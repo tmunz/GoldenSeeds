@@ -109,6 +109,9 @@ export class DrawConfigInput extends React.Component<Props, State> {
       if (drawConfigType !== DrawConfigType.STRING && drawConfigType !== DrawConfigType.OBJECT) {
         tmp = InputType.RANGE;
       }
+      if (drawConfigType === DrawConfigType.COLOR) {
+        tmp = InputType.COLOR;
+      }
     }
     this.inputType = tmp;
   }
@@ -119,7 +122,7 @@ export class DrawConfigInput extends React.Component<Props, State> {
 
     return <Input
       key={attribute}
-      value={this.inputType === InputType.RANGE ? this.valueRange.toString() : this.valueText}
+      value={this.inputType === InputType.RANGE || this.inputType === InputType.COLOR ? this.valueRange.toString() : this.valueText}
       onChange={value => this.props.onChange(this.nMode && this.inputType == InputType.RANGE ? 'n * ' + value : value)}
       label={DrawConfig.getName(attribute)}
       className={[this.props.isParsable ? "" : "invalid", this.isRangeable ? "" : "range-invalid"].join(" ")}
