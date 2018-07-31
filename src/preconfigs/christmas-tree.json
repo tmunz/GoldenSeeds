@@ -1,0 +1,1 @@
+{"name":"christmas-tree","type":"stroke","size":610,"style":{},"backgroundColor":"none","angle":"0","distance":"0","items":9,"itemCorners":6,"itemColor":"#b3de87","itemAngle":"0","itemSize":"Math.pow(n, 1 / goldenRatio)","itemRatio":"(1 - 1 / (n + 1))","cutRatio0":"n == items ? 0 : n % 2 ? 1-(0.2/itemSize(n)) : 0","cutRatio1":"n == items ? 0 : n % 2 ? 1 : 0.2/itemSize(n)"}

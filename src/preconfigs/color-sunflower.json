@@ -1,0 +1,1 @@
+{"name":"color-sunflower","type":"filled","size":610,"style":{},"backgroundColor":"gold","angle":"n * 360 / goldenRatio","distance":"Math.pow(n, 1 / goldenRatio)","items":233,"itemCorners":2,"itemColor":"random","itemAngle":"n * 360 / goldenRatio - 110","itemSize":"Math.max(Math.pow(n, 1 / 4), 1)","itemRatio":"0.9","cutRatio0":"0","cutRatio1":"0"}

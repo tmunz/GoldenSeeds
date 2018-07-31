@@ -1,0 +1,1 @@
+{"name":"dandelion","type":"stroke","size":610,"style":{},"backgroundColor":"none","angle":"0","distance":"0","items":89,"itemCorners":0,"itemColor":"random","itemAngle":"n * 360 / goldenRatio - 90","itemSize":"n","itemRatio":"1 / Math.pow(goldenRatio, 2)","cutRatio0":"-4 / 3","cutRatio1":"0"}

@@ -1,0 +1,26 @@
+@import "../base.styl";
+.draw-config-input {
+  display: table;
+  &>* {
+    display: table-cell;
+    &.n-mode-selector,
+    &.expert-mode-selector,
+    &.golden-ratio-selector {
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      vertical-align: middle;
+      cursor: pointer;
+      padding: 2px;
+      color: $color-link;
+      &:hover {
+        color: $color-accent;
+        hover();
+      }
+    }
+  }
+  &:hover {
+    &>* {
+      opacity: 1;
+    }
+  }
+}
