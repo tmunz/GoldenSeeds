@@ -1,6 +1,7 @@
 const Webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const contentBase = '/dist';
+const Path = require('path');
+const dist = Path.join(__dirname, 'dist');
 
 module.exports = {
   entry: {
@@ -11,19 +12,16 @@ module.exports = {
     ]
   },
   output: {
-    path: __dirname + contentBase,
+    path: dist,
     publicPath: './',
     filename: 'bundle.[name].[hash].js',
   },
   devtool: 'cheap-eval-source-map',
   devServer: {
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    },
     inline: true,
-    historyApiFallback: true,
     port: 8880,
-    contentBase: '.' + contentBase,
+    historyApiFallback: true,
+    publicPath: '/',
     hot: true
   },
   module: {

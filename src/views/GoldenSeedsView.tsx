@@ -31,14 +31,15 @@ interface State {
 
 export class GoldenSeedsView extends React.Component<Props, State> {
 
-  static PRECONFIGS: DrawConfig[] = preconfigsRaw.map(c => DrawConfig.produce(c));
+  static PRECONFIGS: DrawConfig[] = preconfigsRaw.map((c: DrawConfig) => DrawConfig.produce(c));
   static INIT_PRECONFIG_INDEX = 0;
 
   static CONFIG_INPUT_ATTRIBUTES: DrawConfigAttribute[] = [
-    DrawConfigAttribute.ITEMS, DrawConfigAttribute.BACKGROUND_COLOR, DrawConfigAttribute.ANGLE, 
-    DrawConfigAttribute.DISTANCE,
-    DrawConfigAttribute.TYPE, DrawConfigAttribute.ITEM_CORNERS, DrawConfigAttribute.ITEM_COLOR,
-    DrawConfigAttribute.ITEM_ANGLE, DrawConfigAttribute.ITEM_SIZE, DrawConfigAttribute.ITEM_RATIO,
+    DrawConfigAttribute.TYPE, DrawConfigAttribute.ITEMS, 
+    DrawConfigAttribute.BACKGROUND_COLOR, DrawConfigAttribute.ITEM_COLOR,
+    DrawConfigAttribute.DISTANCE, DrawConfigAttribute.ANGLE,
+    DrawConfigAttribute.ITEM_CORNERS,  DrawConfigAttribute.ITEM_RATIO,
+    DrawConfigAttribute.ITEM_SIZE, DrawConfigAttribute.ITEM_ANGLE,
     DrawConfigAttribute.CUT_RATIO_0, DrawConfigAttribute.CUT_RATIO_1,
   ];
 

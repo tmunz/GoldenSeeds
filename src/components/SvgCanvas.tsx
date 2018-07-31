@@ -144,7 +144,6 @@ export class SvgCanvas extends React.Component<Props, State> {
   }
 
   render() {
-    console.log(this.props.width + '   ' + this.props.config.size)
     return (
       <svg xmlns="http://www.w3.org/2000/svg" width={this.props.width} height={this.props.height} ref={e => this.svgContent = e}>
         <circle
