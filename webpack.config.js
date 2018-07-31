@@ -1,6 +1,6 @@
 const Webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const contentBase ='/dist';
+const contentBase = '/dist';
 
 module.exports = {
   entry: {
@@ -12,8 +12,8 @@ module.exports = {
   },
   output: {
     path: __dirname + contentBase,
-    publicPath: '/',
-    filename: 'bundle.js'
+    publicPath: './',
+    filename: 'bundle.[name].[hash].js',
   },
   devtool: 'cheap-eval-source-map',
   devServer: {
@@ -27,37 +27,35 @@ module.exports = {
     hot: true
   },
   module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader!ts-loader'
-      }, {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
-      }, {
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        exclude: /\.icon\.svg$/,
-        loader: 'file-loader?name=[name].[ext]'
-      }, {
-        test: /\.jpe?g$|\.gif$|\.png$/i,
-        loader: 'file-loader?name=[name].[ext]'
-      }, {
-        test: /\.css$|\.styl$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: () => [require('autoprefixer')]
-            }
-          },
-          'stylus-loader'
-        ],
-      }
-    ]
+    rules: [{
+      test: /\.tsx?$/,
+      exclude: /node_modules/,
+      loader: 'babel-loader!ts-loader'
+    }, {
+      test: /\.js$/,
+      exclude: /node_modules/,
+      loader: 'babel-loader'
+    }, {
+      test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+      exclude: /\.icon\.svg$/,
+      loader: 'file-loader?name=[name].[ext]'
+    }, {
+      test: /\.jpe?g$|\.gif$|\.png$/i,
+      loader: 'file-loader?name=[name].[ext]'
+    }, {
+      test: /\.css$|\.styl$/,
+      use: [
+        'style-loader',
+        'css-loader',
+        {
+          loader: 'postcss-loader',
+          options: {
+            plugins: () => [require('autoprefixer')]
+          }
+        },
+        'stylus-loader'
+      ],
+    }]
   },
   resolve: {
     extensions: ['*', '.js', '.ts', '.tsx']
