@@ -89,9 +89,21 @@
       &>input {
         appearance: none;
         tap-decoration-color: transparent;
-        border-color: transparent;
-        background: lighten($color-background, 15);
+        border-color: $color-background;
         box-shadow: inset 0 1px 0 0 darken($color-text, 50), inset 0 -1px 0 0 darken($color-text, 25);
+        background: lighten($color-background, 15);
+        color-input($color) {
+          background-image: linear-gradient(to right, lighten($color-background, 15) 0%, darken($color, 35) 100%);
+        }
+        &.color-input-red {
+          color-input(#ff0000);
+        }
+        &.color-input-green {
+          color-input(#00ff00);
+        }
+        &.color-input-blue {
+          color-input(#0000ff);
+        }
         &::-ms-track,
         &::-moz-range-track {
           border: inherit;
@@ -107,7 +119,7 @@
         }
         thumb($color=$color-link) {
           _thumb($color) {
-            &:active {
+            &:active, &:focus {
               cursor: grabbing;
             }
             cursor: grab;

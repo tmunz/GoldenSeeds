@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import './Input.styl';
+import { Color } from '../datatypes/Color';
 
 
 interface Props {
@@ -18,6 +19,7 @@ interface Props {
 interface State { }
 
 export enum InputType { RANGE, TEXT, COLOR }
+enum InputColor { NONE, RED, GREEN, BLUE }
 
 export class Input extends React.Component<Props, State> {
 
@@ -32,10 +34,13 @@ export class Input extends React.Component<Props, State> {
     step: 1
   }
 
-  getInputField(value: any, colorType?: number): React.ReactNode {
-    return <div className="input-value">
+  getInputField(value: any, inputColor: InputColor): React.ReactNode {
+    return <div className="input-value" key={inputColor}>
       <input
-        className={[typeof this.props.className !== 'undefined' ? this.props.className : ""].join(" ")}
+        className={[
+          typeof this.props.className !== 'undefined' ? this.props.className : "",
+          inputColor !== InputColor.NONE ? "color-input color-input-" + InputColor[inputColor].toLowerCase() : ""
+        ].join(" ")}
         type={InputType[this.props.type === InputType.COLOR ? InputType.RANGE : this.props.type].toLowerCase()}
         onChange={(e) => {
           let newValue: any = e.target.value;
@@ -43,9 +48,9 @@ export class Input extends React.Component<Props, State> {
             newValue =
               newValue < 0 ? -0x80000000 | this.props.value
                 : newValue > 0xff ? 0x1000000 | this.props.value
-                  : colorType === 0 ? (this.props.value & 0x00ffff | ((Number(newValue) & 0xff) << 16))
-                    : colorType === 1 ? (this.props.value & 0xff00ff | ((Number(newValue) & 0xff) << 8))
-                      : colorType === 2 ? (this.props.value & 0xffff00 | ((Number(newValue) & 0xff) << 0))
+                  : inputColor === InputColor.RED ? (this.props.value & 0x00ffff | ((Number(newValue) & 0xff) << 16))
+                    : inputColor === InputColor.GREEN ? (this.props.value & 0xff00ff | ((Number(newValue) & 0xff) << 8))
+                      : inputColor === InputColor.BLUE ? (this.props.value & 0xffff00 | ((Number(newValue) & 0xff) << 0))
                         : undefined;
           }
           this.props.onChange(this.props.type === InputType.RANGE ? Number(newValue) : newValue)
@@ -55,7 +60,11 @@ export class Input extends React.Component<Props, State> {
         max={this.props.type === InputType.COLOR ? 0x100 : this.props.max}
         step={this.props.step}
       />
-      {this.props.type !== InputType.TEXT && <output>{this.props.type === InputType.COLOR ? value : this.props.valueLabel}</output>}
+      {this.props.type !== InputType.TEXT && <output>{
+        this.props.type === InputType.COLOR ?
+          (value < 0 ? 'transparent' : 0xff < value ? 'random' : value)
+          : this.props.valueLabel
+      }</output>}
     </div>
   }
 
@@ -66,10 +75,9 @@ export class Input extends React.Component<Props, State> {
         {this.props.label}
       </label>
       <div className="input-container">
-        {(this.props.type === InputType.COLOR ? [0, 1, 2] : [undefined]).map((i: number) =>
-          this.getInputField(this.props.type === InputType.COLOR ?
-            this.props.value < 0 ? this.props.value : this.props.value > 0xffffff ? 0x100 : this.props.value >> (2 - i) * 8 & 0xff
-            : this.props.value, i)
+        {(this.props.type === InputType.COLOR ? [InputColor.RED, InputColor.GREEN, InputColor.BLUE] : [InputColor.NONE]).map((c: InputColor, i: number) =>
+          this.getInputField(c === InputColor.NONE ? this.props.value
+            : this.props.value < 0 ? this.props.value : this.props.value > 0xffffff ? 0x100 : this.props.value >> (2 - i) * 8 & 0xff, c)
         )}
       </div>
     </div>
