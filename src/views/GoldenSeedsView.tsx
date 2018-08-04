@@ -25,8 +25,10 @@ interface State {
   currentRawConfig: DrawConfig;
   currentPreconfigIndex: number;
   configMode: boolean;
+  configHeight: number | "auto";
   animationRunning: boolean;
   isParsableInputs: boolean[],
+
 }
 
 export class GoldenSeedsView extends React.Component<Props, State> {
@@ -35,11 +37,10 @@ export class GoldenSeedsView extends React.Component<Props, State> {
   static INIT_PRECONFIG_INDEX = 0;
 
   static CONFIG_INPUT_ATTRIBUTES: DrawConfigAttribute[] = [
-    DrawConfigAttribute.TYPE, DrawConfigAttribute.ITEMS, 
+    DrawConfigAttribute.TYPE, DrawConfigAttribute.ITEMS, DrawConfigAttribute.ITEM_CORNERS,
     DrawConfigAttribute.BACKGROUND_COLOR, DrawConfigAttribute.ITEM_COLOR,
     DrawConfigAttribute.DISTANCE, DrawConfigAttribute.ANGLE,
-    DrawConfigAttribute.ITEM_CORNERS,  DrawConfigAttribute.ITEM_RATIO,
-    DrawConfigAttribute.ITEM_SIZE, DrawConfigAttribute.ITEM_ANGLE,
+    DrawConfigAttribute.ITEM_RATIO, DrawConfigAttribute.ITEM_SIZE, DrawConfigAttribute.ITEM_ANGLE,
     DrawConfigAttribute.CUT_RATIO_0, DrawConfigAttribute.CUT_RATIO_1,
   ];
 
@@ -59,11 +60,18 @@ export class GoldenSeedsView extends React.Component<Props, State> {
       animationRunning: false,
       ...DrawConfigHelper.generateConfigState(currentRawConfig, new DrawConfig(), 1),
       configMode: true,
+      configHeight: "auto"
     };
   }
 
   componentDidMount() {
-    this.forceUpdate();
+    this.setState(state => ({ configHeight: state.configMode ? this.overlayConfigContainerElement.scrollHeight : 0 }));
+  }
+
+  componentDidUpdate() {
+    if (!this.state.configMode && this.state.configHeight !== 0) {
+      window.requestAnimationFrame(() => this.setState({ configHeight: 0 }));
+    }
   }
 
   exportConfig = () => {
@@ -97,6 +105,18 @@ export class GoldenSeedsView extends React.Component<Props, State> {
         }
       }, interval);
     }
+  }
+
+  toggleConfigMode = () => {
+    this.setState(state => {
+      let nextConfigMode = !state.configMode;
+      let configHeight: number = this.overlayConfigContainerElement.scrollHeight;
+      if (nextConfigMode) {
+        setTimeout(() => this.setState({ configHeight: "auto" }), 500);
+      }
+      //actually collapsing it in componentDidUpdate
+      return { configMode: nextConfigMode, configHeight };
+    });
   }
 
   createDrawConfigInputField(attribute: DrawConfigAttribute) {
@@ -141,9 +161,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
           <div
             className="colapsable"
             style={{
-              height: this.state.configMode ?
-                (this.overlayConfigContainerElement ? this.overlayConfigContainerElement.scrollHeight : "auto")
-                : 0
+              height: this.state.configHeight
             }}
           >
             <div ref={e => this.overlayConfigContainerElement = e} className="overlay-container">
@@ -166,7 +184,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
             className="config-mode-selector"
             size={60}
             direction={this.state.configMode ? Direction.UP : Direction.DOWN}
-            onClick={() => this.setState(state => ({ configMode: !state.configMode }))}
+            onClick={this.toggleConfigMode}
           />
         </div>
         <div className="overlay overlay-export overlay-container">

@@ -16,7 +16,9 @@ interface Props {
   step?: number,
 }
 
-interface State { }
+interface State { 
+  focus: boolean[];
+}
 
 export enum InputType { RANGE, TEXT, COLOR }
 enum InputColor { NONE, RED, GREEN, BLUE }
@@ -25,7 +27,9 @@ export class Input extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = {
+      focus: []
+    };
   }
 
   static defaultProps = {
@@ -39,9 +43,12 @@ export class Input extends React.Component<Props, State> {
       <input
         className={[
           typeof this.props.className !== 'undefined' ? this.props.className : "",
-          inputColor !== InputColor.NONE ? "color-input color-input-" + InputColor[inputColor].toLowerCase() : ""
+          inputColor !== InputColor.NONE ? "color-input color-input-" + InputColor[inputColor].toLowerCase() : "",
+          this.state.focus[inputColor] ? "focus" : ""
         ].join(" ")}
         type={InputType[this.props.type === InputType.COLOR ? InputType.RANGE : this.props.type].toLowerCase()}
+        onMouseDown={() => this.setState(state => {let tmp = [...state.focus]; tmp[inputColor] = true; return {focus: tmp};})}
+        onMouseUp={() => this.setState(state => {let tmp = [...state.focus]; tmp[inputColor] = false; return {focus: tmp};})}
         onChange={(e) => {
           let newValue: any = e.target.value;
           if (this.props.type === InputType.COLOR) {

@@ -32,7 +32,7 @@
       position: absolute;
       pointer-events: none;
       width: 100px;
-      top: ($height/2)px;
+      top: ($height/2 - 4)px;
       left: 20px;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -117,15 +117,15 @@
         &::-ms-tooltip {
           display: none;
         }
-        thumb($color=$color-link) {
+        &::-moz-range-track {
+          background: transparent;
+        }
+        thumb($color=$color-link, $cursor=grab) {
           _thumb($color) {
-            &:active, &:focus {
-              cursor: grabbing;
-            }
-            cursor: grab;
+            cursor: $cursor;
             appearance: none;
             width: 40px;
-            height: ($range-height - 4)px;
+            height: ($range-height)px;
             border: none;
             border-radius: ($range-height)px;
             background-image: linear-gradient(to bottom, $color 0, darken($color, 50) 100%);
@@ -143,6 +143,9 @@
         thumb();
         &:focus {
           thumb($color-accent);
+        }
+        &.focus {
+          thumb($color-accent, grabbing);
         }
         &.range-invalid {
           thumb($color-text);
