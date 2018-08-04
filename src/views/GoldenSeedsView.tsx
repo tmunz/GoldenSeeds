@@ -33,7 +33,7 @@ interface State {
 
 export class GoldenSeedsView extends React.Component<Props, State> {
 
-  static PRECONFIGS: DrawConfig[] = preconfigsRaw.map((c: DrawConfig) => DrawConfig.produce(c));
+  static PRECONFIGS: DrawConfig[] = preconfigsRaw.map((c: DrawConfig) => DrawConfig.import(c));
   static INIT_PRECONFIG_INDEX = 0;
 
   static CONFIG_INPUT_ATTRIBUTES: DrawConfigAttribute[] = [
@@ -77,7 +77,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
   exportConfig = () => {
     this.exportConfigElement.download = this.state.currentRawConfig.name + '.json';
     this.exportConfigElement.href = URL.createObjectURL(new File([
-      JSON.stringify(this.state.currentRawConfig)
+      JSON.stringify(DrawConfig.export(this.state.currentRawConfig))
     ], this.state.currentRawConfig.name + '.json', { type: 'text/json' }));
   }
 
@@ -139,7 +139,9 @@ export class GoldenSeedsView extends React.Component<Props, State> {
     if (typeof selection.files[0] !== 'undefined') {
       var fileReader = new FileReader();
       fileReader.onload = event => {
-        onLoad(DrawConfig.produce(JSON.parse(event.target.result)));
+        let config = DrawConfig.import(JSON.parse(event.target.result));
+        console.log(config)
+        onLoad(config);
       }
       fileReader.readAsText(selection.files[0]);
     }
@@ -196,7 +198,10 @@ export class GoldenSeedsView extends React.Component<Props, State> {
               style={{ display: 'none' }}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                 GoldenSeedsView.loadConfig(event.target, currentRawConfig =>
-                  this.setState(DrawConfigHelper.generateConfigState(currentRawConfig, this.state.config, this.state.scale)))
+                  this.setState({
+                    currentRawConfig: currentRawConfig,
+                    ...DrawConfigHelper.generateConfigState(currentRawConfig, this.state.config, this.state.scale)
+                  }))
               }
             />
             <a target="_blank" onClick={() => this.importConfigElement.click()}>open config</a>

@@ -108,11 +108,19 @@ export class DrawConfig {
     return DrawConfigAttribute[attribute].replace(/_/g, ' ').toLowerCase();
   }
 
-  static produce = (raw: any): DrawConfig => {
+  static import = (raw: any): DrawConfig => {
     let config = {
       ... new DrawConfig(), ...raw,
       type: DrawType.fromString(raw.type),
     }
     return config;
+  }
+
+  static export = (config: DrawConfig): any => {
+    let raw = {
+      ... new DrawConfig(), ...config,
+      type: DrawType.toString(config.type).toLowerCase(),
+    }
+    return raw;
   }
 }
