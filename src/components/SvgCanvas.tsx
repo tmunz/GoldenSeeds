@@ -50,8 +50,7 @@ export class SvgCanvas extends React.Component<Props, State> {
   create() {
     let props: DrawerProps = { itemPositions: this.itemPositions, config: this.props.config, scale: this.props.scale };
     switch (this.props.config.type) {
-      case DrawType.FILLED:
-      case DrawType.STROKE:
+      case DrawType.REGULAR_SHAPE:
       default:
         return <RegularShapeDrawer {...props} />
     }

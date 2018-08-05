@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { DrawConfigAttribute, DrawConfigType, DrawConfig, DrawType } from '../datatypes/DrawConfig';
+import { DrawConfigAttribute, DrawConfigType, DrawConfig, DrawType, DrawStyle } from '../datatypes/DrawConfig';
 import { InputType, Input } from './Input';
 import { MathUtils } from '../helper/MathUtils';
 import { DirectionSelector, Direction } from './DirectionSelector';
@@ -74,13 +74,17 @@ export class DrawConfigInput extends React.Component<Props, State> {
       }
 
       if (props.attribute === DrawConfigAttribute.TYPE) {
-        valueText = DrawType.toString(valueRange).toLocaleLowerCase();
+        valueText = DrawType.toString(valueRange);
+      }
+
+      if (props.attribute === DrawConfigAttribute.STYLE) {
+        valueText = DrawStyle.toString(valueRange);
       }
 
       let valueTextWithoutN = this.valueTextWithoutN(valueText);
       this.nMode = valueText !== valueTextWithoutN;
       if (this.nMode === true) {
-        valueRange = typeof valueTextWithoutN === 'undefined' ? 1 : Number(valueTextWithoutN); 
+        valueRange = typeof valueTextWithoutN === 'undefined' ? 1 : Number(valueTextWithoutN);
         //IMPROVEMENT: use eval  resp. somehow convertToExpression instead of Number(...)
       }
 
@@ -136,8 +140,8 @@ export class DrawConfigInput extends React.Component<Props, State> {
       }
       max={
         drawConfigType === DrawConfigType.COLOR ? 0x1000000
-          : attribute === DrawConfigAttribute.TYPE || attribute === DrawConfigAttribute.CUT_RATIO_0
-            || attribute === DrawConfigAttribute.CUT_RATIO_1 ? 1
+          : attribute === DrawConfigAttribute.TYPE || attribute === DrawConfigAttribute.STYLE
+            || attribute === DrawConfigAttribute.CUT_RATIO_0 || attribute === DrawConfigAttribute.CUT_RATIO_1 ? 1
             : attribute === DrawConfigAttribute.ITEM_RATIO ? 2
               : attribute === DrawConfigAttribute.DISTANCE ? this.nMode ? 1 : 100
                 : attribute === DrawConfigAttribute.ITEM_SIZE ? 10

@@ -18,9 +18,6 @@ export namespace DrawConfigAttribute {
 
   export const getType = (attribute: DrawConfigAttribute): DrawConfigType => {
     switch (attribute) {
-      case DrawConfigAttribute.STYLE:
-        return DrawConfigType.OBJECT;
-
       case DrawConfigAttribute.ITEMS:
       case DrawConfigAttribute.SIZE:
       case DrawConfigAttribute.ITEM_CORNERS:
@@ -43,6 +40,7 @@ export namespace DrawConfigAttribute {
       case DrawConfigAttribute.ANGLE:
         return DrawConfigType.ANGLE_EXPRESSION;
 
+      case DrawConfigAttribute.STYLE:
       case DrawConfigAttribute.TYPE:
         return DrawConfigType.ENUM;
 
@@ -52,17 +50,31 @@ export namespace DrawConfigAttribute {
   }
 }
 
-export enum DrawType {
+export enum DrawStyle {
   FILLED, STROKE
+}
+
+export namespace DrawStyle {
+  export const toString = (attribute: DrawStyle): string => {
+    return DrawStyle[attribute].toLocaleLowerCase().replace('_', '-');
+  }
+
+  export const fromString = (attribute: string): DrawStyle => {
+    return Number(DrawStyle[attribute.toUpperCase().replace('-', '_') as any]);
+  }
+}
+
+export enum DrawType {
+  REGULAR_SHAPE, VORONOI
 }
 
 export namespace DrawType {
   export const toString = (attribute: DrawType): string => {
-    return DrawType[attribute];
+    return DrawType[attribute].toLocaleLowerCase().replace('_', '-');
   }
 
   export const fromString = (attribute: string): DrawType => {
-    return Number(DrawType[attribute.toUpperCase() as any]);
+    return Number(DrawType[attribute.toUpperCase().replace('-', '_') as any]);
   }
 }
 
@@ -75,9 +87,9 @@ export enum DrawConfigType {
 export class DrawConfig {
 
   name: string = 'new';
-  type: DrawType = DrawType.FILLED;
+  type: DrawType = DrawType.REGULAR_SHAPE;
+  style: DrawStyle = DrawStyle.FILLED;
   size: number = 600;
-  style: {} = {};
 
   backgroundColor: Color = new Color('golden');
   angle: (n: number) => number = (n: number) => n;
@@ -112,6 +124,7 @@ export class DrawConfig {
     let config = {
       ... new DrawConfig(), ...raw,
       type: DrawType.fromString(raw.type),
+      style: DrawStyle.fromString(raw.style),
     }
     return config;
   }
@@ -119,7 +132,8 @@ export class DrawConfig {
   static export = (config: DrawConfig): any => {
     let raw = {
       ... new DrawConfig(), ...config,
-      type: DrawType.toString(config.type).toLowerCase(),
+      type: DrawType.toString(config.type),
+      style: DrawStyle.toString(config.style),
     }
     return raw;
   }

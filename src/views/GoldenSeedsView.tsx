@@ -38,7 +38,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
 
   static CONFIG_INPUT_ATTRIBUTES: DrawConfigAttribute[] = [
     DrawConfigAttribute.TYPE, DrawConfigAttribute.ITEMS, DrawConfigAttribute.ITEM_CORNERS,
-    DrawConfigAttribute.BACKGROUND_COLOR, DrawConfigAttribute.ITEM_COLOR,
+    DrawConfigAttribute.STYLE, DrawConfigAttribute.BACKGROUND_COLOR, DrawConfigAttribute.ITEM_COLOR,
     DrawConfigAttribute.DISTANCE, DrawConfigAttribute.ANGLE,
     DrawConfigAttribute.ITEM_RATIO, DrawConfigAttribute.ITEM_SIZE, DrawConfigAttribute.ITEM_ANGLE,
     DrawConfigAttribute.CUT_RATIO_0, DrawConfigAttribute.CUT_RATIO_1,
@@ -136,11 +136,11 @@ export class GoldenSeedsView extends React.Component<Props, State> {
   }
 
   static loadConfig = (selection: any, onLoad: (config: DrawConfig) => void) => {
+    console.log(selection)
     if (typeof selection.files[0] !== 'undefined') {
       var fileReader = new FileReader();
       fileReader.onload = event => {
         let config = DrawConfig.import(JSON.parse(event.target.result));
-        console.log(config)
         onLoad(config);
       }
       fileReader.readAsText(selection.files[0]);

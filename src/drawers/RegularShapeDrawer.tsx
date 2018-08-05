@@ -100,27 +100,15 @@ export class RegularShapeDrawer extends AbstractDrawer {
     }
   }
 
-  render() {
-    let elements: JSX.Element[] = [];
-
-    this.props.itemPositions.map((position: number[], i) => {
+  createElements() {
+    return this.props.itemPositions.map((position: number[], i) => {
       let n = i + 1;
-      let e: JSX.Element = this.props.config.itemCorners > 0 ?
+      return this.props.config.itemCorners > 0 ?
         this.drawRegularShape(position, this.props.scale * this.props.config.itemSize(n), this.props.config.itemCorners, this.props.config.itemRatio(n),
           this.props.config.itemAngle(n), this.props.config.cutRatio0(n), this.props.config.cutRatio1(n)) :
         this.drawArc(position, this.props.scale * this.props.config.itemSize(n), (360 * this.props.config.cutRatio1(n)) + this.props.config.itemAngle(n),
-          360 * (1 - (this.props.config.cutRatio1(n) - this.props.config.cutRatio0(n))));
-
-      let itemColor = this.props.config.itemColor.toString();
-      elements.push({
-        ...e, key: n, props: {
-          ...e.props,
-          ...(this.props.config.type === DrawType.FILLED ? { fill: itemColor } : { fill: 'none', stroke: itemColor, strokeWidth: 1 }),
-          ...this.props.config.style,
-          id: `item-${n}`,
-        }
-      });
+          360 * (1 - (this.props.config.cutRatio1(n) - this.props.config.cutRatio0(n)))
+        );
     });
-    return <g>{elements}</g>
   }
 }
