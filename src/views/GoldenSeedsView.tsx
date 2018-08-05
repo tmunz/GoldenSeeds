@@ -135,15 +135,14 @@ export class GoldenSeedsView extends React.Component<Props, State> {
     />;
   }
 
-  static loadConfig = (selection: any, onLoad: (config: DrawConfig) => void) => {
-    console.log(selection)
-    if (typeof selection.files[0] !== 'undefined') {
+  static loadConfig = (file: Blob, onLoad: (config: DrawConfig) => void) => {
+    if (typeof file !== 'undefined') {
       var fileReader = new FileReader();
       fileReader.onload = event => {
         let config = DrawConfig.import(JSON.parse(event.target.result));
         onLoad(config);
       }
-      fileReader.readAsText(selection.files[0]);
+      fileReader.readAsText(file);
     }
   }
 
@@ -196,12 +195,17 @@ export class GoldenSeedsView extends React.Component<Props, State> {
               ref={e => this.importConfigElement = e}
               type="file"
               style={{ display: 'none' }}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                GoldenSeedsView.loadConfig(event.target, currentRawConfig =>
-                  this.setState({
-                    currentRawConfig: currentRawConfig,
-                    ...DrawConfigHelper.generateConfigState(currentRawConfig, this.state.config, this.state.scale)
-                  }))
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                let file: Blob = event.target.files[0];
+                if (typeof file !== 'undefined') {
+                  GoldenSeedsView.loadConfig(file, currentRawConfig =>
+                    this.setState({
+                      currentRawConfig: currentRawConfig,
+                      ...DrawConfigHelper.generateConfigState(currentRawConfig, this.state.config, this.state.scale)
+                    }))
+                  this.importConfigElement.value = '';
+                }
+              }
               }
             />
             <a target="_blank" onClick={() => this.importConfigElement.click()}>open config</a>

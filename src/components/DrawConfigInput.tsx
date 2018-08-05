@@ -31,7 +31,7 @@ export class DrawConfigInput extends React.Component<Props, State> {
   inputType: InputType;     // state.expertMode
 
   static NO_EXPERT_MODE_ATTRIBUTES: DrawConfigAttribute[] = [
-    DrawConfigAttribute.NAME, DrawConfigAttribute.TYPE,
+    DrawConfigAttribute.NAME, DrawConfigAttribute.TYPE, DrawConfigAttribute.STYLE,
     DrawConfigAttribute.ITEMS, DrawConfigAttribute.ITEM_CORNERS,
   ];
 
