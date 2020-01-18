@@ -4,9 +4,11 @@ import { DrawConfig, DrawStyle } from '../datatypes/DrawConfig';
 
 
 export interface Props {
-  itemPositions: number[][],
-  config: DrawConfig,
-  scale: number,
+  itemPositions: number[][];
+  config: DrawConfig;
+  scale: number;
+  width: number;
+  height: number;
 }
 
 export abstract class AbstractDrawer extends React.Component<Props> {

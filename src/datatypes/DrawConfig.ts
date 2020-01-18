@@ -6,17 +6,17 @@ export enum DrawConfigAttribute {
   ITEMS, ITEM_CORNERS, ITEM_COLOR, ITEM_ANGLE, ITEM_SIZE, ITEM_RATIO, CUT_RATIO_0, CUT_RATIO_1,
 }
 
-export namespace DrawConfigAttribute {
+export class DrawConfigAttribute_ {
 
-  export const toString = (attribute: DrawConfigAttribute): string => {
+  static toString (attribute: DrawConfigAttribute): string {
     return DrawConfigAttribute[attribute];
   }
 
-  export const fromString = (attribute: string): DrawConfigAttribute => {
+  static fromString (attribute: string): DrawConfigAttribute {
     return Number(DrawConfigAttribute[attribute.toUpperCase() as any]);
   }
 
-  export const getType = (attribute: DrawConfigAttribute): DrawConfigType => {
+  static getType (attribute: DrawConfigAttribute): DrawConfigType {
     switch (attribute) {
       case DrawConfigAttribute.ITEMS:
       case DrawConfigAttribute.SIZE:
@@ -54,12 +54,12 @@ export enum DrawStyle {
   FILLED, STROKE
 }
 
-export namespace DrawStyle {
-  export const toString = (attribute: DrawStyle): string => {
+export class DrawStyle_ {
+  static toString (attribute: DrawStyle): string {
     return DrawStyle[attribute].toLocaleLowerCase().replace('_', '-');
   }
 
-  export const fromString = (attribute: string): DrawStyle => {
+  static fromString (attribute: string): DrawStyle {
     return Number(DrawStyle[attribute.toUpperCase().replace('-', '_') as any]);
   }
 }
@@ -68,12 +68,12 @@ export enum DrawType {
   REGULAR_SHAPE, VORONOI
 }
 
-export namespace DrawType {
-  export const toString = (attribute: DrawType): string => {
+export class DrawType_ {
+  static toString (attribute: DrawType): string {
     return DrawType[attribute].toLocaleLowerCase().replace('_', '-');
   }
 
-  export const fromString = (attribute: string): DrawType => {
+  static fromString (attribute: string): DrawType {
     return Number(DrawType[attribute.toUpperCase().replace('-', '_') as any]);
   }
 }
@@ -97,7 +97,7 @@ export class DrawConfig {
 
   items: number = 1;
   itemCorners: number = 0;
-  itemColor: /*(n: number) =>*/ Color = new Color('black');
+  itemColor: Color = new Color('black');
   itemAngle: (n: number) => number = (n: number) => 0;
   itemSize: (n: number) => number = (n: number) => 1;
   itemRatio: (n: number) => number = (n: number) => 0.5;
@@ -123,8 +123,8 @@ export class DrawConfig {
   static import = (raw: any): DrawConfig => {
     let config = {
       ... new DrawConfig(), ...raw,
-      type: DrawType.fromString(raw.type),
-      style: DrawStyle.fromString(raw.style),
+      type: DrawType_.fromString(raw.type),
+      style: DrawStyle_.fromString(raw.style),
     }
     return config;
   }
@@ -132,8 +132,8 @@ export class DrawConfig {
   static export = (config: DrawConfig): any => {
     let raw = {
       ... new DrawConfig(), ...config,
-      type: DrawType.toString(config.type),
-      style: DrawStyle.toString(config.style),
+      type: DrawType_.toString(config.type),
+      style: DrawStyle_.toString(config.style),
     }
     return raw;
   }

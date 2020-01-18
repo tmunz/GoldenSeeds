@@ -3,8 +3,8 @@ import * as React from 'react';
 import { SvgCanvas } from '../components/SvgCanvas';
 import { Input, InputType } from '../components/Input';
 import { DirectionSelector, Direction } from '../components/DirectionSelector';
-import { DrawConfig, DrawConfigAttribute, DrawConfigType } from '../datatypes/DrawConfig';
-import { preconfigs as preconfigsRaw } from '../preconfigs/preconfigs';
+import { DrawConfig, DrawConfigAttribute } from '../datatypes/DrawConfig';
+import { preconfigs as preconfigsRaw } from '../preconfigs/index';
 import { MathUtils } from '../helper/MathUtils';
 import { AnimationHelper } from '../helper/AnimationHelper';
 import { DrawConfigInput } from '../components/DrawConfigInput';
@@ -139,7 +139,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
     if (typeof file !== 'undefined') {
       var fileReader = new FileReader();
       fileReader.onload = event => {
-        let config = DrawConfig.import(JSON.parse(event.target.result));
+        let config = DrawConfig.import(JSON.parse(event.target.result as string)); // TODO remove string
         onLoad(config);
       }
       fileReader.readAsText(file);
@@ -154,7 +154,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
             ref={e => this.svgCanvas = e}
             config={this.state.config}
             scale={this.state.scale}
-            width={window.innerWidth * 104}
+            width={window.innerWidth * 1.04}
             height={window.innerHeight}
           />
         </div>

@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { DrawConfigAttribute, DrawConfigType, DrawConfig, DrawType, DrawStyle } from '../datatypes/DrawConfig';
+import { DrawConfigAttribute, DrawConfigType, DrawConfig, DrawConfigAttribute_, DrawType_, DrawStyle_ } from '../datatypes/DrawConfig';
 import { InputType, Input } from './Input';
 import { MathUtils } from '../helper/MathUtils';
 import { DirectionSelector, Direction } from './DirectionSelector';
+import { Color } from '../datatypes/Color';
 
 import './DrawConfigInput.styl';
-import { Color } from '../datatypes/Color';
 
 
 interface Props {
@@ -58,8 +58,8 @@ export class DrawConfigInput extends React.Component<Props, State> {
   }
 
   private update(props: Props) {
-    this.updateInputType(this.state.expertMode, DrawConfigAttribute.getType(props.attribute));
-    let drawConfigType: DrawConfigType = DrawConfigAttribute.getType(props.attribute);
+    this.updateInputType(this.state.expertMode, DrawConfigAttribute_.getType(props.attribute));
+    let drawConfigType: DrawConfigType = DrawConfigAttribute_.getType(props.attribute);
 
     if (typeof props.value !== "undefined") {
       let valueRange = Number(props.value);
@@ -74,11 +74,11 @@ export class DrawConfigInput extends React.Component<Props, State> {
       }
 
       if (props.attribute === DrawConfigAttribute.TYPE) {
-        valueText = DrawType.toString(valueRange);
+        valueText = DrawType_.toString(valueRange);
       }
 
       if (props.attribute === DrawConfigAttribute.STYLE) {
-        valueText = DrawStyle.toString(valueRange);
+        valueText = DrawStyle_.toString(valueRange);
       }
 
       let valueTextWithoutN = this.valueTextWithoutN(valueText);
@@ -122,7 +122,7 @@ export class DrawConfigInput extends React.Component<Props, State> {
 
   createInputField(): React.ReactNode {
     let attribute = this.props.attribute;
-    let drawConfigType: DrawConfigType = DrawConfigAttribute.getType(attribute);
+    let drawConfigType: DrawConfigType = DrawConfigAttribute_.getType(attribute);
 
     return <Input
       key={attribute}
@@ -160,7 +160,7 @@ export class DrawConfigInput extends React.Component<Props, State> {
   }
 
   render() {
-    let drawConfigType: DrawConfigType = DrawConfigAttribute.getType(this.props.attribute);
+    let drawConfigType: DrawConfigType = DrawConfigAttribute_.getType(this.props.attribute);
     return (
       <div className="draw-config-input">
         {this.createInputField()}
@@ -188,7 +188,7 @@ export class DrawConfigInput extends React.Component<Props, State> {
             className="expert-mode-selector"
             direction={this.state.expertMode ? Direction.LEFT : Direction.RIGHT}
             onClick={() => this.setState(state => {
-              this.updateInputType(!state.expertMode, DrawConfigAttribute.getType(this.props.attribute));
+              this.updateInputType(!state.expertMode, DrawConfigAttribute_.getType(this.props.attribute));
               return { expertMode: !state.expertMode }
             })}
           />

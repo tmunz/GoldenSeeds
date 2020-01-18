@@ -1,0 +1,1 @@
+{"name":"voronoi","type":"voronoi","size":610,"style":"filled","backgroundColor":"#0000ff","angle":"n * 360 / goldenRatio","distance":"Math.pow(n, 1 / goldenRatio)","items":50,"itemCorners":0,"itemColor":"#00ff00","itemAngle":"n * 360 / goldenRatio - 90","itemSize":"Math.pow(n / 5, 1 / 5)","itemRatio":"1 / Math.pow(goldenRatio, 2)","cutRatio0":0,"cutRatio1":0}

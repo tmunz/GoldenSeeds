@@ -20,8 +20,7 @@ export const COLORS: { [name: string]: number } = {
 
 export class Color {
 
-  //TODO better colorMapping
-  private value: number; // [0, 0xffffff]; negative values are  interpreted as transparent, bigger values as random
+  private value: number; // [0, 0xffffff]; negative values are interpreted as transparent, bigger values as random
 
   constructor(raw: any) {
     let value: number = Color._convertToColor(raw);

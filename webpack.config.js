@@ -1,16 +1,11 @@
 const Webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const Path = require('path');
 const dist = Path.join(__dirname, 'dist');
 
 module.exports = {
-  entry: {
-    main: './src/index.tsx',
-    vendor: [
-      'react-hot-loader/patch',
-      './src/polyfills/index.js'
-    ]
-  },
+  entry: './src/index.tsx',
   output: {
     path: dist,
     publicPath: './',
@@ -19,20 +14,15 @@ module.exports = {
   devtool: 'cheap-eval-source-map',
   devServer: {
     inline: true,
-    port: 8880,
+    port: 8888,
     historyApiFallback: true,
     publicPath: '/',
-    hot: true
+    hot: true,
   },
   module: {
     rules: [{
-      test: /\.tsx?$/,
-      exclude: /node_modules/,
-      loader: 'babel-loader!ts-loader'
-    }, {
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: 'babel-loader'
+      test: /\.(j|t)sx?$/,
+      loader: 'babel-loader',
     }, {
       test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
       exclude: /\.icon\.svg$/,
@@ -53,12 +43,14 @@ module.exports = {
         },
         'stylus-loader'
       ],
-    }]
+    }
+    ]
   },
   resolve: {
-    extensions: ['*', '.js', '.ts', '.tsx']
+    extensions: ['.js', '.ts', '.tsx', '.styl']
   },
   plugins: [
+    new ForkTsCheckerWebpackPlugin(),
     new Webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       template: 'index.html'

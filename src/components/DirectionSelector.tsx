@@ -1,7 +1,9 @@
 import * as React from 'react';
 
-import './DirectionSelector.styl';
 import { AnimationHelper } from '../helper/AnimationHelper';
+
+import './DirectionSelector.styl';
+
 
 export enum Direction {
   NONE, UP, DOWN, LEFT, RIGHT

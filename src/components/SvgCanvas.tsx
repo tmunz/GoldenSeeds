@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { DrawConfig, DrawType } from '../datatypes/DrawConfig';
-import { RegularShapeDrawer } from '../drawers/RegularShapeDrawer';
 import { Props as DrawerProps } from '../drawers/AbstractDrawer';
+import { VoronoiDrawer, RegularShapeDrawer } from '../drawers/index';
 
 
 interface Props {
@@ -48,8 +48,16 @@ export class SvgCanvas extends React.Component<Props, State> {
   }
 
   create() {
-    let props: DrawerProps = { itemPositions: this.itemPositions, config: this.props.config, scale: this.props.scale };
+    let props: DrawerProps = {
+      itemPositions: this.itemPositions,
+      config: this.props.config,
+      scale: this.props.scale,
+      width: this.props.width,
+      height: this.props.height
+    };
     switch (this.props.config.type) {
+      case DrawType.VORONOI:
+        return <VoronoiDrawer {...props} />
       case DrawType.REGULAR_SHAPE:
       default:
         return <RegularShapeDrawer {...props} />

@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import { DrawType } from '../datatypes/DrawConfig';
-import { AbstractDrawer, Props } from './AbstractDrawer';
+import { AbstractDrawer, Props } from '../AbstractDrawer';
 
 
 export class RegularShapeDrawer extends AbstractDrawer {
@@ -23,7 +22,7 @@ export class RegularShapeDrawer extends AbstractDrawer {
   drawRegularShape = (center: number[], size: number, corners: number,
     ratio: number, angle: number, cutRatio0: number, cutRatio1: number): JSX.Element => {
 
-    let p = (pt: number[]) => ' ' + (center[0] - pt[0]) + ',' + (center[1] - pt[1]) + ' ' //bring point coordinates in svg format
+    let p = (pt: number[]) => ' ' + (center[0] - pt[0]) + ',' + (center[1] - pt[1]) + ' ' // bring point coordinates in svg format
     let pts: number[][] = [];
 
     for (var i = 0; i < corners; i++) {
@@ -37,7 +36,7 @@ export class RegularShapeDrawer extends AbstractDrawer {
         rad, rad + Math.PI / 2, rad + rad2 + Math.PI / 2, rad + rad2
       ].map(c => [Math.sin(c), Math.cos(c)]);
 
-      let magicNumber = 1 / 3 // (2/3)*Math.tan(Math.PI/(2*corners)) // would ensures a good circle approximation for ratio 1
+      let magicNumber = 1 / 3 // (2/3)*Math.tan(Math.PI/(2*corners)) // ensures a good circle approximation for ratio 1
 
       let multipliers = [
         size / 2 * ratio,               //  innerRadius

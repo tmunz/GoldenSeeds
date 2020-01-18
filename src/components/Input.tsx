@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import './Input.styl';
-import { Color } from '../datatypes/Color';
 
 
 interface Props {

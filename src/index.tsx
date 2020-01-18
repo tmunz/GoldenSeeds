@@ -1,14 +1,12 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import { render } from "react-dom";
+import React from "react";
 
-import { GoldenSeedsView } from './views/GoldenSeedsView';
+import { GoldenSeedsView } from "./views/GoldenSeedsView";
 
 import './index.styl';
 
 
-ReactDOM.render(
+render(
   <GoldenSeedsView />,
   document.getElementById('app')
 );
-
-module.hot.accept();

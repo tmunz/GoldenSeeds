@@ -8,4 +8,5 @@ export const preconfigs = [
     require('./overlapping-triangles.json'),
     require('./christmas-tree.json'),
     require('./hinge-third.json'),
+    require('./voronoi.json'),
 ];
