@@ -2,7 +2,7 @@ const Webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const Path = require('path');
-const dist = Path.join(__dirname, 'dist');
+const dist = Path.join(__dirname, 'docs');
 
 module.exports = {
   entry: './src/index.tsx',
