@@ -1,0 +1,80 @@
+.range-input.input {
+
+  &>output {
+    font-size 10px;
+    position: absolute;
+    pointer-events: none;
+    width: 100%;
+    top: 10px;
+    left: 0px;
+    padding: 0 8px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+  }
+
+  &>input {
+    appearance: none;
+    tap-decoration-color: transparent;
+    background-color:  var(--borderColor);
+    padding: 0;
+    height: 12px;
+    overflow: hidden;
+
+    &::-ms-track,
+    &::-moz-range-track {
+      border: inherit;
+      color: transparent;
+      background: transparent;
+    }
+
+    &::-ms-fill-lower,
+    &::-ms-fill-upper {
+      background: transparent;
+    }
+
+    &::-ms-tooltip {
+      display: none;
+    }
+
+    &::-moz-range-track {
+      background: transparent;
+    }
+
+    thumb($color=var(--actionColor)) {
+      _thumb($color) {
+        transition: .4s ease-in-out all;
+        cursor: grab;
+        appearance: none;
+        width: (40)px;
+        height: 9999999px;
+        border: none;
+        background: $color;
+        border-radius: 0;
+      }
+
+      &::-webkit-slider-thumb {
+        _thumb($color);
+      }
+
+      &::-ms-thumb {
+        _thumb($color);
+      }
+
+      &::-moz-range-thumb {
+        _thumb($color);
+      }
+    }
+
+    thumb();
+
+    &:focus {
+      thumb(var(--accentColor));
+    }
+
+    &.range-invalid {
+      thumb(var(--textColor));
+    }
+  }
+}

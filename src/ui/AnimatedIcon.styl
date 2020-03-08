@@ -1,0 +1,14 @@
+.animated-icon {
+  &>.icon {
+    stroke: var(--actionColor);
+    stroke-width: 2px;
+    stroke-linecap: round;
+    transition: stroke .8s;
+  }
+
+  &:hover {
+    &>.icon {
+      stroke: var(--accentColor);
+    }
+  }
+}

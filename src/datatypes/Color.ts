@@ -27,11 +27,7 @@ export class Color {
     this.value = isFinite(value) ? value : 0x000000;
   }
 
-  toRgb(): number {
-    return this.value;
-  }
-
-  toString(): string {
+  toString = (): string => {
     if (this.value < 0) {
       return 'transparent';
     } else {
@@ -39,16 +35,22 @@ export class Color {
     }
   }
 
-  static arr2num(arr: number[]): number {
+  get = () => {
+    return this.value;
+  }
+
+  /*
+  // IMPROVEMENT HSL input
+  private static arr2num(arr: number[]): number {
     return (arr[0] << 16) + (arr[1] << 8) + arr[2];
   }
 
-  static num2arr(n: number): number[] {
+  private static num2arr(n: number): number[] {
     return [n >> 16 & 0xff, n >> 8 & 0xff, n & 0xff];
   }
 
   // all ranges [0, 0xff]
-  static rgb2hsl(rgb: number[]): number[] {
+  private static rgb2hsl(rgb: number[]): number[] {
     let min: number = Math.min(...rgb);
     let max: number = Math.max(...rgb);
     let avg: number = (max + min) / 2;
@@ -65,7 +67,8 @@ export class Color {
         avg
       ].map(c => Math.floor(c));
     }
-  }
+  }*/
+
 
   private static rawRgbToNumber(raw: string): number {
     if (typeof raw !== 'undefined' && raw.length > 0 && raw.charAt(0) === '#') {
@@ -95,7 +98,7 @@ export class Color {
         return rgb;
       }
     }
-    return undefined;
+    return null;
   }
 
   static convertToColor(raw: any): Color {

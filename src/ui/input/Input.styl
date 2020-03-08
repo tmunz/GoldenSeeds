@@ -1,0 +1,52 @@
+.input {
+  $height=30;
+  $input-height=18;
+  $font-size=13.5;
+
+  position: relative;
+  padding: 8px 0 4px;
+  font-size: ($font-size)px;
+  margin: 10px 0;
+
+  &>label {
+    position: absolute;
+    white-space: nowrap;
+    z-index: 2;
+    top: (($height) /2 - 5)px;
+    left: 0;
+    padding: 0 4px;
+    pointer-events: none;
+    color: var(--textColor);
+    transition: .4s ease-in-out all;
+
+    transform: translateY(-($height/2)px);
+    font-size: 11px;
+
+    &.input-empty {
+      transform: translateY(0);
+      font-size: ($font-size)px;
+    }
+  }
+
+  &>input {
+    outline: none;
+    height: ($input-height)px;
+    padding: 4px;
+    font-size: ($font-size)px;
+    background: var(--backgroundColor);
+    color: var(--actionColor);
+    border: none;
+    transition: .4s ease-in-out all;
+    width: 182px;
+    position: relative;
+    box-sizing: border-box;
+
+    &.invalid+label {
+      color: var(--errorColor) !important;
+    }
+
+    &:focus+label {
+      color: var(--accentColor);
+    }
+  }
+}

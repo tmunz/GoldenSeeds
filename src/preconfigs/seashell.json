@@ -1,1 +1,25 @@
-{"name":"seashell","type":"regular-shape","size":610,"style":"stroke","backgroundColor":"none","angle":"n*100","distance":"n","items":610,"itemCorners":0,"itemColor":"gold","itemAngle":"n*2","itemSize":"n*1","itemRatio":"0","cutRatio0":"0","cutRatio1":"n/items"}
+{
+  "meta": {
+    "name": "seashell"
+  },
+  "grid": {
+    "type": "polar",
+    "items": "610",
+    "angle": "n * 100",
+    "distance": "n"
+  },
+  "background": {
+    "color": "none"
+  },
+  "drawer": {
+    "type": "regular-shape",
+    "style": "stroke",
+    "corners": "0",
+    "color": "gold",
+    "angle": "n*2",
+    "size": "n*1",
+    "ratio": "0",
+    "cutRatio0": "0",
+    "cutRatio1": "n/items"
+  }
+}

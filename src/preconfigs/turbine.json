@@ -1,1 +1,25 @@
-{"name":"turbine","type":"regular-shape","size":610,"style":"stroke","backgroundColor":"none","angle":"0","distance":"0","items":34,"itemCorners":10,"itemColor":"gold","itemAngle":"n","itemSize":"Math.pow(n, 1 / goldenRatio)","itemRatio":"1 / Math.pow(goldenRatio, 2)","cutRatio0":"0","cutRatio1":"0"}
+{
+  "meta": {
+    "name": "turbine"
+  },
+  "grid": {
+    "type": "polar",
+    "items": "34",
+    "angle": "0",
+    "distance": "0"
+  },
+  "background": {
+    "color": "none"
+  },
+  "drawer": {
+    "type": "regular-shape",
+    "style": "stroke",
+    "corners": "10",
+    "color": "gold",
+    "angle": "n",
+    "size": "Math.pow(n, 1 / goldenRatio)",
+    "ratio": "1 / Math.pow(goldenRatio, 2)",
+    "cutRatio0": "0",
+    "cutRatio1": "0"
+  }
+}

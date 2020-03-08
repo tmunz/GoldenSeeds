@@ -1,12 +1,15 @@
 import { render } from "react-dom";
 import React from "react";
 
-import { GoldenSeedsView } from "./views/GoldenSeedsView";
+import { App } from "./App";
+import { GoldenSeedsView } from "./view/GoldenSeedsView";
+import { appStore } from "./store/AppStore";
 
+import './variables.styl';
 import './index.styl';
 
 
 render(
-  <GoldenSeedsView />,
+  <App stream={appStore.state} view={GoldenSeedsView} />,
   document.getElementById('app')
 );

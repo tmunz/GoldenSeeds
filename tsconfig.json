@@ -11,6 +11,7 @@
     "noUnusedLocals": true,
     "declarationDir": "dist/types",
     "declaration": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "moduleResolution": "node",
   }
 }

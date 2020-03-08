@@ -1,0 +1,25 @@
+.text-input.input {
+
+  border-bottom: 2px solid var(--borderColor);
+
+  &>.indicator {
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 45%;
+      height: 2px;
+      width: 10%;
+      transition: .4s ease-in-out all;
+    }
+  }
+
+
+  &>input {
+    &:focus~.indicator:after {
+      background-color:  var(--accentColor);;
+      width: 100%;
+      left: 0;
+    }
+  }
+}

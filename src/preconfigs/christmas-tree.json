@@ -1,1 +1,25 @@
-{"name":"christmas-tree","type":"regular-shape","size":610,"style":"stroke","backgroundColor":"none","angle":"0","distance":"0","items":9,"itemCorners":6,"itemColor":"#b3de87","itemAngle":"0","itemSize":"Math.pow(n, 1 / goldenRatio)","itemRatio":"(1 - 1 / (n + 1))","cutRatio0":"n == items ? 0 : n % 2 ? 1-(0.2/itemSize(n)) : 0","cutRatio1":"n == items ? 0 : n % 2 ? 1 : 0.2/itemSize(n)"}
+{
+  "meta": {
+    "name": "christmas-tree"
+  },
+  "grid": {
+    "type": "polar",
+    "items": "9",
+    "angle": "0",
+    "distance": "0"
+  },
+  "background": {
+    "color": "none"
+  },
+  "drawer": {
+    "type": "regular-shape",
+    "style": "stroke",
+    "corners": "6",
+    "color": "#b3de87",
+    "angle": "0",
+    "size": "Math.pow(n, 1 / goldenRatio)",
+    "ratio": "(1 - 1 / (n + 1))",
+    "cutRatio0": "n == items ? 0 : n % 2 ? 0.8 : 0",
+    "cutRatio1": "n == items ? 0 : n % 2 ? 1 : 0.2"
+  }
+}

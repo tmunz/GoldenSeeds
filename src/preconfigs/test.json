@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "name": "test"
+  },
+  "grid": {
+    "type": "cartesian",
+    "items": "4",
+    "x": "2"
+  },
+  "background": {
+    "color": "transparent"
+  },
+  "drawer": {
+    "type": "voronoi",
+    "color": "gold",
+    "style": "filled",
+    "borderWidth": "1"
+  }
+}

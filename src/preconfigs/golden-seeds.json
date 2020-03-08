@@ -1,1 +1,25 @@
-{"name":"golden-seeds","type":"regular-shape","size":610,"style":"filled","backgroundColor":"gold","angle":"n * 360 / goldenRatio","distance":"Math.pow(n, 1 / goldenRatio)","items":987,"itemCorners":0,"itemColor":"#000000","itemAngle":"n * 360 / goldenRatio - 90","itemSize":"Math.pow(n / 5, 1 / 5)","itemRatio":"1 / Math.pow(goldenRatio, 2)","cutRatio0":0,"cutRatio1":0}
+{
+  "meta": {
+    "name": "golden-seeds"
+  },
+  "grid": {
+    "type": "polar",
+    "items": "987",
+    "angle": "n * 360 / goldenRatio",
+    "distance": "Math.pow(n, 1 / goldenRatio)"
+  },
+  "background": {
+    "color": "transparent"
+  },
+  "drawer": {
+    "type": "regular-shape",
+    "corners": "0",
+    "color": "gold",
+    "style": "filled",
+    "angle": "0",
+    "size": "Math.pow(n / 5, 1 / 5)",
+    "ratio": "1 / Math.pow(goldenRatio, 2)",
+    "cutRatio0": "0",
+    "cutRatio1": "0"
+  }
+}
