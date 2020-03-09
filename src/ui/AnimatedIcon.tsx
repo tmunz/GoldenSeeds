@@ -5,7 +5,7 @@ import './AnimatedIcon.styl';
 export interface Props {
   points: (number[][][] | string[]);
   index: number;
-  rotation?: number
+  rotation?: number;
 }
 
 
@@ -23,8 +23,8 @@ export function AnimatedIcon(props: Props) {
   });
 
   const toPath = (ps: number[][] | string) => {
-    return typeof ps === "string" ? ps : ps.reduce((agg, p) => agg + ` ${p[0]},${p[1]}`, "");
-  }
+    return typeof ps === 'string' ? ps : ps.reduce((agg, p) => agg + ` ${p[0]},${p[1]}`, '');
+  };
 
   return <svg viewBox="0 0 100 100" className="animated-icon">
     <polyline

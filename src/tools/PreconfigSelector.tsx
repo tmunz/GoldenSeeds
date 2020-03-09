@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
 import { preconfigs } from '../preconfigs/index';
-import { Input, InputType } from "../ui/input/Input";
-import { setConfigFromPreconfigs } from "../store/Actions";
+import { Input, InputType } from '../ui/input/Input';
+import { setConfigFromPreconfigs } from '../store/Actions';
 
 
 interface Props {

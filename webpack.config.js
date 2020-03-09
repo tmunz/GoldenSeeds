@@ -26,10 +26,16 @@ module.exports = {
     }, {
       test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
       exclude: /\.icon\.svg$/,
-      loader: 'file-loader?name=[name].[ext]'
+      loader: 'file-loader?name=[name].[ext]',
+      options: {
+        esModule: false,
+      },
     }, {
       test: /\.jpe?g$|\.gif$|\.png$/i,
-      loader: 'file-loader?name=[name].[ext]'
+      loader: 'file-loader?name=[name].[ext]',
+      options: {
+        esModule: false,
+      },
     }, {
       test: /\.css$|\.styl$/,
       use: [

@@ -5,14 +5,14 @@ import './ColorInput.styl';
 
 
 export interface Props {
-  label?: string,
-  value?: string,
-  rangeValue?: number,
-  onChange: (value: number) => void,
-  className?: string,
+  label?: string;
+  value?: string;
+  rangeValue?: number;
+  onChange: (value: number) => void;
+  className?: string;
 }
 
-enum InputColor { RED = "red", GREEN = "green", BLUE = "blue" }
+enum InputColor { RED = 'red', GREEN = 'green', BLUE = 'blue' }
 
 
 export class ColorInput extends React.Component<Props> {
@@ -29,23 +29,23 @@ export class ColorInput extends React.Component<Props> {
                 : value >> (2 - i) * 8 & 0xff, c)
         )}
       </div>
-    </div>
+    </div>;
   }
 
   private getInputField(value: any, inputColor?: InputColor): React.ReactNode {
     return <RangeInput
       key={inputColor}
       className={[
-        typeof this.props.className !== 'undefined' ? this.props.className : "",
-        inputColor ? "color-input-range-" + inputColor : "",
-      ].join(" ")}
+        typeof this.props.className !== 'undefined' ? this.props.className : '',
+        inputColor ? 'color-input-range-' + inputColor : '',
+      ].join(' ')}
       onChange={n => this.props.onChange(this.convertValue(n, inputColor))}
       rangeValue={typeof value !== 'undefined' ? value : ''}
       value={value < 0 ? 'transparent' : 0xff < value ? 'random' : value}
       min={-1}
       max={0x100}
       step={1}
-    />
+    />;
   }
 
   private convertValue(channel: any, inputColor?: InputColor) {

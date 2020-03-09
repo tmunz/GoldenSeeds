@@ -49,8 +49,8 @@ export class Math2d {
     const c = {
       x: Math.cos(rads + slopeAbRads) * distanceAC + a.x,
       y: Math.sin(rads + slopeAbRads) * distanceAC + a.y,
-    }
-    return c
+    };
+    return c;
   }
 
 }

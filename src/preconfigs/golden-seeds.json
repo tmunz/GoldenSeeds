@@ -13,10 +13,10 @@
   },
   "drawer": {
     "type": "regular-shape",
-    "corners": "0",
+    "corners": "2",
     "color": "gold",
     "style": "filled",
-    "angle": "0",
+    "angle": "n * 111",
     "size": "Math.pow(n / 5, 1 / 5)",
     "ratio": "1 / Math.pow(goldenRatio, 2)",
     "cutRatio0": "0",

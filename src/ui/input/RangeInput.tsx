@@ -4,14 +4,14 @@ import './RangeInput.styl';
 
 
 export interface Props {
-  className?: string,
-  label?: string,
-  value?: string,
-  rangeValue?: any,
-  onChange: (value: number) => void,
-  min?: number,
-  max?: number,
-  step?: number,
+  className?: string;
+  label?: string;
+  value?: string;
+  rangeValue?: any;
+  onChange: (value: number) => void;
+  min?: number;
+  max?: number;
+  step?: number;
 }
 
 export class RangeInput extends React.Component<Props> {
@@ -32,6 +32,6 @@ export class RangeInput extends React.Component<Props> {
         {this.props.label}
       </label>
       <output>{this.props.value} </output>
-    </div>
+    </div>;
   }
 }

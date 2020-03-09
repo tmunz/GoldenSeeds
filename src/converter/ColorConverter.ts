@@ -1,7 +1,7 @@
-import { InputType } from "../ui/input/Input";
-import { Converter } from "./Converter";
-import { StageState } from "../Config";
-import { Color } from "../datatypes/Color";
+import { InputType } from '../ui/input/Input';
+import { Converter } from './Converter';
+import { StageState } from '../Config';
+import { Color } from '../datatypes/Color';
 
 export class ColorConverter extends Converter<Color> {
 

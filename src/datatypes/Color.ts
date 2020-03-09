@@ -23,7 +23,7 @@ export class Color {
   private value: number; // [0, 0xffffff]; negative values are interpreted as transparent, bigger values as random
 
   constructor(raw: any) {
-    let value: number = Color._convertToColor(raw);
+    const value: number = Color._convertToColor(raw);
     this.value = isFinite(value) ? value : 0x000000;
   }
 
@@ -72,7 +72,7 @@ export class Color {
 
   private static rawRgbToNumber(raw: string): number {
     if (typeof raw !== 'undefined' && raw.length > 0 && raw.charAt(0) === '#') {
-      let parsedValue = parseInt(raw.substring(1), 16);
+      const parsedValue = parseInt(raw.substring(1), 16);
       if (!isFinite(parsedValue)) {
         return undefined;
       }
@@ -80,7 +80,7 @@ export class Color {
         return parsedValue;
       }
       if (raw.length === 4) {  // enable #fff as well as #ffffff
-        let tmp = ((parsedValue & 0xf00) << 8) | ((parsedValue & 0x0f0) << 4) | (parsedValue & 0x00f);
+        const tmp = ((parsedValue & 0xf00) << 8) | ((parsedValue & 0x0f0) << 4) | (parsedValue & 0x00f);
         return tmp | (tmp << 4);
       }
     } else {
@@ -93,7 +93,7 @@ export class Color {
     if (isFinite(Number(raw))) {
       return Number(raw);
     } else {
-      let rgb: number = Color.rawRgbToNumber(raw);
+      const rgb: number = Color.rawRgbToNumber(raw);
       if (isFinite(rgb)) {
         return rgb;
       }
@@ -102,7 +102,7 @@ export class Color {
   }
 
   static convertToColor(raw: any): Color {
-    let value: number = Color._convertToColor(raw);
+    const value: number = Color._convertToColor(raw);
     return isFinite(value) ? new Color(value) : null;
   }
 

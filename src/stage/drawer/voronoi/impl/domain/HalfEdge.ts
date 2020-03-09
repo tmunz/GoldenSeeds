@@ -17,10 +17,10 @@ export class HalfEdge {
 
   getStartpoint(): Vertex {
     return this.site === this.edge.leftSite ? this.edge.getStartPoint() : this.edge.getEndPoint();
-  };
+  }
 
   getEndpoint(): Vertex {
     return this.site === this.edge.leftSite ? this.edge.getEndPoint() : this.edge.getStartPoint();
-  };
+  }
 
 }

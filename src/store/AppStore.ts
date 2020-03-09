@@ -1,4 +1,4 @@
-import { Store, Stream as AbstractStream } from "./Store";
+import { Store, Stream as AbstractStream } from './Store';
 import { Config } from '../Config';
 
 export interface AppState {

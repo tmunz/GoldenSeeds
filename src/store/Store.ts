@@ -1,10 +1,10 @@
-import flyd from "flyd";
-import { ObjectUtils, Patch } from "../utils/ObjectUtils";
-import { HistoryManager } from "../utils/HistoryManager";
+import flyd from 'flyd';
+import { ObjectUtils, Patch } from '../utils/ObjectUtils';
+import { HistoryManager } from '../utils/HistoryManager';
 
 export type Stream<T> = flyd.Stream<T>;
 
-export abstract class Store<T extends Object> {
+export abstract class Store<T extends Record<string, any>> {
 
   private _initialState: T;
   private _state: Stream<T>;
@@ -23,10 +23,10 @@ export abstract class Store<T extends Object> {
     }
   }
 
-  private reduce(source: any, { path, value, type }: { path: string[], value: any, type: string }) {
+  private reduce(source: any, { path, value, type }: { path: string[]; value: any; type: string }) {
     switch (type) {
-      case "set": return ObjectUtils.set<any>(source, { path, value });
-      case "merge": return ObjectUtils.merge<any>(source, { path, value });
+    case 'set': return ObjectUtils.set<any>(source, { path, value });
+    case 'merge': return ObjectUtils.merge<any>(source, { path, value });
     }
   }
 
@@ -35,14 +35,14 @@ export abstract class Store<T extends Object> {
   }
 
   set(value: any, path: string[] = [], withHistory?: boolean) {
-    this.update({ path, value, type: "set" }, withHistory);
+    this.update({ path, value, type: 'set' }, withHistory);
   }
 
   merge(value: any, path: string[] = [], withHistory?: boolean) {
-    this.update({ path, value, type: "merge" }, withHistory);
+    this.update({ path, value, type: 'merge' }, withHistory);
   }
 
-  private update(next: { path: string[], value: any, type: string }, withHistory: boolean = true) {
+  private update(next: { path: string[]; value: any; type: string }, withHistory = true) {
     this._update(next);
     if (this.withHistory && withHistory) {
       this._history.push(this._state());
@@ -77,7 +77,7 @@ export abstract class Store<T extends Object> {
   }
 
   private get withHistory() {
-    return typeof this._history !== "undefined";
+    return typeof this._history !== 'undefined';
   }
 
   private createHistory() {

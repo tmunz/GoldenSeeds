@@ -27,7 +27,7 @@ export class VoronoiDrawer extends React.Component<Props> {
     const boundary: Boundary = new Boundary(this.boundingBox);
     const offset = this.props.config.borderWidth / 10;
 
-    let voronoi = new Voronoi(this.props.grid, boundary, offset);
+    const voronoi = new Voronoi(this.props.grid, boundary, offset);
 
     return voronoi.cells.map((cell: Cell, i: number) => {
       const path = this.createPath(cell);
@@ -36,7 +36,7 @@ export class VoronoiDrawer extends React.Component<Props> {
       return {
         ...path,
         key: i,
-        props: { ...path.props, ...style, vectorEffect: "non-scaling-stroke" },
+        props: { ...path.props, ...style, vectorEffect: 'non-scaling-stroke' },
       };
     });
 
@@ -62,7 +62,7 @@ export class VoronoiDrawer extends React.Component<Props> {
       } else {
         return `${s} L ${point.x}, ${point.y} `;
       }
-    }, '') + 'z'} />
+    }, '') + 'z'} />;
   }
 
   private get boundingBox(): BoundingBox {

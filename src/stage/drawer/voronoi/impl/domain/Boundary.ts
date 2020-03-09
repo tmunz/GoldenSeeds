@@ -15,14 +15,14 @@ export class Boundary {
     this.h = h;
   }
 
-  isPointOnBorder(point: { x: number, y: number }): boolean {
+  isPointOnBorder(point: { x: number; y: number }): boolean {
     return DistanceHelper.isEqualWithTolerance(point.x, this.left())
       || DistanceHelper.isEqualWithTolerance(point.y, this.top())
       || DistanceHelper.isEqualWithTolerance(point.x, this.right())
-      || DistanceHelper.isEqualWithTolerance(point.y, this.bottom())
+      || DistanceHelper.isEqualWithTolerance(point.y, this.bottom());
   }
 
-  isPointInside(point: { x: number, y: number }): boolean {
+  isPointInside(point: { x: number; y: number }): boolean {
     return this.left() <= point.x && point.x <= this.right()
       && this.top() <= point.y && point.y <= this.bottom();
   }

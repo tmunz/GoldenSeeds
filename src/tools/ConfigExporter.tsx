@@ -1,6 +1,6 @@
-import React from "react";
-import { Config } from "../Config";
-import { DirectionButton, Direction } from "../ui/DirectionButton";
+import React from 'react';
+import { Config } from '../Config';
+import { DirectionButton, Direction } from '../ui/DirectionButton';
 
 interface Props {
   config: Config;
@@ -33,7 +33,7 @@ export class ConfigExporter extends React.Component<Props> {
   }
 
   private convertConfigToJson(config: Config): { [key: string]: { [key: string]: string } } {
-    return ["grid", "background", "drawer"].reduce((stage, stageId) => ({
+    return ['grid', 'background', 'drawer'].reduce((stage, stageId) => ({
       ...stage,
       [stageId]: Object.keys((config as any)[stageId].state).reduce(
         (agg, key) => ({ ...agg, [key]: (config as any)[stageId].state[key].rawValue }),

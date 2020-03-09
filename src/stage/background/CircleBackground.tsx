@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 
-import { Background } from "./Background";
-import { ColorConverter } from "../../converter";
-import { Color } from "../../datatypes/Color";
+import { Background } from './Background';
+import { ColorConverter } from '../../converter';
+import { Color } from '../../datatypes/Color';
 
 export class CircleBackground extends Background {
 
-  type = "circle";
+  type = 'circle';
 
   initialState = {
-    color: "#000000",
+    color: '#000000',
   };
 
   converter = {
-    color: new ColorConverter("color"),
+    color: new ColorConverter('color'),
   };
 
   generate = (config: { color: Color }) => {

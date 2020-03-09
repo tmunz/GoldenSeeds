@@ -1,4 +1,4 @@
-import { SiteArea } from "./SiteArea";
+import { SiteArea } from './SiteArea';
 
 export class SiteAreaStore {
 

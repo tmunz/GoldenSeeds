@@ -20,12 +20,12 @@ export class Voronoi {
   vertices: Point[] = [];
 
 
-  constructor(inputPoints: number[][], boundary: Boundary, cellOffset: number = 0) {
+  constructor(inputPoints: number[][], boundary: Boundary, cellOffset = 0) {
 
     // console.log(inputPoints.length, boundary);
     // console.time("voronoi");
 
-    let worker = new VoronoiWorker();
+    const worker = new VoronoiWorker();
     const siteQueue: Queue<Site> = this.createSiteQueue(inputPoints);
 
     const { edges, vertices: domainVertices, siteAreas } = worker.process(siteQueue, boundary);
@@ -74,8 +74,8 @@ export class Voronoi {
 
 
   private convertToCell(siteArea: SiteArea): Cell {
-    let center = { x: siteArea.site.x, y: siteArea.site.y };
-    let path = this.createPath(siteArea.halfEdges);
+    const center = { x: siteArea.site.x, y: siteArea.site.y };
+    const path = this.createPath(siteArea.halfEdges);
     return { center, path };
   }
 

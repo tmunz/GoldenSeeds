@@ -4,9 +4,9 @@ import { Config, StageState } from '../Config';
 
 
 interface Props {
-  config: Config,
-  width: number,
-  height: number,
+  config: Config;
+  width: number;
+  height: number;
 }
 
 export class SvgCanvas extends React.Component<Props> {
@@ -21,23 +21,23 @@ export class SvgCanvas extends React.Component<Props> {
 
     return (
       <ErrorBoundary>
-        <svg xmlns="http://www.w3.org/2000/svg"
+        <svg xmlns='http://www.w3.org/2000/svg'
           width={this.props.width}
           height={this.props.height}
           ref={e => this.svgContent = e}
         >
           <defs>
-            <g id="background">{background.result}</g>
-            <g id="drawing">{drawing.result}</g>
+            <g id='background'>{background.result}</g>
+            <g id='drawing'>{drawing.result}</g>
           </defs>
-          <use transform={this.transform(background.boundingBox, 200)} href="#background" />
-          <use transform={this.transform(drawing.boundingBox, 220)} href="#drawing" />
+          <use transform={this.transform(background.boundingBox, 200)} href='#background' />
+          <use transform={this.transform(drawing.boundingBox, 220)} href='#drawing' />
         </svg>
       </ErrorBoundary>
     );
   }
 
-  private transform(boundingBox: BoundingBox, offset: number = 0): string {
+  private transform(boundingBox: BoundingBox, offset = 0): string {
     const targetSize = Math.min(this.props.width, this.props.height) - offset;
     const scale = targetSize / Math.max(boundingBox.w, boundingBox.h);
     const x = (this.props.width / 2 - (boundingBox.x + boundingBox.w / 2) * scale);
@@ -67,7 +67,7 @@ class ErrorBoundary extends React.Component<{}, { error: boolean }> {
 
   render() {
     if (this.state.error) {
-      return <div className="error">Something went wrong - work in progress :-(</div>;
+      return <div className='error'>Something went wrong - work in progress :-(</div>;
     }
     return this.props.children;
   }

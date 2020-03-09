@@ -29,13 +29,13 @@ export class DirectionButton extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = { hover: false }
+    this.state = { hover: false };
   }
 
   render() {
     return (
       <div
-        className={["direction-button", this.state.hover ? "hover" : ""].join(" ")}
+        className={['direction-button', this.state.hover ? 'hover' : ''].join(' ')}
         onClick={() => this.props.onClick && this.props.onClick()}
         onMouseEnter={() => this.setState({ hover: true })}
         onMouseLeave={() => this.setState({ hover: false })}

@@ -1,6 +1,6 @@
-import React from "react";
-import { DirectionButton, Direction } from "../ui/DirectionButton";
-import { appStore } from "../store/AppStore";
+import React from 'react';
+import { DirectionButton, Direction } from '../ui/DirectionButton';
+import { appStore } from '../store/AppStore';
 
 export class HistoryController extends React.Component<{}> {
 

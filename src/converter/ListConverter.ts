@@ -1,6 +1,6 @@
-import { Converter } from "./Converter";
-import { StageState } from "../Config";
-import { InputType } from "../ui/input/Input";
+import { Converter } from './Converter';
+import { StageState } from '../Config';
+import { InputType } from '../ui/input/Input';
 
 export class ListConverter<T> extends Converter<string> {
 

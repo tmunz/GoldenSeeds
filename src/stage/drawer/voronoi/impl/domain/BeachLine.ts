@@ -1,15 +1,15 @@
-import { RbTree } from "../utils/rbTree/RbTree";
-import { RbTreeNode } from "../utils/rbTree/RbTreeNode";
-import { Edge } from "./Edge";
-import { CircleEventQueue } from "./CircleEventQueue";
-import { EdgeManager } from "./EdgeManager";
-import { Vertex } from "./Vertex";
-import { Site } from "./Site";
-import { VertexFactory } from "./VertexFactory";
-import { SiteArea } from "./SiteArea";
-import { DistanceHelper } from "./DistanceHelper";
-import { HalfEdge } from "./HalfEdge";
-import { SiteAreaStore } from "./SiteAreaStore";
+import { RbTree } from '../utils/rbTree/RbTree';
+import { RbTreeNode } from '../utils/rbTree/RbTreeNode';
+import { Edge } from './Edge';
+import { CircleEventQueue } from './CircleEventQueue';
+import { EdgeManager } from './EdgeManager';
+import { Vertex } from './Vertex';
+import { Site } from './Site';
+import { VertexFactory } from './VertexFactory';
+import { SiteArea } from './SiteArea';
+import { DistanceHelper } from './DistanceHelper';
+import { HalfEdge } from './HalfEdge';
+import { SiteAreaStore } from './SiteAreaStore';
 
 
 export interface BeachSection {
@@ -48,7 +48,7 @@ export class BeachLine {
     this.siteAreaStore.put(site.id, new SiteArea(site));
     let { leftSection, rightSection } = this.getSectionsFor(site);
 
-    let newArc: BeachSection = this.addNewSectionToExisting({ site }, leftSection);
+    const newArc: BeachSection = this.addNewSectionToExisting({ site }, leftSection);
 
     // the new section ...
     const isFirstBeachSection = !leftSection && !rightSection;
@@ -77,7 +77,7 @@ export class BeachLine {
       this.circleEvents.detachCurrent(rightSection);
 
       const collapsingPoint = this.calculateCenterOfOutcircle(leftSection.site, site, rightSection.site);
-      let vertex = this.vertexFactory.create(collapsingPoint.x, collapsingPoint.y);
+      const vertex = this.vertexFactory.create(collapsingPoint.x, collapsingPoint.y);
 
       this.createNewEdgeFrom(vertex, leftSection, rightSection);
 
@@ -91,25 +91,25 @@ export class BeachLine {
 
 
   removeSection(beachSection: BeachSectionNode): void {
-    let vertex = this.vertexFactory.create(beachSection.circleEvent.x, beachSection.circleEvent.centerY);
-    let previousSection = beachSection.prev;
-    let nextSection = beachSection.next;
+    const vertex = this.vertexFactory.create(beachSection.circleEvent.x, beachSection.circleEvent.centerY);
+    const previousSection = beachSection.prev;
+    const nextSection = beachSection.next;
 
     this.detachSection(beachSection, this.circleEvents);
     this.closeBeachBetween(previousSection, beachSection, nextSection, vertex);
   }
 
 
-  private getSectionsFor(site: Site): { leftSection: BeachSection, rightSection: BeachSection } {
+  private getSectionsFor(site: Site): { leftSection: BeachSection; rightSection: BeachSection } {
     let node = this.dataTree.getRoot();
     let leftSection, rightSection;
 
     while (node) {
-      let leftBreakPointRelativeX = this.calculateLeftBreakPointX(node, site.y) - site.x;
+      const leftBreakPointRelativeX = this.calculateLeftBreakPointX(node, site.y) - site.x;
       if (leftBreakPointRelativeX > DistanceHelper.tolerance) {
         node = node.left;
       } else {
-        let rightBreakPointRelativeX = site.x - this.calculateRightBreakPointX(node, site.y);
+        const rightBreakPointRelativeX = site.x - this.calculateRightBreakPointX(node, site.y);
 
         // x greaterThanWithTolerance boundary.right() => falls somewhere after the right edge of the beachsection
         if (rightBreakPointRelativeX > DistanceHelper.tolerance) {
@@ -147,22 +147,22 @@ export class BeachLine {
   private closeBeachBetween(previousSection: BeachSectionNode, beachSection: BeachSectionNode,
     nextSection: BeachSectionNode, vertex: Vertex) {
 
-    let leftBeach: BeachSection[] = this.getLeftBeach(previousSection, vertex);
+    const leftBeach: BeachSection[] = this.getLeftBeach(previousSection, vertex);
     this.circleEvents.detachCurrent(leftBeach[0]);
 
-    let rightBeach: BeachSection[] = this.getRightBeach(nextSection, vertex);
+    const rightBeach: BeachSection[] = this.getRightBeach(nextSection, vertex);
     this.circleEvents.detachCurrent(rightBeach[rightBeach.length - 1]);
 
-    let collapsingSections: BeachSection[] = [...leftBeach, beachSection, ...rightBeach];
+    const collapsingSections: BeachSection[] = [...leftBeach, beachSection, ...rightBeach];
     collapsingSections.forEach((rightSection: BeachSection, i: number, arr: BeachSection[]) => {
       if (i > 0) {
-        let leftSection = arr[i - 1];
+        const leftSection = arr[i - 1];
         this.createNewEdgeFrom(vertex, leftSection, rightSection);
       }
     });
 
-    let leftSection = collapsingSections[0];
-    let rightSection = collapsingSections[collapsingSections.length - 1];
+    const leftSection = collapsingSections[0];
+    const rightSection = collapsingSections[collapsingSections.length - 1];
     rightSection.edge = this.addNewEdge(leftSection.site, rightSection.site, undefined, vertex);
 
     this.circleEvents.attachCircleEventIfNeededOnCollapse(leftSection);
@@ -171,7 +171,7 @@ export class BeachLine {
 
 
   private getLeftBeach(section: BeachSectionNode, vertex: Vertex): BeachSection[] {
-    let leftBeach: BeachSection[] = [];
+    const leftBeach: BeachSection[] = [];
     let previousSection = section;
     let leftSection_ = section;
     while (
@@ -191,7 +191,7 @@ export class BeachLine {
 
 
   private getRightBeach(section: BeachSectionNode, vertex: Vertex): BeachSection[] {
-    let rightBeach = [];
+    const rightBeach = [];
     let nextSection = section;
     let rightSection_ = section;
     while (
@@ -216,16 +216,16 @@ export class BeachLine {
   }
 
 
-  private calculateCenterOfOutcircle(a: { x: number, y: number }, b: { x: number, y: number }, c: { x: number, y: number }) {
+  private calculateCenterOfOutcircle(a: { x: number; y: number }, b: { x: number; y: number }, c: { x: number; y: number }) {
     // set origin to point a
     const d = { x: b.x - a.x, y: b.y - a.y };
     const e = { x: c.x - a.x, y: c.y - a.y };
 
-    let f = 2 * (d.x * e.y - d.y * e.x);
-    let hd = Math.pow(d.x, 2) + Math.pow(d.y, 2);
-    let he = Math.pow(e.x, 2) + Math.pow(e.y, 2);
-    let x = (e.y * hd - d.y * he) / f + a.x;
-    let y = (d.x * hd - e.x * he) / f + a.y;
+    const f = 2 * (d.x * e.y - d.y * e.x);
+    const hd = Math.pow(d.x, 2) + Math.pow(d.y, 2);
+    const he = Math.pow(e.x, 2) + Math.pow(e.y, 2);
+    const x = (e.y * hd - d.y * he) / f + a.x;
+    const y = (d.x * hd - e.x * he) / f + a.y;
     return { x, y };
   }
 
@@ -239,29 +239,29 @@ export class BeachLine {
   private calculateLeftBreakPointX(beachSection: BeachSectionNode, sweepLineX: number): number {
 
     let site = beachSection.site;
-    let rfocx = site.x;
-    let rfocy = site.y;
-    let pby2 = rfocy - sweepLineX;
+    const rfocx = site.x;
+    const rfocy = site.y;
+    const pby2 = rfocy - sweepLineX;
 
     if (!pby2) {
       return rfocx;
     }
 
-    let leftSection = beachSection.prev;
+    const leftSection = beachSection.prev;
     if (!leftSection) {
       return -Infinity;
     }
 
     site = leftSection.site;
-    let lfocx = site.x;
-    let lfocy = site.y;
-    let plby2 = lfocy - sweepLineX;
+    const lfocx = site.x;
+    const lfocy = site.y;
+    const plby2 = lfocy - sweepLineX;
 
     if (!plby2) {
       return lfocx;
     }
 
-    let hl = lfocx - rfocx,
+    const hl = lfocx - rfocx,
       aby2 = 1 / pby2 - 1 / plby2,
       b = hl / plby2;
 
@@ -274,11 +274,11 @@ export class BeachLine {
 
 
   private calculateRightBreakPointX(beachSection: BeachSectionNode, sweepLineX: number): number {
-    let rightSection = beachSection.next;
+    const rightSection = beachSection.next;
     if (rightSection) {
       return this.calculateLeftBreakPointX(rightSection, sweepLineX);
     } else {
-      let site = beachSection.site;
+      const site = beachSection.site;
       return site.y === sweepLineX ? site.x : Infinity;
     }
   }
@@ -296,7 +296,7 @@ export class BeachLine {
 
 
   private addNewEdge(leftSite: Site, rightSite: Site, va?: Vertex, vb?: Vertex): Edge {
-    let edge: Edge = this.edgeManager.create(leftSite, rightSite);
+    const edge: Edge = this.edgeManager.create(leftSite, rightSite);
     if (va) {
       edge.createStartpoint(va, leftSite, rightSite);
     }

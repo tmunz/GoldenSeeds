@@ -18,12 +18,12 @@ module.exports = function (api) {
         allExtensions: true,
         isTSX: true,
         targets: {
-          browsers: "> 0.5%"
+          browsers: '> 0.5%'
         }
       }],
     ],
     plugins: [
-      "@babel/proposal-class-properties",
+      '@babel/proposal-class-properties',
     ],
-  }
-}
+  };
+};

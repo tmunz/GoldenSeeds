@@ -9,4 +9,4 @@ module.exports = {
   ],
   coverageReporters: ['text-summary'],
   setupFilesAfterEnv: ['./src/stage/drawer/voronoi/TestUtils.ts'],
-}
+};

@@ -2,18 +2,18 @@ import * as React from 'react';
 import { RangeInput } from './RangeInput';
 import { TextInput } from './TextInput';
 
-import "./ExtendedRangeInput.styl";
+import './ExtendedRangeInput.styl';
 
 
 export interface Props {
-  className?: string,
-  label?: string,
-  value?: string,
-  rangeValue?: number,
-  onChange: (value: any) => void,
-  min?: number,
-  max?: number,
-  step?: number,
+  className?: string;
+  label?: string;
+  value?: string;
+  rangeValue?: number;
+  onChange: (value: any) => void;
+  min?: number;
+  max?: number;
+  step?: number;
 }
 
 export class ExtendedRangeInput extends React.Component<Props> {

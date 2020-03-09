@@ -14,7 +14,7 @@ export class Queue<T> {
 
   pop(): T {
     this.prev = this.curr;
-    this.curr = this.data.pop()
+    this.curr = this.data.pop();
     return this.curr;
   }
 
@@ -23,7 +23,7 @@ export class Queue<T> {
   }
 
   getPrevious() {
-    return this.prev
+    return this.prev;
   }
 
 }

@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { DirectionButton, Direction } from "../ui/DirectionButton";
+import { DirectionButton, Direction } from '../ui/DirectionButton';
 
 
 interface Props {

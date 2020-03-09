@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import { MathUtils } from "../utils/MathUtils";
-import { InputType } from "../ui/input/Input";
-import { StageState } from "../Config";
-import { Converter } from "./Converter";
-import { setConfigValue } from "../store/Actions";
+import { MathUtils } from '../utils/MathUtils';
+import { InputType } from '../ui/input/Input';
+import { StageState } from '../Config';
+import { Converter } from './Converter';
+import { setConfigValue } from '../store/Actions';
 
 
 export class ExpressionConverter extends Converter<(n: number, items: number, itemSize: (n: number) => number) => number> {
@@ -22,23 +22,23 @@ export class ExpressionConverter extends Converter<(n: number, items: number, it
       canExpertMode: true,
       rangeValue,
       controls,
-      convertToString: (i: any) => `${nMode && typeof i === "number" ? 'n * ' : ''}${i}`,
-    }
+      convertToString: (i: any) => `${nMode && typeof i === 'number' ? 'n * ' : ''}${i}`,
+    };
   }
 
   private generateNControl(stage: string, nLessValue: string, active: boolean): JSX.Element {
     return <div
       key={this.name}
-      className={["n-mode-selector", active ? "active" : ""].join(" ")}
-      onClick={() => { setConfigValue(stage, this.name, (active ? '' : 'n * ') + nLessValue) }}
+      className={['n-mode-selector', active ? 'active' : ''].join(' ')}
+      onClick={() => { setConfigValue(stage, this.name, (active ? '' : 'n * ') + nLessValue); }}
     >
       n
-    </div >
+    </div >;
   }
 
   protected convertFromRaw = (rawValue: string): ((n: number, items: number, itemSize: (n: number) => number) => number) => {
     try {
-      let expression = this.convertToExpression(rawValue);
+      const expression = this.convertToExpression(rawValue);
       // don't check everything because of performance reasons
       [0, 1].map((i: number) => expression(i, 100, n => n)); //test Expression 
       return expression;

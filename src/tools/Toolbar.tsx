@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import { SvgExporter } from "./SvgExporter";
-import { ConfigExporter } from "./ConfigExporter";
-import { ConfigImporter } from "./ConfigImporter";
-import { AnimationController } from "./AnimationController";
-import { PreconfigSelector } from "./PreconfigSelector";
-import { Input } from "../ui/input/Input";
-import { setItemCount, setRawConfig, setName } from "../store/Actions";
-import { Config } from "../Config";
-import { HistoryController } from "./HistoryController";
+import { SvgExporter } from './SvgExporter';
+import { ConfigExporter } from './ConfigExporter';
+import { ConfigImporter } from './ConfigImporter';
+import { AnimationController } from './AnimationController';
+import { PreconfigSelector } from './PreconfigSelector';
+import { Input } from '../ui/input/Input';
+import { setItemCount, setRawConfig, setName } from '../store/Actions';
+import { Config } from '../Config';
+import { HistoryController } from './HistoryController';
 
 import './Toolbar.styl';
 
@@ -20,7 +20,7 @@ interface Props {
 }
 
 interface State {
-  __removeSvgButtonTest: number
+  __removeSvgButtonTest: number;
 }
 
 export class Toolbar extends React.Component<Props, State> {
@@ -35,7 +35,7 @@ export class Toolbar extends React.Component<Props, State> {
     const items = this.props.config?.grid?.state?.items?.value;
     return (
       <div className="overlay overlay-container toolbar">
-        <Input value={name} onChange={setName} label={"name"} />
+        <Input value={name} onChange={setName} label={'name'} />
         <PreconfigSelector preconfigIndex={this.props.preconfigIndex} />
         <div className="actions">
           <HistoryController />

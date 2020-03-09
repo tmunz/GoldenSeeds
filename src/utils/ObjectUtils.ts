@@ -24,8 +24,8 @@ export class ObjectUtils {
 
   static patch<T>(source: T, ...patches: any[]): T {
     const isArray = Array.isArray(source);
-    const copy = isArray ? [...(source as unknown as any[])] : { ...source }
-    return ObjectUtils.apply(isArray, copy, patches)
+    const copy = isArray ? [...(source as unknown as any[])] : { ...source };
+    return ObjectUtils.apply(isArray, copy, patches);
   }
 
   static deepCopy<T>(obj: T): T {
@@ -34,13 +34,13 @@ export class ObjectUtils {
 
   private static convertPatchToObject(patch: Patch) {
     let current: any = patch.value;
-    let path: string[] = [...patch.path];
+    const path: string[] = [...patch.path];
     let key: string;
     while (key = path.pop()) {
       current = { [key]: current };
     }
     return current;
-  };
+  }
 
   private static apply<T>(isArray: boolean, copy: any, patch: any): T {
     if (patch && typeof patch === 'object') {
@@ -49,7 +49,7 @@ export class ObjectUtils {
       }
       else {
         Object.keys(patch).forEach((k: string | number) => {
-          const val = patch[k]
+          const val = patch[k];
           if (typeof val === 'function') {
             copy[k] = val;
           }

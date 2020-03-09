@@ -51,7 +51,7 @@ export class Edge {
       return true;
     }
 
-    let center: { x: number, y: number } = { x: (this.leftSite.x + this.rightSite.x) / 2, y: (this.leftSite.y + this.rightSite.y) / 2 };
+    const center: { x: number; y: number } = { x: (this.leftSite.x + this.rightSite.x) / 2, y: (this.leftSite.y + this.rightSite.y) / 2 };
     let slope: number;
     let fb: number;
 
@@ -63,7 +63,7 @@ export class Edge {
       fb = center.y - slope * center.x;
     }
 
-    let slopeIsVertical = slope === undefined;
+    const slopeIsVertical = slope === undefined;
 
     if (slopeIsVertical) {
       if (!boundary.isPointInside(center)) {
@@ -124,13 +124,13 @@ export class Edge {
         this.vertices[1] = vertexFactory.create(boundary.left(), slope * boundary.left() + fb);
       }
     }
-    return true
+    return true;
   }
 
 
-  private calculateUpward(center: { x: number, y: number }, boundary: Boundary, vertexFactory: VertexFactory) {
-    let boundaryA = boundary.bottom();
-    let boundaryB = boundary.top();
+  private calculateUpward(center: { x: number; y: number }, boundary: Boundary, vertexFactory: VertexFactory) {
+    const boundaryA = boundary.bottom();
+    const boundaryB = boundary.top();
     if (!this.getStartPoint() || this.getStartPoint().y > boundaryA) {
       this.vertices[0] = vertexFactory.create(center.x, boundaryA);
     } else if (this.vertices[0].y < boundaryB) {
@@ -140,9 +140,9 @@ export class Edge {
   }
 
 
-  private calculateDownward(center: { x: number, y: number }, boundary: Boundary, vertexFactory: VertexFactory) {
-    let boundaryA = boundary.top();
-    let boundaryB = boundary.bottom();
+  private calculateDownward(center: { x: number; y: number }, boundary: Boundary, vertexFactory: VertexFactory) {
+    const boundaryA = boundary.top();
+    const boundaryB = boundary.bottom();
     if (!this.getStartPoint() || this.getStartPoint().y < boundaryA) {
       this.vertices[0] = vertexFactory.create(center.x, boundaryA);
     } else if (this.vertices[0].y >= boundaryB) {
@@ -160,14 +160,14 @@ export class Edge {
       return false;
     }
 
-    let ax = this.vertices[0].x;
-    let ay = this.vertices[0].y;
-    let bx = this.vertices[1].x;
-    let by = this.vertices[1].y;
+    const ax = this.vertices[0].x;
+    const ay = this.vertices[0].y;
+    const bx = this.vertices[1].x;
+    const by = this.vertices[1].y;
     let t0 = 0;
     let t1 = 1;
-    let dx = bx - ax;
-    let dy = by - ay;
+    const dx = bx - ax;
+    const dy = by - ay;
 
     // left
     let q = ax - boundary.left();

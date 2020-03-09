@@ -1,4 +1,4 @@
-import { Math2d } from "./Math2d";
+import { Math2d } from './Math2d';
 
 describe('angleAt', () => {
   test('calculates point on straight line correct', () => {

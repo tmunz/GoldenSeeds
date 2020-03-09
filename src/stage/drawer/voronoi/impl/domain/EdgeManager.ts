@@ -1,10 +1,10 @@
-import { Edge } from "./Edge";
-import { VertexFactory } from "./VertexFactory";
-import { AbstractMemoryFactory } from "../utils/AbstractMemoryFactory";
-import { Site } from "./Site";
-import { SiteAreaStore } from "./SiteAreaStore";
-import { Boundary } from "./Boundary";
-import { Vertex } from "./Vertex";
+import { Edge } from './Edge';
+import { VertexFactory } from './VertexFactory';
+import { AbstractMemoryFactory } from '../utils/AbstractMemoryFactory';
+import { Site } from './Site';
+import { SiteAreaStore } from './SiteAreaStore';
+import { Boundary } from './Boundary';
+import { Vertex } from './Vertex';
 
 
 export class EdgeManager extends AbstractMemoryFactory<Edge> {

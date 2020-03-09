@@ -1,5 +1,5 @@
-import { ConvexPolygonTools } from "./ConvexPolygonTools";
-import { Math2d } from "../math/Math2d";
+import { ConvexPolygonTools } from './ConvexPolygonTools';
+import { Math2d } from '../math/Math2d';
 
 describe('offsetPath', () => {
   test('calculates simple rectangle with no offset correct', () => {

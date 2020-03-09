@@ -9,7 +9,7 @@ import { Stage } from '../stage/Stage';
 import { typesForStage } from '../stage';
 import { Collapsable } from '../ui/Collapsable';
 
-import "./Editor.styl";
+import './Editor.styl';
 
 interface Props {
   config: Config;
@@ -21,14 +21,14 @@ export class Editor extends React.Component<Props> {
   render() {
     return (
       <div className="overlay editor">
-        {["background", "grid", "drawer"].map(stageId => {
+        {['background', 'grid', 'drawer'].map(stageId => {
           const types = typesForStage(stageId);
           const stage: Stage<any> = (this.props.config as any)[stageId];
           const editMode = this.props.editStageId === stageId;
           return (
-            <div key={stageId} className={"stage " + stageId}>
+            <div key={stageId} className={'stage ' + stageId}>
               <h1
-                className={`stage action ${editMode ? "edit-mode" : ""}`}
+                className={`stage action ${editMode ? 'edit-mode' : ''}`}
                 onClick={() => setEditMode(editMode ? null : stageId)}>
                 {stageId}
               </h1>
@@ -55,7 +55,7 @@ export class Editor extends React.Component<Props> {
                 }
               </Collapsable>
             </div>
-          )
+          );
         })
         }
       </div >

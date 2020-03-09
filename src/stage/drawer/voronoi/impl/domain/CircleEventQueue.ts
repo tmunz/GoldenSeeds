@@ -1,6 +1,6 @@
-import { RbTree } from "../utils/rbTree/RbTree";
-import { RbTreeNode } from "../utils/rbTree/RbTreeNode";
-import { BeachSection } from "./BeachLine";
+import { RbTree } from '../utils/rbTree/RbTree';
+import { RbTreeNode } from '../utils/rbTree/RbTreeNode';
+import { BeachSection } from './BeachLine';
 
 
 export interface CircleEvent extends BeachSection, RbTreeNode<CircleEvent> { }
@@ -15,7 +15,7 @@ export class CircleEventQueue {
   }
 
   detachCurrent(arc: CircleEvent): void {
-    let circleEvent = arc.circleEvent;
+    const circleEvent = arc.circleEvent;
     if (circleEvent) {
       if (!circleEvent.prev) {
         this.current = circleEvent.next;
@@ -26,16 +26,16 @@ export class CircleEventQueue {
   }
 
   attachCircleEventIfNeededOnCollapse(arc: CircleEvent): void {
-    let lArc = arc.prev;
-    let rArc = arc.next;
+    const lArc = arc.prev;
+    const rArc = arc.next;
 
     if (!lArc || !rArc) {
       return;
     }
 
-    let lSite = lArc.site;
-    let cSite = arc.site;
-    let rSite = rArc.site;
+    const lSite = lArc.site;
+    const cSite = arc.site;
+    const rSite = rArc.site;
 
     // If site of left beachsection is same as site of
     // right beachsection, there can't be convergence
@@ -53,12 +53,12 @@ export class CircleEventQueue {
     // The bottom-most part of the circumcircle is our Fortune 'circle
     // event', and its center is a vertex potentially part of the final
     // Voronoi diagram.
-    let bx = cSite.x;
-    let by = cSite.y;
-    let ax = lSite.x - bx;
-    let ay = lSite.y - by;
-    let cx = rSite.x - bx;
-    let cy = rSite.y - by;
+    const bx = cSite.x;
+    const by = cSite.y;
+    const ax = lSite.x - bx;
+    const ay = lSite.y - by;
+    const cx = rSite.x - bx;
+    const cy = rSite.y - by;
 
     // If points l->c->r are clockwise, then center beach section does not
     // collapse, hence it can't end up as a vertex (we reuse 'd' here, which
@@ -66,12 +66,12 @@ export class CircleEventQueue {
     // http://en.wikipedia.org/wiki/Curve_orientation#Orientation_of_a_simple_polygon
     // rhill 2011-05-21: Nasty finite precision error which caused circumcircle() to
     // return infinites: 1e-12 seems to fix the problem.
-    let d = 2 * (ax * cy - ay * cx);
+    const d = 2 * (ax * cy - ay * cx);
     if (d >= -2e-12) {
       return;
     }
 
-    let ha = ax * ax + ay * ay,
+    const ha = ax * ax + ay * ay,
       hc = cx * cx + cy * cy,
       x = (cy * ha - ay * hc) / d,
       y = (ax * hc - cx * ha) / d,
@@ -80,13 +80,13 @@ export class CircleEventQueue {
     // Important: boundary.bottom()ottom should always be under or at sweep, so no need
     // to waste CPU cycles by checking
 
-    let circleEvent: CircleEvent = {
+    const circleEvent: CircleEvent = {
       arc,
       site: cSite,
       x: x + bx,
       y: centerY + Math.sqrt(x * x + y * y),
       centerY,
-    }
+    };
 
     arc.circleEvent = circleEvent;
     this.push(circleEvent);

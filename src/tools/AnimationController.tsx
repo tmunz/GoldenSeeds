@@ -1,7 +1,7 @@
-import React from "react";
-import { MathUtils } from "../utils/MathUtils";
-import { AnimationUtils } from "../utils/AnimationUtils";
-import { DirectionButton, Direction } from "../ui/DirectionButton";
+import React from 'react';
+import { MathUtils } from '../utils/MathUtils';
+import { AnimationUtils } from '../utils/AnimationUtils';
+import { DirectionButton, Direction } from '../ui/DirectionButton';
 
 interface Props {
   target: number;
@@ -23,14 +23,14 @@ export class AnimationController extends React.Component<Props, State> {
     super(props);
     this.state = {
       current: undefined,
-    }
+    };
   }
 
   render() {
-    const currentlyAnimating = typeof this.state.current !== "undefined";
+    const currentlyAnimating = typeof this.state.current !== 'undefined';
     return (
       <a
-        className={currentlyAnimating ? "active" : ""}
+        className={currentlyAnimating ? 'active' : ''}
         target="_blank"
         onClick={() => this.animate()}
       >
@@ -41,7 +41,7 @@ export class AnimationController extends React.Component<Props, State> {
   }
 
   animate = () => {
-    const doesNotInterfereWithRunningAnimation = typeof this.state.current === "undefined";
+    const doesNotInterfereWithRunningAnimation = typeof this.state.current === 'undefined';
 
     if (doesNotInterfereWithRunningAnimation) {
       const target = this.props.target;
@@ -52,7 +52,7 @@ export class AnimationController extends React.Component<Props, State> {
         const raw = AnimationUtils.easeInOut(AnimationController.START_VALUE, target, frame, duration);
         const current: number = Math.max(0, Math.min(target, Math.round(raw)));
         this.props.onNewFrame(current);
-        let isComplete = current >= target;
+        const isComplete = current >= target;
         this.setState({ current: isComplete ? undefined : current });
         if (isComplete) {
           clearInterval(this.animation);

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import { Stream } from "./store/AppStore";
+import { Stream } from './store/AppStore';
 
 interface Props {
   stream: Stream;
@@ -11,4 +11,4 @@ export const App = (props: Props) => {
   const [state, setState] = useState(props.stream());
   useEffect(() => props.stream.map(appState => setState(appState)));
   return React.createElement(props.view, state);
-}
+};

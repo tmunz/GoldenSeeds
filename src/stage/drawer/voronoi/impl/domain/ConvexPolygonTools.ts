@@ -1,8 +1,8 @@
-import { Math2d } from "../math/Math2d";
+import { Math2d } from '../math/Math2d';
 
 export class ConvexPolygonTools {
 
-  static offsetPath(path: Point[], offset: number = 0): Point[] {
+  static offsetPath(path: Point[], offset = 0): Point[] {
     const isCounterclockwise = ConvexPolygonTools.isCounterclockwise(path);
     const counterclockwisePath = isCounterclockwise ? path : [...path].reverse();
 
@@ -41,13 +41,13 @@ export class ConvexPolygonTools {
     let signedArea = 0;
     path.forEach((curr, i, arr) => {
       const next = arr[(i + 1) % arr.length];
-      signedArea += (curr.x * next.y - next.x * curr.y)
+      signedArea += (curr.x * next.y - next.x * curr.y);
     });
     return signedArea / 2;
   }
 
-  private static calculateRawOffsets(path: Point[], offset: number = 0): {
-    originalPoint: Point, offsetPoint: Point, baseDistance: number, bisectorAngle: number
+  private static calculateRawOffsets(path: Point[], offset = 0): {
+    originalPoint: Point; offsetPoint: Point; baseDistance: number; bisectorAngle: number;
   }[] {
     return path.map((point, i, arr) => {
       const prev = arr[(i - 1 + arr.length) % arr.length];

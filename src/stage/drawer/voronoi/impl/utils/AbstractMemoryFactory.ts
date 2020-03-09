@@ -6,7 +6,7 @@ export abstract class AbstractMemoryFactory<T> {
 
   protected memorize(t: T) {
     this.createdObjects.push(t);
-  };
+  }
 
   getAll(): T[] {
     return this.createdObjects;

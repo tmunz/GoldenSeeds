@@ -30,7 +30,7 @@ export class DrawConfigInput extends React.Component<Props> {
           <Input
             onChange={(value: any) => this.props.onChange(this.props.convertToString ? this.props.convertToString(value) : `${value}`)}
             label={this.props.label}
-            className={this.props.valid ? "" : "invalid range-invalid"}
+            className={this.props.valid ? '' : 'invalid range-invalid'}
             value={this.props.textValue}
             rangeValue={this.props.rangeValue}
             type={this.props.inputType}

@@ -1,6 +1,6 @@
 
-import { Vertex } from "./Vertex";
-import { AbstractMemoryFactory } from "../utils/AbstractMemoryFactory";
+import { Vertex } from './Vertex';
+import { AbstractMemoryFactory } from '../utils/AbstractMemoryFactory';
 
 export class VertexFactory extends AbstractMemoryFactory<Vertex> {
 

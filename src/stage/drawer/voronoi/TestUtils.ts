@@ -13,7 +13,7 @@ declare global {
 const isSamePoint = (received: Point, expected: Point): boolean => {
   return Math.abs(received.x - expected.x) <= Math.pow(10, -3)
     && (Math.abs(received.y - expected.y) <= Math.pow(10, -3));
-}
+};
 
 expect.extend({
   pointToBeCloseTo(received: Point, expected: Point) {

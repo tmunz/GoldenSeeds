@@ -1,15 +1,15 @@
-import { CircleEventQueue } from "./CircleEventQueue";
-import { VertexFactory } from "./VertexFactory";
-import { SiteAreaStore } from "./SiteAreaStore";
-import { EdgeManager } from "./EdgeManager";
-import { BeachLine, BeachSection } from "./BeachLine";
-import { Queue } from "../utils/Queue";
-import { Site } from "./Site";
-import { Boundary } from "./Boundary";
-import { Edge } from "./Edge";
-import { Vertex } from "./Vertex";
-import { DistanceHelper } from "./DistanceHelper";
-import { SiteArea } from "./SiteArea";
+import { CircleEventQueue } from './CircleEventQueue';
+import { VertexFactory } from './VertexFactory';
+import { SiteAreaStore } from './SiteAreaStore';
+import { EdgeManager } from './EdgeManager';
+import { BeachLine, BeachSection } from './BeachLine';
+import { Queue } from '../utils/Queue';
+import { Site } from './Site';
+import { Boundary } from './Boundary';
+import { Edge } from './Edge';
+import { Vertex } from './Vertex';
+import { DistanceHelper } from './DistanceHelper';
+import { SiteArea } from './SiteArea';
 
 
 export class VoronoiWorker {
@@ -20,7 +20,7 @@ export class VoronoiWorker {
   private edgeManager: EdgeManager = new EdgeManager(this.vertexFactory, this.siteAreaStore);
   private beachLine: BeachLine = new BeachLine(this.circleEvents, this.edgeManager, this.vertexFactory, this.siteAreaStore);
 
-  process(queue: Queue<Site>, boundary: Boundary): { edges: Edge[], vertices: Vertex[], siteAreas: SiteArea[] } {
+  process(queue: Queue<Site>, boundary: Boundary): { edges: Edge[]; vertices: Vertex[]; siteAreas: SiteArea[] } {
 
     let site = queue.pop();
 

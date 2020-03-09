@@ -1,4 +1,4 @@
-import { RbTreeNode } from "./RbTreeNode";
+import { RbTreeNode } from './RbTreeNode';
 
 // ---------------------------------------------------------------------------
 // Red-Black tree code (based on C version of "rbtree" by Franck Bui-Huu
@@ -113,8 +113,8 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
     node.next = node.prev = null;
 
     let parent: TreeNode = node.parent;
-    let left: TreeNode = node.left;
-    let right: TreeNode = node.right;
+    const left: TreeNode = node.left;
+    const right: TreeNode = node.right;
     let next: TreeNode = null;
 
     if (!left) {
@@ -235,9 +235,9 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
   }
 
   private rotateLeft(node: TreeNode): void {
-    let p: TreeNode = node;
-    let q: TreeNode = node.right;
-    let parent: TreeNode = p.parent;
+    const p: TreeNode = node;
+    const q: TreeNode = node.right;
+    const parent: TreeNode = p.parent;
 
     if (parent) {
       if (parent.left === p) {
@@ -260,9 +260,9 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
   }
 
   private rotateRight(node: TreeNode): void {
-    let p: TreeNode = node;
-    let q: TreeNode = node.left;
-    let parent: TreeNode = p.parent;
+    const p: TreeNode = node;
+    const q: TreeNode = node.left;
+    const parent: TreeNode = p.parent;
     if (parent) {
       if (parent.left === p) {
         parent.left = q;
