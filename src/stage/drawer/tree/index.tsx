@@ -25,10 +25,10 @@ export class Tree extends Drawer {
     return {
       result: <TreeDrawer config={config} grid={grid.result} />,
       boundingBox: {
-        x: 0,
-        y: 0,
-        w: 1,
-        h: 1,
+        x: grid.boundingBox.x - config.depth / 2,
+        y: grid.boundingBox.y - config.depth / 2,
+        w: grid.boundingBox.w + config.depth,
+        h: grid.boundingBox.h + config.depth,
       },
     };
   }
