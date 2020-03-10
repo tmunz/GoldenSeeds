@@ -9,12 +9,16 @@ import './Themer.styl';
 
 export class Themer extends React.Component<{}, { show: boolean }> {
 
+  root: HTMLElement = document.querySelector(':root');
+
   constructor(props: {}) {
     super(props);
     this.state = { show: false }
   }
 
   render() {
+    const lightThemeActive = this.root.classList.contains('light-theme');
+
     return (
       <div className="overlay themer">
         <h1
@@ -23,6 +27,14 @@ export class Themer extends React.Component<{}, { show: boolean }> {
           theme
         </h1>
         <Collapsable show={this.state.show}>
+          <div className='action' onClick={() => {
+            lightThemeActive
+              ? this.root.classList.remove('light-theme')
+              : this.root.classList.add('light-theme');
+            this.forceUpdate();
+          }}>
+            {lightThemeActive ? 'dark' : 'light'}
+          </div>
           <ColorInput
             label="accent"
             rangeValue={this.getColor('accent').get()}
@@ -34,7 +46,7 @@ export class Themer extends React.Component<{}, { show: boolean }> {
   }
 
   private setColor(id: string, c: Color) {
-    (document.querySelector(':root') as any).style.setProperty(`--${id}Color`, c.toString());
+    (document.querySelector(':root') as HTMLElement).style.setProperty(`--${id}Color`, c.toString());
     this.forceUpdate();
   }
 

@@ -32,6 +32,7 @@ export function AnimatedIcon(props: Props) {
       points={toPath(props.points[0])}
       transform={`rotate(${props.rotation ? props.rotation : 0} 50 50)`}
       vectorEffect="non-scaling-stroke"
+      fill="none"
     >
       {
         (props.points as any[]).map((points: string | number[][], i: number) => <animate

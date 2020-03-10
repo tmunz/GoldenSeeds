@@ -36,6 +36,7 @@ export class DrawConfigInput extends React.Component<Props> {
             min={this.props.min}
             max={this.props.max}
             step={this.props.step}
+            random={true}
           />
         </div>
         {this.props.controls}

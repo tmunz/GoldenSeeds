@@ -8,6 +8,7 @@ export interface Props {
   label?: string;
   value?: string;
   rangeValue?: number;
+  random?: boolean;
   onChange: (value: number) => void;
   className?: string;
 }
@@ -43,7 +44,7 @@ export class ColorInput extends React.Component<Props> {
       rangeValue={typeof value !== 'undefined' ? value : ''}
       value={value < 0 ? 'transparent' : 0xff < value ? 'random' : value}
       min={-1}
-      max={0x100}
+      max={this.props.random ? 0x100 : 0xff}
       step={1}
     />;
   }
