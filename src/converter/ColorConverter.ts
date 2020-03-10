@@ -12,11 +12,7 @@ export class ColorConverter extends Converter<Color> {
   inputConfig = (stage: string, configItem: StageState<Color>) => {
     return { 
       inputType: InputType.COLOR, 
-      canExpertMode: true,
       rangeValue: configItem.value.get(),
-      min: -1,
-      max: 0x1000000,
-      step: 1,
     };
   }
 }
