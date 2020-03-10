@@ -1,3 +1,5 @@
+import { randomInt } from "../utils/Random";
+
 export const COLORS: { [name: string]: number } = {
   'black': 0x000000,
   'white': 0xffffff,
@@ -27,11 +29,11 @@ export class Color {
     this.value = isFinite(value) ? value : 0x000000;
   }
 
-  toString = (): string => {
+  toString = (seed: number = 0): string => {
     if (this.value < 0) {
       return 'transparent';
     } else {
-      return '#' + (0x1000000 + (this.value > 0xffffff ? Math.random() * 0xffffff : this.value)).toString(16).substring(1, 7);
+      return '#' + (0x1000000 + (0xffffff < this.value ? randomInt(0, 0xffffff, seed) : this.value)).toString(16).substring(1, 7);
     }
   }
 

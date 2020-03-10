@@ -31,7 +31,7 @@ export class VoronoiDrawer extends React.Component<Props> {
 
     return voronoi.cells.map((cell: Cell, i: number) => {
       const path = this.createPath(cell);
-      const color = this.props.config.color.toString();
+      const color = this.props.config.color.toString(i);
       const style = this.props.config.style === DrawStyle.STROKE ? { stroke: color, strokeWidth: '1' } : { fill: color };
       return {
         ...path,

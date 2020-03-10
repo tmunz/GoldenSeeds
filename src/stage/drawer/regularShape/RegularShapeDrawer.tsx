@@ -38,7 +38,7 @@ export class RegularShapeDrawer extends React.Component<Props> {
   render() {
     return <g>{
       this.createElements().map((e: JSX.Element, i) => {
-        const itemColor = this.props.config.color.toString();
+        const itemColor = this.props.config.color.toString(i);
         return {
           ...e, key: i, props: {
             ...e.props,
