@@ -8,6 +8,7 @@
     "x": "2"
   },
   "background": {
+    "type": "circle",
     "color": "transparent"
   },
   "drawer": {

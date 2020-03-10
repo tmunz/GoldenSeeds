@@ -1,6 +1,6 @@
 import { appStore } from './AppStore';
 import { Converter } from '../converter';
-import { stageByType } from '../stage';
+import { stageRegistry } from '../stage';
 
 
 export const setConfigValue = (stageName: string, name: string, value: any) => {
@@ -12,9 +12,9 @@ export const setRawConfig = (configRaw: any, preconfigIndex?: number) => {
   appStore.set(preconfigIndex, ['preconfigIndex'], false);
   appStore.set({
     meta: configRaw.meta,
-    grid: stageByType('grid', configRaw.grid.type).withState(configRaw.grid),
-    background: stageByType('background', configRaw.background.type).withState(configRaw.background),
-    drawer: stageByType('drawer', configRaw.drawer.type).withState(configRaw.drawer),
+    grid: stageRegistry.newInstanceOf('grid', configRaw.grid.type)?.withState(configRaw.grid),
+    background: stageRegistry.newInstanceOf('background', configRaw.background.type)?.withState(configRaw.background),
+    drawer: stageRegistry.newInstanceOf('drawer', configRaw.drawer.type)?.withState(configRaw.drawer),
   }, ['config']);
 };
 
@@ -35,6 +35,6 @@ export const setItemCount = (count: number) => {
 };
 
 export const setType = (stageId: string, type: string) => {
-  const stage = stageByType(stageId, type).withState();
+  const stage = stageRegistry.newInstanceOf(stageId, type).withState();
   appStore.set(stage, ['config', stageId]);
 };

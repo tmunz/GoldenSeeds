@@ -1,23 +1,17 @@
-import { Stage } from './Stage';
-import { drawerByType } from './drawer';
-import { gridByType } from './grid';
-import { backgroundByType } from './background';
+import { StageRegistry } from './StageRegistry';
+import { CircleBackground } from './background/CircleBackground';
+import { RegularShape } from './drawer/regularShape';
+import { Voronoi } from './drawer/voronoi';
+import { CartesianGrid } from './grid/CartesianGrid';
+import { PolarGrid } from './grid/PolarGrid';
 
 
-// TODO move to individual stages
-export const typesForStage = (stageId: string): string[] => {
-  switch (stageId) {
-  case 'grid': return ['polar', 'cartesian'];
-  case 'drawer': return ['regular-shape', 'voronoi'];
-  default: return [];
-  }
-};
+export const stageRegistry = new StageRegistry();
 
-export const stageByType = (stageId: string, type: string): Stage<any> => {
-  switch (stageId) {
-  case 'grid': return gridByType(type);
-  case 'background': return backgroundByType(type);
-  case 'drawer': return drawerByType(type);
-  default: throw new Error('unknown stage');
-  }
-}; 
+stageRegistry.register('background', 'circle', () => new CircleBackground());
+
+stageRegistry.register('grid', 'cartesian', () => new CartesianGrid());
+stageRegistry.register('grid', 'polar', () => new PolarGrid());
+
+stageRegistry.register('drawer', 'regular-shape', () => new RegularShape());
+stageRegistry.register('drawer', 'voronoi', () => new Voronoi());

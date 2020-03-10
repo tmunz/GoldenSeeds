@@ -9,6 +9,7 @@
     "distance": "Math.pow(n, 1 / goldenRatio)"
   },
   "background": {
+    "type": "circle",
     "color": "transparent"
   },
   "drawer": {

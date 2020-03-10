@@ -9,6 +9,7 @@
     "distance": "n"
   },
   "background": {
+    "type": "circle",
     "color": "none"
   },
   "drawer": {

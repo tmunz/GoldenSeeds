@@ -6,7 +6,7 @@ import { Converter } from '../converter';
 import { DrawConfigInput } from './DrawConfigInput';
 import { InputType } from '../ui/input/Input';
 import { Stage } from '../stage/Stage';
-import { typesForStage } from '../stage';
+import { stageRegistry } from '../stage';
 import { Collapsable } from '../ui/Collapsable';
 
 import './Editor.styl';
@@ -22,7 +22,7 @@ export class Editor extends React.Component<Props> {
     return (
       <div className="overlay editor">
         {['background', 'grid', 'drawer'].map(stageId => {
-          const types = typesForStage(stageId);
+          const types = stageRegistry.getTypes(stageId);
           const stage: Stage<any> = (this.props.config as any)[stageId];
           const editMode = this.props.editStageId === stageId;
           return (
