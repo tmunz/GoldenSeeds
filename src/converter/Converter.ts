@@ -14,7 +14,6 @@ export abstract class Converter<T> {
 
   protected abstract convertFromRaw(rawValue: string): T;
 
-  // TODO typing: and other DrawConfigInputProps 
   protected abstract inputConfig(stage: string, configItem: StageState<T>):
     Partial<DrawConfigInputProps> & { inputType: InputType; };
 
@@ -29,10 +28,10 @@ export abstract class Converter<T> {
     };
   }
 
-  convert = (rawValue: string): StageState<any> => {
+  convert = (rawValue: string): Partial<StageState<T>> => {
     const value = this.convertFromRaw(rawValue);
     const valid = typeof value !== 'undefined' && value !== null;
-    const converted: StageState<T> = { rawValue, valid } as StageState<T>;
+    const converted: Partial<StageState<T>> = { rawValue, valid };
     if (valid) {
       converted.value = value;
     }
