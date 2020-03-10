@@ -15,7 +15,8 @@ export abstract class Converter<T> {
   protected abstract convertFromRaw(rawValue: string): T;
 
   // TODO typing: and other DrawConfigInputProps 
-  protected abstract inputConfig(stage: string, configItem: StageState<T>): { inputType: InputType; canExpertMode: boolean };
+  protected abstract inputConfig(stage: string, configItem: StageState<T>):
+    Partial<DrawConfigInputProps> & { inputType: InputType; };
 
   getInputFieldConfiguration = (stage: string, configItem: StageState<T>): DrawConfigInputProps => {
     return {

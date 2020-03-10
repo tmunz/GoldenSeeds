@@ -14,9 +14,8 @@ export class ListConverter<T> extends Converter<string> {
   inputConfig = (stage: string, configItem: StageState<string>) => {
     return { 
       inputType: InputType.RANGE, 
-      canExpertMode: false,
-      textValue: configItem.rawValue,
-      convertToString: (i: number) => this.list[i],
+      value: configItem.rawValue,
+      convertToString: (i: any) => this.list[i].toString(),
       rangeValue: this.list.findIndex(s => s.toString() === configItem.rawValue),
     };
   }

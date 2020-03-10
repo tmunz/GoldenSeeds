@@ -16,7 +16,6 @@ export interface Props {
   onChange?: (rawValue: string) => void;
   convertToString?: (value: any) => string;
   controls?: JSX.Element[];
-  canExpertMode?: boolean;
   inputType: InputType;
 }
 
