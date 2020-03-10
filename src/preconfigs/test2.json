@@ -4,17 +4,17 @@
   },
   "grid": {
     "type": "cartesian",
-    "items": "1",
-    "x": "1"
+    "items": "4",
+    "x": "2"
   },
   "background": {
     "type": "circle",
     "color": "transparent"
   },
   "drawer": {
-    "type": "tree",
+    "type": "voronoi",
     "color": "gold",
-    "depth": "4",
-    "variation": "0"
+    "style": "filled",
+    "borderWidth": "1"
   }
 }
