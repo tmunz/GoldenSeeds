@@ -6,7 +6,11 @@ import { Color } from '../../../datatypes/Color';
 export interface TreeConfig {
   color: Color;
   depth: number;
-  variation: number;
+  splitAngle: number;
+  splitVariation: number;
+  splitProbability: number;
+  lengthConservation: number;
+  lengthVariation: number;
 }
 
 export interface Props {
@@ -22,6 +26,7 @@ export class TreeDrawer extends React.Component<Props> {
   }
 
   render() {
+    const tree = this.calculateTree();
     const color = this.props.config.color.toString(0);
     const depth = this.props.config.depth;
     return this.props.grid.map(p => (
@@ -35,5 +40,11 @@ export class TreeDrawer extends React.Component<Props> {
         vectorEffect='non-scaling-stroke'
       />
     ));
+  }
+
+  private calculateTree() {
+    let root = { x: this.props.config.depth / 2, y: 0, angle: 90 };
+    let lines: {a: Point, b: Point}[] = [];
+    return root;
   }
 }
