@@ -14,7 +14,11 @@
   "drawer": {
     "type": "tree",
     "color": "gold",
-    "depth": "4",
-    "variation": "0"
+    "depth": "10",
+    "splitAngle": "30",
+    "splitVariation": "0.2",
+    "splitProbability": "0.8",
+    "lengthConservation": "0.8",
+    "lengthVariation": "0.8"
   }
 }
