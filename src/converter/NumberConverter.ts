@@ -1,15 +1,16 @@
 import { InputType } from '../ui/input/Input';
 import { Converter } from './Converter';
-import { StageState } from '../stage/Stage';
 
 export class NumberConverter extends Converter<number> {
 
-  inputConfig = (stage: string, configItem: StageState<number>) => {
-    return { inputType: InputType.RANGE, canExpertMode: false };
+  inputConfig = () => {
+    return { 
+      inputType: InputType.RANGE, 
+    };
   }
 
   protected convertFromRaw = (rawValue: string): number => {
-    const value = Number.parseInt(rawValue);
+    const value = Number.parseFloat(rawValue);
     return isFinite(value) ? value : null;
   }
 }

@@ -17,13 +17,12 @@ export interface Props {
 export class RangeInput extends React.Component<Props> {
 
   render() {
-    const value = this.props.rangeValue;
     return <div className='input range-input'>
       <input
         className={this.props.className}
         type="range"
-        onChange={(e) => this.props.onChange(Number(e.target.value))}
-        value={isFinite(value) ? value : ''}
+        onChange={(e) => this.props.onChange(parseFloat(e.target.value))}
+        value={`${isFinite(this.props.rangeValue) ? this.props.rangeValue : ''}`}
         min={this.props.min}
         max={this.props.max}
         step={this.props.step}
@@ -31,7 +30,7 @@ export class RangeInput extends React.Component<Props> {
       <label>
         {this.props.label}
       </label>
-      <output>{this.props.value} </output>
+      <output>{this.props.value}</output>
     </div>;
   }
 }

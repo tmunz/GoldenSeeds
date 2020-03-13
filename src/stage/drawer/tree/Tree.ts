@@ -59,11 +59,11 @@ export class Tree {
       if (currentNode.level < config.depth) {
         currentNode.branches = [];
         (new Array(2).fill(_seed++)).forEach((seed, i, arr) => {
-          if (true) { // random(0, 1, seed) < config.splitProbability
+          if (random(0, 1) <= config.splitProbability) { // seed
             const branchInRange = i * arr.length - arr.length / 2;
             const relativeAngle = (branchInRange * ((config.splitAngle * Math.PI / 180) * (1 - config.splitVariation)));
             const angle = currentNode.angle + relativeAngle;
-            const length = 1; // Math.pow(lengthConservation, level) * random(0, 1, seed) * (1-config.lengthVariation);
+            const length = Math.pow(config.lengthConservation, currentNode.level) * random(0, 1) * (1-(config.lengthVariation / 2)); // seed
             const point = {
               x: Math.cos(angle) * length + currentNode.point.x,
               y: Math.sin(angle) * length + currentNode.point.y,
