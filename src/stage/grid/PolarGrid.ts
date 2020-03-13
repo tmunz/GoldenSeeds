@@ -7,7 +7,7 @@ export class PolarGrid extends Grid {
   type = 'polar';
 
   initialState = {
-    items: '987',
+    items: '21',
     angle: 'n * 360 / goldenRatio',
     distance: 'Math.pow(n, 1 / goldenRatio)'
   };

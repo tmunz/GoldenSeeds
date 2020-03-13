@@ -21,24 +21,24 @@ export class TreeDrawer extends React.Component<Props> {
   }
 
   render() {
-    const tree = new Tree(this.props.config);
-    const color = this.props.config.color.toString(0);
     const depth = this.props.config.depth;
-    return this.props.grid.map((p, i) => (
-      <g key={i}>
+    return this.props.grid.map((p, i) => {
+      const tree = new Tree({ ...this.props.config, seed: this.props.config.seed + i });
+      const color = this.props.config.color.toString(i);
+      return <g key={i}>
         {tree.limbs.map((limb, j) => (
           <line
             key={j}
             x1={p[0] + limb.from.x}
-            y1={p[1] + depth/2 - limb.from.y}
+            y1={p[1] - limb.from.y}
             x2={p[0] + limb.to.x}
-            y2={p[1] + depth/2 - limb.to.y}
+            y2={p[1] - limb.to.y}
             stroke={color}
-            strokeWidth={1}
+            strokeWidth={Math.pow(this.props.config.lengthConservation, limb.level) * 5}
             vectorEffect='non-scaling-stroke'
           />
         ))}
       </g>
-    ));
-  }
+    });
+  };
 }

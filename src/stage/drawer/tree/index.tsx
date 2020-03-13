@@ -24,7 +24,7 @@ export class Tree extends Drawer {
     color: new ColorConverter('color'),
     depth: new NumberConverter('depth', { min: 0, max: 13, step: 1 }),
     splitAngle: new NumberConverter('splitAngle', { min: 0, max: 90, step: 1 }),
-    splitVariation: new NumberConverter('splitVariation', { min: 0, max: 1, step: 0.05 }),
+    splitVariation: new NumberConverter('splitVariation', { min: -1, max: 1, step: 0.05 }),
     splitProbability: new NumberConverter('splitProbability', { min: 0, max: 1, step: 0.05 }),
     lengthConservation: new NumberConverter('lengthConservation', { min: 0, max: 1, step: 0.05 }),
     lengthVariation: new NumberConverter('lengthVariation', { min: 0, max: 1, step: 0.05 }),
@@ -32,13 +32,14 @@ export class Tree extends Drawer {
   }
 
   generate = (config: TreeConfig, grid: { result: number[][]; boundingBox: BoundingBox }) => {
+    const size = [...new Array(config.depth).keys()].reduce((agg, n) => agg + Math.pow(config.lengthConservation, n), 0);
     return {
       result: <TreeDrawer config={config} grid={grid.result} />,
       boundingBox: {
-        x: grid.boundingBox.x - config.depth / 2,
-        y: grid.boundingBox.y - config.depth / 2,
-        w: grid.boundingBox.w + config.depth,
-        h: grid.boundingBox.h + config.depth,
+        x: grid.boundingBox.x - size / 2,
+        y: grid.boundingBox.y - size,
+        w: grid.boundingBox.w + size,
+        h: grid.boundingBox.h + size,
       },
     };
   }

@@ -53,17 +53,23 @@ export class Tree {
     const limbs: Limb[] = [{ from: root.point, to: root.branches[0].point, level: 0 }];
 
     const queue = [...root.branches];
-    let _seed = 0;
+    let _seed = config.seed;
     let currentNode: Node;
     while (currentNode = queue.pop()) {
       if (currentNode.level < config.depth) {
         currentNode.branches = [];
         (new Array(2).fill(_seed++)).forEach((seed, i, arr) => {
-          if (random(0, 1) <= config.splitProbability) { // seed
+          if (1 - config.splitProbability <= random(0, 1, seed)) {
             const branchInRange = i * arr.length - arr.length / 2;
-            const relativeAngle = (branchInRange * ((config.splitAngle * Math.PI / 180) * (1 - config.splitVariation)));
-            const angle = currentNode.angle + relativeAngle;
-            const length = Math.pow(config.lengthConservation, currentNode.level) * random(0, 1) * (1-(config.lengthVariation / 2)); // seed
+
+            const relativeAngle = branchInRange * (config.splitAngle * Math.PI / 180);
+            const splitVariation = random(-config.splitVariation/2, config.splitVariation/2, seed + 1000);
+            const angle = currentNode.angle + relativeAngle + splitVariation;
+
+            const baseLength = Math.pow(config.lengthConservation, currentNode.level);
+            const lengthVariation = random(1 - config.lengthVariation, 1, seed);
+            const length = baseLength * lengthVariation;
+
             const point = {
               x: Math.cos(angle) * length + currentNode.point.x,
               y: Math.sin(angle) * length + currentNode.point.y,
