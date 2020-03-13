@@ -1,6 +1,6 @@
 {
   "meta": {
-    "name": "sponge"
+    "name": "tree"
   },
   "grid": {
     "type": "cartesian",
@@ -15,11 +15,11 @@
     "type": "tree",
     "color": "gold",
     "depth": "13",
-    "splitAngle": "25",
-    "splitVariation": "0.0",
-    "splitProbability": "0.9",
-    "lengthConservation": "0.8",
-    "lengthVariation": "1",
-    "seed": "22"
+    "splitAngle": "60",
+    "splitVariation": "0.6",
+    "splitProbability": "1",
+    "lengthConservation": "0.75",
+    "lengthVariation": "0",
+    "seed": "48"
   }
 }

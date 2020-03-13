@@ -53,21 +53,23 @@ export class Tree {
     const limbs: Limb[] = [{ from: root.point, to: root.branches[0].point, level: 0 }];
 
     const queue = [...root.branches];
-    let _seed = config.seed;
+    let seed = config.seed;
     let currentNode: Node;
     while (currentNode = queue.pop()) {
       if (currentNode.level < config.depth) {
         currentNode.branches = [];
-        (new Array(2).fill(_seed++)).forEach((seed, i, arr) => {
+        const branchAmount = 2;
+        for (let i = 0; i < branchAmount; i++) {
+          seed++;
           if (1 - config.splitProbability <= random(0, 1, seed)) {
-            const branchInRange = i * arr.length - arr.length / 2;
+            const branchInRange = i * branchAmount - branchAmount / 2;
 
             const relativeAngle = branchInRange * (config.splitAngle * Math.PI / 180);
-            const splitVariation = random(-config.splitVariation/2, config.splitVariation/2, seed + 1000);
+            const splitVariation = random(-config.splitVariation / 2, config.splitVariation / 2, seed + 1000);
             const angle = currentNode.angle + relativeAngle + splitVariation;
 
             const baseLength = Math.pow(config.lengthConservation, currentNode.level);
-            const lengthVariation = random(1 - config.lengthVariation, 1, seed);
+            const lengthVariation = random(1 - config.lengthVariation, 1, seed + 500);
             const length = baseLength * lengthVariation;
 
             const point = {
@@ -77,7 +79,7 @@ export class Tree {
             currentNode.branches.push({ point, level: currentNode.level + 1, angle });
             limbs.push({ from: currentNode.point, to: point, level: currentNode.level });
           }
-        });
+        }
         queue.unshift(...currentNode.branches);
       }
     }

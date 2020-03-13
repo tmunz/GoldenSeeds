@@ -21,7 +21,6 @@ export class TreeDrawer extends React.Component<Props> {
   }
 
   render() {
-    const depth = this.props.config.depth;
     return this.props.grid.map((p, i) => {
       const tree = new Tree({ ...this.props.config, seed: this.props.config.seed + i });
       const color = this.props.config.color.toString(i);

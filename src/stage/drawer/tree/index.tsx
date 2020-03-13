@@ -11,12 +11,12 @@ export class Tree extends Drawer {
 
   initialState = {
     color: 'gold',
-    depth: '10',
-    splitAngle: '30',
-    splitVariation: '0.2',
-    splitProbability: '0.8',
+    depth: '13',
+    splitAngle: '25',
+    splitVariation: '0.0',
+    splitProbability: '0.9',
     lengthConservation: '0.8',
-    lengthVariation: '0.8',
+    lengthVariation: '1',
     seed: '0',
   };
 
