@@ -17,17 +17,19 @@ export class Tree extends Drawer {
     splitProbability: '0.8',
     lengthConservation: '0.8',
     lengthVariation: '0.8',
+    seed: '0',
   };
 
   converter = {
     color: new ColorConverter('color'),
     depth: new NumberConverter('depth', { min: 0, max: 13, step: 1 }),
     splitAngle: new NumberConverter('splitAngle', { min: 0, max: 90, step: 1 }),
-    splitVariation: new NumberConverter('splitVariation', { min: 0, max: 0.05, step: 1 }),
-    splitProbability: new NumberConverter('splitProbability', { min: 0, max: 0.05, step: 1 }),
-    lengthConservation: new NumberConverter('lengthConservation', { min: 0, max: 0.05, step: 1 }),
-    lengthVariation: new NumberConverter('lengthVariation', { min: 0, max: 0.05, step: 1 }),
-  };
+    splitVariation: new NumberConverter('splitVariation', { min: 0, max: 1, step: 0.05 }),
+    splitProbability: new NumberConverter('splitProbability', { min: 0, max: 1, step: 0.05 }),
+    lengthConservation: new NumberConverter('lengthConservation', { min: 0, max: 1, step: 0.05 }),
+    lengthVariation: new NumberConverter('lengthVariation', { min: 0, max: 1, step: 0.05 }),
+    seed: new NumberConverter('seed', { min: 0, max: 1000, step: 1 }),
+  }
 
   generate = (config: TreeConfig, grid: { result: number[][]; boundingBox: BoundingBox }) => {
     return {

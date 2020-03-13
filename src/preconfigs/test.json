@@ -19,6 +19,7 @@
     "splitVariation": "0.2",
     "splitProbability": "0.8",
     "lengthConservation": "0.8",
-    "lengthVariation": "0.8"
+    "lengthVariation": "0.8",
+    "seed": "0"
   }
 }

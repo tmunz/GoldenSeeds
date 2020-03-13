@@ -1,16 +1,11 @@
 import * as React from 'react';
 
 import { Color } from '../../../datatypes/Color';
+import { Tree, Config as TreeImplConfig } from './Tree';
 
 
-export interface TreeConfig {
+export interface TreeConfig extends TreeImplConfig {
   color: Color;
-  depth: number;
-  splitAngle: number;
-  splitVariation: number;
-  splitProbability: number;
-  lengthConservation: number;
-  lengthVariation: number;
 }
 
 export interface Props {
@@ -26,25 +21,24 @@ export class TreeDrawer extends React.Component<Props> {
   }
 
   render() {
-    const tree = this.calculateTree();
+    const tree = new Tree(this.props.config);
     const color = this.props.config.color.toString(0);
     const depth = this.props.config.depth;
-    return this.props.grid.map(p => (
-      <rect
-        x={p[0] - depth / 2}
-        y={p[1] - depth / 2}
-        width={depth}
-        height={depth}
-        stroke={color}
-        strokeWidth={1}
-        vectorEffect='non-scaling-stroke'
-      />
+    return this.props.grid.map((p, i) => (
+      <g key={i}>
+        {tree.limbs.map((limb, j) => (
+          <line
+            key={j}
+            x1={p[0] + limb.from.x}
+            y1={p[1] + depth/2 - limb.from.y}
+            x2={p[0] + limb.to.x}
+            y2={p[1] + depth/2 - limb.to.y}
+            stroke={color}
+            strokeWidth={1}
+            vectorEffect='non-scaling-stroke'
+          />
+        ))}
+      </g>
     ));
-  }
-
-  private calculateTree() {
-    let root = { x: this.props.config.depth / 2, y: 0, angle: 90 };
-    let lines: {a: Point, b: Point}[] = [];
-    return root;
   }
 }
