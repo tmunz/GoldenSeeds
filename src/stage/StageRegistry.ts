@@ -12,7 +12,7 @@ export class StageRegistry {
   }
 
   getTypes(stageId: string): string[] {
-    return [...this.registry.get(stageId).keys()].sort();
+    return [...this.registry.get(stageId).keys()];
   }
 
   newInstanceOf(stageId: string, type: string): Stage<any> {
