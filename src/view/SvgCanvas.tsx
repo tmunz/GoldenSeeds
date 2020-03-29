@@ -12,7 +12,6 @@ interface Props {
 export class SvgCanvas extends React.Component<Props> {
 
   svgContent: SVGSVGElement;
-  itemPositions: number[][] = [];
 
   render() {
     const grid = this.props.config.grid.generate(this.convertToValue(this.props.config.grid.state));

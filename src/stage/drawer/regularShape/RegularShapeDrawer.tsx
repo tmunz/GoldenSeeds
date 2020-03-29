@@ -36,37 +36,29 @@ export class RegularShapeDrawer extends React.Component<Props> {
   }
 
   render() {
-    return <g>{
-      this.createElements().map((e: JSX.Element, i) => {
-        const itemColor = this.props.config.color.toString(i);
-        return {
-          ...e, key: i, props: {
-            ...e.props,
-            ...(this.props.config.style === DrawStyle.FILLED
-              ? { fill: itemColor }
-              : { fill: 'none', stroke: itemColor, strokeWidth: 1, vectorEffect: 'non-scaling-stroke' }),
-            id: `item-${i}`,
-          }
-        };
-      })
-    }</g>;
-  }
-
-  private createElements() {
     const config = this.props.config;
     const items: number = this.props.grid.length;
     return this.props.grid.map((position: number[], i) => {
+      let element;
       const n = i + 1;
       const itemSize: number = config.size(n, items);
       if (config.corners > 0) {
         const itemProps = this.getItemProps(n, items, itemSize);
-        return this.drawRegularShape(position, itemProps);
+        element = this.drawRegularShape(position, itemProps);
       } else {
         const cutRatio1 = config.cutRatio1(n, items, itemSize);
         const startAngle = (360 * cutRatio1) + config.angle(n, items, itemSize);
         const angle = 360 * (1 - (cutRatio1 - config.cutRatio0(n, items, itemSize)));
-        return this.drawArc(position, itemSize, startAngle, angle);
+        element = this.drawArc(position, i, itemSize, startAngle, angle);
       }
+
+      const itemColor = this.props.config.color.toString(i);
+      const style = this.props.config.style === DrawStyle.FILLED
+        ? { fill: itemColor }
+        : { fill: 'none', stroke: itemColor, strokeWidth: 1, vectorEffect: 'non-scaling-stroke' };
+
+      console.log({ ...element, ...style, key: i });
+      return { ...element, props: { ...element.props, ...style }, key: i };
     });
   }
 
@@ -164,7 +156,7 @@ export class RegularShapeDrawer extends React.Component<Props> {
   }
 
 
-  private drawArc = (center: number[], size: number, startAngle: number, angle: number): JSX.Element => {
+  private drawArc = (center: number[], i: number, size: number, startAngle: number, angle: number): JSX.Element => {
     const p = (pt: number[]) => ' ' + pt[0] + ',' + pt[1] + ' '; //bring point coordinates in svg format
     if (angle <= -360 || 360 <= angle) {
       return <circle cx={center[0]} cy={center[1]} r={size / 2} />;
