@@ -2,17 +2,12 @@
   "meta": {
     "name": "christmas-tree"
   },
-  "grid": {
+  "stages": [{
     "type": "polar",
     "items": "9",
     "angle": "0",
     "distance": "0"
-  },
-  "background": {
-    "type": "circle",
-    "color": "none"
-  },
-  "drawer": {
+  }, {
     "type": "regular-shape",
     "style": "stroke",
     "corners": "6",
@@ -22,5 +17,5 @@
     "ratio": "(1 - 1 / (n + 1))",
     "cutRatio0": "n == items ? 0 : n % 2 ? 0.8 : 0",
     "cutRatio1": "n == items ? 0 : n % 2 ? 1 : 0.2"
-  }
+  }]
 }

@@ -2,17 +2,12 @@
   "meta": {
     "name": "seashell"
   },
-  "grid": {
+  "stages": [{
     "type": "polar",
     "items": "610",
     "angle": "n * 100",
     "distance": "n"
-  },
-  "background": {
-    "type": "circle",
-    "color": "none"
-  },
-  "drawer": {
+  }, {
     "type": "regular-shape",
     "style": "stroke",
     "corners": "0",
@@ -22,5 +17,5 @@
     "ratio": "0",
     "cutRatio0": "0",
     "cutRatio1": "n/items"
-  }
+  }]
 }

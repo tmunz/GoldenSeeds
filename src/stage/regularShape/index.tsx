@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { Drawer } from '../Drawer';
-import { NumberConverter, ExpressionConverter, ListConverter, ColorConverter } from '../../../converter';
-import { MathUtils } from '../../../utils/MathUtils';
+import { NumberConverter, ExpressionConverter, ListConverter, ColorConverter } from '../../converter';
+import { MathUtils } from '../../utils/MathUtils';
 import { RegularShapeDrawer, RegularShapeConfig } from './RegularShapeDrawer';
-import { DrawStyle } from '../../../datatypes/DrawStyle';
+import { DrawStyle } from '../../datatypes/DrawStyle';
+import { Stage, StageResult } from '../Stage';
 
 
-export class RegularShape extends Drawer {
+export class RegularShape extends Stage {
 
   type = 'regular-shape';
 
@@ -33,16 +33,17 @@ export class RegularShape extends Drawer {
     cutRatio1: new ExpressionConverter('cutRatio1', { min: 0, max: 1, step: 0.05 }),
   };
 
-  generate = (config: RegularShapeConfig, grid: { result: number[][]; boundingBox: BoundingBox }) => {
-    const items = grid.result.length;
+  generate = (config: RegularShapeConfig, prev: StageResult) => {
+    const items = prev.grid.length;
     const itemsSize = config.size(items, items);
     return {
-      result: <RegularShapeDrawer config={config} grid={grid.result} />,
+      grid: prev.grid,
+      render: <RegularShapeDrawer config={config} grid={prev.grid} />,
       boundingBox: {
-        x: grid.boundingBox.x - itemsSize / 2,
-        y: grid.boundingBox.y - itemsSize / 2,
-        w: grid.boundingBox.w + itemsSize,
-        h: grid.boundingBox.h + itemsSize,
+        x: prev.boundingBox.x - itemsSize / 2,
+        y: prev.boundingBox.y - itemsSize / 2,
+        w: prev.boundingBox.w + itemsSize,
+        h: prev.boundingBox.h + itemsSize,
       },
     };
   };

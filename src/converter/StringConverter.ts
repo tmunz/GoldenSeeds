@@ -4,7 +4,7 @@ import { StageState } from '../stage/Stage';
 
 export class StringConverter extends Converter<string> {
 
-  inputConfig = (stage: string, configItem: StageState<string>) => {
+  inputConfig = (stage: number, configItem: StageState<string>) => {
     return { inputType: InputType.TEXT, canExpertMode: false };
   }
 

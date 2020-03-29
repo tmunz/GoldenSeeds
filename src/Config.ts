@@ -1,6 +1,4 @@
-import { Grid } from './stage/grid/Grid';
-import { Background } from './stage/background/Background';
-import { Drawer } from './stage/drawer/Drawer';
+import { Stage } from "./stage/Stage";
 
 export interface StageState<T> {
   rawValue: string;
@@ -10,7 +8,5 @@ export interface StageState<T> {
 
 export interface Config {
   meta: { name: string };
-  grid: Grid;
-  background: Background;
-  drawer: Drawer;
+  stages: Stage[];
 }

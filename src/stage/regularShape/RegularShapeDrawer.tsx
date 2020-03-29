@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { DrawStyle } from '../../../datatypes/DrawStyle';
-import { Color } from '../../../datatypes/Color';
+import { DrawStyle } from '../../datatypes/DrawStyle';
+import { Color } from '../../datatypes/Color';
 
 export interface RegularShapeConfig {
   style: DrawStyle;
@@ -57,7 +57,6 @@ export class RegularShapeDrawer extends React.Component<Props> {
         ? { fill: itemColor }
         : { fill: 'none', stroke: itemColor, strokeWidth: 1, vectorEffect: 'non-scaling-stroke' };
 
-      console.log({ ...element, ...style, key: i });
       return { ...element, props: { ...element.props, ...style }, key: i };
     });
   }

@@ -2,20 +2,17 @@ import { Stage } from "./Stage";
 
 export class StageRegistry {
 
-  private registry: Map<string, Map<string, () => Stage<any>>> = new Map();
+  private registry: Map<string, () => Stage> = new Map();
 
-  register(stageId: string, type: string, stageCreator: () => Stage<any>) {
-    if (!this.registry.has(stageId)) {
-      this.registry.set(stageId, new Map());
-    }
-    this.registry.get(stageId).set(type, stageCreator);
+  register(type: string, stageCreator: () => Stage) {
+    this.registry.set(type, stageCreator);
   }
 
-  getTypes(stageId: string): string[] {
-    return [...this.registry.get(stageId).keys()];
+  get types(): string[] {
+    return [...this.registry.keys()];
   }
 
-  newInstanceOf(stageId: string, type: string): Stage<any> {
-    return this.registry.get(stageId)?.get(type)();
+  newInstanceOf(type: string): Stage {
+    return this.registry.get(type)();
   }
 }

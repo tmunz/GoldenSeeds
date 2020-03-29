@@ -9,7 +9,7 @@ import { setConfigValue } from '../store/Actions';
 
 export class ExpressionConverter extends Converter<(n: number, items: number, itemSize: (n: number) => number) => number> {
 
-  inputConfig = (stage: string, configItem: StageState<(n: number, items: number, itemSize: (n: number) => number) => number>) => {
+  inputConfig = (stage: number, configItem: StageState<(n: number, items: number, itemSize: (n: number) => number) => number>) => {
     const regexResult = configItem.rawValue.match(/^\s*(n\s\*\s*(.*\S)?)\s*$/);
     const nMode: boolean = regexResult ? true : false;
     const nLessValue: string = nMode ? regexResult[2] : configItem.rawValue;
@@ -26,7 +26,7 @@ export class ExpressionConverter extends Converter<(n: number, items: number, it
     };
   }
 
-  private generateNControl(stage: string, nLessValue: string, active: boolean): JSX.Element {
+  private generateNControl(stage: number, nLessValue: string, active: boolean): JSX.Element {
     return <div
       key={this.name}
       className={['n-mode-selector', active ? 'active' : ''].join(' ')}

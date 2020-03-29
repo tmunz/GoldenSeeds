@@ -3,10 +3,9 @@ import React from 'react';
 import { SvgExporter } from './SvgExporter';
 import { ConfigExporter } from './ConfigExporter';
 import { ConfigImporter } from './ConfigImporter';
-import { AnimationController } from './AnimationController';
 import { PreconfigSelector } from './PreconfigSelector';
 import { Input } from '../ui/input/Input';
-import { setItemCount, setRawConfig, setName } from '../store/Actions';
+import { setRawConfig, setName } from '../store/Actions';
 import { Config } from '../Config';
 import { HistoryController } from './HistoryController';
 
@@ -32,7 +31,7 @@ export class Toolbar extends React.Component<Props, State> {
 
   render() {
     const name = this.props.config?.meta?.name;
-    const items = this.props.config?.grid?.state?.items?.value;
+    // TODO const items = this.props.config.stages[0]?.state?.items?.value;
     return (
       <div className="overlay overlay-container toolbar">
         <Input value={name} onChange={setName} label={'name'} />
@@ -42,7 +41,7 @@ export class Toolbar extends React.Component<Props, State> {
           <ConfigImporter onConfigChanged={setRawConfig} />
           <ConfigExporter config={this.props.config} />
           <SvgExporter name={name} getSvg={() => this.props.getSvg()} />
-          <AnimationController target={items} onNewFrame={setItemCount} />
+          {/*<AnimationController target={items} onNewFrame={setItemCount} />*/}
         </div>
       </div>
     );

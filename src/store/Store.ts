@@ -34,15 +34,15 @@ export abstract class Store<T extends Record<string, any>> {
     return this._state;
   }
 
-  set(value: any, path: string[] = [], withHistory?: boolean) {
+  set(value: any, path: (string|number)[] = [], withHistory?: boolean) {
     this.update({ path, value, type: 'set' }, withHistory);
   }
 
-  merge(value: any, path: string[] = [], withHistory?: boolean) {
+  merge(value: any, path:(string|number)[] = [], withHistory?: boolean) {
     this.update({ path, value, type: 'merge' }, withHistory);
   }
 
-  private update(next: { path: string[]; value: any; type: string }, withHistory = true) {
+  private update(next: { path: (string|number)[]; value: any; type: string }, withHistory = true) {
     this._update(next);
     if (this.withHistory && withHistory) {
       this._history.push(this._state());

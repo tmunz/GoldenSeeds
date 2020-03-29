@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { Drawer } from '../Drawer';
-import { NumberConverter, ColorConverter } from '../../../converter';
+import { NumberConverter, ColorConverter } from '../../converter';
 import { TreeConfig, TreeDrawer } from './TreeDrawer';
+import { Stage, StageResult } from '../Stage';
 
 
-export class Tree extends Drawer {
+export class Tree extends Stage {
 
   type = 'tree';
 
@@ -31,15 +31,16 @@ export class Tree extends Drawer {
     seed: new NumberConverter('seed', { min: 0, max: 1000, step: 1 }),
   }
 
-  generate = (config: TreeConfig, grid: { result: number[][]; boundingBox: BoundingBox }) => {
+  generate = (config: TreeConfig, prev: StageResult) => {
     const size = [...new Array(config.depth).keys()].reduce((agg, n) => agg + Math.pow(config.lengthConservation, n), 0);
     return {
-      result: <TreeDrawer config={config} grid={grid.result} />,
+      grid: prev.grid,
+      render: <TreeDrawer config={config} grid={prev.grid} />,
       boundingBox: {
-        x: grid.boundingBox.x - size / 2,
-        y: grid.boundingBox.y - size,
-        w: grid.boundingBox.w + size,
-        h: grid.boundingBox.h + size,
+        x: prev.boundingBox.x - size / 2,
+        y: prev.boundingBox.y - size,
+        w: prev.boundingBox.w + size,
+        h: prev.boundingBox.h + size,
       },
     };
   }

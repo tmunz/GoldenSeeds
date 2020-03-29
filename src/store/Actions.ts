@@ -3,18 +3,16 @@ import { Converter } from '../converter';
 import { stageRegistry } from '../stage';
 
 
-export const setConfigValue = (stageName: string, name: string, value: any) => {
-  const converter: Converter<any> = (appStore.state().config as any)[stageName].converter[name];
-  appStore.merge(converter.convert(value), ['config', stageName, 'state', name]);
+export const setConfigValue = (stageId: number, name: string, value: any) => {
+  const converter: Converter<any> = appStore.state().config.stages[stageId].converter[name];
+  appStore.merge(converter.convert(value), ['config', 'stages', stageId, 'state', name]);
 };
 
 export const setRawConfig = (configRaw: any, preconfigIndex?: number) => {
   appStore.set(preconfigIndex, ['preconfigIndex'], false);
   appStore.set({
     meta: configRaw.meta,
-    grid: stageRegistry.newInstanceOf('grid', configRaw.grid.type)?.withState(configRaw.grid),
-    background: stageRegistry.newInstanceOf('background', configRaw.background.type)?.withState(configRaw.background),
-    drawer: stageRegistry.newInstanceOf('drawer', configRaw.drawer.type)?.withState(configRaw.drawer),
+    stages: configRaw.stages.map((stage: any) => stageRegistry.newInstanceOf(stage.type)?.withState(stage)),
   }, ['config']);
 };
 
@@ -22,7 +20,7 @@ export const setConfigFromPreconfigs = (preconfigIndex: number, preconfigs: any[
   setRawConfig(preconfigs[preconfigIndex], preconfigIndex);
 };
 
-export const setEditMode = (stageId: string) => {
+export const setEditMode = (stageId: number) => {
   appStore.set(stageId, ['editStageId'], false);
 };
 
@@ -31,10 +29,10 @@ export const setName = (name: string) => {
 };
 
 export const setItemCount = (count: number) => {
-  setConfigValue('grid', 'items', count);
+  setConfigValue(0, 'items', count);
 };
 
-export const setType = (stageId: string, type: string) => {
-  const stage = stageRegistry.newInstanceOf(stageId, type).withState();
+export const setType = (stageId: number, type: string) => {
+  const stage = stageRegistry.newInstanceOf(type).withState();
   appStore.set(stage, ['config', stageId]);
 };

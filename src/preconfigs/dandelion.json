@@ -2,17 +2,12 @@
   "meta": {
     "name": "dandelion"
   },
-  "grid": {
+  "stages": [{
     "type": "polar",
     "items": "89",
     "angle": "0",
     "distance": "0"
-  },
-  "background": {
-    "type": "circle",
-    "color": "none"
-  },
-  "drawer": {
+  }, {
     "type": "regular-shape",
     "style": "stroke",
     "corners": "0",
@@ -22,5 +17,5 @@
     "ratio": "1 / Math.pow(goldenRatio, 2)",
     "cutRatio0": "-4 / 3",
     "cutRatio1": "0"
-  }
+  }]
 }

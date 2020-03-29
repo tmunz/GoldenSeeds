@@ -2,16 +2,7 @@
   "meta": {
     "name": "tree"
   },
-  "grid": {
-    "type": "cartesian",
-    "items": "1",
-    "x": "1"
-  },
-  "background": {
-    "type": "circle",
-    "color": "transparent"
-  },
-  "drawer": {
+  "stages": [{
     "type": "tree",
     "color": "gold",
     "depth": "13",
@@ -21,5 +12,5 @@
     "lengthConservation": "0.8",
     "lengthVariation": "1",
     "seed": "22"
-  }
+  }]
 }

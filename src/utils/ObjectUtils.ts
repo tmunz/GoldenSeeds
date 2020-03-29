@@ -1,5 +1,5 @@
 export interface Patch {
-  path: string[];
+  path: (string|number)[];
   value: any;
 }
 
@@ -34,8 +34,8 @@ export class ObjectUtils {
 
   private static convertPatchToObject(patch: Patch) {
     let current: any = patch.value;
-    const path: string[] = [...patch.path];
-    let key: string;
+    const path: (string|number)[] = [...patch.path];
+    let key: (string|number);
     while (key = path.pop()) {
       current = { [key]: current };
     }

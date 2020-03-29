@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { Drawer } from '../Drawer';
-import { NumberConverter, ColorConverter, ListConverter } from '../../../converter';
+import { NumberConverter, ColorConverter, ListConverter } from '../../converter';
 import { VoronoiDrawer, VoronoiConfig } from './VoronoiDrawer';
-import { DrawStyle } from '../../../datatypes/DrawStyle';
+import { DrawStyle } from '../../datatypes/DrawStyle';
+import { StageResult, Stage } from '../Stage';
 
 
-export class Voronoi extends Drawer {
+export class Voronoi extends Stage {
 
   type = 'voronoi';
 
@@ -22,10 +22,11 @@ export class Voronoi extends Drawer {
     borderWidth: new NumberConverter('borderWidth', { min: 0, max: 10, step: 1 }),
   };
 
-  generate = (config: VoronoiConfig, grid: { result: number[][]; boundingBox: BoundingBox }) => {
+  generate = (config: VoronoiConfig, prev: StageResult) => {
     return {
-      result: <VoronoiDrawer config={config} grid={grid.result} />,
-      boundingBox: grid.boundingBox
+      render: <VoronoiDrawer config={config} grid={prev.grid} />,
+      boundingBox: prev.boundingBox,
+      grid: prev.grid,
     };
   }
 }

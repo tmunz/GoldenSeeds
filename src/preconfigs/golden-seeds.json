@@ -2,17 +2,12 @@
   "meta": {
     "name": "golden-seeds"
   },
-  "grid": {
+  "stages": [{
     "type": "polar",
     "items": "987",
     "angle": "n * 360 / goldenRatio",
     "distance": "Math.pow(n, 1 / goldenRatio)"
-  },
-  "background": {
-    "type": "circle",
-    "color": "transparent"
-  },
-  "drawer": {
+  }, {
     "type": "regular-shape",
     "corners": "2",
     "color": "gold",
@@ -22,5 +17,5 @@
     "ratio": "1 / Math.pow(goldenRatio, 2)",
     "cutRatio0": "0",
     "cutRatio1": "0"
-  }
+  }]
 }

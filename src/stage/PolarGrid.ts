@@ -1,8 +1,8 @@
-import { Grid } from './Grid';
-import { NumberConverter, ExpressionConverter } from '../../converter';
-import { MathUtils } from '../../utils/MathUtils';
+import { NumberConverter, ExpressionConverter } from '../converter';
+import { MathUtils } from '../utils/MathUtils';
+import { StageResult, Stage } from './Stage';
 
-export class PolarGrid extends Grid {
+export class PolarGrid extends Stage {
 
   type = 'polar';
 
@@ -22,13 +22,13 @@ export class PolarGrid extends Grid {
     items: number;
     angle: (n: number, items: number) => number;
     distance: (n: number, items: number) => number;
-  }) => {
-    const result = [];
+  }, prev: StageResult): StageResult => {
+    const grid = [];
     for (let n = 1; n <= items; n++) {
       const rad = angle(n, items) / 180 * Math.PI;
-      result.push([Math.cos(rad), Math.sin(rad)].map((trig, i) => distance(n, items) * trig));
+      grid.push([Math.cos(rad), Math.sin(rad)].map((trig, i) => distance(n, items) * trig));
     }
     const radius = distance(items, items);
-    return { result, boundingBox: { x: -radius, y: -radius, w: radius * 2, h: radius * 2 } };
+    return { grid, boundingBox: { x: -radius, y: -radius, w: radius * 2, h: radius * 2 }, render: null };
   }
 }

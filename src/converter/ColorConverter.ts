@@ -9,7 +9,7 @@ export class ColorConverter extends Converter<Color> {
     return Color.convertToColor(rawValue);
   }
 
-  inputConfig = (stage: string, configItem: StageState<Color>) => {
+  inputConfig = (stage: number, configItem: StageState<Color>) => {
     return { 
       inputType: InputType.COLOR, 
       rangeValue: configItem.value.get(),

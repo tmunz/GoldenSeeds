@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Config, StageState } from '../Config';
+import { StageResult } from '../stage/Stage';
 
 
 interface Props {
@@ -14,9 +15,15 @@ export class SvgCanvas extends React.Component<Props> {
   svgContent: SVGSVGElement;
 
   render() {
-    const grid = this.props.config.grid.generate(this.convertToValue(this.props.config.grid.state));
-    const drawing = this.props.config.drawer.generate(this.convertToValue(this.props.config.drawer.state), grid);
-    const background = this.props.config.background.generate(this.convertToValue(this.props.config.background.state));
+    let prev: StageResult = {
+      grid: [[0, 0]],
+      render: null,
+      boundingBox: { x: 0, y: 0, w: 0, h: 0 }
+    };
+    const generatedStages = this.props.config.stages.map((stage) => {
+      prev = stage.generate(this.convertToValue(stage.state), prev);
+      return prev;
+    });
 
     return (
       <ErrorBoundary>
@@ -25,12 +32,9 @@ export class SvgCanvas extends React.Component<Props> {
           height={this.props.height}
           ref={e => this.svgContent = e}
         >
-          <defs>
-            <g id='background'>{background.result}</g>
-            <g id='drawing'>{drawing.result}</g>
-          </defs>
-          <use transform={this.transform(background.boundingBox, 200)} href='#background' />
-          <use transform={this.transform(drawing.boundingBox, 220)} href='#drawing' />
+          {
+            generatedStages.map(stageResult => <g transform={this.transform(stageResult.boundingBox, 220)}>{stageResult.render}</g>)
+          }
         </svg>
       </ErrorBoundary>
     );

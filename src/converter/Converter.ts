@@ -14,10 +14,10 @@ export abstract class Converter<T> {
 
   protected abstract convertFromRaw(rawValue: string): T;
 
-  protected abstract inputConfig(stage: string, configItem: StageState<T>):
+  protected abstract inputConfig(stage: number, configItem: StageState<T>):
     Partial<DrawConfigInputProps> & { inputType: InputType; };
 
-  getInputFieldConfiguration = (stage: string, configItem: StageState<T>): DrawConfigInputProps => {
+  getInputFieldConfiguration = (stage: number, configItem: StageState<T>): DrawConfigInputProps => {
     return {
       label: this.name,
       textValue: configItem.value.toString(),

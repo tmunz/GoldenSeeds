@@ -6,12 +6,18 @@ export interface StageState<T> {
   valid: boolean;
 }
 
-export abstract class Stage<T, U = {}> {
+export interface StageResult {
+  grid: number[][];
+  render: JSX.Element;
+  boundingBox: BoundingBox;
+}
+
+export abstract class Stage {
 
   abstract type: string;
   abstract converter: { [key: string]: Converter<any> };
   abstract initialState: { [key: string]: string }
-  abstract generate: (props: object, prev?: {result: U; boundingBox: BoundingBox}) => { result: T; boundingBox: BoundingBox };
+  abstract generate: (props: object, prev: StageResult) => StageResult;
   state: { [key: string]: StageState<any> };
 
   withState = (state?: { [key: string]: string }) => {

@@ -11,7 +11,7 @@ export class ListConverter<T> extends Converter<string> {
     this.list = list;
   }
 
-  inputConfig = (stage: string, configItem: StageState<string>) => {
+  inputConfig = (stage: number, configItem: StageState<string>) => {
     return { 
       inputType: InputType.RANGE, 
       value: configItem.rawValue,

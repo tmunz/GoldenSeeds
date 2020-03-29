@@ -1,4 +1,4 @@
-import { random } from "../../../utils/Random";
+import { random } from "../../utils/Random";
 
 export interface Config {
   depth: number;

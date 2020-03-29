@@ -4,7 +4,7 @@ import { Config } from '../Config';
 export interface AppState {
   config: Config;
   preconfigIndex: number;
-  editStageId: string;
+  editStageId: number;
 }
 
 export type Stream = AbstractStream<AppState>;
