@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { Background } from './Background';
-import { ColorConverter } from '../../converter';
-import { Color } from '../../datatypes/Color';
+import { Background } from '../Background';
+import { ColorConverter } from '../../../converter';
+import { Color } from '../../../datatypes/Color';
+import { CircleBackgroundDrawer } from './CircleBackgroundDrawer';
 
 export class CircleBackground extends Background {
 
@@ -19,7 +20,7 @@ export class CircleBackground extends Background {
   generate = (config: { color: Color }) => {
     const size = 1;
     return {
-      result: <circle r={size / 2} cx={0} cy={0} fill={config.color.toString()} />,
+      result: <CircleBackgroundDrawer config={config} />,
       boundingBox: { x: -size / 2, y: -size / 2, w: size, h: size },
     };
   }

@@ -1,5 +1,5 @@
 import { StageRegistry } from './StageRegistry';
-import { CircleBackground } from './background/CircleBackground';
+import { CircleBackground } from './background/circle';
 import { RegularShape } from './drawer/regularShape';
 import { Voronoi } from './drawer/voronoi';
 import { CartesianGrid } from './grid/CartesianGrid';
