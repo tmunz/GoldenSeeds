@@ -4,7 +4,7 @@ import { MathUtils } from '../utils/MathUtils';
 import { InputType } from '../ui/input/Input';
 import { StageState } from '../Config';
 import { Converter } from './Converter';
-import { setConfigValue } from '../store/Actions';
+import { stageService } from '../stage/StageService';
 
 
 export class ExpressionConverter extends Converter<(n: number, items: number, itemSize: (n: number) => number) => number> {
@@ -30,7 +30,7 @@ export class ExpressionConverter extends Converter<(n: number, items: number, it
     return <div
       key={this.name}
       className={['n-mode-selector', active ? 'active' : ''].join(' ')}
-      onClick={() => { setConfigValue(stage, this.name, (active ? '' : 'n * ') + nLessValue); }}
+      onClick={() => { stageService.setConfigValue(stage, this.name, (active ? '' : 'n * ') + nLessValue); }}
     >
       n
     </div >;

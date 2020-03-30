@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import { setConfigValue, setType, setEditMode } from '../store/Actions';
 import { Config, StageState } from '../Config';
 import { Converter } from '../converter';
 import { DrawConfigInput } from './DrawConfigInput';
@@ -9,6 +8,7 @@ import { Collapsable } from '../ui/Collapsable';
 import { stageRegistry } from '../stage';
 
 import './Editor.styl';
+import { stageService } from '../stage/StageService';
 
 
 interface Props {
@@ -29,7 +29,7 @@ export class Editor extends React.Component<Props> {
             <div key={stageId} className={'stage ' + stageId}>
               <h1
                 className={`stage action ${editMode ? 'edit-mode' : ''}`}
-                onClick={() => setEditMode(editMode ? null : stageId)}>
+                onClick={() => stageService.setEditMode(editMode ? null : stageId)}>
                 Stage {stageId + 1}
               </h1>
               <Collapsable key={stageId} show={editMode}>
@@ -42,7 +42,7 @@ export class Editor extends React.Component<Props> {
                   max={types.length - 1}
                   valid
                   convertToString={i => types[i]}
-                  onChange={(type: string) => setType(stageId, type)}
+                  onChange={(type: string) => stageService.setType(stageId, type)}
                 />
                 {
                   (Object.keys(stage.converter)).map((key: string) =>
@@ -67,7 +67,7 @@ export class Editor extends React.Component<Props> {
       key={converter.name
       }
       {...converter.getInputFieldConfiguration(stageId, configItem)}
-      onChange={(rawValue: any) => setConfigValue(stageId, converter.name, rawValue)}
+      onChange={(rawValue: any) => stageService.setConfigValue(stageId, converter.name, rawValue)}
     />;
   }
 }

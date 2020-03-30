@@ -1,17 +1,19 @@
 import * as React from 'react';
 
 import { Toolbar } from '../tools/Toolbar';
-import { AppState } from '../store/AppStore';
-import { setRawConfig } from '../store/Actions';
-import { preconfigs } from '../preconfigs';
 import { Editor } from '../editor/Editor';
 import { Themer } from '../themer/Themer';
 import { SvgCanvas } from './SvgCanvas';
+import { Config } from '../Config';
 
 import './GoldenSeedsView.styl';
 
 
-type Props = AppState
+type Props = {
+  config: Config;
+  preconfigIndex: number;
+  editStageId: number;
+}
 
 interface State {
   width: number;
@@ -21,13 +23,12 @@ interface State {
 export class GoldenSeedsView extends React.Component<Props, State> {
 
   private svgCanvas: SvgCanvas;
+
   constructor(props: Props) {
     super(props);
     this.state = {
       ...this.dimension,
     };
-
-    setRawConfig(preconfigs[props.preconfigIndex], props.preconfigIndex);
   }
 
   componentDidMount() {

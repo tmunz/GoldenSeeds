@@ -2,7 +2,7 @@ import React from 'react';
 
 import { preconfigs } from '../preconfigs/index';
 import { Input, InputType } from '../ui/input/Input';
-import { setConfigFromPreconfigs } from '../store/Actions';
+import { stageService } from '../stage/StageService';
 
 
 interface Props {
@@ -18,7 +18,7 @@ export class PreconfigSelector extends React.Component<Props> {
         rangeValue={this.props.preconfigIndex}
         min={0}
         max={preconfigs.length - 1}
-        onChange={(index: number) => setConfigFromPreconfigs(index, preconfigs)}
+        onChange={(index: number) => stageService.selectPreconfig(index)}
       />
     );
   }

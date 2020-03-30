@@ -5,11 +5,10 @@ import { ConfigExporter } from './ConfigExporter';
 import { ConfigImporter } from './ConfigImporter';
 import { PreconfigSelector } from './PreconfigSelector';
 import { Input } from '../ui/input/Input';
-import { setRawConfig, setName } from '../store/Actions';
 import { Config } from '../Config';
-import { HistoryController } from './HistoryController';
 
 import './Toolbar.styl';
+import { stageService } from '../stage/StageService';
 
 
 interface Props {
@@ -31,14 +30,13 @@ export class Toolbar extends React.Component<Props, State> {
 
   render() {
     const name = this.props.config?.meta?.name;
-    // TODO const items = this.props.config.stages[0]?.state?.items?.value;
+    // TODO animation // const items = this.props.config.stages[0]?.state?.items?.value;
     return (
       <div className="overlay overlay-container toolbar">
-        <Input value={name} onChange={setName} label={'name'} />
+        <Input value={name} onChange={stageService.setName} label={'name'} />
         <PreconfigSelector preconfigIndex={this.props.preconfigIndex} />
         <div className="actions">
-          <HistoryController />
-          <ConfigImporter onConfigChanged={setRawConfig} />
+          <ConfigImporter onConfigChanged={stageService.setRawConfig} />
           <ConfigExporter config={this.props.config} />
           <SvgExporter name={name} getSvg={() => this.props.getSvg()} />
           {/*<AnimationController target={items} onNewFrame={setItemCount} />*/}
