@@ -29,10 +29,10 @@ export const setName = (name: string) => {
 };
 
 export const setItemCount = (count: number) => {
-  setConfigValue(0, 'items', count);
+  // TODO setConfigValue(0, 'items', count);
 };
 
 export const setType = (stageId: number, type: string) => {
   const stage = stageRegistry.newInstanceOf(type).withState();
-  appStore.set(stage, ['config', stageId]);
+  appStore.set(stage, ['config', 'stages', stageId]);
 };
