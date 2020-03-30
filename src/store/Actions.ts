@@ -28,10 +28,6 @@ export const setName = (name: string) => {
   appStore.set(name, ['config', 'meta', 'name']);
 };
 
-export const setItemCount = (count: number) => {
-  // TODO setConfigValue(0, 'items', count);
-};
-
 export const setType = (stageId: number, type: string) => {
   const stage = stageRegistry.newInstanceOf(type).withState();
   appStore.set(stage, ['config', 'stages', stageId]);

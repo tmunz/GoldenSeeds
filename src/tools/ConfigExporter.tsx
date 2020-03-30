@@ -32,15 +32,16 @@ export class ConfigExporter extends React.Component<Props> {
     }
   }
 
-  private convertConfigToJson(config: Config): { [key: string]: { [key: string]: string } } {
-    return ['grid', 'background', 'drawer'].reduce((stage, stageId) => ({
-      ...stage,
-      [stageId]: Object.keys((config as any)[stageId].state).reduce(
-        (agg, key) => ({ ...agg, [key]: (config as any)[stageId].state[key].rawValue }),
-        { type: (config as any)[stageId].type }
+  private convertConfigToJson(config: Config): any {
+    const stages = config.stages.map(stage =>
+      Object.keys(stage.state).reduce(
+        (agg, key) => ({ ...agg, [key]: stage.state[key].rawValue }),
+        { type: stage.type }
       ),
-    }), {
+    );
+    return {
       meta: config.meta,
-    });
+      stages,
+    };
   }
 }

@@ -43,7 +43,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
       <div className="golden-seeds-view">
         {
           this.props.config && <React.Fragment>
-            <div className="canvas" style={{ left: (this.props.editStageId ? '52vw' : '50vw') }}>
+            <div className="canvas" style={{ left: (this.props.editStageId !== null ? '52vw' : '50vw') }}>
               <SvgCanvas
                 ref={e => this.svgCanvas = e}
                 config={this.props.config}

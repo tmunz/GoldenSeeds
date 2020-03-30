@@ -30,7 +30,7 @@ export class Editor extends React.Component<Props> {
               <h1
                 className={`stage action ${editMode ? 'edit-mode' : ''}`}
                 onClick={() => setEditMode(editMode ? null : stageId)}>
-                {stageId}
+                Stage {stageId + 1}
               </h1>
               <Collapsable key={stageId} show={editMode}>
                 <DrawConfigInput
