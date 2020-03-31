@@ -1,5 +1,5 @@
-import { NumberConverter } from '../converter';
-import { Stage, StageResult } from './Stage';
+import { NumberConverter } from '../../converter';
+import { Stage, StageResult } from '../Stage';
 
 export class CartesianGrid extends Stage {
 
@@ -16,7 +16,7 @@ export class CartesianGrid extends Stage {
   };
 
   generate = ({ x, items }: { x: number; items: number }, prev: StageResult): StageResult => {
-    // TODO within previous grid
+    // TODO use prev
     const grid = [];
     for (let i = 0; i < items; i++) {
       grid.push([i % x, Math.floor(i / x)]);

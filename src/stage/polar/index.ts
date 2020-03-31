@@ -1,6 +1,6 @@
-import { NumberConverter, ExpressionConverter } from '../converter';
-import { MathUtils } from '../utils/MathUtils';
-import { StageResult, Stage } from './Stage';
+import { NumberConverter, ExpressionConverter } from '../../converter';
+import { MathUtils } from '../../utils/MathUtils';
+import { StageResult, Stage } from '../Stage';
 
 export class PolarGrid extends Stage {
 
@@ -23,6 +23,7 @@ export class PolarGrid extends Stage {
     angle: (n: number, items: number) => number;
     distance: (n: number, items: number) => number;
   }, prev: StageResult): StageResult => {
+    // TODO use prev
     const grid = [];
     for (let n = 1; n <= items; n++) {
       const rad = angle(n, items) / 180 * Math.PI;

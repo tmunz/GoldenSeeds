@@ -5,9 +5,9 @@ import { Converter } from '../converter';
 import { DrawConfigInput } from './DrawConfigInput';
 import { InputType } from '../ui/input/Input';
 import { Collapsable } from '../ui/Collapsable';
-import { stageRegistry } from '../stage';
 import { stageService } from '../stage/StageService';
 import { editorService } from './EditorService';
+import { stageRegistry } from '../stage/StageRegistry';
 
 import './Editor.styl';
 

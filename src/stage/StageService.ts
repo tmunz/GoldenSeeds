@@ -1,8 +1,8 @@
 import { BehaviorSubject } from "rxjs";
 
-import { stageRegistry } from ".";
 import { Config } from "../Config";
 import { preconfigs } from "../preconfigs";
+import { stageRegistry } from "./StageRegistry";
 
 export class StageService {
 
