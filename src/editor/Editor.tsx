@@ -6,9 +6,10 @@ import { DrawConfigInput } from './DrawConfigInput';
 import { InputType } from '../ui/input/Input';
 import { Collapsable } from '../ui/Collapsable';
 import { stageRegistry } from '../stage';
+import { stageService } from '../stage/StageService';
+import { editorService } from './EditorService';
 
 import './Editor.styl';
-import { stageService } from '../stage/StageService';
 
 
 interface Props {
@@ -29,7 +30,7 @@ export class Editor extends React.Component<Props> {
             <div key={stageId} className={'stage ' + stageId}>
               <h1
                 className={`stage action ${editMode ? 'edit-mode' : ''}`}
-                onClick={() => stageService.setEditMode(editMode ? null : stageId)}>
+                onClick={() => editorService.setEditMode(editMode ? null : stageId)}>
                 Stage {stageId + 1}
               </h1>
               <Collapsable key={stageId} show={editMode}>

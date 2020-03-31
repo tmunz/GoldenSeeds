@@ -36,7 +36,7 @@ export class Toolbar extends React.Component<Props, State> {
         <Input value={name} onChange={stageService.setName} label={'name'} />
         <PreconfigSelector preconfigIndex={this.props.preconfigIndex} />
         <div className="actions">
-          <ConfigImporter onConfigChanged={stageService.setRawConfig} />
+          <ConfigImporter onConfigChanged={(rawConfig) => stageService.setRawConfig(rawConfig)} />
           <ConfigExporter config={this.props.config} />
           <SvgExporter name={name} getSvg={() => this.props.getSvg()} />
           {/*<AnimationController target={items} onNewFrame={setItemCount} />*/}

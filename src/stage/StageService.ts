@@ -8,7 +8,6 @@ export class StageService {
 
   preconfigIndex$ = new BehaviorSubject<number>(0);
   config$ = new BehaviorSubject<Config>(this.convertRawToConfig(preconfigs[0]));
-  editStageId$ = new BehaviorSubject<number>(null);
 
 
   setConfigValue(stageId: number, id: string, rawValue: string) {
@@ -25,10 +24,6 @@ export class StageService {
 
   selectPreconfig(preconfigIndex: number) {
     this.setRawConfig(preconfigs[preconfigIndex], preconfigIndex);
-  };
-
-  setEditMode(stageId: number) {
-    this.editStageId$.next(stageId);
   };
 
   setName(name: string) {
