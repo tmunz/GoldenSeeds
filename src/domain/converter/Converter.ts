@@ -1,4 +1,4 @@
-import { StageState } from "../Stage";
+import { StageState } from "../stage/Stage";
 
 
 export abstract class Converter<T> {

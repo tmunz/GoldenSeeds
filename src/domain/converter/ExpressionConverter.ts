@@ -1,4 +1,4 @@
-import { MathUtils } from "../../../utils/MathUtils";
+import { MathUtils } from "../../utils/MathUtils";
 import { Converter } from "./Converter";
 
 

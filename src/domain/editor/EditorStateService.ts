@@ -1,6 +1,6 @@
 import { BehaviorSubject } from "rxjs";
 
-export class EditorService {
+export class EditorStateService {
 
   editStageId$ = new BehaviorSubject<number>(null);
 
@@ -10,4 +10,4 @@ export class EditorService {
 
 }
 
-export const editorService = new EditorService();
+export const editorStateService = new EditorStateService();

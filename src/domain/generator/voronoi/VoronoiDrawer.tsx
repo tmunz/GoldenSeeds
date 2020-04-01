@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { Boundary, Cell, Point, Voronoi } from './impl/index';
-import { DrawStyle } from '../../../../datatypes/DrawStyle';
-import { Color } from '../../../../datatypes/Color';
+import { DrawStyle } from '../../../datatypes/DrawStyle';
+import { Color } from '../../../datatypes/Color';
 
 
 export interface VoronoiConfig {

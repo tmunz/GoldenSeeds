@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import { Config } from '../../Config';
+import { Config } from '../Config';
 import { DrawConfigInput } from './DrawConfigInput';
-import { InputType } from '../../../ui/input/Input';
-import { Collapsable } from '../../../ui/Collapsable';
-import { editorService } from './EditorService';
-import { stageRegistry } from '../StageRegistry';
-import { configService } from '../../ConfigService';
-import { StageState } from '../Stage';
+import { InputType } from '../../ui/input/Input';
+import { Collapsable } from '../../ui/Collapsable';
+import { editorStateService } from './EditorStateService';
+import { configService } from '../ConfigService';
+import { StageState } from '../stage/Stage';
+import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 
 import './Editor.styl';
 
@@ -24,21 +24,21 @@ export class Editor extends React.Component<Props> {
       <div className="overlay editor">
         {this.props.config.stages.map((stage, i) => {
           const stageId = i;
-          const types = stageRegistry.types;
+          const types = svgGeneratorRegistry.types;
           const editMode = this.props.editStageId === stageId;
           return (
             <div key={stageId} className={'stage ' + stageId}>
               <h1
                 className={`stage action ${editMode ? 'edit-mode' : ''}`}
-                onClick={() => editorService.setEditMode(editMode ? null : stageId)}>
+                onClick={() => editorStateService.setEditMode(editMode ? null : stageId)}>
                 Stage {stageId + 1}
               </h1>
               <Collapsable key={stageId} show={editMode}>
                 <DrawConfigInput
                   label="type"
                   inputType={InputType.RANGE}
-                  textValue={stage.type}
-                  rangeValue={types.findIndex((s: string) => s === stage.type)}
+                  textValue={stage.generator.type}
+                  rangeValue={types.findIndex((s: string) => s === stage.generator.type)}
                   min={0}
                   max={types.length - 1}
                   valid

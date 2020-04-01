@@ -8,5 +8,5 @@ module.exports = {
     '!**/vendor/**'
   ],
   coverageReporters: ['text-summary'],
-  setupFilesAfterEnv: ['./src/stage/drawer/voronoi/TestUtils.ts'],
+  setupFilesAfterEnv: ['./src/domain/generator/voronoi/TestUtils.ts'],
 };

@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import { Config } from './Config';
-import { StageResult, StageState } from './stage/Stage';
+import { StageState } from './stage/Stage';
+import { SvgGeneratorResult } from './generator/SvgGenerator';
 
 
 interface Props {
@@ -15,13 +16,13 @@ export class SvgCanvas extends React.Component<Props> {
   svgContent: SVGSVGElement;
 
   render() {
-    let prev: StageResult = {
+    let prev: SvgGeneratorResult = {
       grid: [[0, 0]],
       render: null,
       boundingBox: { x: 0, y: 0, w: 0, h: 0 }
     };
     const generatedStages = this.props.config.stages.map((stage) => {
-      prev = stage.generate(this.convertToValue(stage.state), prev);
+      prev = stage.generator.generate(this.convertToValue(stage.state), prev);
       return prev;
     });
 

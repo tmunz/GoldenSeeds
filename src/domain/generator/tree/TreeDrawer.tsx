@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Color } from '../../../../datatypes/Color';
+import { Color } from '../../../datatypes/Color';
 import { Tree, Config as TreeImplConfig } from './Tree';
 
 

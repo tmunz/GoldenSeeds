@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { InputType, Input } from '../../../ui/input/Input';
+import { InputType, Input } from '../../ui/input/Input';
 
 import './DrawConfigInput.styl';
 

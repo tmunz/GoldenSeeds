@@ -3,8 +3,9 @@ import { BehaviorSubject } from "rxjs";
 import { preconfigs } from "../preconfigs";
 
 import { Config } from "./Config";
-import { stageRegistry } from "./stage/StageRegistry";
-import { converterService } from "./stage/ConverterService";
+import { converterService } from "./converter/ConverterService";
+import { svgGeneratorRegistry } from "./generator/SvgGeneratorRegistry";
+import { Stage } from "./stage/Stage";
 
 export class ConfigService {
 
@@ -15,7 +16,9 @@ export class ConfigService {
   setConfigValue(stageId: number, id: string, rawValue: string) {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
-    nextConfig.stages[stageId].state[id] = converterService.convert(config.stages[stageId].definition[id].type, rawValue) as any;
+    nextConfig.stages[stageId].state[id] = converterService.convert(
+      config.stages[stageId].generator.definition[id].type, rawValue
+    ) as any;
     this.config$.next(nextConfig);
   };
 
@@ -33,17 +36,16 @@ export class ConfigService {
   };
 
   setType(stageId: number, type: string) {
-    const stage = stageRegistry.newInstance(type);
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
-    nextConfig.stages[stageId] = stage
+    nextConfig.stages[stageId] = new Stage(svgGeneratorRegistry.newInstance(type))
     this.config$.next(nextConfig);
   };
 
   private convertRawToConfig(configRaw: any) {
     return {
       meta: configRaw.meta,
-      stages: configRaw.stages.map((stageRaw: any) => stageRegistry.newInstance(stageRaw.type, stageRaw)),
+      stages: configRaw.stages.map((stageRaw: any) => new Stage(svgGeneratorRegistry.newInstance(stageRaw.type), stageRaw)),
     }
   }
 }

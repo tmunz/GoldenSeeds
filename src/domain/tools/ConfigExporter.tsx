@@ -36,7 +36,7 @@ export class ConfigExporter extends React.Component<Props> {
     const stages = config.stages.map(stage =>
       Object.keys(stage.state).reduce(
         (agg, key) => ({ ...agg, [key]: stage.state[key].rawValue }),
-        { type: stage.type }
+        { type: stage.generator.type }
       ),
     );
     return {

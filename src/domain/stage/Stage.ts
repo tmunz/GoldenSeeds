@@ -1,5 +1,5 @@
-import { StageItemType } from "./StageItemType";
-import { converterService } from "./ConverterService";
+import { converterService } from "../converter/ConverterService";
+import { SvgGenerator } from "../generator/SvgGenerator";
 
 export interface StageState<T> {
   rawValue: string;
@@ -7,28 +7,23 @@ export interface StageState<T> {
   valid: boolean;
 }
 
-export interface StageResult {
-  grid: number[][];
-  render: JSX.Element;
-  boundingBox: BoundingBox;
-}
+export class Stage {
 
-export abstract class Stage {
-
-  abstract type: string;
-  abstract definition: { [key: string]: { initial: string, type: StageItemType } }
-  abstract generate: (props: object, prev: StageResult) => StageResult;
+  generator: SvgGenerator;
   state: { [key: string]: StageState<any> };
 
-  withState(state?: { [key: string]: string }) {
+  constructor(generator: SvgGenerator, state?: { [key: string]: string }) {
+    this.generator = generator;
+    this.state = this.makeState(state);
+  }
+
+  private makeState(state?: { [key: string]: string }) {
     const stateRaw: { [key: string]: string } = {
-      ...Object.keys(this.definition).reduce((agg, key) => ({ ...agg, [key]: this.definition[key].initial }), {}),
+      ...Object.keys(this.generator.definition).reduce((agg, key) => ({ ...agg, [key]: this.generator.definition[key].initial }), {}),
       ...(state ? state : {}),
     };
-    this.state = Object.keys(this.definition)
+    return Object.keys(this.generator.definition)
       .filter(key => key !== 'type')
-      .reduce((agg, key) => ({ ...agg, [key]: converterService.convert(this.definition[key].type, stateRaw[key]) }), {});
-    return this;
-  };
+      .reduce((agg, key) => ({ ...agg, [key]: converterService.convert(this.generator.definition[key].type, stateRaw[key]) }), {});
+  }
 }
-

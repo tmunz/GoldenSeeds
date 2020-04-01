@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { DrawStyle } from '../../../../datatypes/DrawStyle';
-import { Color } from '../../../../datatypes/Color';
+import { DrawStyle } from '../../../datatypes/DrawStyle';
+import { Color } from '../../../datatypes/Color';
 
 export interface RegularShapeConfig {
   style: DrawStyle;
