@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 import { GoldenSeedsView } from './view/GoldenSeedsView';
-import { stageService } from './stage/StageService';
-import { editorService } from './editor/EditorService';
+import { configService } from './domain/ConfigService';
+import { editorService } from './domain/stage/editor/EditorService';
 
 export function App() {
   const [preconfigIndex, setPreconfigIndex] = useState();
@@ -10,8 +10,8 @@ export function App() {
   const [editStageId, setEditStageId] = useState();
 
   useEffect(() => {
-    const preconfigSubscription = stageService.preconfigIndex$.subscribe(setPreconfigIndex as any);
-    const configSubscription = stageService.config$.subscribe(setConfig as any);
+    const preconfigSubscription = configService.preconfigIndex$.subscribe(setPreconfigIndex as any);
+    const configSubscription = configService.config$.subscribe(setConfig as any);
     const editStageIdSubscription = editorService.editStageId$.subscribe(setEditStageId as any);
     return () => {
       preconfigSubscription.unsubscribe();

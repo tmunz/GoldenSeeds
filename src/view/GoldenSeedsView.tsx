@@ -1,12 +1,13 @@
 import * as React from 'react';
 
-import { Toolbar } from '../tools/Toolbar';
-import { Editor } from '../editor/Editor';
+import { Toolbar } from '../domain/tools/Toolbar';
+import { Editor } from '../domain/stage/editor/Editor';
+import { SvgCanvas } from '../domain/SvgCanvas';
+import { Config } from '../domain/Config';
 import { Themer } from '../themer/Themer';
-import { SvgCanvas } from './SvgCanvas';
-import { Config } from '../Config';
 
 import './GoldenSeedsView.styl';
+
 
 
 type Props = {
