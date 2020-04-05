@@ -22,7 +22,6 @@ export class Tree implements SvgGenerator {
   generate = (config: TreeConfig, prev: SvgGeneratorResult) => {
     const size = [...new Array(config.depth).keys()].reduce((agg, n) => agg + Math.pow(config.lengthConservation, n), 0);
     const tree = draw(config, prev.grid);
-    console.log(tree)
     return {
       grid: tree.points.map(p => [prev.boundingBox.x + p.x, prev.boundingBox.y - p.y]),
       svg: tree.svg,

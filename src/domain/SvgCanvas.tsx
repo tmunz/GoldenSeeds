@@ -34,11 +34,14 @@ export class SvgCanvas extends React.Component<Props> {
           ref={e => this.svgContent = e}
         >
           {
-            generatedStages.map((stageResult, i) => <g
-              key={i}
-              transform={this.transform(stageResult.boundingBox, 220)}
-              dangerouslySetInnerHTML={{ __html: stageResult.svg }}
-            />)
+            generatedStages.map((stageResult, i) => {
+              const svg = stageResult.svg;
+              return typeof svg === 'string' && <g
+                key={i}
+                transform={this.transform(stageResult.boundingBox, 220)}
+                dangerouslySetInnerHTML={{ __html: svg }}
+              />
+            })
           }
         </svg>
       </ErrorBoundary>

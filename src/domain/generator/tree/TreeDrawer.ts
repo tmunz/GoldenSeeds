@@ -22,5 +22,5 @@ export function draw(config: TreeConfig, grid: number[][]): { svg: string, point
     />`
     )).join('');
     return { svg: agg.svg + svg, points: [...agg.points, ...tree.limbs.map(l => l.to)] };
-  }, { svg: null, points: [] });
+  }, { svg: '', points: [] });
 }
