@@ -15,12 +15,7 @@ export class SvgCanvas extends React.Component<Props> {
 
   svgContent: SVGSVGElement;
 
-  componentDidUpdate() {
-    console.timeEnd('render')
-  }
-
   render() {
-    console.time('render')
     let prev: SvgGeneratorResult = {
       grid: [[0, 0]],
       svg: null,
@@ -55,7 +50,7 @@ export class SvgCanvas extends React.Component<Props> {
     const scale = targetSize / Math.max(boundingBox.w, boundingBox.h);
     const x = (this.props.width / 2 - (boundingBox.x + boundingBox.w / 2) * scale);
     const y = (this.props.height / 2 - (boundingBox.y + boundingBox.h / 2) * scale);
-    return `translate(${x},${y}) scale(${scale})`;
+    return `translate(${isFinite(x) ? x : 0},${isFinite(y) ? y : 0}) scale(${isFinite(scale) ? scale : 1})`;
   }
 
   private convertToValue(obj: { [key: string]: StageState<any> }): { [key: string]: any } {

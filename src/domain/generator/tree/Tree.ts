@@ -44,7 +44,6 @@ export class Tree {
 
 
   private static calculateTree(config: Config): { root: Node, limbs: Limb[] } {
-
     const root: Node = {
       point: { x: 0, y: 0 }, level: 0, angle: undefined, branches: [
         { point: { x: 0, y: 1 }, level: 1, angle: Math.PI / 2 }
@@ -55,6 +54,7 @@ export class Tree {
     const queue = [...root.branches];
     let seed = config.seed;
     let currentNode: Node;
+
     do {
       currentNode = queue.pop()
       if (currentNode && currentNode.level < config.depth) {

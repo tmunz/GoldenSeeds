@@ -14,10 +14,10 @@ export class Stage {
 
   constructor(generator: SvgGenerator, state?: { [key: string]: string }) {
     this.generator = generator;
-    this.state = this.makeState(state);
+    this.state = this.initialState(state);
   }
 
-  private makeState(state?: { [key: string]: string }) {
+  private initialState(state?: { [key: string]: string }) {
     const stateRaw: { [key: string]: string } = {
       ...Object.keys(this.generator.definition).reduce((agg, key) => ({ ...agg, [key]: this.generator.definition[key].initial }), {}),
       ...(state ? state : {}),
