@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { VoronoiDrawer, VoronoiConfig } from './VoronoiDrawer';
+import { VoronoiConfig, draw } from './VoronoiDrawer';
 import { DrawStyle } from '../../../datatypes/DrawStyle';
 import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
 
@@ -18,8 +16,8 @@ export class Voronoi implements SvgGenerator {
 
   generate = (config: VoronoiConfig, prev: SvgGeneratorResult) => {
     return {
-      render: <VoronoiDrawer config={config} grid={prev.grid} />,
       boundingBox: prev.boundingBox,
+      svg: draw(config, prev.grid),
       grid: prev.grid,
     };
   }

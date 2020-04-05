@@ -1,7 +1,5 @@
-import React from 'react';
-
 import { MathUtils } from '../../../utils/MathUtils';
-import { TreeConfig, TreeDrawer } from './TreeDrawer';
+import { TreeConfig, draw } from './TreeDrawer';
 import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
 
 
@@ -25,7 +23,7 @@ export class Tree implements SvgGenerator {
     const size = [...new Array(config.depth).keys()].reduce((agg, n) => agg + Math.pow(config.lengthConservation, n), 0);
     return {
       grid: prev.grid,
-      render: <TreeDrawer config={config} grid={prev.grid} />,
+      svg: draw(config, prev.grid),
       boundingBox: {
         x: prev.boundingBox.x - size / 2,
         y: prev.boundingBox.y - size,

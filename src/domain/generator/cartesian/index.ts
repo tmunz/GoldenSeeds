@@ -17,6 +17,6 @@ export class CartesianGrid implements SvgGenerator {
     for (let i = 0; i < items; i++) {
       grid.push([i % x, Math.floor(i / x)]);
     }
-    return { grid, boundingBox: { x: 0, y: 0, w: x - 1, h: Math.ceil(items / x) - 1 }, render: null };
+    return { grid, boundingBox: { x: 0, y: 0, w: x - 1, h: Math.ceil(items / x) - 1 }, svg: null };
   }
 }

@@ -15,10 +15,15 @@ export class SvgCanvas extends React.Component<Props> {
 
   svgContent: SVGSVGElement;
 
+  componentDidUpdate() {
+    console.timeEnd('render')
+  }
+
   render() {
+    console.time('render')
     let prev: SvgGeneratorResult = {
       grid: [[0, 0]],
-      render: null,
+      svg: null,
       boundingBox: { x: 0, y: 0, w: 0, h: 0 }
     };
     const generatedStages = this.props.config.stages.map((stage) => {
@@ -37,9 +42,8 @@ export class SvgCanvas extends React.Component<Props> {
             generatedStages.map((stageResult, i) => <g
               key={i}
               transform={this.transform(stageResult.boundingBox, 220)}
-            >
-              {stageResult.render}
-            </g>)
+              dangerouslySetInnerHTML={{ __html: stageResult.svg }}
+            />)
           }
         </svg>
       </ErrorBoundary>

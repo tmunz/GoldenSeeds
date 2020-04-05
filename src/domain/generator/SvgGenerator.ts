@@ -9,7 +9,7 @@ export type ParamDefinition = { initial: string } & ({ type: ParamDefinitionType
 
 export interface SvgGeneratorResult {
   grid: number[][];
-  render: JSX.Element;
+  svg: string;
   boundingBox: BoundingBox;
 }
 

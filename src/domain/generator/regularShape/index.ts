@@ -1,8 +1,6 @@
-import React from 'react';
-
 import { DrawStyle } from '../../../datatypes/DrawStyle';
 import { MathUtils } from '../../../utils/MathUtils';
-import { RegularShapeDrawer, RegularShapeConfig } from './RegularShapeDrawer';
+import { draw, RegularShapeConfig } from './RegularShapeDrawer';
 import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
 
 
@@ -27,7 +25,7 @@ export class RegularShape implements SvgGenerator {
     const itemsSize = config.size(items, items);
     return {
       grid: prev.grid,
-      render: <RegularShapeDrawer config={config} grid={prev.grid} />,
+      svg: draw(config, prev.grid),
       boundingBox: {
         x: prev.boundingBox.x - itemsSize / 2,
         y: prev.boundingBox.y - itemsSize / 2,

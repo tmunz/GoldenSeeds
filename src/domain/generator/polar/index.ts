@@ -25,6 +25,6 @@ export class PolarGrid implements SvgGenerator {
       grid.push([Math.cos(rad), Math.sin(rad)].map((trig, i) => distance(n, items) * trig));
     }
     const radius = distance(items, items);
-    return { grid, boundingBox: { x: -radius, y: -radius, w: radius * 2, h: radius * 2 }, render: null };
+    return { grid, boundingBox: { x: -radius, y: -radius, w: radius * 2, h: radius * 2 }, svg: null };
   }
 }
