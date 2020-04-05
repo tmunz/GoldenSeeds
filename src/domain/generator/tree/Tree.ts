@@ -55,8 +55,9 @@ export class Tree {
     const queue = [...root.branches];
     let seed = config.seed;
     let currentNode: Node;
-    while (currentNode = queue.pop()) {
-      if (currentNode.level < config.depth) {
+    do {
+      currentNode = queue.pop()
+      if (currentNode && currentNode.level < config.depth) {
         currentNode.branches = [];
         const branchAmount = 2;
         for (let i = 0; i < branchAmount; i++) {
@@ -82,7 +83,7 @@ export class Tree {
         }
         queue.unshift(...currentNode.branches);
       }
-    }
+    } while (currentNode !== undefined);
     return { root, limbs };
   }
 }
