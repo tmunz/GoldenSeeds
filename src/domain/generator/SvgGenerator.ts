@@ -1,11 +1,11 @@
 type ParamDefinitionTypeMinMaxStep = 'expression' | 'number';
 
 export type ParamDefinitionType = ParamDefinitionTypeMinMaxStep | 'color' | 'selection' | 'string';
+export type ParamDefinitionMinMaxStep = { type: ParamDefinitionTypeMinMaxStep, min: number, max: number, step: number };
+export type ParamDefinitionSelection = { type: 'selection', options: string[] };
 
 export type ParamDefinition = { initial: string } & ({ type: ParamDefinitionType }
-  | { type: ParamDefinitionTypeMinMaxStep, min: number, max: number, step: number }
-  | { type: 'selection', options: string[] });
-
+  | ParamDefinitionMinMaxStep | ParamDefinitionSelection);
 
 export interface SvgGeneratorResult {
   grid: number[][];

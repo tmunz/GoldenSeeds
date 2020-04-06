@@ -2,8 +2,7 @@ import * as React from 'react';
 
 import { InputType, Input } from '../../ui/input/Input';
 
-import './DrawConfigInput.styl';
-
+import './EditorInput.styl';
 
 
 export interface Props {
@@ -16,12 +15,11 @@ export interface Props {
   valid?: boolean;
   onChange?: (rawValue: string) => void;
   convertToString?: (value: any) => string;
-  controls?: JSX.Element[];
   inputType: InputType;
 }
 
 
-export class DrawConfigInput extends React.Component<Props> {
+export class EditorInput extends React.Component<Props> {
 
   render() {
     return (
@@ -40,7 +38,6 @@ export class DrawConfigInput extends React.Component<Props> {
             random={true}
           />
         </div>
-        {this.props.controls}
       </div >
     );
   }

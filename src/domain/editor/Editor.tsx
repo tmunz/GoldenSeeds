@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { Config } from '../Config';
-import { DrawConfigInput } from './DrawConfigInput';
 import { InputType } from '../../ui/input/Input';
 import { Collapsable } from '../../ui/Collapsable';
 import { editorStateService } from './EditorStateService';
@@ -10,6 +9,7 @@ import { StageState } from '../stage/Stage';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 
 import './Editor.styl';
+import { EditorInput } from './EditorInput';
 
 
 interface Props {
@@ -34,7 +34,7 @@ export class Editor extends React.Component<Props> {
                 Stage {stageId + 1}
               </h1>
               <Collapsable key={stageId} show={editMode}>
-                <DrawConfigInput
+                <EditorInput
                   label="type"
                   inputType={InputType.RANGE}
                   textValue={stage.generator.type}
@@ -66,7 +66,7 @@ export class Editor extends React.Component<Props> {
   private generateEntryModifier(stageId: number, id: string, state: StageState<any>) {
     {/* TODO ...converter.getInputFieldConfiguration(stageId, state) */ }
 
-    return <DrawConfigInput
+    return <EditorInput
       key={id}
       onChange={(rawValue: any) => configService.setConfigValue(stageId, id, rawValue)}
 
