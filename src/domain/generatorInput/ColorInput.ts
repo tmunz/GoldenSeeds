@@ -9,6 +9,8 @@ export class ColorInput extends SvgGeneratorInput<Color> {
   inputConfig(stageId: number, name: string, definition: ParamDefinition, state: StageState<Color>) {
     return {
       inputType: InputType.COLOR,
+      textValue: state.value.toString(),
+      rangeValue: state.value.get(),
     };
   }
 }

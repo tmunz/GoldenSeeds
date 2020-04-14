@@ -1,5 +1,5 @@
 import { SvgGeneratorInput } from './SvgGeneratorInput';
-import { ParamDefinition } from '../generator/SvgGenerator';
+import { ParamDefinition, ParamDefinitionMinMaxStep } from '../generator/SvgGenerator';
 import { StageState } from '../stage/Stage';
 import { InputType } from '../../ui/input/Input';
 
@@ -20,6 +20,9 @@ export class ExpressionInput extends SvgGeneratorInput<(n: number, items: number
       inputType: InputType.EXTENDED_RANGE,
       canExpertMode: true,
       rangeValue,
+      min: (definition as ParamDefinitionMinMaxStep)?.min,
+      max: (definition as ParamDefinitionMinMaxStep)?.max,
+      step: (definition as ParamDefinitionMinMaxStep)?.step,
       // controls,
       convertToString: (i: any) => `${nMode && typeof i === 'number' ? 'n * ' : ''}${i}`,
     };

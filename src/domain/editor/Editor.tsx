@@ -70,6 +70,8 @@ export class Editor extends React.Component<Props> {
   private generateEntryModifier(stageId: number, id: string, definition: ParamDefinition, state: StageState<any>) {
     const props = editorService.getInputFieldConfiguration(definition.type, stageId, id, definition, state);
 
+    console.log(definition.type, stageId, id, definition, state, props)
+
     return <EditorInput
       {...props}
       key={id}
