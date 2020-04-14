@@ -7,9 +7,12 @@ import { editorStateService } from './EditorStateService';
 import { configService } from '../ConfigService';
 import { StageState } from '../stage/Stage';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
+import { EditorInput } from './EditorInput';
+import { editorService } from './EditorService';
+import { ParamDefinition } from '../generator/SvgGenerator';
 
 import './Editor.styl';
-import { EditorInput } from './EditorInput';
+
 
 
 interface Props {
@@ -50,6 +53,7 @@ export class Editor extends React.Component<Props> {
                     this.generateEntryModifier(
                       stageId,
                       key,
+                      stage.generator.definition[key],
                       stage.state[key],
                     )
                   )
@@ -63,17 +67,13 @@ export class Editor extends React.Component<Props> {
     );
   }
 
-  private generateEntryModifier(stageId: number, id: string, state: StageState<any>) {
-    {/* TODO ...converter.getInputFieldConfiguration(stageId, state) */ }
+  private generateEntryModifier(stageId: number, id: string, definition: ParamDefinition, state: StageState<any>) {
+    const props = editorService.getInputFieldConfiguration(definition.type, stageId, id, definition, state);
 
     return <EditorInput
+      {...props}
       key={id}
       onChange={(rawValue: any) => configService.setConfigValue(stageId, id, rawValue)}
-
-      inputType={InputType.TEXT}
-      label={id}
-      textValue={state.rawValue}
-      rangeValue={state.value}
     />;
   }
 }

@@ -4,7 +4,7 @@ import { InputType } from '../../ui/input/Input';
 import { SvgGeneratorInput } from './SvgGeneratorInput';
 
 
-export class SelectionConverter<T> extends SvgGeneratorInput<T[]> {
+export class SelectionInput<T> extends SvgGeneratorInput<T[]> {
 
   inputConfig(stageId: number, name: string, definition: ParamDefinition, state: StageState<T[]>) {
     const options = (definition as ParamDefinitionSelection)?.options;
