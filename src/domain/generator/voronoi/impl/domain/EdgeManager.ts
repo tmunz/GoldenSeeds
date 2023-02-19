@@ -6,9 +6,7 @@ import { SiteAreaStore } from './SiteAreaStore';
 import { Boundary } from './Boundary';
 import { Vertex } from './Vertex';
 
-
 export class EdgeManager extends AbstractMemoryFactory<Edge> {
-
   private vertexFactory: VertexFactory;
   private siteAreaStore: SiteAreaStore;
 
@@ -27,9 +25,17 @@ export class EdgeManager extends AbstractMemoryFactory<Edge> {
   clean(boundary: Boundary): void {
     const cleanedEdges: Edge[] = [];
 
-    this.createdObjects.forEach(edge => {
-      const couldConnectEdge = edge.connectWith(boundary, this.vertexFactory, this.siteAreaStore);
-      const couldClipEdge = edge.clipTo(boundary, this.vertexFactory, this.siteAreaStore);
+    this.createdObjects.forEach((edge) => {
+      const couldConnectEdge = edge.connectWith(
+        boundary,
+        this.vertexFactory,
+        this.siteAreaStore,
+      );
+      const couldClipEdge = edge.clipTo(
+        boundary,
+        this.vertexFactory,
+        this.siteAreaStore,
+      );
       if (couldConnectEdge && couldClipEdge && edge.hasMinLength()) {
         cleanedEdges.push(edge);
       } else {

@@ -1,14 +1,22 @@
 import { SvgGeneratorInput } from './SvgGeneratorInput';
-import { ParamDefinition, ParamDefinitionMinMaxStep } from '../generator/SvgGenerator';
+import {
+  ParamDefinition,
+  ParamDefinitionMinMaxStep,
+} from '../generator/SvgGenerator';
 import { StageState } from '../stage/Stage';
 import { InputType } from '../../ui/input/Input';
 
-
-export class ExpressionInput extends SvgGeneratorInput<(n: number, items: number, itemSize: (n: number) => number) => number> {
-
-  inputConfig = (stageId: number, name: string, definition: ParamDefinition,
-    state: StageState<(n: number, items: number, itemSize: (n: number) => number) => number>) => {
-
+export class ExpressionInput extends SvgGeneratorInput<
+  (n: number, items: number, itemSize: (n: number) => number) => number
+> {
+  inputConfig = (
+    stageId: number,
+    name: string,
+    definition: ParamDefinition,
+    state: StageState<
+      (n: number, items: number, itemSize: (n: number) => number) => number
+    >,
+  ) => {
     const regexResult = state.rawValue.match(/^\s*(n\s\*\s*(.*\S)?)\s*$/);
     const nMode: boolean = regexResult ? true : false;
     const nLessValue: string = nMode ? regexResult[2] : state.rawValue;
@@ -24,9 +32,10 @@ export class ExpressionInput extends SvgGeneratorInput<(n: number, items: number
       max: (definition as ParamDefinitionMinMaxStep)?.max,
       step: (definition as ParamDefinitionMinMaxStep)?.step,
       // controls,
-      convertToString: (i: any) => `${nMode && typeof i === 'number' ? 'n * ' : ''}${i}`,
+      convertToString: (i: any) =>
+        `${nMode && typeof i === 'number' ? 'n * ' : ''}${i}`,
     };
-  }
+  };
 
   /*private generateNControl(stage: number, nLessValue: string, active: boolean): JSX.Element {
     return <div

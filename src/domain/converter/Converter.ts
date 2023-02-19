@@ -1,8 +1,6 @@
-import { StageState } from "../stage/Stage";
-
+import { StageState } from '../stage/Stage';
 
 export abstract class Converter<T> {
-
   protected abstract convertFromRaw(rawValue: string): T;
 
   convert = (rawValue: string): Partial<StageState<T>> => {
@@ -13,5 +11,5 @@ export abstract class Converter<T> {
       converted.value = value;
     }
     return converted;
-  }
+  };
 }

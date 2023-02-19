@@ -11,17 +11,25 @@ import { Vertex } from './Vertex';
 import { DistanceHelper } from './DistanceHelper';
 import { SiteArea } from './SiteArea';
 
-
 export class VoronoiWorker {
-
   private circleEvents: CircleEventQueue = new CircleEventQueue();
   private vertexFactory: VertexFactory = new VertexFactory();
   private siteAreaStore: SiteAreaStore = new SiteAreaStore();
-  private edgeManager: EdgeManager = new EdgeManager(this.vertexFactory, this.siteAreaStore);
-  private beachLine: BeachLine = new BeachLine(this.circleEvents, this.edgeManager, this.vertexFactory, this.siteAreaStore);
+  private edgeManager: EdgeManager = new EdgeManager(
+    this.vertexFactory,
+    this.siteAreaStore,
+  );
+  private beachLine: BeachLine = new BeachLine(
+    this.circleEvents,
+    this.edgeManager,
+    this.vertexFactory,
+    this.siteAreaStore,
+  );
 
-  process(queue: Queue<Site>, boundary: Boundary): { edges: Edge[]; vertices: Vertex[]; siteAreas: SiteArea[] } {
-
+  process(
+    queue: Queue<Site>,
+    boundary: Boundary,
+  ): { edges: Edge[]; vertices: Vertex[]; siteAreas: SiteArea[] } {
     let site = queue.pop();
 
     while (site || this.circleEvents.getCurrent()) {
@@ -41,16 +49,18 @@ export class VoronoiWorker {
     return {
       edges: this.edgeManager.getAll(),
       vertices: this.vertexFactory.getAll(),
-      siteAreas: this.siteAreaStore.getAll()
+      siteAreas: this.siteAreaStore.getAll(),
     };
   }
 
   private shouldAddBeachSectionFor(site: Site): boolean {
-    return site
-      && (!this.circleEvents.getCurrent()
-        || site.y < this.circleEvents.getCurrent().y
-        || (site.y === this.circleEvents.getCurrent().y && site.x < this.circleEvents.getCurrent().x)
-      );
+    return (
+      site &&
+      (!this.circleEvents.getCurrent() ||
+        site.y < this.circleEvents.getCurrent().y ||
+        (site.y === this.circleEvents.getCurrent().y &&
+          site.x < this.circleEvents.getCurrent().x))
+    );
   }
 
   private shouldIgnoreSite(site: Site, previousSite: Site) {
@@ -66,8 +76,13 @@ export class VoronoiWorker {
   }
 
   private closeSiteAreas(boundary: Boundary): void {
-    const createBorderEdgeFun = (site: Site, start: Vertex, end: Vertex): Edge =>
-      this.edgeManager.create(site, null, start, end);
-    this.siteAreaStore.getAll().forEach(siteArea => siteArea.close(createBorderEdgeFun, boundary));
+    const createBorderEdgeFun = (
+      site: Site,
+      start: Vertex,
+      end: Vertex,
+    ): Edge => this.edgeManager.create(site, null, start, end);
+    this.siteAreaStore
+      .getAll()
+      .forEach((siteArea) => siteArea.close(createBorderEdgeFun, boundary));
   }
 }

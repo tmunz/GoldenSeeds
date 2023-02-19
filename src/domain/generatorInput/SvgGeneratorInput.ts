@@ -4,11 +4,19 @@ import { InputType } from '../../ui/input/Input';
 import { Props as EditorInputProps } from '../editor/EditorInput';
 
 export abstract class SvgGeneratorInput<T> {
+  protected abstract inputConfig(
+    stageId: number,
+    name: string,
+    definition: ParamDefinition,
+    state: StageState<T>,
+  ): Partial<EditorInputProps> & { inputType: InputType };
 
-  protected abstract inputConfig(stageId: number, name: string, definition: ParamDefinition, state: StageState<T>):
-    Partial<EditorInputProps> & { inputType: InputType; };
-
-  getInputFieldConfiguration(stageId: number, name: string, definition: ParamDefinition, state: StageState<T>): EditorInputProps {
+  getInputFieldConfiguration(
+    stageId: number,
+    name: string,
+    definition: ParamDefinition,
+    state: StageState<T>,
+  ): EditorInputProps {
     return {
       label: name,
       textValue: state.value.toString(),

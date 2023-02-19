@@ -6,7 +6,6 @@ import { Boundary } from '../index';
 import { SiteAreaStore } from './SiteAreaStore';
 
 export class Edge {
-
   leftSite: Site;
   rightSite: Site;
   private vertices: Vertex[];
@@ -45,21 +44,31 @@ export class Edge {
     this.addVertex(vertex, rightSite, leftSite);
   }
 
-
-  connectWith(boundary: Boundary, vertexFactory: VertexFactory, siteAreaStore: SiteAreaStore): boolean {
+  connectWith(
+    boundary: Boundary,
+    vertexFactory: VertexFactory,
+    siteAreaStore: SiteAreaStore,
+  ): boolean {
     if (this.getEndPoint()) {
       return true;
     }
 
-    const center: { x: number; y: number } = { x: (this.leftSite.x + this.rightSite.x) / 2, y: (this.leftSite.y + this.rightSite.y) / 2 };
+    const center: { x: number; y: number } = {
+      x: (this.leftSite.x + this.rightSite.x) / 2,
+      y: (this.leftSite.y + this.rightSite.y) / 2,
+    };
     let slope: number;
     let fb: number;
 
     siteAreaStore.get(this.leftSite.id).canBeClosed = true;
     siteAreaStore.get(this.rightSite.id).canBeClosed = true;
 
-    if (!DistanceHelper.isEqualWithTolerance(this.leftSite.y, this.rightSite.y)) {
-      slope = (this.leftSite.x - this.rightSite.x) / (- this.leftSite.y + this.rightSite.y);
+    if (
+      !DistanceHelper.isEqualWithTolerance(this.leftSite.y, this.rightSite.y)
+    ) {
+      slope =
+        (this.leftSite.x - this.rightSite.x) /
+        (-this.leftSite.y + this.rightSite.y);
       fb = center.y - slope * center.x;
     }
 
@@ -79,25 +88,35 @@ export class Edge {
     // closer to vertical than horizontal, connect start point to the
     // top or bottom side of the bounding box
     else if (slope < -1 || 1 < slope) {
-
-
       // downward
       if (this.leftSite.x > this.rightSite.x) {
         if (!this.vertices[0] || this.vertices[0].y < boundary.top()) {
-          this.vertices[0] = vertexFactory.create((boundary.top() - fb) / slope, boundary.top());
+          this.vertices[0] = vertexFactory.create(
+            (boundary.top() - fb) / slope,
+            boundary.top(),
+          );
         } else if (this.vertices[0].y >= boundary.bottom()) {
           return false;
         }
-        this.vertices[1] = vertexFactory.create((boundary.bottom() - fb) / slope, boundary.bottom());
+        this.vertices[1] = vertexFactory.create(
+          (boundary.bottom() - fb) / slope,
+          boundary.bottom(),
+        );
       }
       // upward
       else {
         if (!this.vertices[0] || this.vertices[0].y > boundary.bottom()) {
-          this.vertices[0] = vertexFactory.create((boundary.bottom() - fb) / slope, boundary.bottom());
+          this.vertices[0] = vertexFactory.create(
+            (boundary.bottom() - fb) / slope,
+            boundary.bottom(),
+          );
         } else if (this.vertices[0].y < boundary.top()) {
           return false;
         }
-        this.vertices[1] = vertexFactory.create((boundary.top() - fb) / slope, boundary.top());
+        this.vertices[1] = vertexFactory.create(
+          (boundary.top() - fb) / slope,
+          boundary.top(),
+        );
       }
     }
 
@@ -107,28 +126,43 @@ export class Edge {
       // rightward
       if (this.leftSite.y < this.rightSite.y) {
         if (!this.vertices[0] || this.vertices[0].x < boundary.left()) {
-          this.vertices[0] = vertexFactory.create(boundary.left(), slope * boundary.left() + fb);
+          this.vertices[0] = vertexFactory.create(
+            boundary.left(),
+            slope * boundary.left() + fb,
+          );
         } else if (this.vertices[0].x >= boundary.right()) {
           return false;
         }
-        this.vertices[1] = vertexFactory.create(boundary.right(), slope * boundary.right() + fb);
+        this.vertices[1] = vertexFactory.create(
+          boundary.right(),
+          slope * boundary.right() + fb,
+        );
       }
 
       // leftward
       else {
         if (!this.vertices[0] || this.vertices[0].x > boundary.right()) {
-          this.vertices[0] = vertexFactory.create(boundary.right(), slope * boundary.right() + fb);
+          this.vertices[0] = vertexFactory.create(
+            boundary.right(),
+            slope * boundary.right() + fb,
+          );
         } else if (this.vertices[0].x < boundary.left()) {
           return false;
         }
-        this.vertices[1] = vertexFactory.create(boundary.left(), slope * boundary.left() + fb);
+        this.vertices[1] = vertexFactory.create(
+          boundary.left(),
+          slope * boundary.left() + fb,
+        );
       }
     }
     return true;
   }
 
-
-  private calculateUpward(center: { x: number; y: number }, boundary: Boundary, vertexFactory: VertexFactory) {
+  private calculateUpward(
+    center: { x: number; y: number },
+    boundary: Boundary,
+    vertexFactory: VertexFactory,
+  ) {
     const boundaryA = boundary.bottom();
     const boundaryB = boundary.top();
     if (!this.getStartPoint() || this.getStartPoint().y > boundaryA) {
@@ -139,8 +173,11 @@ export class Edge {
     this.vertices[1] = vertexFactory.create(center.x, boundaryB);
   }
 
-
-  private calculateDownward(center: { x: number; y: number }, boundary: Boundary, vertexFactory: VertexFactory) {
+  private calculateDownward(
+    center: { x: number; y: number },
+    boundary: Boundary,
+    vertexFactory: VertexFactory,
+  ) {
     const boundaryA = boundary.top();
     const boundaryB = boundary.bottom();
     if (!this.getStartPoint() || this.getStartPoint().y < boundaryA) {
@@ -151,11 +188,11 @@ export class Edge {
     this.vertices[1] = vertexFactory.create(center.x, boundaryB);
   }
 
-
-
- 
-
-  clipTo(boundary: Boundary, vertexFactory: VertexFactory, siteAreaStore: SiteAreaStore): boolean {
+  clipTo(
+    boundary: Boundary,
+    vertexFactory: VertexFactory,
+    siteAreaStore: SiteAreaStore,
+  ): boolean {
     if (!this.vertices[0] || !this.vertices[1]) {
       return false;
     }
@@ -302,4 +339,3 @@ export class Edge {
     return this.vertices[0] || this.vertices[1];
   }
 }
-

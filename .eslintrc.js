@@ -32,10 +32,9 @@ module.exports = {
   ignorePatterns: ['**/build/*.js', '**/node-modules/*'],
   rules: {
     indent: ['error', 2],
-    'linebreak-style': ['error', 'windows'],
     'eol-last': ['error', 'always'],
     quotes: ['error', 'single'],
-    semi: ['error', 'always']
-
+    semi: ['error', 'always'],
+    'no-explicit-any': 'off', // TODO
   },
 };

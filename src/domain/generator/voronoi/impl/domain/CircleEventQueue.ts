@@ -2,11 +2,9 @@ import { RbTree } from '../utils/rbTree/RbTree';
 import { RbTreeNode } from '../utils/rbTree/RbTreeNode';
 import { BeachSection } from './BeachLine';
 
-
-export interface CircleEvent extends BeachSection, RbTreeNode<CircleEvent> { }
+export interface CircleEvent extends BeachSection, RbTreeNode<CircleEvent> {}
 
 export class CircleEventQueue {
-
   private dataTree = new RbTree<CircleEvent>();
   private current: CircleEvent;
 
@@ -97,7 +95,10 @@ export class CircleEventQueue {
     let node: CircleEvent = this.dataTree.getRoot();
 
     while (node) {
-      if (circleEvent.y < node.y || (circleEvent.y === node.y && circleEvent.x <= node.x)) {
+      if (
+        circleEvent.y < node.y ||
+        (circleEvent.y === node.y && circleEvent.x <= node.x)
+      ) {
         if (node.left) {
           node = node.left;
         } else {

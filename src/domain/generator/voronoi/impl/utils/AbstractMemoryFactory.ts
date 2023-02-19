@@ -1,5 +1,4 @@
 export abstract class AbstractMemoryFactory<T> {
-
   protected createdObjects: T[] = [];
 
   abstract create(...params: any[]): T;
@@ -11,5 +10,4 @@ export abstract class AbstractMemoryFactory<T> {
   getAll(): T[] {
     return this.createdObjects;
   }
-
 }

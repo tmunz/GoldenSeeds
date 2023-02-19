@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { AnimatedIcon } from './AnimatedIcon';
 import { ArrowFlat } from './svg/ArrowFlat';
@@ -7,11 +7,12 @@ import { ArrowNone } from './svg/ArrowNone';
 
 import './DirectionButton.styl';
 
-
 export enum Direction {
-  UP = 180, DOWN = 0, LEFT = 90, RIGHT = 270
+  UP = 180,
+  DOWN = 0,
+  LEFT = 90,
+  RIGHT = 270,
 }
-
 
 interface Props {
   title: string;
@@ -26,7 +27,6 @@ interface State {
 }
 
 export class DirectionButton extends React.Component<Props, State> {
-
   constructor(props: Props) {
     super(props);
     this.state = { hover: false };
@@ -35,7 +35,9 @@ export class DirectionButton extends React.Component<Props, State> {
   render() {
     return (
       <div
-        className={['direction-button', this.state.hover ? 'hover' : ''].join(' ')}
+        className={['direction-button', this.state.hover ? 'hover' : ''].join(
+          ' ',
+        )}
         onClick={() => this.props.onClick && this.props.onClick()}
         onMouseEnter={() => this.setState({ hover: true })}
         onMouseLeave={() => this.setState({ hover: false })}

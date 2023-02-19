@@ -9,11 +9,10 @@ interface Props {
 }
 
 interface State {
-  current: number;
+  current?: number;
 }
 
 export class AnimationController extends React.Component<Props, State> {
-
   private static START_VALUE = 0;
   private static INTERVAL = 40;
 
@@ -34,22 +33,29 @@ export class AnimationController extends React.Component<Props, State> {
         target="_blank"
         onClick={() => this.animate()}
       >
-        <DirectionButton direction={Direction.RIGHT} title="animate"/>
+        <DirectionButton direction={Direction.RIGHT} title="animate" />
         {/* currentlyAnimating && this.state.current */}
       </a>
     );
   }
 
   animate = () => {
-    const doesNotInterfereWithRunningAnimation = typeof this.state.current === 'undefined';
+    const doesNotInterfereWithRunningAnimation =
+      typeof this.state.current === 'undefined';
 
     if (doesNotInterfereWithRunningAnimation) {
       const target = this.props.target;
       const start = new Date().getTime();
       this.animation = setInterval(() => {
-        const frame = (new Date().getTime() - start) / AnimationController.INTERVAL;
+        const frame =
+          (new Date().getTime() - start) / AnimationController.INTERVAL;
         const duration = MathUtils.goldenRatio * AnimationController.INTERVAL;
-        const raw = AnimationUtils.easeInOut(AnimationController.START_VALUE, target, frame, duration);
+        const raw = AnimationUtils.easeInOut(
+          AnimationController.START_VALUE,
+          target,
+          frame,
+          duration,
+        );
         const current: number = Math.max(0, Math.min(target, Math.round(raw)));
         this.props.onNewFrame(current);
         const isComplete = current >= target;
@@ -59,5 +65,5 @@ export class AnimationController extends React.Component<Props, State> {
         }
       }, AnimationController.INTERVAL);
     }
-  }
+  };
 }

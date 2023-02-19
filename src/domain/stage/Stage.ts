@@ -1,5 +1,5 @@
-import { converterService } from "../converter/ConverterService";
-import { SvgGenerator } from "../generator/SvgGenerator";
+import { converterService } from '../converter/ConverterService';
+import { SvgGenerator } from '../generator/SvgGenerator';
 
 export interface StageState<T> {
   rawValue: string;
@@ -8,7 +8,6 @@ export interface StageState<T> {
 }
 
 export class Stage {
-
   generator: SvgGenerator;
   state: { [key: string]: StageState<any> };
 
@@ -19,11 +18,26 @@ export class Stage {
 
   private initialState(state?: { [key: string]: string }) {
     const stateRaw: { [key: string]: string } = {
-      ...Object.keys(this.generator.definition).reduce((agg, key) => ({ ...agg, [key]: this.generator.definition[key].initial }), {}),
+      ...Object.keys(this.generator.definition).reduce(
+        (agg, key) => ({
+          ...agg,
+          [key]: this.generator.definition[key].initial,
+        }),
+        {},
+      ),
       ...(state ? state : {}),
     };
     return Object.keys(this.generator.definition)
-      .filter(key => key !== 'type')
-      .reduce((agg, key) => ({ ...agg, [key]: converterService.convert(this.generator.definition[key].type, stateRaw[key]) }), {});
+      .filter((key) => key !== 'type')
+      .reduce(
+        (agg, key) => ({
+          ...agg,
+          [key]: converterService.convert(
+            this.generator.definition[key].type,
+            stateRaw[key],
+          ),
+        }),
+        {},
+      );
   }
 }

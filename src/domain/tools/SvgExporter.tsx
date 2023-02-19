@@ -3,21 +3,25 @@ import { DirectionButton, Direction } from '../../ui/DirectionButton';
 
 interface Props {
   name: string;
-  getSvg: () => SVGSVGElement;
+  getSvg: () => SVGSVGElement | null;
 }
 
 export class SvgExporter extends React.Component<Props> {
-
-  private exportSvgElement: HTMLAnchorElement;
+  private exportSvgElement: HTMLAnchorElement | null = null;
 
   render() {
     return (
       <div>
         <a
           target="_blank"
-          ref={e => this.exportSvgElement = e}
-          onClick={() => this.exportSvg()} >
-          <DirectionButton direction={Direction.DOWN} title="save" iconText="svg" />
+          ref={(e) => (this.exportSvgElement = e)}
+          onClick={() => this.exportSvg()}
+        >
+          <DirectionButton
+            direction={Direction.DOWN}
+            title="save"
+            iconText="svg"
+          />
         </a>
       </div>
     );
@@ -25,13 +29,13 @@ export class SvgExporter extends React.Component<Props> {
 
   private exportSvg() {
     const svg = this.props.getSvg();
-    this.exportSvgElement.download = this.props.name + '.svg';
-    this.exportSvgElement.href = URL.createObjectURL(
-      new File(
-        [svg ? svg.outerHTML : ''],
-        this.props.name + '.svg',
-        { type: 'image/svg+xml' }
-      )
-    );
+    if (this.exportSvgElement) {
+      this.exportSvgElement.download = this.props.name + '.svg';
+      this.exportSvgElement.href = URL.createObjectURL(
+        new File([svg ? svg.outerHTML : ''], this.props.name + '.svg', {
+          type: 'image/svg+xml',
+        }),
+      );
+    }
   }
 }

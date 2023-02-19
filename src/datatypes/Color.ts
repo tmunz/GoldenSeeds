@@ -1,27 +1,26 @@
-import { randomInt } from "../utils/Random";
+import { randomInt } from '../utils/Random';
 
 export const COLORS: { [name: string]: number } = {
-  'black': 0x000000,
-  'white': 0xffffff,
+  black: 0x000000,
+  white: 0xffffff,
 
-  'red': 0xff0000,
-  'green': 0x00ff00,
-  'blue': 0x0000ff,
+  red: 0xff0000,
+  green: 0x00ff00,
+  blue: 0x0000ff,
 
-  'yellow': 0xffff00,
-  'magenta': 0xff00ff,
-  'cyan': 0x00ffff,
+  yellow: 0xffff00,
+  magenta: 0xff00ff,
+  cyan: 0x00ffff,
 
-  'gold': 0xdecd87,
-  'wood': 0xdecd87,
+  gold: 0xdecd87,
+  wood: 0xdecd87,
 
-  'random': 0xf000000,
-  'transparent': -1,
-  'none': -1
+  random: 0xf000000,
+  transparent: -1,
+  none: -1,
 };
 
 export class Color {
-
   private value: number; // [0, 0xffffff]; negative values are interpreted as transparent, bigger values as random
 
   constructor(raw: any) {
@@ -29,17 +28,25 @@ export class Color {
     this.value = isFinite(value) ? value : 0x000000;
   }
 
-  toString = (seed: number = 0): string => {
+  toString = (seed = 0): string => {
     if (this.value < 0) {
       return 'transparent';
     } else {
-      return '#' + (0x1000000 + (0xffffff < this.value ? randomInt(0, 0xffffff, seed) : this.value)).toString(16).substring(1, 7);
+      return (
+        '#' +
+        (
+          0x1000000 +
+          (0xffffff < this.value ? randomInt(0, 0xffffff, seed) : this.value)
+        )
+          .toString(16)
+          .substring(1, 7)
+      );
     }
-  }
+  };
 
   get = () => {
     return this.value;
-  }
+  };
 
   /*
   // IMPROVEMENT HSL input
@@ -71,7 +78,6 @@ export class Color {
     }
   }*/
 
-
   private static rawRgbToNumber(raw: string): number {
     if (typeof raw !== 'undefined' && raw.length > 0 && raw.charAt(0) === '#') {
       const parsedValue = parseInt(raw.substring(1), 16);
@@ -81,8 +87,12 @@ export class Color {
       if (raw.length === 7) {
         return parsedValue;
       }
-      if (raw.length === 4) {  // enable #fff as well as #ffffff
-        const tmp = ((parsedValue & 0xf00) << 8) | ((parsedValue & 0x0f0) << 4) | (parsedValue & 0x00f);
+      if (raw.length === 4) {
+        // enable #fff as well as #ffffff
+        const tmp =
+          ((parsedValue & 0xf00) << 8) |
+          ((parsedValue & 0x0f0) << 4) |
+          (parsedValue & 0x00f);
         return tmp | (tmp << 4);
       }
     } else {
@@ -107,5 +117,4 @@ export class Color {
     const value: number = Color._convertToColor(raw);
     return isFinite(value) ? new Color(value) : null;
   }
-
 }

@@ -10,14 +10,20 @@ export function App() {
   const [editStageId, setEditStageId] = useState();
 
   useEffect(() => {
-    const preconfigSubscription = configService.preconfigIndex$.subscribe(setPreconfigIndex as any);
-    const configSubscription = configService.config$.subscribe(setConfig as any);
-    const editStageIdSubscription = editorStateService.editStageId$.subscribe(setEditStageId as any);
+    const preconfigSubscription = configService.preconfigIndex$.subscribe(
+      setPreconfigIndex as any,
+    );
+    const configSubscription = configService.config$.subscribe(
+      setConfig as any,
+    );
+    const editStageIdSubscription = editorStateService.editStageId$.subscribe(
+      setEditStageId as any,
+    );
     return () => {
       preconfigSubscription.unsubscribe();
       configSubscription.unsubscribe();
       editStageIdSubscription.unsubscribe();
-    }
+    };
   }, []);
 
   return (

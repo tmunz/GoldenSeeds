@@ -1,4 +1,4 @@
-import { Stage } from "./stage/Stage";  
+import { Stage } from './stage/Stage';
 
 export interface Config {
   meta: { name: string };

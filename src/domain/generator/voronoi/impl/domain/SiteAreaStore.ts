@@ -1,7 +1,6 @@
 import { SiteArea } from './SiteArea';
 
 export class SiteAreaStore {
-
   private data: SiteArea[] = [];
 
   get(id: number): SiteArea {
@@ -15,5 +14,4 @@ export class SiteAreaStore {
   getAll(): SiteArea[] {
     return this.data;
   }
-
 }

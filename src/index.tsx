@@ -6,8 +6,4 @@ import { App } from './App';
 import './variables.styl';
 import './index.styl';
 
-
-render(
-  <App />,
-  document.getElementById('app')
-);
+render(<App />, document.getElementById('app'));

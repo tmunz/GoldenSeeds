@@ -10,11 +10,10 @@ import { configService } from '../ConfigService';
 
 import './Toolbar.styl';
 
-
 interface Props {
   config: Config;
   preconfigIndex: number;
-  getSvg: () => SVGSVGElement;
+  getSvg: () => SVGSVGElement | null;
 }
 
 export class Toolbar extends React.Component<Props> {
@@ -26,7 +25,11 @@ export class Toolbar extends React.Component<Props> {
         <Input value={name} onChange={configService.setName} label={'name'} />
         <PreconfigSelector preconfigIndex={this.props.preconfigIndex} />
         <div className="actions">
-          <ConfigImporter onConfigChanged={(rawConfig) => configService.setRawConfig(rawConfig)} />
+          <ConfigImporter
+            onConfigChanged={(rawConfig) =>
+              configService.setRawConfig(rawConfig)
+            }
+          />
           <ConfigExporter config={this.props.config} />
           <SvgExporter name={name} getSvg={() => this.props.getSvg()} />
           {/*<AnimationController target={items} onNewFrame={setItemCount} />*/}

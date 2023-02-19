@@ -1,4 +1,4 @@
-import { randomInt, random } from "./Random";
+import { randomInt, random } from './Random';
 
 describe('randomInt', () => {
   test('0 to 1 with no seeed', () => {

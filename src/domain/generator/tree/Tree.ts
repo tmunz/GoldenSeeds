@@ -1,4 +1,4 @@
-import { random } from "../../../utils/Random";
+import { random } from '../../../utils/Random';
 
 export interface Config {
   depth: number;
@@ -24,7 +24,6 @@ interface Limb {
 }
 
 export class Tree {
-
   private _root: Node;
   private _limbs: Limb[];
 
@@ -42,21 +41,23 @@ export class Tree {
     return this._limbs;
   }
 
-
-  private static calculateTree(config: Config): { root: Node, limbs: Limb[] } {
+  private static calculateTree(config: Config): { root: Node; limbs: Limb[] } {
     const root: Node = {
-      point: { x: 0, y: 0 }, level: 0, angle: undefined, branches: [
-        { point: { x: 0, y: 1 }, level: 1, angle: Math.PI / 2 }
-      ]
+      point: { x: 0, y: 0 },
+      level: 0,
+      angle: undefined,
+      branches: [{ point: { x: 0, y: 1 }, level: 1, angle: Math.PI / 2 }],
     };
-    const limbs: Limb[] = [{ from: root.point, to: root.branches[0].point, level: 0 }];
+    const limbs: Limb[] = [
+      { from: root.point, to: root.branches[0].point, level: 0 },
+    ];
 
     const queue = [...root.branches];
     let seed = config.seed;
     let currentNode: Node;
 
     do {
-      currentNode = queue.pop()
+      currentNode = queue.pop();
       if (currentNode && currentNode.level < config.depth) {
         currentNode.branches = [];
         const branchAmount = 2;
@@ -65,20 +66,40 @@ export class Tree {
           if (1 - config.splitProbability <= random(0, 1, seed)) {
             const branchInRange = i * branchAmount - branchAmount / 2;
 
-            const relativeAngle = branchInRange * (config.splitAngle * Math.PI / 180);
-            const splitVariation = random(-config.splitVariation / 2, config.splitVariation / 2, seed + 1000);
+            const relativeAngle =
+              branchInRange * ((config.splitAngle * Math.PI) / 180);
+            const splitVariation = random(
+              -config.splitVariation / 2,
+              config.splitVariation / 2,
+              seed + 1000,
+            );
             const angle = currentNode.angle + relativeAngle + splitVariation;
 
-            const baseLength = Math.pow(config.lengthConservation, currentNode.level);
-            const lengthVariation = random(1 - config.lengthVariation, 1, seed + 500);
+            const baseLength = Math.pow(
+              config.lengthConservation,
+              currentNode.level,
+            );
+            const lengthVariation = random(
+              1 - config.lengthVariation,
+              1,
+              seed + 500,
+            );
             const length = baseLength * lengthVariation;
 
             const point = {
               x: Math.cos(angle) * length + currentNode.point.x,
               y: Math.sin(angle) * length + currentNode.point.y,
             };
-            currentNode.branches.push({ point, level: currentNode.level + 1, angle });
-            limbs.push({ from: currentNode.point, to: point, level: currentNode.level });
+            currentNode.branches.push({
+              point,
+              level: currentNode.level + 1,
+              angle,
+            });
+            limbs.push({
+              from: currentNode.point,
+              to: point,
+              level: currentNode.level,
+            });
           }
         }
         queue.unshift(...currentNode.branches);

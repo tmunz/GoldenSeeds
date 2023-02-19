@@ -1,8 +1,14 @@
-import { NumberConverter, ColorConverter, ExpressionConverter, StringConverter, SelectionConverter, Converter } from "./";
-import { ParamDefinitionType } from "../generator/SvgGenerator";
+import {
+  NumberConverter,
+  ColorConverter,
+  ExpressionConverter,
+  StringConverter,
+  SelectionConverter,
+  Converter,
+} from './';
+import { ParamDefinitionType } from '../generator/SvgGenerator';
 
 export class ConverterService {
-
   private registry: Map<ParamDefinitionType, Converter<any>> = new Map();
 
   constructor() {
@@ -20,7 +26,6 @@ export class ConverterService {
   convert(type: ParamDefinitionType, rawValue: string) {
     return this.registry.get(type).convert(rawValue);
   }
-
 }
 
 export const converterService = new ConverterService();

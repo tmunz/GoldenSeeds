@@ -4,13 +4,11 @@ import { preconfigs } from '../../preconfigs/index';
 import { Input, InputType } from '../../ui/input/Input';
 import { configService } from '../ConfigService';
 
-
 interface Props {
   preconfigIndex: number;
 }
 
 export class PreconfigSelector extends React.Component<Props> {
-
   render() {
     return (
       <Input

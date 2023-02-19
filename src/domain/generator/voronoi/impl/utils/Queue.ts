@@ -1,5 +1,4 @@
 export class Queue<T> {
-
   private data: T[] = [];
   private curr: T;
   private prev: T;
@@ -25,5 +24,4 @@ export class Queue<T> {
   getPrevious() {
     return this.prev;
   }
-
 }

@@ -15,20 +15,27 @@ export class SiteArea {
     this.canBeClosed = false;
   }
 
-  close(createBorderEdge: (site: Site, a: Vertex, b: Vertex) => Edge, boundary: Boundary) {
-
+  close(
+    createBorderEdge: (site: Site, a: Vertex, b: Vertex) => Edge,
+    boundary: Boundary,
+  ) {
     const halfEdges = this.halfEdges
-      .filter(halfEdge => halfEdge.edge.isConnected())
+      .filter((halfEdge) => halfEdge.edge.isConnected())
       .sort((a, b: HalfEdge) => b.angle - a.angle);
 
     if (halfEdges.length > 0 && this.canBeClosed) {
+      const danglingStart: HalfEdge = halfEdges.find((halfEdge) =>
+        boundary.isPointOnBorder(halfEdge.getStartpoint()),
+      );
+      const danglingEnd: HalfEdge = halfEdges.find((halfEdge) =>
+        boundary.isPointOnBorder(halfEdge.getEndpoint()),
+      );
 
-      const danglingStart: HalfEdge = halfEdges
-        .find(halfEdge => boundary.isPointOnBorder(halfEdge.getStartpoint()));
-      const danglingEnd: HalfEdge = halfEdges
-        .find(halfEdge => boundary.isPointOnBorder(halfEdge.getEndpoint()));
-        
-      const edge: Edge = createBorderEdge(this.site, danglingStart.getStartpoint(), danglingEnd.getEndpoint());
+      const edge: Edge = createBorderEdge(
+        this.site,
+        danglingStart.getStartpoint(),
+        danglingEnd.getEndpoint(),
+      );
       const halfEdge = new HalfEdge(edge, this.site, null);
       halfEdges.push(halfEdge);
     }
@@ -36,5 +43,4 @@ export class SiteArea {
     this.halfEdges = halfEdges;
     this.canBeClosed = false;
   }
-
 }

@@ -5,7 +5,6 @@ import { RbTreeNode } from './RbTreeNode';
 // https://github.com/fbuihuu/libtree/blob/master/rb.c
 //
 export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
-  
   private root: TreeNode;
 
   constructor() {
@@ -38,9 +37,7 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
       }
 
       parent = node;
-    }
-
-    else if (this.root) {
+    } else if (this.root) {
       node = this.getFirst(this.root);
       successor.prev = null;
       successor.next = node;
@@ -186,7 +183,10 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
           sibling = parent.right;
         }
 
-        if ((sibling.left && sibling.left.red) || (sibling.right && sibling.right.red)) {
+        if (
+          (sibling.left && sibling.left.red) ||
+          (sibling.right && sibling.right.red)
+        ) {
           if (!sibling.right || !sibling.right.red) {
             sibling.left.red = false;
             sibling.red = true;
@@ -208,7 +208,10 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
           sibling = parent.left;
         }
 
-        if ((sibling.left && sibling.left.red) || (sibling.right && sibling.right.red)) {
+        if (
+          (sibling.left && sibling.left.red) ||
+          (sibling.right && sibling.right.red)
+        ) {
           if (!sibling.left || !sibling.left.red) {
             sibling.right.red = false;
             sibling.red = true;
@@ -226,7 +229,6 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
       sibling.red = true;
       node = parent;
       parent = parent.parent;
-
     } while (!node.red);
 
     if (node) {

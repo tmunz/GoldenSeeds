@@ -1,6 +1,5 @@
 import { DistanceHelper } from './DistanceHelper';
 
-
 // needs to be convex
 export class Boundary {
   private x: number;
@@ -16,15 +15,21 @@ export class Boundary {
   }
 
   isPointOnBorder(point: { x: number; y: number }): boolean {
-    return DistanceHelper.isEqualWithTolerance(point.x, this.left())
-      || DistanceHelper.isEqualWithTolerance(point.y, this.top())
-      || DistanceHelper.isEqualWithTolerance(point.x, this.right())
-      || DistanceHelper.isEqualWithTolerance(point.y, this.bottom());
+    return (
+      DistanceHelper.isEqualWithTolerance(point.x, this.left()) ||
+      DistanceHelper.isEqualWithTolerance(point.y, this.top()) ||
+      DistanceHelper.isEqualWithTolerance(point.x, this.right()) ||
+      DistanceHelper.isEqualWithTolerance(point.y, this.bottom())
+    );
   }
 
   isPointInside(point: { x: number; y: number }): boolean {
-    return this.left() <= point.x && point.x <= this.right()
-      && this.top() <= point.y && point.y <= this.bottom();
+    return (
+      this.left() <= point.x &&
+      point.x <= this.right() &&
+      this.top() <= point.y &&
+      point.y <= this.bottom()
+    );
   }
 
   left(): number {
@@ -42,5 +47,4 @@ export class Boundary {
   bottom(): number {
     return this.y + this.h;
   }
-
 }
