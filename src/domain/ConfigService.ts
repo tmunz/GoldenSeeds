@@ -8,6 +8,7 @@ import { svgGeneratorRegistry } from './generator/SvgGeneratorRegistry';
 import { Stage } from './stage/Stage';
 
 export class ConfigService {
+
   preconfigIndex$ = new BehaviorSubject<number>(0);
   config$ = new BehaviorSubject<Config>(this.convertRawToConfig(preconfigs[0]));
 
@@ -21,7 +22,7 @@ export class ConfigService {
     this.config$.next(nextConfig);
   }
 
-  setRawConfig(configRaw: any, preconfigIndex?: number) {
+  setRawConfig(configRaw: any, preconfigIndex: number = 0) {
     this.preconfigIndex$.next(preconfigIndex);
     this.config$.next(this.convertRawToConfig(configRaw));
   }
@@ -40,6 +41,20 @@ export class ConfigService {
     nextConfig.stages[stageId] = new Stage(
       svgGeneratorRegistry.newInstance(type),
     );
+    this.config$.next(nextConfig);
+  }
+
+  deleteStage(stageId: number) {
+    const config = this.config$.value;
+    const nextConfig = { ...config, stages: [...config.stages] };
+    nextConfig.stages.splice(stageId, 1);
+    this.config$.next(nextConfig);
+  }
+
+  addStage(): void {
+    const config = this.config$.value;
+    const nextConfig = { ...config, stages: [...config.stages] };
+    nextConfig.stages.push(new Stage(svgGeneratorRegistry.newInstance('cartesian')));
     this.config$.next(nextConfig);
   }
 

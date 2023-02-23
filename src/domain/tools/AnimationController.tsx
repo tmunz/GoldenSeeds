@@ -1,7 +1,7 @@
 import React from 'react';
 import { MathUtils } from '../../utils/MathUtils';
 import { AnimationUtils } from '../../utils/AnimationUtils';
-import { DirectionButton, Direction } from '../../ui/DirectionButton';
+import { AnimatedButton, Direction } from '../../ui/AnimatedButton';
 
 interface Props {
   target: number;
@@ -33,7 +33,7 @@ export class AnimationController extends React.Component<Props, State> {
         target="_blank"
         onClick={() => this.animate()}
       >
-        <DirectionButton direction={Direction.RIGHT} title="animate" />
+        <AnimatedButton direction={Direction.RIGHT} title="animate" />
         {/* currentlyAnimating && this.state.current */}
       </a>
     );

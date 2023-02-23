@@ -82,7 +82,7 @@ export class Color {
     if (typeof raw !== 'undefined' && raw.length > 0 && raw.charAt(0) === '#') {
       const parsedValue = parseInt(raw.substring(1), 16);
       if (!isFinite(parsedValue)) {
-        return undefined;
+        return -1;
       }
       if (raw.length === 7) {
         return parsedValue;
@@ -98,7 +98,7 @@ export class Color {
     } else {
       return COLORS[raw];
     }
-    return undefined;
+    return -1;
   }
 
   private static _convertToColor(raw: any): number {
@@ -110,11 +110,11 @@ export class Color {
         return rgb;
       }
     }
-    return null;
+    return -1;
   }
 
   static convertToColor(raw: any): Color {
     const value: number = Color._convertToColor(raw);
-    return isFinite(value) ? new Color(value) : null;
+    return new Color(value);
   }
 }

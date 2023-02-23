@@ -5,7 +5,7 @@ import { ArrowFlat } from './svg/ArrowFlat';
 import { ArrowRegular } from './svg/ArrowRegular';
 import { ArrowNone } from './svg/ArrowNone';
 
-import './DirectionButton.styl';
+import './AnimatedButton.styl';
 
 export enum Direction {
   UP = 180,
@@ -15,18 +15,19 @@ export enum Direction {
 }
 
 interface Props {
-  title: string;
+  title?: string;
   iconText?: string;
-  direction: Direction;
+  direction?: Direction;
   disabled?: boolean;
   onClick?: () => void;
+  points?: number[][][];
 }
 
 interface State {
   hover: boolean;
 }
 
-export class DirectionButton extends React.Component<Props, State> {
+export class AnimatedButton extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { hover: false };
@@ -35,7 +36,7 @@ export class DirectionButton extends React.Component<Props, State> {
   render() {
     return (
       <div
-        className={['direction-button', this.state.hover ? 'hover' : ''].join(
+        className={['animated-button', this.state.hover ? 'hover' : ''].join(
           ' ',
         )}
         onClick={() => this.props.onClick && this.props.onClick()}
@@ -45,9 +46,9 @@ export class DirectionButton extends React.Component<Props, State> {
         <div className="tooltip">{this.props.title}</div>
         <div className="icon-text">{this.props.iconText}</div>
         <AnimatedIcon
-          points={[ArrowNone, ArrowFlat, ArrowRegular]}
+          points={this.props.points ?? [ArrowNone, ArrowFlat, ArrowRegular]}
           index={this.props.disabled ? 0 : this.state.hover ? 2 : 1}
-          rotation={this.props.direction}
+          rotation={this.props.direction ?? Direction.DOWN }
         />
       </div>
     );

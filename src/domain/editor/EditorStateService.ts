@@ -1,9 +1,9 @@
 import { BehaviorSubject } from 'rxjs';
 
 export class EditorStateService {
-  editStageId$ = new BehaviorSubject<number>(null);
+  editStageId$ = new BehaviorSubject<number | null>(null);
 
-  setEditMode(stageId: number) {
+  setEditMode(stageId: number | null) {
     this.editStageId$.next(stageId);
   }
 }

@@ -10,8 +10,15 @@ import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 import { EditorInput } from './EditorInput';
 import { editorService } from './EditorService';
 import { ParamDefinition } from '../generator/SvgGenerator';
+import { AnimatedButton } from '../../ui/AnimatedButton';
+import { DeleteRegular } from '../../ui/svg/DeleteRegular';
+import { DeleteRotated } from '../../ui/svg/DeleteRotated';
+import { DeleteNone } from '../../ui/svg/DeleteNone';
 
 import './Editor.styl';
+import { AddRegular } from '../../ui/svg/AddRegular';
+import { AddNone } from '../../ui/svg/AddNone';
+import { AddRotated } from '../../ui/svg/AddRotated';
 
 interface Props {
   config: Config;
@@ -27,15 +34,21 @@ export class Editor extends React.Component<Props> {
           const types = svgGeneratorRegistry.types;
           const editMode = this.props.editStageId === stageId;
           return (
-            <div key={stageId} className={'stage ' + stageId}>
-              <h1
-                className={`stage action ${editMode ? 'edit-mode' : ''}`}
-                onClick={() =>
-                  editorStateService.setEditMode(editMode ? null : stageId)
-                }
-              >
-                Stage {stageId + 1}
-              </h1>
+            <div key={stageId} className='stage' id={'stage-' + stageId}>
+              <div className='stage-header'>
+                <a target="_blank" onClick={() => configService.deleteStage(stageId)}>
+                  <AnimatedButton
+                    title="remove"
+                    points={[DeleteNone, DeleteRegular, DeleteRotated]}
+                  />
+                </a>
+                <h1 
+                  className={`action ${editMode ? 'edit-mode' : ''}`}
+                  onClick={() => editorStateService.setEditMode(editMode ? null : stageId)}
+                >
+                  Stage {stageId + 1}
+                </h1>
+              </div>
               <Collapsable key={stageId} show={editMode}>
                 <EditorInput
                   label="type"
@@ -64,6 +77,14 @@ export class Editor extends React.Component<Props> {
             </div>
           );
         })}
+        <div className='stage-header'>
+          <a target="_blank" onClick={() => configService.addStage()}>
+            <AnimatedButton
+              title="add"
+              points={[AddNone, AddRegular, AddRotated]}
+            />
+          </a>
+        </div>
       </div>
     );
   }
@@ -81,8 +102,6 @@ export class Editor extends React.Component<Props> {
       definition,
       state,
     );
-
-    console.log(definition.type, stageId, id, definition, state, props);
 
     return (
       <EditorInput
