@@ -12,7 +12,7 @@ Application to generate SVGs based on mathematical rules
 
 ## Current development
 - v2.0 is currently in development (dev branch)
-  currently missing the following functionality:
+  missing as of now the following functionality:
   - reorder stages
   - History (undo / redo)
 - first improvements for 2.0.0-beta
