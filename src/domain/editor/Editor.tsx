@@ -10,16 +10,17 @@ import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 import { EditorInput } from './EditorInput';
 import { editorService } from './EditorService';
 import { ParamDefinition } from '../generator/SvgGenerator';
-import { AnimatedButton } from '../../ui/AnimatedButton';
+import { AnimatedButton, Direction } from '../../ui/AnimatedButton';
 import { DeleteRegular } from '../../ui/svg/DeleteRegular';
 import { DeleteRotated } from '../../ui/svg/DeleteRotated';
 import { DeleteNone } from '../../ui/svg/DeleteNone';
-
-import './Editor.styl';
 import { AddRegular } from '../../ui/svg/AddRegular';
 import { AddNone } from '../../ui/svg/AddNone';
 import { AddRotated } from '../../ui/svg/AddRotated';
 import { AnimationController } from '../tools/AnimationController';
+
+import './Editor.styl';
+
 
 interface Props {
   config: Config;
@@ -27,6 +28,7 @@ interface Props {
 }
 
 export class Editor extends React.Component<Props> {
+
   render() {
     return (
       <div className="overlay editor">
@@ -35,7 +37,11 @@ export class Editor extends React.Component<Props> {
           const types = svgGeneratorRegistry.types;
           const editMode = this.props.editStageId === stageId;
           return (
-            <div key={stageId} className='stage' id={'stage-' + stageId}>
+            <div
+              key={stageId}
+              className="stage"
+              id={'stage-' + stageId}
+            >
               <div className={`stage-header ${editMode ? 'edit-mode' : ''}`}>
                 <a target="_blank" onClick={() => configService.deleteStage(stageId)}>
                   <AnimatedButton
@@ -43,12 +49,21 @@ export class Editor extends React.Component<Props> {
                     points={[DeleteNone, DeleteRegular, DeleteRotated]}
                   />
                 </a>
-                { stage.state.items && // TODO add animation possibility to stage (e.g. depth for tree)
-                  <AnimationController 
-                    target={ stage.state.items.value } 
-                    onNewFrame={items => configService.setConfigValue(stageId, 'items', "" + items)} />
-                }
-                <h1 
+                <a target="_blank" onClick={() => stageId < this.props.config.stages.length - 1 && this.swapStages(stageId, stageId + 1)}>
+                  <AnimatedButton
+                    title="downmove"
+                    direction={Direction.DOWN}
+                    disabled={!(stageId < this.props.config.stages.length - 1)}
+                  />
+                </a>
+                <a target="_blank" onClick={() => 0 < stageId && this.swapStages(stageId, stageId - 1)}>
+                  <AnimatedButton
+                    title="upmove"
+                    direction={Direction.UP}
+                    disabled={!(0 < stageId)}
+                  />
+                </a>
+                <h1
                   className="action"
                   onClick={() => editorStateService.setEditMode(editMode ? null : stageId)}
                 >
@@ -95,6 +110,15 @@ export class Editor extends React.Component<Props> {
     );
   }
 
+  private swapStages(a: number, b: number): void {
+    configService.swapStages(a, b);
+    if (this.props.editStageId === a) {
+      editorStateService.setEditMode(b);
+    } else if (this.props.editStageId === b) {
+      editorStateService.setEditMode(a);
+    }
+  }
+
   private generateEntryModifier(
     stageId: number,
     id: string,
@@ -110,13 +134,21 @@ export class Editor extends React.Component<Props> {
     );
 
     return (
-      <EditorInput
-        {...props}
-        key={id}
-        onChange={(rawValue: any) =>
-          configService.setConfigValue(stageId, id, rawValue)
+      <div className='editor-item'>
+        <EditorInput
+          {...props}
+          key={id}
+          onChange={(rawValue: any) =>
+            configService.setConfigValue(stageId, id, rawValue)
+          }
+        />
+        {definition.animateable &&
+          <AnimationController
+            target={state.value}
+            onNewFrame={v => configService.setConfigValue(stageId, id, "" + v)}
+          />
         }
-      />
+      </div>
     );
   }
 }

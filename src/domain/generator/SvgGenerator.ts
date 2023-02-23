@@ -13,7 +13,7 @@ export type ParamDefinitionMinMaxStep = {
 };
 export type ParamDefinitionSelection = { type: 'selection'; options: string[] };
 
-export type ParamDefinition = { initial: string } & (
+export type ParamDefinition = { initial: string, animateable?: boolean } & (
   | { type: ParamDefinitionType }
   | ParamDefinitionMinMaxStep
   | ParamDefinitionSelection

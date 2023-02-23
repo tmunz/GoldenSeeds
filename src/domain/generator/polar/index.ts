@@ -12,6 +12,7 @@ export class PolarGrid implements SvgGenerator {
       min: 1,
       max: MathUtils.fib(16),
       step: 1,
+      animateable: true,
     },
     angle: {
       initial: 'n * 360 / goldenRatio',

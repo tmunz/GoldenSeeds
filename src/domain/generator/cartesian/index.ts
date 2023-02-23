@@ -12,6 +12,7 @@ export class CartesianGrid implements SvgGenerator {
       min: 1,
       max: 625,
       step: 1,
+      animateable: true,
     },
   };
 

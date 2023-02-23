@@ -51,6 +51,13 @@ export class ConfigService {
     this.config$.next(nextConfig);
   }
 
+  swapStages(a: number, b: number): void {
+    const config = this.config$.value;
+    const nextConfig = { ...config, stages: [...config.stages] };
+    nextConfig.stages[a] = nextConfig.stages.splice(b, 1, nextConfig.stages[a])[0];
+    this.config$.next(nextConfig);
+  }
+
   addStage(): void {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };

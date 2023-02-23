@@ -12,8 +12,9 @@ export class Tree implements SvgGenerator {
       initial: '13',
       type: 'number' as const,
       min: 0,
-      max: MathUtils.fib(6),
+      max: MathUtils.fib(7),
       step: 1,
+      animateable: true,
     },
     splitAngle: {
       initial: '25',
@@ -50,7 +51,14 @@ export class Tree implements SvgGenerator {
       max: 1,
       step: 0.05,
     },
-    seed: { initial: '0', type: 'number' as const, min: 0, max: 1000, step: 1 },
+    seed: {
+      initial: '0',
+      type: 'number' as const,
+      min: 0,
+      max: 1000,
+      step: 1,
+      animateable: true,
+    },
   };
 
   generate = (config: TreeConfig, prev: SvgGeneratorResult) => {
