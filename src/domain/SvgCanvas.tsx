@@ -24,6 +24,19 @@ export class SvgCanvas extends React.Component<Props> {
       return prev;
     });
 
+    const content = generatedStages.map((stageResult, i) => {
+      const svg = stageResult.svg;
+      return (
+        typeof svg === 'string' && (
+          <g
+            key={i}
+            transform={this.transform(stageResult.boundingBox, 220)}
+            dangerouslySetInnerHTML={{ __html: svg }}
+          />
+        )
+      );
+    });
+
     return (
       <ErrorBoundary>
         <svg
@@ -32,18 +45,7 @@ export class SvgCanvas extends React.Component<Props> {
           height={this.props.height}
           ref={(e) => (this.svgContent = e)}
         >
-          {generatedStages.map((stageResult, i) => {
-            const svg = stageResult.svg;
-            return (
-              typeof svg === 'string' && (
-                <g
-                  key={i}
-                  transform={this.transform(stageResult.boundingBox, 220)}
-                  dangerouslySetInnerHTML={{ __html: svg }}
-                />
-              )
-            );
-          })}
+          {content}
         </svg>
       </ErrorBoundary>
     );
