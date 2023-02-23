@@ -46,7 +46,7 @@ export class Editor extends React.Component<Props> {
                   className={`action ${editMode ? 'edit-mode' : ''}`}
                   onClick={() => editorStateService.setEditMode(editMode ? null : stageId)}
                 >
-                  Stage {stageId + 1}
+                  {stage.generator.type}
                 </h1>
               </div>
               <Collapsable key={stageId} show={editMode}>
