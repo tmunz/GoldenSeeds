@@ -36,7 +36,7 @@ export class Editor extends React.Component<Props> {
           const editMode = this.props.editStageId === stageId;
           return (
             <div key={stageId} className='stage' id={'stage-' + stageId}>
-              <div className='stage-header'>
+              <div className={`stage-header ${editMode ? 'edit-mode' : ''}`}>
                 <a target="_blank" onClick={() => configService.deleteStage(stageId)}>
                   <AnimatedButton
                     title="remove"
@@ -49,7 +49,7 @@ export class Editor extends React.Component<Props> {
                     onNewFrame={items => configService.setConfigValue(stageId, 'items', "" + items)} />
                 }
                 <h1 
-                  className={`action ${editMode ? 'edit-mode' : ''}`}
+                  className="action"
                   onClick={() => editorStateService.setEditMode(editMode ? null : stageId)}
                 >
                   {stage.generator.type}

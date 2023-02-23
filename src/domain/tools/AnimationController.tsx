@@ -1,7 +1,9 @@
 import React from 'react';
-import { MathUtils } from '../../utils/MathUtils';
 import { AnimationUtils } from '../../utils/AnimationUtils';
-import { AnimatedButton, Direction } from '../../ui/AnimatedButton';
+import { AnimatedButton } from '../../ui/AnimatedButton';
+import { PlayNone } from '../../ui/svg/PlayNone';
+import { PlayRegular } from '../../ui/svg/PlayRegular';
+import { PlayFlipped } from '../../ui/svg/PlayFlipped';
 
 interface Props {
   target: number;
@@ -33,8 +35,11 @@ export class AnimationController extends React.Component<Props, State> {
         target="_blank"
         onClick={() => this.animate()}
       >
-        <AnimatedButton direction={Direction.RIGHT} title="animate" />
-        {/* currentlyAnimating && this.state.current */}
+        <AnimatedButton  
+          title="play" 
+          points={[PlayNone, PlayRegular, PlayFlipped]}
+          iconText={ currentlyAnimating ? ("" + this.state.current) : undefined }
+        />
       </a>
     );
   }
@@ -47,14 +52,12 @@ export class AnimationController extends React.Component<Props, State> {
       const target = this.props.target;
       const start = new Date().getTime();
       this.animation = setInterval(() => {
-        const frame =
-          (new Date().getTime() - start) / AnimationController.INTERVAL;
-        const duration = MathUtils.goldenRatio * AnimationController.INTERVAL;
+        const frame = (new Date().getTime() - start) / AnimationController.INTERVAL;
         const raw = AnimationUtils.easeInOut(
           AnimationController.START_VALUE,
           target,
           frame,
-          duration,
+          100,
         );
         const current: number = Math.max(0, Math.min(target, Math.round(raw)));
         this.props.onNewFrame(current);
