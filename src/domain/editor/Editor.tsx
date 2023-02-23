@@ -19,6 +19,7 @@ import './Editor.styl';
 import { AddRegular } from '../../ui/svg/AddRegular';
 import { AddNone } from '../../ui/svg/AddNone';
 import { AddRotated } from '../../ui/svg/AddRotated';
+import { AnimationController } from '../tools/AnimationController';
 
 interface Props {
   config: Config;
@@ -42,6 +43,11 @@ export class Editor extends React.Component<Props> {
                     points={[DeleteNone, DeleteRegular, DeleteRotated]}
                   />
                 </a>
+                { stage.state.items && // TODO add animation possibility to stage (e.g. depth for tree)
+                  <AnimationController 
+                    target={ stage.state.items.value } 
+                    onNewFrame={items => configService.setConfigValue(stageId, 'items', "" + items)} />
+                }
                 <h1 
                   className={`action ${editMode ? 'edit-mode' : ''}`}
                   onClick={() => editorStateService.setEditMode(editMode ? null : stageId)}

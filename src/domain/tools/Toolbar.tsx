@@ -19,7 +19,6 @@ interface Props {
 export class Toolbar extends React.Component<Props> {
   render() {
     const name = this.props.config?.meta?.name;
-    // TODO animation // const items = this.props.config.stages[0]?.state?.items?.value;
     return (
       <div className="overlay overlay-container toolbar">
         <Input value={name} onChange={configService.setName} label={'name'} />
@@ -32,7 +31,6 @@ export class Toolbar extends React.Component<Props> {
           />
           <ConfigExporter config={this.props.config} />
           <SvgExporter name={name} getSvg={() => this.props.getSvg()} />
-          {/*<AnimationController target={items} onNewFrame={setItemCount} />*/}
         </div>
       </div>
     );
