@@ -6,10 +6,6 @@ module.exports = {
   entry: {
     app: path.resolve(__dirname, "..", "./src/index.tsx"),
   },
-  output: {
-    path: path.resolve(__dirname, "..", "./docs"),
-    filename: 'bundle.[name].[hash].js',
-  },
   module: {
     rules: [{
       test: /\.(j|t)sx?$/,

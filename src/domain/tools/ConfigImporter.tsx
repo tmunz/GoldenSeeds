@@ -20,7 +20,7 @@ export class ConfigImporter extends React.Component<Props> {
         />
         <a target="_blank" onClick={() => this.importConfigElement?.click()}>
           <AnimatedButton
-            rotation={AnimatedButton.DIRECTION_DOWN}
+            rotation={AnimatedButton.DIRECTION_UP}
             title="load"
             iconText="json"
           />

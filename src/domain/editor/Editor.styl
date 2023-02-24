@@ -1,54 +1,62 @@
 .editor {
   overflow: auto;
   direction: rtl;
+
   .content-wrapper {
     direction: ltr;
   }
- 
+
   &::-webkit-scrollbar {
-      width: 6px;
+    width: 6px;
   }
 
   &::-webkit-scrollbar-track {
-      background: var(--backgroundColor);
-      border-radius: 5px;
+    background: var(--backgroundColor);
+    border-radius: 5px;
   }
 
   &::-webkit-scrollbar-thumb {
-      background: var(--textColor);
-      border-radius: 5px;
+    background: var(--textColor);
+    border-radius: 5px;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-      background: var(--accentColor);
+    background: var(--accentColor);
   }
 
   .stage-header {
-    display: flex;
-    justify-content: space-between;
-    align-content: center;
-    &.edit-mode>* {
-      color: var(--accentColor)!important;
+
+    &:hover>.controls {
+      opacity: 1;
     }
-    &>* {
-      flex: 1;
+
+    &>.controls {
+      display: inline-block;
+      opacity: 0;
+      transition:opacity .8s;
     }
-    h1 {
-      flex: 9999999;
-      // letter-spacing: 14px;
-      margin: 0;
+
+    &>h1 {
       padding: 8px;
-      align-self: flex-end;
+      display: inline-block;
+      vertical-align: super;
+      margin: 0;
     }
   }
+
   .stage {
-    padding-bottom: 20px;
-    margin-bottom: 30px;
     // border-bottom: 1px solid var(--accentColor);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
   }
+
   .editor-item {
-    display: flex;
-    justify-content: space-between;
-    align-content: left;
+    &>* {
+      display: inline-block;
+
+      &:first {
+        width: 80px;
+      }
+    }
   }
 }

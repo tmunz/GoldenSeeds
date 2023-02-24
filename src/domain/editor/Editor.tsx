@@ -38,34 +38,36 @@ export class Editor extends React.Component<Props> {
                 className="stage"
                 id={'stage-' + stageId}
               >
-                <div className={`stage-header ${editMode ? 'edit-mode' : ''}`}>
-                  <a target="_blank" onClick={() => configService.deleteStage(stageId)}>
-                    <AnimatedButton
-                      title="remove"
-                      points={[PlusNone, PlusRegular, PlusRotated]}
-                      rotation={45}
-                    />
-                  </a>
-                  <a target="_blank" onClick={() => i < this.props.config.stages.length - 1 && configService.swapStages(i, i + 1)}>
-                    <AnimatedButton
-                      title="downmove"
-                      rotation={AnimatedButton.DIRECTION_DOWN}
-                      disabled={!(i < this.props.config.stages.length - 1)}
-                    />
-                  </a>
-                  <a target="_blank" onClick={() => 0 < i && configService.swapStages(i, i - 1)}>
-                    <AnimatedButton
-                      title="upmove"
-                      rotation={AnimatedButton.DIRECTION_UP}
-                      disabled={!(0 < i)}
-                    />
-                  </a>
+                <div className='stage-header'>
                   <h1
                     className="action"
                     onClick={() => editorStateService.setEditMode(editMode ? null : stageId)}
                   >
                     {stage.generator.type}
                   </h1>
+                  <div className="controls">
+                    <a target="_blank" onClick={() => 0 < i && configService.swapStages(i, i - 1)}>
+                      <AnimatedButton
+                        title="upmove"
+                        rotation={AnimatedButton.DIRECTION_UP}
+                        disabled={!(0 < i)}
+                      />
+                    </a>
+                    <a target="_blank" onClick={() => i < this.props.config.stages.length - 1 && configService.swapStages(i, i + 1)}>
+                      <AnimatedButton
+                        title="downmove"
+                        rotation={AnimatedButton.DIRECTION_DOWN}
+                        disabled={!(i < this.props.config.stages.length - 1)}
+                      />
+                    </a>
+                    <a target="_blank" onClick={() => configService.deleteStage(stageId)}>
+                      <AnimatedButton
+                        title="remove"
+                        points={[PlusNone, PlusRegular, PlusRotated]}
+                        rotation={45}
+                      />
+                    </a>
+                  </div>
                 </div>
                 <Collapsable key={stageId} show={editMode}>
                   <EditorInput
