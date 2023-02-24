@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Config } from './Config';
-import { StageState } from './stage/Stage';
 import { SvgGeneratorResult } from './generator/SvgGenerator';
+import { svgGeneratorService } from './generator/SvgGeneratorService';
 
 interface Props {
   config: Config;
@@ -14,15 +14,10 @@ export class SvgCanvas extends React.Component<Props> {
   svgContent: SVGSVGElement | null = null;
 
   render() {
-    let prev: SvgGeneratorResult = {
-      grid: [[0, 0]],
-      svg: null,
-      boundingBox: { x: 0, y: 0, w: 0, h: 0 },
-    };
-    const generatedStages = this.props.config.stages.map((stage) => {
-      prev = stage.generator.generate(this.convertToValue(stage.state), prev);
-      return prev;
-    });
+    const generatedStages: SvgGeneratorResult[] = [];
+    this.props.config.stages.forEach((stage, i) => 
+      generatedStages.push(svgGeneratorService.getResult(stage, generatedStages[i - 1]))
+    );
 
     const content = generatedStages.map((stageResult, i) => {
       const svg = stageResult.svg;
@@ -61,15 +56,6 @@ export class SvgCanvas extends React.Component<Props> {
     return `translate(${isFinite(x) ? x : 0},${isFinite(y) ? y : 0}) scale(${
       isFinite(scale) ? scale : 1
     })`;
-  }
-
-  private convertToValue(obj: { [key: string]: StageState<any> }): {
-    [key: string]: any;
-  } {
-    return Object.keys(obj).reduce(
-      (agg, key) => ({ ...agg, [key]: obj[key].value }),
-      {},
-    );
   }
 }
 

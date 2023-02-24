@@ -63,7 +63,7 @@ function getItemProps(
 
 function isSamePosition(pA: number[], pB: number[]): boolean {
   return [0, 1].reduce(
-    (b, c) => b && pA && pB && Math.abs(pA[c] - pB[c]) < 0.0001 /*tolerance*/,
+    (b: boolean, t: number) => b && pA && pB && Math.abs(pA[t] - pB[t]) < 0.0001 /*tolerance*/,
     true,
   );
 }

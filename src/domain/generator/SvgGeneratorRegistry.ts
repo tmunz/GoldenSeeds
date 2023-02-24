@@ -10,7 +10,7 @@ export class SvgGeneratorRegistry {
 
   constructor() {
     const classes = [CartesianGrid, PolarGrid, RegularShape, Voronoi, Tree];
-    classes.forEach((c) => this.register(c.type, () => new c()));
+    classes.forEach((c: any) => this.register(c.type, () => new c()));
   }
 
   register(type: string, svgGeneratorCreator: () => SvgGenerator) {
@@ -21,8 +21,9 @@ export class SvgGeneratorRegistry {
     return [...this.registry.keys()];
   }
 
-  newInstance(type: string): SvgGenerator {
-    return this.registry.get(type)();
+  newInstance(type: string): SvgGenerator | null {
+    const instance = this.registry.get(type);
+    return instance ? instance() : null;
   }
 }
 
