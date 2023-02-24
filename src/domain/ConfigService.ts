@@ -35,19 +35,19 @@ export class ConfigService {
     this.config$.next({ ...this.config$.value, meta: { name } });
   }
 
-  setType(stageId: number, type: string) {
+  setType(stageId: string, type: string) {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
-    nextConfig.stages[stageId] = new Stage(
-      svgGeneratorRegistry.newInstance(type),
+    nextConfig.stages[this.findIndexByStageId(stageId)] = new Stage(
+      svgGeneratorRegistry.newInstance(type), {}, stageId,
     );
     this.config$.next(nextConfig);
   }
 
-  deleteStage(stageId: number) {
+  deleteStage(stageId: string) {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
-    nextConfig.stages.splice(stageId, 1);
+    nextConfig.stages.splice(this.findIndexByStageId(stageId), 1);
     this.config$.next(nextConfig);
   }
 
@@ -61,8 +61,12 @@ export class ConfigService {
   addStage(): void {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
-    nextConfig.stages.push(new Stage(svgGeneratorRegistry.newInstance('cartesian')));
+    nextConfig.stages.push(new Stage(svgGeneratorRegistry.getDefaultGenerator()));
     this.config$.next(nextConfig);
+  }
+
+  private findIndexByStageId(stageId: string): number {
+    return this.config$.value.stages.findIndex(s => s.id === stageId);
   }
 
   private convertRawToConfig(configRaw: any) {

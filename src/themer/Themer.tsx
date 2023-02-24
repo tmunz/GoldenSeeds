@@ -18,7 +18,7 @@ export class Themer extends React.Component<{}, { show: boolean }> {
     const lightThemeActive = this.root.classList.contains('light-theme');
 
     return (
-      <div className="overlay themer">
+      <div className="themer">
         <h1
           className={`action ${this.state.show ? 'edit-mode' : ''}`}
           onClick={() => this.setState((state) => ({ show: !state.show }))}

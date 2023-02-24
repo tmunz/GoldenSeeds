@@ -20,7 +20,7 @@ export class Toolbar extends React.Component<Props> {
   render() {
     const name = this.props.config?.meta?.name;
     return (
-      <div className="overlay overlay-container toolbar">
+      <div className="toolbar">
         <Input value={name} onChange={configService.setName} label={'name'} />
         <PreconfigSelector preconfigIndex={this.props.preconfigIndex} />
         <div className="actions">

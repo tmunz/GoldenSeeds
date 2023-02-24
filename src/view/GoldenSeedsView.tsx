@@ -51,7 +51,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
               <SvgCanvas
                 ref={(e) => (this.svgCanvas = e)}
                 config={this.props.config}
-                width={this.state.width * 1.04}
+                width={this.state.width * 1.04 /* must be slightly larger, because of movement */}
                 height={this.state.height}
               />
             </div>

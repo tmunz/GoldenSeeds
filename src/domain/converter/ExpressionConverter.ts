@@ -3,7 +3,8 @@ import { Converter } from './Converter';
 
 export class ExpressionConverter extends Converter<
   (n: number, items: number, itemSize: (n: number) => number) => number
-> {
+  > {
+
   protected convertFromRaw = (
     rawValue: string,
   ): ((
@@ -17,7 +18,7 @@ export class ExpressionConverter extends Converter<
       [0, 1].map((i: number) => expression(i, 100, (n) => n)); //test Expression
       return expression;
     } catch (e) {
-      return null;
+      return this.convertToExpression('n'); // TODO use last valid one
     }
   };
 

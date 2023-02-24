@@ -6,6 +6,7 @@ import { Tree } from './tree';
 import { SvgGenerator } from './SvgGenerator';
 
 export class SvgGeneratorRegistry {
+
   private registry: Map<string, () => SvgGenerator> = new Map();
 
   constructor() {
@@ -24,6 +25,10 @@ export class SvgGeneratorRegistry {
   newInstance(type: string): SvgGenerator | null {
     const instance = this.registry.get(type);
     return instance ? instance() : null;
+  }
+
+  getDefaultGenerator(): SvgGenerator {
+    return new RegularShape() as SvgGenerator;
   }
 }
 
