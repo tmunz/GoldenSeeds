@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { AnimatedButton, Direction } from '../../ui/AnimatedButton';
+import { AnimatedButton } from '../../ui/AnimatedButton';
 
 interface Props {
   onConfigChanged: (configRaw: any) => void;
@@ -20,7 +20,7 @@ export class ConfigImporter extends React.Component<Props> {
         />
         <a target="_blank" onClick={() => this.importConfigElement?.click()}>
           <AnimatedButton
-            direction={Direction.UP}
+            rotation={AnimatedButton.DIRECTION_DOWN}
             title="load"
             iconText="json"
           />

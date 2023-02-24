@@ -1,23 +1,14 @@
 import React from 'react';
 
 import { AnimatedIcon } from './AnimatedIcon';
-import { ArrowFlat } from './svg/ArrowFlat';
-import { ArrowRegular } from './svg/ArrowRegular';
-import { ArrowNone } from './svg/ArrowNone';
+import { ArrowFlat, ArrowRegular, ArrowNone } from './icon/Arrow';
 
 import './AnimatedButton.styl';
-
-export enum Direction {
-  UP = 180,
-  DOWN = 0,
-  LEFT = 90,
-  RIGHT = 270,
-}
 
 interface Props {
   title?: string;
   iconText?: string;
-  direction?: Direction;
+  rotation?: number;
   disabled?: boolean;
   onClick?: () => void;
   points?: number[][][];
@@ -28,6 +19,12 @@ interface State {
 }
 
 export class AnimatedButton extends React.Component<Props, State> {
+
+  static DIRECTION_UP = 180;
+  static DIRECTION_DOWN = 0;
+  static DIRECTION_LEFT = 90;
+  static DIRECTION_RIGHT = 270;
+
   constructor(props: Props) {
     super(props);
     this.state = { hover: false };
@@ -48,7 +45,7 @@ export class AnimatedButton extends React.Component<Props, State> {
         <AnimatedIcon
           points={this.props.points ?? [ArrowNone, ArrowFlat, ArrowRegular]}
           index={this.props.disabled ? 0 : this.state.hover ? 2 : 1}
-          rotation={this.props.direction ?? Direction.DOWN }
+          rotation={this.props.rotation ?? 0 }
         />
       </div>
     );

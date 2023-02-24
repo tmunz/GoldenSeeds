@@ -1,9 +1,7 @@
 import React from 'react';
 import { AnimationUtils } from '../../utils/AnimationUtils';
 import { AnimatedButton } from '../../ui/AnimatedButton';
-import { PlayNone } from '../../ui/svg/PlayNone';
-import { PlayRegular } from '../../ui/svg/PlayRegular';
-import { PlayFlipped } from '../../ui/svg/PlayFlipped';
+import { PlayNone, PlayRegular, PlayFlipped } from '../../ui/icon/Play';
 
 interface Props {
   target: number;

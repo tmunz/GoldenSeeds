@@ -10,16 +10,11 @@ import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 import { EditorInput } from './EditorInput';
 import { editorService } from './EditorService';
 import { ParamDefinition } from '../generator/SvgGenerator';
-import { AnimatedButton, Direction } from '../../ui/AnimatedButton';
-import { DeleteRegular } from '../../ui/svg/DeleteRegular';
-import { DeleteRotated } from '../../ui/svg/DeleteRotated';
-import { DeleteNone } from '../../ui/svg/DeleteNone';
-import { AddRegular } from '../../ui/svg/AddRegular';
-import { AddNone } from '../../ui/svg/AddNone';
-import { AddRotated } from '../../ui/svg/AddRotated';
+import { PlusNone, PlusRegular, PlusRotated } from '../../ui/icon/Plus';
 import { AnimationController } from '../tools/AnimationController';
 
 import './Editor.styl';
+import { AnimatedButton } from '../../ui/AnimatedButton';
 
 
 interface Props {
@@ -46,20 +41,21 @@ export class Editor extends React.Component<Props> {
                 <a target="_blank" onClick={() => configService.deleteStage(stageId)}>
                   <AnimatedButton
                     title="remove"
-                    points={[DeleteNone, DeleteRegular, DeleteRotated]}
+                    points={[PlusNone, PlusRegular, PlusRotated]}
+                    rotation={45}
                   />
                 </a>
                 <a target="_blank" onClick={() => stageId < this.props.config.stages.length - 1 && this.swapStages(stageId, stageId + 1)}>
                   <AnimatedButton
                     title="downmove"
-                    direction={Direction.DOWN}
+                    rotation={AnimatedButton.DIRECTION_DOWN}
                     disabled={!(stageId < this.props.config.stages.length - 1)}
                   />
                 </a>
                 <a target="_blank" onClick={() => 0 < stageId && this.swapStages(stageId, stageId - 1)}>
                   <AnimatedButton
                     title="upmove"
-                    direction={Direction.UP}
+                    rotation={AnimatedButton.DIRECTION_UP}
                     disabled={!(0 < stageId)}
                   />
                 </a>
@@ -102,7 +98,7 @@ export class Editor extends React.Component<Props> {
           <a target="_blank" onClick={() => configService.addStage()}>
             <AnimatedButton
               title="add"
-              points={[AddNone, AddRegular, AddRotated]}
+              points={[PlusNone, PlusRegular, PlusRotated]}
             />
           </a>
         </div>

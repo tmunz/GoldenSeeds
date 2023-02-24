@@ -1,6 +1,6 @@
 import React from 'react';
 import { Config } from '../Config';
-import { AnimatedButton, Direction } from '../../ui/AnimatedButton';
+import { AnimatedButton } from '../../ui/AnimatedButton';
 
 interface Props {
   config: Config;
@@ -18,7 +18,7 @@ export class ConfigExporter extends React.Component<Props> {
           onClick={() => this.exportConfig()}
         >
           <AnimatedButton
-            direction={Direction.DOWN}
+            rotation={AnimatedButton.DIRECTION_DOWN}
             title="save"
             iconText="json"
           />

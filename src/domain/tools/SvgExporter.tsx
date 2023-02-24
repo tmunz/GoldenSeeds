@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnimatedButton, Direction } from '../../ui/AnimatedButton';
+import { AnimatedButton } from '../../ui/AnimatedButton';
 
 interface Props {
   name: string;
@@ -18,7 +18,7 @@ export class SvgExporter extends React.Component<Props> {
           onClick={() => this.exportSvg()}
         >
           <AnimatedButton
-            direction={Direction.DOWN}
+            rotation={AnimatedButton.DIRECTION_DOWN}
             title="save"
             iconText="svg"
           />
