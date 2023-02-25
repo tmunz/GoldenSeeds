@@ -15,7 +15,7 @@ export class SvgCanvas extends React.Component<Props> {
 
   render() {
     const generatedStages: SvgGeneratorResult[] = [];
-    this.props.config.stages.forEach((stage, i) => 
+    this.props.config.stages.forEach((stage, i) =>
       generatedStages.push(svgGeneratorService.getResult(stage, generatedStages[i - 1]))
     );
 
@@ -50,13 +50,11 @@ export class SvgCanvas extends React.Component<Props> {
   private transform(boundingBox: BoundingBox, offset = 0): string {
     const targetSize = Math.min(this.props.width, this.props.height) - offset;
     const scale = targetSize / Math.max(boundingBox.w, boundingBox.h);
-    const x =
-      this.props.width / 2 - (boundingBox.x + boundingBox.w / 2) * scale;
-    const y =
-      this.props.height / 2 - (boundingBox.y + boundingBox.h / 2) * scale;
+    const x = this.props.width / 2 - (boundingBox.x + boundingBox.w / 2) * scale;
+    const y = this.props.height / 2 - (boundingBox.y + boundingBox.h / 2) * scale;
     return `translate(${isFinite(x) ? x : 0},${isFinite(y) ? y : 0}) scale(${
       isFinite(scale) ? scale : 1
-    })`;
+      })`;
   }
 }
 

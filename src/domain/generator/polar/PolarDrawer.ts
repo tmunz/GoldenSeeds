@@ -13,7 +13,7 @@ export function draw(
   grid: number[][],
 ): { svg: string, points: number[][] } {
   return grid.reduce(
-    (agg, p, i) => {
+    (agg, p) => {
       const coordinates = calculatePolarGrid(config.items, config.angle, config.distance);
       const svg = coordinates.map((coordinate: number[], j: number) =>
         `<line

@@ -41,12 +41,12 @@ export class PolarGrid implements SvgGenerator {
 
   generate = (config: PolarConfig, prev: SvgGeneratorResult): SvgGeneratorResult => {
 
-    const tree = draw(config, prev.grid);
+    const drawing = draw(config, prev.grid);
 
-    const minX = tree.points.reduce((min, p) => Math.min(p[0], min), 0);
-    const maxX = tree.points.reduce((max, p) => Math.max(p[0], max), 0);
-    const minY = tree.points.reduce((min, p) => Math.min(p[0], min), 0);
-    const maxY = tree.points.reduce((max, p) => Math.max(p[0], max), 0);
+    const minX = drawing.points.reduce((min, p) => Math.min(p[0], min), 0);
+    const maxX = drawing.points.reduce((max, p) => Math.max(p[0], max), 0);
+    const minY = drawing.points.reduce((min, p) => Math.min(p[1], min), 0);
+    const maxY = drawing.points.reduce((max, p) => Math.max(p[1], max), 0);
 
     const width = maxX - minX;
     const height = maxY - minY;
@@ -59,8 +59,8 @@ export class PolarGrid implements SvgGenerator {
     };
 
     return {
-      grid: tree.points,
-      svg: tree.svg,
+      grid: drawing.points,
+      svg: drawing.svg,
       boundingBox,
     };
   };

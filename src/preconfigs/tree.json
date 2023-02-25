@@ -18,10 +18,10 @@
       "type": "regular-shape",
       "color": "#b3de87",
       "style": "filled",
-      "corners": "2",
+      "corners": "1",
       "angle": "n*111",
-      "size": "n < 2**3 ? 0 : 0.05",
-      "ratio": "0.4",
+      "size": "n < 2**3 ? 0 : 0.1",
+      "ratio": "0.5",
       "cutRatio0": "0",
       "cutRatio1": "0"
     }

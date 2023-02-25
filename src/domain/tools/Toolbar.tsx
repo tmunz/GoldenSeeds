@@ -21,7 +21,7 @@ export class Toolbar extends React.Component<Props> {
     const name = this.props.config?.meta?.name;
     return (
       <div className="toolbar">
-        <Input value={name} onChange={configService.setName} label={'name'} />
+        <Input value={name} onChange={(name) => configService.setName(name)} label={'name'} />
         <PreconfigSelector preconfigIndex={this.props.preconfigIndex} />
         <div className="actions">
           <ConfigImporter

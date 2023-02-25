@@ -1,10 +1,19 @@
 import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
+import { CartesianConfig, draw } from './CartesianDrawer';
 
 export class CartesianGrid implements SvgGenerator {
   static type = 'cartesian';
   type = CartesianGrid.type;
 
   definition = {
+    color: { initial: 'gold', type: 'color' as const },
+    strokeWidth: {
+      initial: '1',
+      type: 'expression' as const,
+      min: 0,
+      max: 10,
+      step: 0.05,
+    },
     x: { initial: '5', type: 'number' as const, min: 1, max: 25, step: 1 },
     items: {
       initial: '20',
@@ -16,20 +25,30 @@ export class CartesianGrid implements SvgGenerator {
     },
   };
 
-  generate = (
-    { x, items }: { x: number; items: number },
-    prev: SvgGeneratorResult,
-  ): SvgGeneratorResult => {
-    // TODO use prev
-    // TODO render
-    const grid = [];
-    for (let i = 0; i < items; i++) {
-      grid.push([i % x, Math.floor(i / x)]);
-    }
+  generate = (config: CartesianConfig, prev: SvgGeneratorResult): SvgGeneratorResult => {
+
+    const drawing = draw(config, prev.grid);
+
+    const minX = drawing.points.reduce((min, p) => Math.min(p[0], min), 0);
+    const maxX = drawing.points.reduce((max, p) => Math.max(p[0], max), 0);
+    const minY = drawing.points.reduce((min, p) => Math.min(p[1], min), 0);
+    const maxY = drawing.points.reduce((max, p) => Math.max(p[1], max), 0);
+
+    const width = maxX - minX;
+    const height = maxY - minY;
+
+    const boundingBox = {
+      x: width === 0 ? prev.boundingBox.x : minX,
+      y: height === 0 ? prev.boundingBox.y : minY ,
+      w: width === 0 ? prev.boundingBox.w : width,
+      h: height === 0 ? prev.boundingBox.h : height,
+    };
+
     return {
-      grid,
-      boundingBox: { x: 0, y: 0, w: x - 1, h: Math.ceil(items / x) - 1 },
-      svg: null,
+      grid: drawing.points,
+      svg: drawing.svg,
+      boundingBox,
     };
   };
 }
+
