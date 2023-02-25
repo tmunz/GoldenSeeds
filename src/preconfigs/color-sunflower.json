@@ -2,30 +2,36 @@
   "meta": {
     "name": "color-sunflower"
   },
-  "stages": [{
-    "type": "regular-shape",
-    "style": "filled",
-    "corners": "0",
-    "color": "gold",
-    "angle": "0",
-    "size": "1.1",
-    "ratio": "0",
-    "cutRatio0": "0",
-    "cutRatio1": "0"
-  }, {
-    "type": "polar",
-    "items": "233",
-    "angle": "n * 360 / goldenRatio",
-    "distance": "Math.pow(n, 1 / goldenRatio)"
-  }, {
-    "type": "regular-shape",
-    "style": "filled",
-    "corners": "2",
-    "color": "random",
-    "angle": "n * 360 / goldenRatio - 110",
-    "size": "Math.max(Math.pow(n, 1 / 4), 1)",
-    "ratio": "0.9",
-    "cutRatio0": "0",
-    "cutRatio1": "0"
-  }]
+  "stages": [
+    {
+      "type": "regular-shape",
+      "color": "gold",
+      "style": "filled",
+      "corners": "0",
+      "angle": "0",
+      "size": "65",
+      "ratio": "0",
+      "cutRatio0": "0",
+      "cutRatio1": "0"
+    },
+    {
+      "type": "polar",
+      "color": "-2147299961",
+      "strokeWidth": "1",
+      "items": "233",
+      "angle": "n * 360 / goldenRatio",
+      "distance": "Math.pow(n, 1 / goldenRatio)"
+    },
+    {
+      "type": "regular-shape",
+      "color": "random",
+      "style": "filled",
+      "corners": "2",
+      "angle": "n * 360 / goldenRatio - 110",
+      "size": "Math.max(Math.pow(n, 1 / 4), 1)",
+      "ratio": "0.9",
+      "cutRatio0": "0",
+      "cutRatio1": "0"
+    }
+  ]
 }

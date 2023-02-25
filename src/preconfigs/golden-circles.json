@@ -8,7 +8,7 @@
     "corners": "0",
     "color": "gold",
     "angle": "0",
-    "size": "1",
+    "size": "56",
     "ratio": "0",
     "cutRatio0": "0",
     "cutRatio1": "0"
@@ -23,7 +23,7 @@
     "corners": "0",
     "color": "#000000",
     "angle": "n * 360 / goldenRatio - 90",
-    "size": "n / items",
+    "size": "n",
     "ratio": "1 / Math.pow(goldenRatio, 2)",
     "cutRatio0": "0",
     "cutRatio1": "1 - (1 / goldenRatio)"

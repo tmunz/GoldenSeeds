@@ -6,7 +6,7 @@ export class SvgGeneratorService {
   static DEFAULT_RESULT: SvgGeneratorResult = {
     grid: [[0, 0]],
     svg: null,
-    boundingBox: { x: -0.5, y: -0.5, w: 1, h: 1 },
+    boundingBox: { x: -0.0005, y: -0.0005, w: 0.001, h: 0.001 },
   };
 
   private cache: Map<string, SvgGeneratorResult> = new Map();

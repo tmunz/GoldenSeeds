@@ -2,9 +2,24 @@
   "meta": {
     "name": "unknown pleasures"
   },
-  "stages": [{
-    "type": "cartesian",
-    "items": "20",
-    "x": "5"
-  }]
+  "stages": [
+    {
+      "type": "cartesian",
+      "color": "12996487",
+      "strokeWidth": "1",
+      "x": "4",
+      "xDistance": "1.7*((n%3)+1)",
+      "yDistance": "0.8",
+      "items": "8"
+    },
+    {
+      "type": "cartesian",
+      "color": "32492935",
+      "strokeWidth": "0.3",
+      "x": "2",
+      "xDistance": "0.35",
+      "yDistance": "0.5*n",
+      "items": "4"
+    }
+  ]
 }

@@ -81,10 +81,7 @@ export class Tree implements SvgGenerator {
     };
 
     return {
-      grid: drawing.points.map((p) => [
-        p.x,
-        p.y,
-      ]),
+      grid: drawing.points.map(p => [p.x, p.y]),
       svg: drawing.svg,
       boundingBox,
     };

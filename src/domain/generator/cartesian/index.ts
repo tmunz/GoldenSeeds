@@ -15,6 +15,20 @@ export class CartesianGrid implements SvgGenerator {
       step: 0.05,
     },
     x: { initial: '5', type: 'number' as const, min: 1, max: 25, step: 1 },
+    xDistance: {
+      initial: '1',
+      type: 'expression' as const,
+      min: 0,
+      max: 2,
+      step: 0.05,
+    },
+    yDistance: {
+      initial: '1',
+      type: 'expression' as const,
+      min: 0,
+      max: 2,
+      step: 0.05,
+    },
     items: {
       initial: '20',
       type: 'number' as const,

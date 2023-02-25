@@ -2,21 +2,36 @@
   "meta": {
     "name": "seashell"
   },
-  "stages": [{
-    "type": "polar",
-    "color": "transparent",
-    "items": "610",
-    "angle": "n * 100",
-    "distance": "n"
-  }, {
-    "type": "regular-shape",
-    "style": "stroke",
-    "corners": "0",
-    "color": "gold",
-    "angle": "n*2",
-    "size": "n",
-    "ratio": "0",
-    "cutRatio0": "0",
-    "cutRatio1": "n/items"
-  }]
+  "stages": [
+    {
+      "type": "regular-shape",
+      "color": "-2147299961",
+      "style": "filled",
+      "corners": "0",
+      "angle": "0",
+      "size": "1400",
+      "ratio": "1",
+      "cutRatio0": "0",
+      "cutRatio1": "0"
+    },
+    {
+      "type": "polar",
+      "color": "transparent",
+      "strokeWidth": "1",
+      "items": "600",
+      "angle": "n * 100",
+      "distance": "n"
+    },
+    {
+      "type": "regular-shape",
+      "color": "gold",
+      "style": "stroke",
+      "corners": "0",
+      "angle": "90-n*2",
+      "size": "n",
+      "ratio": "0",
+      "cutRatio0": "0",
+      "cutRatio1": "n/items"
+    }
+  ]
 }

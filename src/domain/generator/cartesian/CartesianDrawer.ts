@@ -5,6 +5,8 @@ export interface CartesianConfig {
   strokeWidth: (n: number, items: number) => number;
   items: number;
   x: number;
+  xDistance: (n: number, items: number) => number;
+  yDistance: (n: number, items: number) => number;
 }
 
 export function draw(
@@ -13,18 +15,14 @@ export function draw(
 ): { svg: string, points: number[][] } {
   return grid.reduce(
     (agg, p) => {
-      const coordinates = calculatePolarGrid(config.items, config.x);
+      const coordinates = calculatePolarGrid(p, config.items, config.x, config.xDistance, config.yDistance);
       const svg = coordinates.map((coordinate: number[], j: number) => {
         const rightIndex = j + 1;
         const downIndex = j + config.x;
         const rightLine = rightIndex % config.x !== 0 && rightIndex < config.items ? drawLine(
-          [p[0] + coordinate[0], p[1] + coordinate[1]],
-          [p[0] + coordinates[rightIndex][0], p[1] + coordinates[rightIndex][1]],
-          config, j * 2) : '';
+          coordinate, coordinates[rightIndex], config, j * 2) : '';
         const downLine = downIndex < config.items ? drawLine(
-          [p[0] + coordinate[0], p[1] + coordinate[1]],
-          [p[0] + coordinates[downIndex][0], p[1] + coordinates[downIndex][1]],
-          config, j * 2 + 1) : '';
+          coordinate, coordinates[downIndex], config, j * 2 + 1) : '';
         return rightLine + downLine;
       }).join('');
       return {
@@ -37,12 +35,20 @@ export function draw(
 }
 
 function calculatePolarGrid(
+  origin: number[],
   items: number,
   x: number,
+  xDistance: (n: number, items: number) => number,
+  yDistance: (n: number, items: number) => number,
 ): number[][] {
   const grid = [];
   for (let i = 0; i < items; i++) {
-    grid.push([i % x, Math.floor(i / x)]);
+    const calcX = i % x;
+    const calcY = Math.floor(i / x);
+    grid.push([
+      origin[0] + (calcX * xDistance(calcX, x)), 
+      origin[1] + (calcY * yDistance(calcY, Math.floor(items / x)))
+    ]);
   }
   return grid;
 }

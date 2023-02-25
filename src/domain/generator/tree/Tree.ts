@@ -44,10 +44,10 @@ export class Tree {
 
   private static calculateTree(config: Config): { root: Node; limbs: Limb[] } {
     const root: Node = {
-      point: { x: 0, y: 0 },
+      point: { x: 0, y: -1 },
       level: 0,
       angle: 0,
-      branches: [{ point: { x: 0, y: 1 }, level: 1, angle: Math.PI / 2 }],
+      branches: [{ point: { x: 0, y: 0 }, level: 1, angle: Math.PI / 2 }],
     };
     const limbs: Limb[] = [
       { from: root.point, to: root.branches[0].point, level: 0 },

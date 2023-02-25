@@ -32,8 +32,8 @@ export class RegularShape implements SvgGenerator {
       initial: '1',
       type: 'expression' as const,
       min: 0,
-      max: 2,
-      step: 0.05,
+      max: 100,
+      step: 0.1,
     },
     ratio: {
       initial: '1',
@@ -59,17 +59,16 @@ export class RegularShape implements SvgGenerator {
   };
 
   generate = (config: RegularShapeConfig, prev: SvgGeneratorResult) => {
-    // TODO correct calculations
     const items = prev.grid.length;
-    const itemsSize = 0; //config.size(items-1, items);
+    const itemsSize = config.size(items-1, items);
     return {
       grid: prev.grid,
       svg: draw(config, prev.grid),
       boundingBox: {
-        x: prev.boundingBox.x - itemsSize / 2,
-        y: prev.boundingBox.y - itemsSize / 2,
-        w: prev.boundingBox.w + itemsSize,
-        h: prev.boundingBox.h + itemsSize,
+        x: - Math.max(prev.boundingBox.w, itemsSize) / 2,
+        y: - Math.max(prev.boundingBox.w, itemsSize) / 2,
+        w: Math.max(prev.boundingBox.w, itemsSize),
+        h: Math.max(prev.boundingBox.h, itemsSize),
       },
     };
   };

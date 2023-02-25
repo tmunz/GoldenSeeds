@@ -3,6 +3,7 @@ import React from 'react';
 import { Config } from './Config';
 import { SvgGeneratorResult } from './generator/SvgGenerator';
 import { svgGeneratorService } from './generator/SvgGeneratorService';
+import { Stage } from './stage/Stage';
 
 interface Props {
   config: Config;
@@ -24,9 +25,8 @@ export class SvgCanvas extends React.Component<Props> {
       return (
         typeof svg === 'string' && (
           <g
-            key={i}
+            key={this.props.config.stages[i].id}
             className={this.props.config.stages[i].generator.type}
-            transform={this.transform(stageResult.boundingBox, 200)}
             dangerouslySetInnerHTML={{ __html: svg }}
           />
         )
@@ -41,13 +41,32 @@ export class SvgCanvas extends React.Component<Props> {
           height={this.props.height}
           ref={(e) => (this.svgContent = e)}
         >
-          {content}
+          <g
+            transform={this.centerAndScale(this.boundingBox(generatedStages), 200)}
+          >
+            {content}
+          </g>
         </svg>
       </ErrorBoundary>
     );
   }
 
-  private transform(boundingBox: BoundingBox, offset = 0): string {
+  private boundingBox(generatedStages: SvgGeneratorResult[]): BoundingBox {
+    const extremePoints = generatedStages.reduce((b, stage) => ({
+      x1: Math.min(stage.boundingBox.x, b.x1),
+      y1: Math.min(stage.boundingBox.y, b.y1),
+      x2: Math.max(stage.boundingBox.x + stage.boundingBox.w, b.x2),
+      y2: Math.max(stage.boundingBox.y + stage.boundingBox.h, b.y2),
+    }), { x1: 0, y1: 0, x2: 0, y2: 0 });
+    return {
+      x: extremePoints.x1,
+      y: extremePoints.y1,
+      w: extremePoints.x2 - extremePoints.x1,
+      h: extremePoints.y2 - extremePoints.y1,
+    }
+  }
+
+  private centerAndScale(boundingBox: BoundingBox, offset = 0): string {
     const targetSize = Math.min(this.props.width, this.props.height) - offset;
     const scale = targetSize / Math.max(boundingBox.w, boundingBox.h);
     const x = this.props.width / 2 - (boundingBox.x + boundingBox.w / 2) * scale;

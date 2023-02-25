@@ -13,7 +13,7 @@
     "corners": "6",
     "color": "#b3de87",
     "angle": "0",
-    "size": "Math.pow(n, 1 / goldenRatio) / items*2.4",
+    "size": "Math.pow(n, 1 / goldenRatio)",
     "ratio": "(1 - 1 / (n + 1))",
     "cutRatio0": "n == items ? 0 : n % 2 ? 0.8 : 0",
     "cutRatio1": "n == items ? 0 : n % 2 ? 1 : 0.2"
