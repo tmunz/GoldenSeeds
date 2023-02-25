@@ -14,13 +14,13 @@ export function draw(
 ): { svg: string, points: number[][] } {
   return grid.reduce(
     (agg, p) => {
-      const coordinates = calculatePolarGrid(config.items, config.angle, config.distance);
+      const coordinates = calculatePolarGrid(p, config.items, config.angle, config.distance);
       const svg = coordinates.map((coordinate: number[], j: number) =>
         `<line
         x1="${p[0]}"
         y1="${p[1]}"
-        x2="${p[0] + coordinate[0]}"
-        y2="${p[1] + coordinate[1]}"
+        x2="${coordinate[0]}"
+        y2="${coordinate[1]}"
         stroke="${config.color.toString(j)}"
         stroke-width="${config.strokeWidth(j, config.items)}"
         vector-effect="non-scaling-stroke"
@@ -37,6 +37,7 @@ export function draw(
 }
 
 function calculatePolarGrid(
+  center: number[],
   items: number,
   angle: (n: number, items: number) => number,
   distance: (n: number, items: number) => number): number[][] {
@@ -45,7 +46,7 @@ function calculatePolarGrid(
     const rad = (angle(n, items) / 180) * Math.PI;
     grid.push(
       [Math.cos(rad), Math.sin(rad)].map(
-        (trig, i) => distance(n, items) * trig,
+        (trig, i) => center[i] + distance(n, items) * trig,
       ),
     );
   }
