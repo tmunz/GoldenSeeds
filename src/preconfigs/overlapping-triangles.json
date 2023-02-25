@@ -2,17 +2,13 @@
   "meta": {
     "name": "overlapping-triangles"
   },
-  "grid": {
+  "stages": [{
     "type": "polar",
+    "color": "#b3de87",
     "items": "377",
     "angle": "n * 360 / goldenRatio",
     "distance": "Math.pow(n, 1 / goldenRatio)"
-  },
-  "background": {
-    "type": "circle",
-    "color": "none"
-  },
-  "drawer": {
+  }, {
     "type": "regular-shape",
     "style": "filled",
     "corners": "3",
@@ -22,5 +18,5 @@
     "ratio": "Math.min(0.4, Math.pow(1 / n, 2 / 5))",
     "cutRatio0": "0",
     "cutRatio1": "0"
-  }
+  }]
 }

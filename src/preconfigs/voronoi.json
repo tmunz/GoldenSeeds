@@ -2,20 +2,16 @@
   "meta": {
     "name": "voronoi"
   },
-  "grid": {
+  "stages": [{
     "type": "polar",
+    "color": "transparent",
     "items": "34",
     "angle": "n * 360 / goldenRatio",
     "distance": "Math.pow(n, 1 / goldenRatio)"
-  },
-  "background": {
-    "type": "circle",
-    "color": "transparent"
-  },
-  "drawer": {
+  }, {
     "type": "voronoi",
     "color": "random",
     "style": "filled",
     "borderWidth": "1"
-  }
+  }]
 }

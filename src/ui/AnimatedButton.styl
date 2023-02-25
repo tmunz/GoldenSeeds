@@ -1,0 +1,41 @@
+.animated-button {
+  position: relative;
+  display inline-block;
+  padding: 5px;
+  margin-top: 10px;
+
+  &:hover {
+    .tooltip {
+      opacity: 1;
+    }
+
+    .icon {
+      stroke: var(--accentColor);
+    }
+  }
+
+  .tooltip {
+    position: absolute;
+    text-align: center;
+    margin: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    top: -14px;
+    opacity: 0;
+    transition: opacity .8s;
+  }
+
+  .icon-text {
+    position: absolute;
+    text-align: center;
+    font-size: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+  }
+
+  .animated-icon {
+    width: 20px;
+    height: 20px;
+  }
+}

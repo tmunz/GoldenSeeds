@@ -1,35 +1,40 @@
 module.exports = {
-  'env': {
-    "browser": true,
-    "commonjs": true,
-    "node": true,
-    "es6": true,
-    "jest": true,
+  env: {
+    browser: true,
+    commonjs: true,
+    es2021: true,
+    node: true,
+    es6: true,
+    jest: true,
   },
-  'extends': [
+  extends: [
     'eslint:recommended',
+    'plugin:prettier/recommended',
+    'plugin:jsx-a11y/recommended',
     'plugin:react/recommended',
-    'plugin:@typescript-eslint/recommended'
+    'plugin:react-hooks/recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
-  'globals': {
-    'Atomics': 'readonly',
-    'SharedArrayBuffer': 'readonly'
-  },
-  'parser': '@typescript-eslint/parser',
-  'parserOptions': {
-    'ecmaFeatures': {
-      'jsx': true
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
     },
-    'ecmaVersion': 2018,
-    'sourceType': 'module'
+    ecmaVersion: 'latest',
+    sourceType: 'module',
   },
-  'plugins': ['react', '@typescript-eslint'],
-  'rules': {
-    'indent': ['error', 2],
-    'linebreak-style': ['error', 'windows'],
+  plugins: [
+    'react',
+    'jsx-a11y',
+    'react-hooks',
+    '@typescript-eslint',
+  ],
+  ignorePatterns: ['**/build/*.js', '**/node-modules/*'],
+  rules: {
+    indent: ['error', 2],
     'eol-last': ['error', 'always'],
-    'quotes': ['error', 'single'],
-    'semi': ['error', 'always'
-    ]
-  }
+    quotes: ['error', 'single'],
+    semi: ['error', 'always'],
+    'no-explicit-any': 'off', // TODO
+  },
 };

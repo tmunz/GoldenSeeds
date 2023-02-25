@@ -2,17 +2,22 @@
   "meta": {
     "name": "color-sunflower"
   },
-  "grid": {
+  "stages": [{
+    "type": "regular-shape",
+    "style": "filled",
+    "corners": "0",
+    "color": "gold",
+    "angle": "0",
+    "size": "1.1",
+    "ratio": "0",
+    "cutRatio0": "0",
+    "cutRatio1": "0"
+  }, {
     "type": "polar",
     "items": "233",
     "angle": "n * 360 / goldenRatio",
     "distance": "Math.pow(n, 1 / goldenRatio)"
-  },
-  "background": {
-    "type": "circle",
-    "color": "gold"
-  },
-  "drawer": {
+  }, {
     "type": "regular-shape",
     "style": "filled",
     "corners": "2",
@@ -22,5 +27,5 @@
     "ratio": "0.9",
     "cutRatio0": "0",
     "cutRatio1": "0"
-  }
+  }]
 }

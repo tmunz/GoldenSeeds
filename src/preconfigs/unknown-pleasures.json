@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "name": "unknown pleasures"
+  },
+  "stages": [{
+    "type": "cartesian",
+    "items": "20",
+    "x": "5"
+  }]
+}

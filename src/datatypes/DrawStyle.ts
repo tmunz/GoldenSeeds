@@ -1,3 +1,4 @@
 export enum DrawStyle {
-  FILLED = 'filled', STROKE = 'stroke'
+  FILLED = 'filled',
+  STROKE = 'stroke',
 }

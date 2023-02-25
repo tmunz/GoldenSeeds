@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
     "noImplicitAny": true,
     "module": "es6",
     "target": "es6",
@@ -13,5 +12,11 @@
     "declaration": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
-  }
+    "noEmit": true,
+    "isolatedModules": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+  },
+  "include": ["src/**/*"]
 }

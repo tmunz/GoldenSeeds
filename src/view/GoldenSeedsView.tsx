@@ -1,17 +1,18 @@
-import * as React from 'react';
+import React from 'react';
 
-import { Toolbar } from '../tools/Toolbar';
-import { AppState } from '../store/AppStore';
-import { setRawConfig } from '../store/Actions';
-import { preconfigs } from '../preconfigs';
-import { Editor } from '../editor/Editor';
+import { Toolbar } from '../domain/tools/Toolbar';
+import { Editor } from '../domain/editor/Editor';
+import { SvgCanvas } from '../domain/SvgCanvas';
+import { Config } from '../domain/Config';
 import { Themer } from '../themer/Themer';
-import { SvgCanvas } from './SvgCanvas';
 
 import './GoldenSeedsView.styl';
 
-
-type Props = AppState
+type Props = {
+  config: Config;
+  preconfigIndex: number;
+  editStageId: number;
+};
 
 interface State {
   width: number;
@@ -19,15 +20,13 @@ interface State {
 }
 
 export class GoldenSeedsView extends React.Component<Props, State> {
+  private svgCanvas: SvgCanvas | null = null;
 
-  private svgCanvas: SvgCanvas;
   constructor(props: Props) {
     super(props);
     this.state = {
       ...this.dimension,
     };
-
-    setRawConfig(preconfigs[props.preconfigIndex], props.preconfigIndex);
   }
 
   componentDidMount() {
@@ -41,13 +40,18 @@ export class GoldenSeedsView extends React.Component<Props, State> {
   render() {
     return (
       <div className="golden-seeds-view">
-        {
-          this.props.config && <React.Fragment>
-            <div className="canvas" style={{ left: (this.props.editStageId ? '52vw' : '50vw') }}>
+        {this.props.config && (
+          <React.Fragment>
+            <div
+              className="canvas"
+              style={{
+                left: this.props.editStageId !== null ? '52vw' : '50vw',
+              }}
+            >
               <SvgCanvas
-                ref={e => this.svgCanvas = e}
+                ref={(e) => (this.svgCanvas = e)}
                 config={this.props.config}
-                width={this.state.width * 1.04}
+                width={this.state.width * 1.04 /* must be slightly larger, because of movement */}
                 height={this.state.height}
               />
             </div>
@@ -56,11 +60,11 @@ export class GoldenSeedsView extends React.Component<Props, State> {
               config={this.props.config}
             />
           </React.Fragment>
-        }
+        )}
         <Toolbar
           config={this.props.config}
           preconfigIndex={this.props.preconfigIndex}
-          getSvg={() => this.svgCanvas ? this.svgCanvas.svgContent : undefined}
+          getSvg={() => this.svgCanvas?.svgContent ?? null}
         />
         <Themer />
       </div>

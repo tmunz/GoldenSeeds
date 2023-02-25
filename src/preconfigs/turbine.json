@@ -2,25 +2,21 @@
   "meta": {
     "name": "turbine"
   },
-  "grid": {
+  "stages": [{
     "type": "polar",
+    "color": "transparent",
     "items": "34",
     "angle": "0",
     "distance": "0"
-  },
-  "background": {
-    "type": "circle",
-    "color": "none"
-  },
-  "drawer": {
+  }, {
     "type": "regular-shape",
     "style": "stroke",
     "corners": "10",
     "color": "gold",
     "angle": "n",
-    "size": "Math.pow(n, 1 / goldenRatio)",
+    "size": "Math.pow(n, 1 / goldenRatio) / 9",
     "ratio": "1 / Math.pow(goldenRatio, 2)",
     "cutRatio0": "0",
     "cutRatio1": "0"
-  }
+  }]
 }
