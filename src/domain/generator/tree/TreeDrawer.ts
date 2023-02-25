@@ -1,5 +1,6 @@
 import { Color } from '../../../datatypes/Color';
 import { Tree, Config as TreeImplConfig } from './Tree';
+import { Point } from './Point';
 
 export interface TreeConfig extends TreeImplConfig {
   color: Color;
@@ -8,7 +9,7 @@ export interface TreeConfig extends TreeImplConfig {
 export function draw(
   config: TreeConfig,
   grid: number[][],
-): { svg: string; points: Point[] } {
+): { svg: string, points: Point[]} {
   return grid.reduce(
     (agg, p, i) => {
       const tree = new Tree({ ...config, seed: config.seed + i });
@@ -27,11 +28,13 @@ export function draw(
       />`,
         )
         .join('');
+      const currentPoints: Point[] = [tree.limbs[0].from, ...tree.limbs.map(l => l.to)]
+        .map(lp => ({x: p[0] + lp.x, y: p[1] - lp.y}));
       return {
         svg: agg.svg + svg,
-        points: [...agg.points, ...tree.limbs.map((l) => l.to)],
+        points: [...agg.points, ...currentPoints],
       };
     },
-    { svg: '', points: [] },
+    { svg: '', points: [] as Point[]},
   );
 }

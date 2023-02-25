@@ -4,6 +4,7 @@
   },
   "stages": [{
     "type": "polar",
+    "color": "#b3de87",
     "items": "377",
     "angle": "n * 360 / goldenRatio",
     "distance": "Math.pow(n, 1 / goldenRatio)"

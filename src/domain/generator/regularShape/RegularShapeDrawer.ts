@@ -33,7 +33,7 @@ export function draw(config: RegularShapeConfig, grid: number[][]) {
       const n = i + 1;
       const itemSize: number = config.size(n, items);
       const elementStyle = style(n, config.color, config.style);
-      if (config.corners > 0) {
+      if (0 < config.corners) {
         const itemProps = getItemProps(config, n, items, itemSize);
         return drawRegularShape(position, itemProps, elementStyle);
       } else {

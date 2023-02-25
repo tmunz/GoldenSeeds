@@ -2,15 +2,28 @@
   "meta": {
     "name": "tree"
   },
-  "stages": [{
-    "type": "tree",
-    "color": "gold",
-    "depth": "13",
-    "splitAngle": "25",
-    "splitVariation": "0.0",
-    "splitProbability": "0.9",
-    "lengthConservation": "0.8",
-    "lengthVariation": "1",
-    "seed": "22"
-  }]
+  "stages": [
+    {
+      "type": "tree",
+      "color": "gold",
+      "depth": "13",
+      "splitAngle": "25",
+      "splitVariation": "0.0",
+      "splitProbability": "0.9",
+      "lengthConservation": "0.8",
+      "lengthVariation": "1",
+      "seed": "22"
+    },
+    {
+      "type": "regular-shape",
+      "color": "#b3de87",
+      "style": "filled",
+      "corners": "2",
+      "angle": "n*111",
+      "size": "n < 2**3 ? 0 : 0.05",
+      "ratio": "0.4",
+      "cutRatio0": "0",
+      "cutRatio1": "0"
+    }
+  ]
 }

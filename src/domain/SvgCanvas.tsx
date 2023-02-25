@@ -25,7 +25,8 @@ export class SvgCanvas extends React.Component<Props> {
         typeof svg === 'string' && (
           <g
             key={i}
-            transform={this.transform(stageResult.boundingBox, 220)}
+            className={this.props.config.stages[i].generator.type}
+            transform={this.transform(stageResult.boundingBox, 200)}
             dangerouslySetInnerHTML={{ __html: svg }}
           />
         )

@@ -1,4 +1,5 @@
 import { random } from '../../../utils/Random';
+import { Point } from './Point';
 
 export interface Config {
   depth: number;
@@ -45,7 +46,7 @@ export class Tree {
     const root: Node = {
       point: { x: 0, y: 0 },
       level: 0,
-      angle: undefined,
+      angle: 0,
       branches: [{ point: { x: 0, y: 1 }, level: 1, angle: Math.PI / 2 }],
     };
     const limbs: Limb[] = [

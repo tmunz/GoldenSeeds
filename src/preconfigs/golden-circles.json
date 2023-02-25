@@ -23,7 +23,7 @@
     "corners": "0",
     "color": "#000000",
     "angle": "n * 360 / goldenRatio - 90",
-    "size": "n",
+    "size": "n / items",
     "ratio": "1 / Math.pow(goldenRatio, 2)",
     "cutRatio0": "0",
     "cutRatio1": "1 - (1 / goldenRatio)"

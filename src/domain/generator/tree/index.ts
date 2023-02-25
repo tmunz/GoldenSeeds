@@ -62,23 +62,31 @@ export class Tree implements SvgGenerator {
   };
 
   generate = (config: TreeConfig, prev: SvgGeneratorResult) => {
-    const size = [...new Array(config.depth).keys()].reduce(
-      (agg, n) => agg + Math.pow(config.lengthConservation, n),
-      0,
-    );
+
     const tree = draw(config, prev.grid);
+
+    const minX = tree.points.reduce((min, p) => Math.min(p.x, min), 0);
+    const maxX = tree.points.reduce((max, p) => Math.max(p.x, max), 0);
+    const minY = tree.points.reduce((min, p) => Math.min(p.y, min), 0);
+    const maxY = tree.points.reduce((max, p) => Math.max(p.y, max), 0);
+
+    const width = maxX - minX;
+    const height = maxY - minY;
+
+    const boundingBox = {
+      x: minX,
+      y: minY,
+      w: width,
+      h: height,
+    };
+
     return {
       grid: tree.points.map((p) => [
-        prev.boundingBox.x + p.x,
-        prev.boundingBox.y - p.y,
+        p.x,
+        p.y,
       ]),
       svg: tree.svg,
-      boundingBox: {
-        x: prev.boundingBox.x - size / 2,
-        y: prev.boundingBox.y - size,
-        w: prev.boundingBox.w + size,
-        h: prev.boundingBox.h + size,
-      },
+      boundingBox,
     };
   };
 }

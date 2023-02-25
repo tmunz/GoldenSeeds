@@ -28,5 +28,5 @@ export interface SvgGeneratorResult {
 export interface SvgGenerator {
   type: string;
   definition: { [key: string]: ParamDefinition };
-  generate: (props: object, prev: SvgGeneratorResult) => SvgGeneratorResult;
+  generate: (props: any, prev: SvgGeneratorResult) => SvgGeneratorResult;
 }

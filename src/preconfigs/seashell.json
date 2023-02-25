@@ -4,6 +4,7 @@
   },
   "stages": [{
     "type": "polar",
+    "color": "transparent",
     "items": "610",
     "angle": "n * 100",
     "distance": "n"
@@ -13,7 +14,7 @@
     "corners": "0",
     "color": "gold",
     "angle": "n*2",
-    "size": "n*1",
+    "size": "n",
     "ratio": "0",
     "cutRatio0": "0",
     "cutRatio1": "n/items"

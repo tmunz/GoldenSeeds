@@ -6,7 +6,6 @@
   left: 0;
   &>* {
     position: absolute;
-    padding: 20px;
     &.canvas {
       top: 50%;
       left: 50%;
@@ -14,17 +13,18 @@
       transform: translate(-50%, -50%);
     }
     &.editor {
-      top: 0;
+      top: 20px;
       left: 10px;
-      bottom: 0;
+      bottom: 20px;
+      padding-left: 20px;
     }
     &.toolbar {
-      top: 0;
-      right: 0;
+      top: 20px;
+      right: 20px;
     }
     &.themer {
-      bottom: 0;
-      right: 0;
+      bottom: 20px;
+      right: 20px;
       h1 {
         text-align: right;
       }
