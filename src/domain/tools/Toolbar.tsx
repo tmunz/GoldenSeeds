@@ -1,21 +1,20 @@
 import React from 'react';
 
-import { SvgExporter } from './SvgExporter';
-import { ConfigExporter } from './ConfigExporter';
-import { ConfigImporter } from './ConfigImporter';
-import { PreconfigSelector } from './PreconfigSelector';
+import { SvgExporter } from '../svg/SvgExporter';
+import { ConfigExporter } from '../config/ConfigExporter';
+import { ConfigImporter } from '../config/ConfigImporter';
+import { PreconfigSelector } from '../config/PreconfigSelector';
 import { Input } from '../../ui/input/Input';
-import { Config } from '../Config';
-import { configService } from '../ConfigService';
-import { animationService } from '../animation/AnimationService';
+import { Config } from '../config/Config';
+import { configService } from '../config/ConfigService';
 
 import './Toolbar.styl';
 
 
 interface Props {
-  config: Config;
-  preconfigIndex: number;
-  getSvg: () => SVGSVGElement | null;
+  config?: Config;
+  preconfigIndex?: number;
+  getSvg: () => string | null | undefined;
 }
 
 export class Toolbar extends React.Component<Props> {

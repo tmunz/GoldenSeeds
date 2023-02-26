@@ -1,11 +1,11 @@
 import { BehaviorSubject } from 'rxjs';
 
-import { preconfigs } from '../preconfigs';
+import { preconfigs } from '../../preconfigs';
 
 import { Config } from './Config';
-import { converterService } from './converter/ConverterService';
-import { svgGeneratorRegistry } from './generator/SvgGeneratorRegistry';
-import { Stage } from './stage/Stage';
+import { converterService } from '../converter/ConverterService';
+import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
+import { Stage } from '../stage/Stage';
 
 export class ConfigService {
 

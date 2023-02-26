@@ -1,5 +1,5 @@
 import React from 'react';
-import { Config } from '../Config';
+import { Config } from '../config/Config';
 import { AnimatedButton } from '../../ui/AnimatedButton';
 
 interface Props {

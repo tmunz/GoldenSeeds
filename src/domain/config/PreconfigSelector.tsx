@@ -2,10 +2,10 @@ import React from 'react';
 
 import { preconfigs } from '../../preconfigs/index';
 import { Input, InputType } from '../../ui/input/Input';
-import { configService } from '../ConfigService';
+import { configService } from '../config/ConfigService';
 
 interface Props {
-  preconfigIndex: number;
+  preconfigIndex?: number;
 }
 
 export class PreconfigSelector extends React.Component<Props> {

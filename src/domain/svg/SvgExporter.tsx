@@ -2,8 +2,8 @@ import React from 'react';
 import { AnimatedButton } from '../../ui/AnimatedButton';
 
 interface Props {
-  name: string;
-  getSvg: () => SVGSVGElement | null;
+  name?: string;
+  getSvg: () => string | null | undefined;
 }
 
 export class SvgExporter extends React.Component<Props> {
@@ -30,11 +30,10 @@ export class SvgExporter extends React.Component<Props> {
   private exportSvg() {
     const svg = this.props.getSvg();
     if (this.exportSvgElement) {
-      this.exportSvgElement.download = this.props.name + '.svg';
+      const fileName = this.props.name ?? 'default' + '.svg';
+      this.exportSvgElement.download = fileName;
       this.exportSvgElement.href = URL.createObjectURL(
-        new File([svg ? svg.outerHTML : ''], this.props.name + '.svg', {
-          type: 'image/svg+xml',
-        }),
+        new File([svg ?? ''], fileName, { type: 'image/svg+xml' }),
       );
     }
   }

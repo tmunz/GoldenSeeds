@@ -1,5 +1,5 @@
 import { AnimationUtils } from "../../utils/AnimationUtils";
-import { configService } from "../ConfigService";
+import { configService } from "../config/ConfigService";
 
 export class AnimationService {
   private static START_VALUE = 1;

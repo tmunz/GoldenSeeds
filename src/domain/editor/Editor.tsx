@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Config } from '../Config';
+import { Config } from '../config/Config';
 import { InputType } from '../../ui/input/Input';
 import { Collapsable } from '../../ui/Collapsable';
 import { editorStateService } from './EditorStateService';
-import { configService } from '../ConfigService';
+import { configService } from '../config/ConfigService';
 import { StageState, Stage } from '../stage/Stage';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 import { EditorInput } from './EditorInput';
@@ -19,7 +19,7 @@ import { AnimatedButton } from '../../ui/AnimatedButton';
 
 interface Props {
   config: Config;
-  editStageId: string;
+  editStageId?: string;
 }
 
 export class Editor extends React.Component<Props> {
