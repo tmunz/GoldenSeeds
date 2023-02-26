@@ -4,30 +4,34 @@
   right: 0;
   bottom: 0;
   left: 0;
-  &>* {
+
+  &>.canvas {
+    position: relative;
+    transition: left 1.2s ease;
+    transform: translate(-50%, 0);
+  }
+
+  &>.editor {
     position: absolute;
-    &.canvas {
-      top: 50%;
-      left: 50%;
-      transition: left 1.2s ease;
-      transform: translate(-50%, -50%);
-    }
-    &.editor {
-      top: 20px;
-      left: 10px;
-      bottom: 20px;
-      padding-left: 20px;
-    }
-    &.toolbar {
-      top: 20px;
-      right: 20px;
-    }
-    &.themer {
-      bottom: 20px;
-      right: 20px;
-      h1 {
-        text-align: right;
-      }
+    top: 20px;
+    left: 10px;
+    bottom: 20px;
+    padding-left: 20px;
+  }
+
+  &>.toolbar {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+
+  &>.themer {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+
+    h1 {
+      text-align: right;
     }
   }
 }

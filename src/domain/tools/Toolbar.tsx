@@ -29,7 +29,6 @@ export class Toolbar extends React.Component<Props> {
           <ConfigImporter
             onConfigChanged={(rawConfig) => {
               configService.setRawConfig(rawConfig);
-              animationService.animateDefault();
             }}
           />
           <ConfigExporter config={this.props.config} />

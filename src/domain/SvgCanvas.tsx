@@ -1,8 +1,11 @@
 import React from 'react';
+import ReactCSSTransitionReplace from 'react-css-transition-replace';
 
 import { Config } from './Config';
 import { SvgGeneratorResult } from './generator/SvgGenerator';
 import { svgGeneratorService } from './generator/SvgGeneratorService';
+
+import './SvgCanvas.styl';
 
 interface Props {
   config: Config;
@@ -34,18 +37,31 @@ export class SvgCanvas extends React.Component<Props> {
 
     return (
       <ErrorBoundary>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width={this.props.width}
-          height={this.props.height}
-          ref={(e) => (this.svgContent = e)}
-        >
-          <g
-            transform={this.centerAndScale(this.boundingBox(generatedStages), 200)}
+        <div className="svg-canvas">
+          <ReactCSSTransitionReplace
+            transitionName="cross-fade"
+            transitionEnterTimeout={1000}
+            transitionLeaveTimeout={1000}
           >
-            {content}
-          </g>
-        </svg>
+            <div 
+              className="svg-canvas-wrapper" 
+              key={this.props.config.stages.reduce((id, stage) => id + '_' + stage.id, '')}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width={this.props.width}
+                height={this.props.height}
+                ref={(e) => (this.svgContent = e)}
+              >
+                <g
+                  transform={this.centerAndScale(this.boundingBox(generatedStages), 200)}
+                >
+                  {content}
+                </g>
+              </svg>
+            </div>
+          </ReactCSSTransitionReplace>
+        </div>
       </ErrorBoundary>
     );
   }
