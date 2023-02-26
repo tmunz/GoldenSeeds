@@ -6,7 +6,7 @@ import { SvgGeneratorInput } from './SvgGeneratorInput';
 
 export class ColorInput extends SvgGeneratorInput<Color> {
   inputConfig(
-    stageId: number,
+    stageId: string,
     name: string,
     definition: ParamDefinition,
     state: StageState<Color>,

@@ -12,11 +12,12 @@ export class ConfigService {
   preconfigIndex$ = new BehaviorSubject<number>(0);
   config$ = new BehaviorSubject<Config>(this.convertRawToConfig(preconfigs[0]));
 
-  setConfigValue(stageId: number, id: string, rawValue: string) {
+  setConfigValue(stageId: string, id: string, rawValue: string) {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
-    nextConfig.stages[stageId].state[id] = converterService.convert(
-      config.stages[stageId].generator.definition[id].type,
+    const index = this.findIndexByStageId(stageId);
+    nextConfig.stages[index].state[id] = converterService.convert(
+      config.stages[index].generator.definition[id].type,
       rawValue,
     ) as any;
     this.config$.next(nextConfig);
@@ -62,6 +63,15 @@ export class ConfigService {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
     nextConfig.stages.push(new Stage(svgGeneratorRegistry.getDefaultGenerator()));
+    this.config$.next(nextConfig);
+  }
+
+  setAnimationValue(stageId: string, id?: string, rawValue?: string) {
+    typeof id === 'string' && typeof rawValue === 'string' && this.setConfigValue(stageId, id, rawValue);
+    const config = this.config$.value;
+    const nextConfig = { ...config, stages: [...config.stages] };
+    const stageIndex = this.findIndexByStageId(stageId);
+    nextConfig.stages[stageIndex] = {...nextConfig.stages[stageIndex], animatedId: id} as Stage;
     this.config$.next(nextConfig);
   }
 

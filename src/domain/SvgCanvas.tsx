@@ -3,7 +3,6 @@ import React from 'react';
 import { Config } from './Config';
 import { SvgGeneratorResult } from './generator/SvgGenerator';
 import { svgGeneratorService } from './generator/SvgGeneratorService';
-import { Stage } from './stage/Stage';
 
 interface Props {
   config: Config;

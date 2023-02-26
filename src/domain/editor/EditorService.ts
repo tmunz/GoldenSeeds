@@ -33,7 +33,7 @@ export class EditorService {
 
   getInputFieldConfiguration(
     type: ParamDefinitionType,
-    stageId: number,
+    stageId: string,
     name: string,
     definition: ParamDefinition,
     state: StageState<any>,

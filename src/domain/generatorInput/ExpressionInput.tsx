@@ -10,7 +10,7 @@ export class ExpressionInput extends SvgGeneratorInput<
   (n: number, items: number, itemSize: (n: number) => number) => number
 > {
   inputConfig = (
-    stageId: number,
+    stageId: string,
     name: string,
     definition: ParamDefinition,
     state: StageState<

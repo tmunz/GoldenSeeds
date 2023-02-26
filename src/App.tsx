@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { GoldenSeedsView } from './view/GoldenSeedsView';
 import { configService } from './domain/ConfigService';
 import { editorStateService } from './domain/editor/EditorStateService';
+import { animationService } from './domain/animation/AnimationService';
 
 export function App() {
   const [preconfigIndex, setPreconfigIndex] = useState();
@@ -19,6 +20,9 @@ export function App() {
     const editStageIdSubscription = editorStateService.editStageId$.subscribe(
       setEditStageId as any,
     );
+
+    animationService.animateDefault();
+    
     return () => {
       preconfigSubscription.unsubscribe();
       configSubscription.unsubscribe();

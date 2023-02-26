@@ -66,7 +66,7 @@ export class RegularShape implements SvgGenerator {
       svg: draw(config, prev.grid),
       boundingBox: {
         x: - Math.max(prev.boundingBox.w, itemsSize) / 2,
-        y: - Math.max(prev.boundingBox.w, itemsSize) / 2,
+        y: - Math.max(prev.boundingBox.h, itemsSize) / 2,
         w: Math.max(prev.boundingBox.w, itemsSize),
         h: Math.max(prev.boundingBox.h, itemsSize),
       },

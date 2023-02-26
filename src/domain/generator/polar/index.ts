@@ -43,10 +43,20 @@ export class PolarGrid implements SvgGenerator {
 
     const drawing = draw(config, prev.grid);
 
-    const minX = drawing.points.reduce((min, p) => Math.min(p[0], min), 0);
-    const maxX = drawing.points.reduce((max, p) => Math.max(p[0], max), 0);
-    const minY = drawing.points.reduce((min, p) => Math.min(p[1], min), 0);
-    const maxY = drawing.points.reduce((max, p) => Math.max(p[1], max), 0);
+    let minX = drawing.points.reduce((min, p) => Math.min(p[0], min), 0);
+    let maxX = drawing.points.reduce((max, p) => Math.max(p[0], max), 0);
+    let minY = drawing.points.reduce((min, p) => Math.min(p[1], min), 0);
+    let maxY = drawing.points.reduce((max, p) => Math.max(p[1], max), 0);
+
+    // stabilize center if all prev points are centered
+    if (prev.grid.reduce((b: boolean, p: number[]) => b && p[0] === 0 && p[1] === 0, true)) {
+      const extremX = Math.max(-minX, maxX);
+      const extremY = Math.max(-minY, maxY);
+      minX = -extremX;
+      maxX = extremX;
+      minY = -extremY;
+      maxY = extremY;
+    }
 
     const width = maxX - minX;
     const height = maxY - minY;

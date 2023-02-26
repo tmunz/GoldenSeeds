@@ -1,6 +1,6 @@
 {
   "name": "golden-seeds",
-  "version": "2.0.0-alpha.8",
+  "version": "2.0.0-alpha.9",
   "repository": "https://github.com/tmunz/GoldenSeeds",
   "description": "",
   "main": "index.js",
@@ -30,6 +30,7 @@
     "@types/jest": "^24.9.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
+    "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
     "@webpack-cli/serve": "^2.0.1",

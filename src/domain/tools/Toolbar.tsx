@@ -7,8 +7,10 @@ import { PreconfigSelector } from './PreconfigSelector';
 import { Input } from '../../ui/input/Input';
 import { Config } from '../Config';
 import { configService } from '../ConfigService';
+import { animationService } from '../animation/AnimationService';
 
 import './Toolbar.styl';
+
 
 interface Props {
   config: Config;
@@ -25,9 +27,10 @@ export class Toolbar extends React.Component<Props> {
         <PreconfigSelector preconfigIndex={this.props.preconfigIndex} />
         <div className="actions">
           <ConfigImporter
-            onConfigChanged={(rawConfig) =>
-              configService.setRawConfig(rawConfig)
-            }
+            onConfigChanged={(rawConfig) => {
+              configService.setRawConfig(rawConfig);
+              animationService.animateDefault();
+            }}
           />
           <ConfigExporter config={this.props.config} />
           <SvgExporter name={name} getSvg={() => this.props.getSvg()} />

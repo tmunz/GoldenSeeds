@@ -2,21 +2,25 @@
   "meta": {
     "name": "turbine"
   },
-  "stages": [{
-    "type": "polar",
-    "color": "transparent",
-    "items": "34",
-    "angle": "0",
-    "distance": "0"
-  }, {
-    "type": "regular-shape",
-    "style": "stroke",
-    "corners": "10",
-    "color": "gold",
-    "angle": "n",
-    "size": "Math.pow(n, 1 / goldenRatio)",
-    "ratio": "1 / Math.pow(goldenRatio, 2)",
-    "cutRatio0": "0",
-    "cutRatio1": "0"
-  }]
+  "stages": [
+    {
+      "type": "polar",
+      "color": "transparent",
+      "strokeWidth": "1",
+      "items": "34",
+      "angle": "0",
+      "distance": "0"
+    },
+    {
+      "type": "regular-shape",
+      "color": "gold",
+      "style": "stroke",
+      "corners": "9",
+      "angle": "n-items",
+      "size": "Math.pow(n, 1 / goldenRatio)",
+      "ratio": "1 / Math.pow(goldenRatio, 2)",
+      "cutRatio0": "0",
+      "cutRatio1": "0"
+    }
+  ]
 }

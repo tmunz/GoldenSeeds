@@ -5,14 +5,14 @@ import { Props as EditorInputProps } from '../editor/EditorInput';
 
 export abstract class SvgGeneratorInput<T> {
   protected abstract inputConfig(
-    stageId: number,
+    stageId: string,
     name: string,
     definition: ParamDefinition,
     state: StageState<T>,
   ): Partial<EditorInputProps> & { inputType: InputType };
 
   getInputFieldConfiguration(
-    stageId: number,
+    stageId: string,
     name: string,
     definition: ParamDefinition,
     state: StageState<T>,

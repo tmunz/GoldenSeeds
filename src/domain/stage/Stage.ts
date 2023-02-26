@@ -1,6 +1,6 @@
 import { converterService } from '../converter/ConverterService';
 import { SvgGenerator } from '../generator/SvgGenerator';
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 export interface StageState<T> {
   rawValue: string;
@@ -9,10 +9,11 @@ export interface StageState<T> {
 }
 
 export class Stage {
-  
+
   id: string
   generator: SvgGenerator;
   state: { [key: string]: StageState<any> };
+  animatedId?: string;
 
   constructor(generator: SvgGenerator, state?: { [key: string]: string }, stageId: string = uuid()) {
     this.id = stageId;

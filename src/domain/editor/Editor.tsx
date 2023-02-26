@@ -5,7 +5,7 @@ import { InputType } from '../../ui/input/Input';
 import { Collapsable } from '../../ui/Collapsable';
 import { editorStateService } from './EditorStateService';
 import { configService } from '../ConfigService';
-import { StageState } from '../stage/Stage';
+import { StageState, Stage } from '../stage/Stage';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 import { EditorInput } from './EditorInput';
 import { editorService } from './EditorService';
@@ -87,7 +87,7 @@ export class Editor extends React.Component<Props> {
                   />
                   {Object.keys(stage.state).map((key: string) =>
                     this.generateEntryModifier(
-                      i,
+                      stage,
                       key,
                       stage.generator.definition[key],
                       stage.state[key],
@@ -111,14 +111,14 @@ export class Editor extends React.Component<Props> {
   }
 
   private generateEntryModifier(
-    stageId: number,
+    stage: Stage,
     id: string,
     definition: ParamDefinition,
     state: StageState<any>,
   ) {
     const props = editorService.getInputFieldConfiguration(
       definition.type,
-      stageId,
+      stage.id,
       id,
       definition,
       state,
@@ -130,13 +130,15 @@ export class Editor extends React.Component<Props> {
           {...props}
           key={id}
           onChange={(rawValue: any) =>
-            configService.setConfigValue(stageId, id, rawValue)
+            configService.setConfigValue(stage.id, id, rawValue)
           }
         />
         {definition.animateable &&
           <AnimationController
-            target={state.value}
-            onNewFrame={v => configService.setConfigValue(stageId, id, "" + v)}
+            stageId={stage.id}
+            id={id}
+            value={state.value}
+            currentlyAnimating={id === stage.animatedId}
           />
         }
       </div>
