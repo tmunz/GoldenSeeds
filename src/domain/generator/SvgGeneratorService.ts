@@ -13,7 +13,7 @@ export class SvgGeneratorService {
 
   getResult(stage: Stage, prev: SvgGeneratorResult = SvgGeneratorService.DEFAULT_RESULT): SvgGeneratorResult { 
     const stageConfig = this.convertToValue(stage.state);
-    const stageKey = JSON.stringify({ stage, prevGrid: prev.grid, prevBoundingBox: prev.boundingBox });
+    const stageKey = JSON.stringify({ stage: stage.state, prevGrid: prev.grid, prevBoundingBox: prev.boundingBox });
     if (!this.cache.has(stageKey)) {
       this.cache.set(stageKey, stage.generator.generate(stageConfig, prev));
     }

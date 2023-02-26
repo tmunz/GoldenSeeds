@@ -60,7 +60,7 @@ export class RegularShape implements SvgGenerator {
 
   generate = (config: RegularShapeConfig, prev: SvgGeneratorResult) => {
     const items = prev.grid.length;
-    const itemsSize = config.size(items-1, items);
+    const itemsSize = config.size(items, items);
     return {
       grid: prev.grid,
       svg: draw(config, prev.grid),

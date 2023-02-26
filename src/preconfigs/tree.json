@@ -9,7 +9,7 @@
       "depth": "13",
       "splitAngle": "25",
       "splitVariation": "0.0",
-      "splitProbability": "0.9",
+      "splitProbability": "0.95",
       "lengthConservation": "0.8",
       "lengthVariation": "1",
       "seed": "22"

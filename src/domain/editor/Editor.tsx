@@ -11,7 +11,7 @@ import { EditorInput } from './EditorInput';
 import { editorService } from './EditorService';
 import { ParamDefinition } from '../generator/SvgGenerator';
 import { PlusNone, PlusRegular, PlusRotated } from '../../ui/icon/Plus';
-import { AnimationController } from '../tools/AnimationController';
+import { AnimationController } from '../animation/AnimationController';
 
 import './Editor.styl';
 import { AnimatedButton } from '../../ui/AnimatedButton';
@@ -97,7 +97,7 @@ export class Editor extends React.Component<Props> {
               </div>
             );
           })}
-          <div className='stage-header'>
+          <div className="stage-header" key="add">
             <a target="_blank" onClick={() => configService.addStage()}>
               <AnimatedButton
                 title="add"
@@ -125,10 +125,9 @@ export class Editor extends React.Component<Props> {
     );
 
     return (
-      <div className='editor-item'>
+      <div className='editor-item' key={id}>
         <EditorInput
           {...props}
-          key={id}
           onChange={(rawValue: any) =>
             configService.setConfigValue(stage.id, id, rawValue)
           }

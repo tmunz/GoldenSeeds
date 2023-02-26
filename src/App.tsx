@@ -21,8 +21,11 @@ export function App() {
       setEditStageId as any,
     );
 
-    animationService.animateDefault();
-    
+    setTimeout(() => {
+      configService.selectPreconfig(0);
+      animationService.animateDefault();
+    }, 500);
+
     return () => {
       preconfigSubscription.unsubscribe();
       configSubscription.unsubscribe();

@@ -9,8 +9,8 @@ import { Stage } from './stage/Stage';
 
 export class ConfigService {
 
-  preconfigIndex$ = new BehaviorSubject<number>(0);
-  config$ = new BehaviorSubject<Config>(this.convertRawToConfig(preconfigs[0]));
+  preconfigIndex$ = new BehaviorSubject<number>(-1);
+  config$ = new BehaviorSubject<Config>( { meta: { name: '' }, stages: [] });
 
   setConfigValue(stageId: string, id: string, rawValue: string) {
     const config = this.config$.value;
@@ -23,7 +23,7 @@ export class ConfigService {
     this.config$.next(nextConfig);
   }
 
-  setRawConfig(configRaw: any, preconfigIndex: number = 0) {
+  setRawConfig(configRaw: any, preconfigIndex: number = -1) {
     this.preconfigIndex$.next(preconfigIndex);
     this.config$.next(this.convertRawToConfig(configRaw));
   }

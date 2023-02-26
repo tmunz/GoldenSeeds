@@ -16,7 +16,7 @@
       "color": "gold",
       "style": "stroke",
       "corners": "9",
-      "angle": "n-items",
+      "angle": "n",
       "size": "Math.pow(n, 1 / goldenRatio)",
       "ratio": "1 / Math.pow(goldenRatio, 2)",
       "cutRatio0": "0",
