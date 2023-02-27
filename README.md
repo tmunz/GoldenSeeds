@@ -1,6 +1,6 @@
 # GoldenSeeds SVG Generator
 Application to generate SVGs based on mathematical rules.
-(try it yourself)[https://tmunz.github.io/GoldenSeeds/] but be aware that v2.0 is currently in alpha state.
+[try it yourself](https://tmunz.github.io/GoldenSeeds/) but be aware that v2.0 is currently in alpha state.
 
 ## Features
 - open / save configurations
@@ -11,7 +11,7 @@ Application to generate SVGs based on mathematical rules.
 coming soon ;-)
 
 ## Issues
-see (Open Issues)[https://github.com/tmunz/GoldenSeeds/issues]
+see [Open Issues](https://github.com/tmunz/GoldenSeeds/issues)
 
 ## DEV Notes
 developed on Node 18.14.1
