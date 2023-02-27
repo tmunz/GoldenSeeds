@@ -12,9 +12,10 @@ import { editorService } from './EditorService';
 import { ParamDefinition } from '../generator/SvgGenerator';
 import { PlusNone, PlusRegular, PlusRotated } from '../../ui/icon/Plus';
 import { AnimationController } from '../animation/AnimationController';
+import { AnimatedButton } from '../../ui/AnimatedButton';
 
 import './Editor.styl';
-import { AnimatedButton } from '../../ui/AnimatedButton';
+
 
 interface Props {
   config: Config;

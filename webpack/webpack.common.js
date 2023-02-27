@@ -1,6 +1,8 @@
 const path = require("path");
+const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const package = require('../package.json');
 
 module.exports = {
   entry: {
@@ -46,6 +48,11 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "..", "./public/index.html"),
+    }),
+    new webpack.DefinePlugin({
+      'process.env':{
+        'APP_VERSION': JSON.stringify(package.version),
+      }
     }),
   ],
   resolve: {

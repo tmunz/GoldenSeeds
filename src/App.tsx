@@ -40,11 +40,14 @@ export function App() {
   }, []);
 
   return (
-    <GoldenSeedsView
-      preconfigIndex={preconfigIndex}
-      config={config}
-      svgContent={svgContent}
-      editStageId={editStageId}
-    />
+    <React.Fragment>
+      <GoldenSeedsView
+        preconfigIndex={preconfigIndex}
+        config={config}
+        svgContent={svgContent}
+        editStageId={editStageId}
+      />
+      {process.env.APP_VERSION}
+    </React.Fragment>
   );
 }

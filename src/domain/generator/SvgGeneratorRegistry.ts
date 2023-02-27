@@ -9,7 +9,7 @@ export class SvgGeneratorRegistry {
   private registry: Map<string, () => SvgGenerator> = new Map();
 
   constructor() {
-    const classes = [CartesianGrid, PolarGrid, RegularShape, Voronoi, Tree];
+    const classes = [RegularShape, PolarGrid, CartesianGrid, Tree, Voronoi];
     classes.forEach((c: any) => this.register(c.type, () => new c()));
   }
 
