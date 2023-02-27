@@ -15,5 +15,3 @@ export const ArrowFlat: number[][] = [
   [50, 60],
   [90, 40],
 ];
-
-

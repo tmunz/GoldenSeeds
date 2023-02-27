@@ -1,6 +1,7 @@
 import { MathUtils } from '../../../utils/MathUtils';
 import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
 import { draw, PolarConfig } from './PolarDrawer';
+import { PointUtils } from '../../../utils/PointUtils';
 
 export class PolarGrid implements SvgGenerator {
   static type = 'polar';
@@ -39,39 +40,33 @@ export class PolarGrid implements SvgGenerator {
     },
   };
 
-  generate = (config: PolarConfig, prev: SvgGeneratorResult): SvgGeneratorResult => {
-
+  generate = (
+    config: PolarConfig,
+    prev: SvgGeneratorResult,
+  ): SvgGeneratorResult => {
     const drawing = draw(config, prev.grid);
 
-    let minX = drawing.points.reduce((min, p) => Math.min(p[0], min), 0);
-    let maxX = drawing.points.reduce((max, p) => Math.max(p[0], max), 0);
-    let minY = drawing.points.reduce((min, p) => Math.min(p[1], min), 0);
-    let maxY = drawing.points.reduce((max, p) => Math.max(p[1], max), 0);
+    let drawingBoundingBox = PointUtils.boundingBox(drawing.points);
 
     // stabilize center if all prev points are centered
-    if (prev.grid.reduce((b: boolean, p: number[]) => b && p[0] === 0 && p[1] === 0, true)) {
-      const extremX = Math.max(-minX, maxX);
-      const extremY = Math.max(-minY, maxY);
-      minX = -extremX;
-      maxX = extremX;
-      minY = -extremY;
-      maxY = extremY;
+    if (
+      prev.grid.reduce(
+        (b: boolean, p: number[]) => b && p[0] === 0 && p[1] === 0,
+        true,
+      )
+    ) {
+      const extremeX = Math.max(-drawingBoundingBox.min[0], drawingBoundingBox.max[0]);
+      const extremeY = Math.max(-drawingBoundingBox.min[1], drawingBoundingBox.max[1]);
+      drawingBoundingBox = {
+        min: [-extremeX, -extremeY],
+        max: [extremeX, extremeY]
+      };
     }
-
-    const width = maxX - minX;
-    const height = maxY - minY;
-
-    const boundingBox = {
-      x: width === 0 ? prev.boundingBox.x : minX,
-      y: height === 0 ? prev.boundingBox.y : minY,
-      w: width === 0 ? prev.boundingBox.w : width,
-      h: height === 0 ? prev.boundingBox.h : height,
-    };
 
     return {
       grid: drawing.points,
       svg: drawing.svg,
-      boundingBox,
+      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, drawingBoundingBox]),
     };
   };
 }

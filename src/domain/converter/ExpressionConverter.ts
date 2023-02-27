@@ -3,8 +3,7 @@ import { Converter } from './Converter';
 
 export class ExpressionConverter extends Converter<
   (n: number, items: number, itemSize: (n: number) => number) => number
-  > {
-
+> {
   protected convertFromRaw = (
     rawValue: string,
   ): ((

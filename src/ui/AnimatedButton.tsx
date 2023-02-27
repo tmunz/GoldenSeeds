@@ -19,7 +19,6 @@ interface State {
 }
 
 export class AnimatedButton extends React.Component<Props, State> {
-
   static DIRECTION_UP = 180;
   static DIRECTION_DOWN = 0;
   static DIRECTION_LEFT = 90;
@@ -45,7 +44,7 @@ export class AnimatedButton extends React.Component<Props, State> {
         <AnimatedIcon
           points={this.props.points ?? [ArrowNone, ArrowFlat, ArrowRegular]}
           index={this.props.disabled ? 0 : this.state.hover ? 2 : 1}
-          rotation={this.props.rotation ?? 0 }
+          rotation={this.props.rotation ?? 0}
         />
       </div>
     );

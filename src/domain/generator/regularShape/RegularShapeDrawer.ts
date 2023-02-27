@@ -1,5 +1,7 @@
 import { DrawStyle } from '../../../datatypes/DrawStyle';
 import { Color } from '../../../datatypes/Color';
+import { BoundingBox } from '../../../datatypes/BoundingBox';
+import { PointUtils } from '../../../utils/PointUtils';
 
 export interface RegularShapeConfig {
   style: DrawStyle;
@@ -26,25 +28,31 @@ interface ItemProps {
   cutRatio1: number;
 }
 
-export function draw(config: RegularShapeConfig, grid: number[][]) {
+export function draw(config: RegularShapeConfig, grid: number[][]): { svg: string, boundingBox: BoundingBox } {
   const items: number = grid.length;
-  return grid
-    .map((position: number[], i: number) => {
-      const n = i + 1;
-      const itemSize: number = config.size(n, items);
-      const elementStyle = style(n, config.color, config.style);
-      if (0 < config.corners) {
-        const itemProps = getItemProps(config, n, items, itemSize);
-        return drawRegularShape(position, itemProps, elementStyle);
-      } else {
-        const cutRatio1 = config.cutRatio1(n, items, itemSize);
-        const startAngle = 360 * cutRatio1 + config.angle(n, items, itemSize);
-        const angle =
-          360 * (1 - (cutRatio1 - config.cutRatio0(n, items, itemSize)));
-        return drawArc(position, i, itemSize, startAngle, angle, elementStyle);
-      }
-    })
-    .join('');
+  return grid.reduce((agg, position: number[], i: number) => {
+    const n = i + 1;
+    const itemSize: number = config.size(n, items);
+    const elementStyle = style(n, config.color, config.style);
+    let svg = '';
+    if (0 < config.corners) {
+      const itemProps = getItemProps(config, n, items, itemSize);
+      svg = drawRegularShape(position, itemProps, elementStyle);
+    } else {
+      const cutRatio1 = config.cutRatio1(n, items, itemSize);
+      const startAngle = 360 * cutRatio1 + config.angle(n, items, itemSize);
+      const angle = 360 * (1 - (cutRatio1 - config.cutRatio0(n, items, itemSize)));
+      svg = drawArc(position, i, itemSize, startAngle, angle, elementStyle);
+    }
+    const boundingBox = {
+      min: [position[0] - itemSize / 2, position[1] - itemSize / 2],
+      max: [position[0] + itemSize / 2, position[1] + itemSize / 2],
+    }
+    return {
+      svg: agg.svg + svg,
+      boundingBox: PointUtils.combineBoundingBoxes([agg.boundingBox, boundingBox]),
+    };
+  }, { svg: '', boundingBox: PointUtils.DEFAULT_BOUNDING_BOX });
 }
 
 function getItemProps(
@@ -63,7 +71,8 @@ function getItemProps(
 
 function isSamePosition(pA: number[], pB: number[]): boolean {
   return [0, 1].reduce(
-    (b: boolean, t: number) => b && pA && pB && Math.abs(pA[t] - pB[t]) < 0.0001 /*tolerance*/,
+    (b: boolean, t: number) =>
+      b && pA && pB && Math.abs(pA[t] - pB[t]) < 0.0001 /*tolerance*/,
     true,
   );
 }
@@ -182,7 +191,7 @@ function drawArc(
   if (angle <= -360 || 360 <= angle) {
     return `<circle ${style} cx="${center[0]}" cy="${center[1]}" r="${
       size / 2
-    }" />`;
+      }" />`;
   } else {
     const r = size / 2;
     const startRad = (startAngle / 180) * Math.PI;
@@ -197,7 +206,7 @@ function drawArc(
     ];
     return `<path ${style} d="${`M ${pointAsSvg(startPt)} A ${r},${r} 0 ${
       angle % 360 < 180 ? 0 : 1
-    }  1 ${pointAsSvg(endPt)}`}" />`;
+      }  1 ${pointAsSvg(endPt)}`}" />`;
   }
 }
 

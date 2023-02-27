@@ -9,18 +9,25 @@ export interface StageState<T> {
 }
 
 export class Stage {
-
-  id: string
+  id: string;
   generator: SvgGenerator;
   state: { [key: string]: StageState<any> };
   animatedId?: string;
 
-  constructor(generator: SvgGenerator | null, state?: { [key: string]: string }, stageId: string = uuid()) {
+  constructor(
+    generator: SvgGenerator | null,
+    state?: { [key: string]: string },
+    stageId: string = uuid(),
+  ) {
     this.id = stageId;
     this.generator = generator ?? {
       type: 'default',
       definition: {},
-      generate: (props: any, prev: SvgGeneratorResult) => ({ grid: [], svg: null, boundingBox: prev.boundingBox })
+      generate: (props: any, prev: SvgGeneratorResult) => ({
+        grid: [],
+        svg: null,
+        boundingBox: prev.boundingBox,
+      }),
     };
     this.state = this.initialState(state);
   }

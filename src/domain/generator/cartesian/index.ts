@@ -1,5 +1,6 @@
 import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
 import { CartesianConfig, draw } from './CartesianDrawer';
+import { PointUtils } from '../../../utils/PointUtils';
 
 export class CartesianGrid implements SvgGenerator {
   static type = 'cartesian';
@@ -39,30 +40,16 @@ export class CartesianGrid implements SvgGenerator {
     },
   };
 
-  generate = (config: CartesianConfig, prev: SvgGeneratorResult): SvgGeneratorResult => {
-
+  generate = (
+    config: CartesianConfig,
+    prev: SvgGeneratorResult,
+  ): SvgGeneratorResult => {
     const drawing = draw(config, prev.grid);
-
-    const minX = drawing.points.reduce((min, p) => Math.min(p[0], min), 0);
-    const maxX = drawing.points.reduce((max, p) => Math.max(p[0], max), 0);
-    const minY = drawing.points.reduce((min, p) => Math.min(p[1], min), 0);
-    const maxY = drawing.points.reduce((max, p) => Math.max(p[1], max), 0);
-
-    const width = maxX - minX;
-    const height = maxY - minY;
-
-    const boundingBox = {
-      x: width === 0 ? prev.boundingBox.x : minX,
-      y: height === 0 ? prev.boundingBox.y : minY ,
-      w: width === 0 ? prev.boundingBox.w : width,
-      h: height === 0 ? prev.boundingBox.h : height,
-    };
 
     return {
       grid: drawing.points,
       svg: drawing.svg,
-      boundingBox,
+      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, PointUtils.boundingBox(drawing.points)]),
     };
   };
 }
-

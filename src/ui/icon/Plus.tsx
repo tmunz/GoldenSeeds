@@ -21,4 +21,3 @@ export const PlusRotated: number[][] = [
   [50, 90],
   [50, 10],
 ];
-

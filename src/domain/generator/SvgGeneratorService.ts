@@ -1,19 +1,26 @@
 import { SvgGeneratorResult } from './SvgGenerator';
 import { Stage, StageState } from '../stage/Stage';
+import { PointUtils } from '../../utils/PointUtils';
 
 export class SvgGeneratorService {
-
   static DEFAULT_RESULT: SvgGeneratorResult = {
     grid: [[0, 0]],
     svg: null,
-    boundingBox: { x: -0.0005, y: -0.0005, w: 0.001, h: 0.001 },
+    boundingBox: PointUtils.DEFAULT_BOUNDING_BOX,
   };
 
   private cache: Map<string, SvgGeneratorResult> = new Map();
 
-  getResult(stage: Stage, prev: SvgGeneratorResult = SvgGeneratorService.DEFAULT_RESULT): SvgGeneratorResult { 
+  getResult(
+    stage: Stage,
+    prev: SvgGeneratorResult = SvgGeneratorService.DEFAULT_RESULT,
+  ): SvgGeneratorResult {
     const stageConfig = this.convertToValue(stage.state);
-    const stageKey = JSON.stringify({ stage: stage.state, prevGrid: prev.grid, prevBoundingBox: prev.boundingBox });
+    const stageKey = JSON.stringify({
+      stage: stage.state,
+      prevGrid: prev.grid,
+      prevBoundingBox: prev.boundingBox,
+    });
     if (!this.cache.has(stageKey)) {
       this.cache.set(stageKey, stage.generator.generate(stageConfig, prev));
     }
@@ -29,7 +36,6 @@ export class SvgGeneratorService {
       {},
     );
   }
-
 }
 
 export const svgGeneratorService = new SvgGeneratorService();

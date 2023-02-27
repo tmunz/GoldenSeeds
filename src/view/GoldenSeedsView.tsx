@@ -22,7 +22,6 @@ interface State {
 }
 
 export class GoldenSeedsView extends React.Component<Props, State> {
-
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -77,7 +76,11 @@ export class GoldenSeedsView extends React.Component<Props, State> {
     this.setState(this.dimension);
     svgService.width = this.dimension.width * 1.04; // must be slightly larger, because of movement
     svgService.height = this.state.height;
-    svgService.setSvgContent(this.dimension.width, this.dimension.height, this.props.config?.stages);
+    svgService.setSvgContent(
+      this.dimension.width,
+      this.dimension.height,
+      this.props.config?.stages,
+    );
   }
 
   private get dimension(): { width: number; height: number } {
@@ -85,7 +88,10 @@ export class GoldenSeedsView extends React.Component<Props, State> {
   }
 }
 
-class ErrorBoundary extends React.Component<React.ComponentProps<any>, { error: boolean }> {
+class ErrorBoundary extends React.Component<
+  React.ComponentProps<any>,
+  { error: boolean }
+> {
   constructor(props: {}) {
     super(props);
     this.state = { error: false };
@@ -96,7 +102,7 @@ class ErrorBoundary extends React.Component<React.ComponentProps<any>, { error: 
   }
 
   componentDidCatch() {
-    console.log("hier")
+    console.log('hier');
     this.setState({ error: true });
   }
 
@@ -104,7 +110,10 @@ class ErrorBoundary extends React.Component<React.ComponentProps<any>, { error: 
     if (this.state.error) {
       return (
         <React.Fragment>
-          <div className="error">Something went wrong - this is currently the alpha version of v2.0; work in progress :-(</div>
+          <div className="error">
+            Something went wrong - this is currently the alpha version of v2.0;
+            work in progress :-(
+          </div>
           <a onClick={() => location.reload()}>continue</a>
         </React.Fragment>
       );

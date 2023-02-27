@@ -12,19 +12,31 @@ export interface CartesianConfig {
 export function draw(
   config: CartesianConfig,
   grid: number[][],
-): { svg: string, points: number[][] } {
+): { svg: string; points: number[][] } {
   return grid.reduce(
     (agg, p) => {
-      const coordinates = calculatePolarGrid(p, config.items, config.x, config.xDistance, config.yDistance);
-      const svg = coordinates.map((coordinate: number[], j: number) => {
-        const rightIndex = j + 1;
-        const downIndex = j + config.x;
-        const rightLine = rightIndex % config.x !== 0 && rightIndex < config.items ? drawLine(
-          coordinate, coordinates[rightIndex], config, j * 2) : '';
-        const downLine = downIndex < config.items ? drawLine(
-          coordinate, coordinates[downIndex], config, j * 2 + 1) : '';
-        return rightLine + downLine;
-      }).join('');
+      const coordinates = calculatePolarGrid(
+        p,
+        config.items,
+        config.x,
+        config.xDistance,
+        config.yDistance,
+      );
+      const svg = coordinates
+        .map((coordinate: number[], j: number) => {
+          const rightIndex = j + 1;
+          const downIndex = j + config.x;
+          const rightLine =
+            rightIndex % config.x !== 0 && rightIndex < config.items
+              ? drawLine(coordinate, coordinates[rightIndex], config, j * 2)
+              : '';
+          const downLine =
+            downIndex < config.items
+              ? drawLine(coordinate, coordinates[downIndex], config, j * 2 + 1)
+              : '';
+          return rightLine + downLine;
+        })
+        .join('');
       return {
         svg: agg.svg + svg,
         points: [...agg.points, ...coordinates],
@@ -46,14 +58,19 @@ function calculatePolarGrid(
     const calcX = i % x;
     const calcY = Math.floor(i / x);
     grid.push([
-      origin[0] + (calcX * xDistance(calcX, x)), 
-      origin[1] + (calcY * yDistance(calcY, Math.floor(items / x)))
+      origin[0] + calcX * xDistance(calcX, x),
+      origin[1] + calcY * yDistance(calcY, Math.floor(items / x)),
     ]);
   }
   return grid;
 }
 
-function drawLine(from: number[], to: number[], config: CartesianConfig, i: number) {
+function drawLine(
+  from: number[],
+  to: number[],
+  config: CartesianConfig,
+  i: number,
+) {
   return `<line
       x1="${from[0]}"
       y1="${from[1]}"
@@ -62,5 +79,5 @@ function drawLine(from: number[], to: number[], config: CartesianConfig, i: numb
       stroke="${config.color.toString(i)}"
       stroke-width="${config.strokeWidth(i, config.items)}"
       vector-effect="non-scaling-stroke"
-    />`
+    />`;
 }

@@ -11,7 +11,6 @@ interface Props {
 }
 
 export class SvgCanvas extends React.Component<Props> {
-
   render() {
     return (
       <div className="svg-canvas">
@@ -20,9 +19,12 @@ export class SvgCanvas extends React.Component<Props> {
           transitionEnterTimeout={1000}
           transitionLeaveTimeout={1000}
         >
-          <div 
-            className="svg-canvas-wrapper" 
-            key={this.props.config.stages.reduce((id, stage) => id + '_' + stage.id, '')}
+          <div
+            className="svg-canvas-wrapper"
+            key={this.props.config.stages.reduce(
+              (id, stage) => id + '_' + stage.id,
+              '',
+            )}
             dangerouslySetInnerHTML={{ __html: this.props.svgContent ?? '' }}
           />
         </ReactCSSTransitionReplace>

@@ -2,6 +2,7 @@ import { DrawStyle } from '../../../datatypes/DrawStyle';
 import { MathUtils } from '../../../utils/MathUtils';
 import { draw, RegularShapeConfig } from './RegularShapeDrawer';
 import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
+import { PointUtils } from '../../../utils/PointUtils';
 
 export class RegularShape implements SvgGenerator {
   static type = 'regular-shape';
@@ -59,17 +60,12 @@ export class RegularShape implements SvgGenerator {
   };
 
   generate = (config: RegularShapeConfig, prev: SvgGeneratorResult) => {
-    const items = prev.grid.length;
-    const itemsSize = config.size(items, items);
+    const regularShape = draw(config, prev.grid);
+
     return {
       grid: prev.grid,
-      svg: draw(config, prev.grid),
-      boundingBox: {
-        x: - Math.max(prev.boundingBox.w, itemsSize) / 2,
-        y: - Math.max(prev.boundingBox.h, itemsSize) / 2,
-        w: Math.max(prev.boundingBox.w, itemsSize),
-        h: Math.max(prev.boundingBox.h, itemsSize),
-      },
+      svg: regularShape.svg,
+      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, regularShape.boundingBox]),
     };
   };
 }

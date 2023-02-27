@@ -1,6 +1,4 @@
-interface BoundingBox {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
+export interface BoundingBox {
+  min: number[];
+  max: number[];
 }

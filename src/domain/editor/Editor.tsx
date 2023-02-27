@@ -16,14 +16,12 @@ import { AnimationController } from '../animation/AnimationController';
 import './Editor.styl';
 import { AnimatedButton } from '../../ui/AnimatedButton';
 
-
 interface Props {
   config: Config;
   editStageId?: string;
 }
 
 export class Editor extends React.Component<Props> {
-
   render() {
     return (
       <div className="editor">
@@ -33,34 +31,46 @@ export class Editor extends React.Component<Props> {
             const types = svgGeneratorRegistry.types;
             const editMode = this.props.editStageId === stageId;
             return (
-              <div
-                key={stageId}
-                className="stage"
-                id={'stage-' + stageId}
-              >
-                <div className='stage-header'>
+              <div key={stageId} className="stage" id={'stage-' + stageId}>
+                <div className="stage-header">
                   <h1
                     className="action"
-                    onClick={() => editorStateService.setEditMode(editMode ? null : stageId)}
+                    onClick={() =>
+                      editorStateService.setEditMode(editMode ? null : stageId)
+                    }
                   >
                     {stage.generator.type}
                   </h1>
                   <div className="controls">
-                    <a target="_blank" onClick={() => 0 < i && configService.swapStages(i, i - 1)}>
+                    <a
+                      target="_blank"
+                      onClick={() =>
+                        0 < i && configService.swapStages(i, i - 1)
+                      }
+                    >
                       <AnimatedButton
                         title="upmove"
                         rotation={AnimatedButton.DIRECTION_UP}
                         disabled={!(0 < i)}
                       />
                     </a>
-                    <a target="_blank" onClick={() => i < this.props.config.stages.length - 1 && configService.swapStages(i, i + 1)}>
+                    <a
+                      target="_blank"
+                      onClick={() =>
+                        i < this.props.config.stages.length - 1 &&
+                        configService.swapStages(i, i + 1)
+                      }
+                    >
                       <AnimatedButton
                         title="downmove"
                         rotation={AnimatedButton.DIRECTION_DOWN}
                         disabled={!(i < this.props.config.stages.length - 1)}
                       />
                     </a>
-                    <a target="_blank" onClick={() => configService.deleteStage(stageId)}>
+                    <a
+                      target="_blank"
+                      onClick={() => configService.deleteStage(stageId)}
+                    >
                       <AnimatedButton
                         title="remove"
                         points={[PlusNone, PlusRegular, PlusRotated]}
@@ -125,21 +135,21 @@ export class Editor extends React.Component<Props> {
     );
 
     return (
-      <div className='editor-item' key={id}>
+      <div className="editor-item" key={id}>
         <EditorInput
           {...props}
           onChange={(rawValue: any) =>
             configService.setConfigValue(stage.id, id, rawValue)
           }
         />
-        {definition.animateable &&
+        {definition.animateable && (
           <AnimationController
             stageId={stage.id}
             id={id}
             value={state.value}
             currentlyAnimating={id === stage.animatedId}
           />
-        }
+        )}
       </div>
     );
   }

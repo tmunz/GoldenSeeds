@@ -67,7 +67,8 @@ export class Tree {
           seed++;
           if (1 - config.splitProbability <= random(0, 1, seed)) {
             const branchInRange = i * branchAmount - branchAmount / 2;
-            const relativeAngle = branchInRange * ((config.splitAngle * Math.PI) / 180);
+            const relativeAngle =
+              branchInRange * ((config.splitAngle * Math.PI) / 180);
             const splitVariation = random(
               -config.splitVariation / 2,
               config.splitVariation / 2,
@@ -75,8 +76,15 @@ export class Tree {
             );
             const angle = currentNode.angle + relativeAngle + splitVariation;
 
-            const baseLength = Math.pow(config.lengthConservation, currentNode.level);
-            const lengthVariation = random(1 - config.lengthVariation, 1, seed + 500);
+            const baseLength = Math.pow(
+              config.lengthConservation,
+              currentNode.level,
+            );
+            const lengthVariation = random(
+              1 - config.lengthVariation,
+              1,
+              seed + 500,
+            );
             const length = baseLength * lengthVariation;
 
             const point = {

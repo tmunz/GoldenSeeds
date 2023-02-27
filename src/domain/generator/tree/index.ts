@@ -1,6 +1,7 @@
 import { MathUtils } from '../../../utils/MathUtils';
 import { TreeConfig, draw } from './TreeDrawer';
 import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
+import { PointUtils } from '../../../utils/PointUtils';
 
 export class Tree implements SvgGenerator {
   static type = 'tree';
@@ -62,28 +63,14 @@ export class Tree implements SvgGenerator {
   };
 
   generate = (config: TreeConfig, prev: SvgGeneratorResult) => {
-
     const drawing = draw(config, prev.grid);
 
-    const minX = drawing.points.reduce((min, p) => Math.min(p.x, min), 0);
-    const maxX = drawing.points.reduce((max, p) => Math.max(p.x, max), 0);
-    const minY = drawing.points.reduce((min, p) => Math.min(p.y, min), 0);
-    const maxY = drawing.points.reduce((max, p) => Math.max(p.y, max), 0);
-
-    const width = maxX - minX;
-    const height = maxY - minY;
-
-    const boundingBox = {
-      x: minX,
-      y: minY,
-      w: width,
-      h: height,
-    };
-
     return {
-      grid: drawing.points.map(p => [p.x, p.y]),
+      grid: drawing.points.map((p) => [p.x, p.y]),
       svg: drawing.svg,
-      boundingBox,
+      boundingBox: PointUtils.combineBoundingBoxes(
+        [prev.boundingBox, PointUtils.boundingBox(drawing.points.map(p => [p.x, p.y]))]
+      ),
     };
   };
 }
