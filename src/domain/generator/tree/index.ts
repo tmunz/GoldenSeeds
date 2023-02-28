@@ -10,7 +10,7 @@ export class Tree implements SvgGenerator {
   definition = {
     color: { initial: 'gold', type: 'color' as const },
     depth: {
-      initial: '13',
+      initial: '8',
       type: 'number' as const,
       min: 0,
       max: MathUtils.fib(7),
@@ -66,10 +66,10 @@ export class Tree implements SvgGenerator {
     const drawing = draw(config, prev.grid);
 
     return {
-      grid: drawing.points.map((p) => [p.x, p.y]),
+      grid: drawing.points,
       svg: drawing.svg,
       boundingBox: PointUtils.combineBoundingBoxes(
-        [prev.boundingBox, PointUtils.boundingBox(drawing.points.map(p => [p.x, p.y]))]
+        [prev.boundingBox, PointUtils.boundingBox(drawing.points)]
       ),
     };
   };

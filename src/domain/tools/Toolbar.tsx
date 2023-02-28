@@ -7,13 +7,17 @@ import { PreconfigSelector } from '../config/PreconfigSelector';
 import { Input } from '../../ui/input/Input';
 import { Config } from '../config/Config';
 import { configService } from '../config/ConfigService';
+import { PngExporter } from './PngExporter';
 
 import './Toolbar.styl';
+
+
+export type ExporterData =  { svg: string, name: string, dimensions: { width: number, height: number } };
 
 interface Props {
   config?: Config;
   preconfigIndex?: number;
-  getSvg: () => string | null | undefined;
+  getExporterData: () => ExporterData;
 }
 
 export class Toolbar extends React.Component<Props> {
@@ -34,7 +38,8 @@ export class Toolbar extends React.Component<Props> {
             }}
           />
           <ConfigExporter config={this.props.config} />
-          <SvgExporter name={name} getSvg={() => this.props.getSvg()} />
+          <SvgExporter getData={() => this.props.getExporterData()} />
+          <PngExporter getData={() => this.props.getExporterData()} />
         </div>
       </div>
     );

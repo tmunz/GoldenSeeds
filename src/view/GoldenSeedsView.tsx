@@ -8,6 +8,7 @@ import { Themer } from '../themer/Themer';
 import { svgService } from '../domain/svg/SvgService';
 
 import './GoldenSeedsView.styl';
+import { PointUtils } from '../utils/PointUtils';
 
 type Props = {
   config?: Config;
@@ -51,7 +52,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
                 }}
               >
                 <SvgCanvas
-                  svgContent={svgService.svgContent$.value}
+                  svgContent={this.props.svgContent}
                   config={this.props.config}
                 />
               </div>
@@ -64,7 +65,15 @@ export class GoldenSeedsView extends React.Component<Props, State> {
           <Toolbar
             config={this.props.config}
             preconfigIndex={this.props.preconfigIndex}
-            getSvg={() => this.props.svgContent}
+            getExporterData={() => {
+              const minDimension = Math.min(this.state.width, this.state.width);
+              return {
+                name: this.props.config?.meta.name ?? 'drawing',
+                svg: this.props.svgContent ?? '',
+                // TODO based on content boundingBox
+                dimensions: { width: minDimension, height: minDimension }
+              };
+            }}
           />
           <Themer />
         </ErrorBoundary>
@@ -73,6 +82,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
   }
 
   private updateDimension() {
+    // TODO use better way to update svgService
     this.setState(this.dimension);
     svgService.width = this.dimension.width * 1.04; // must be slightly larger, because of movement
     svgService.height = this.state.height;
@@ -91,7 +101,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
 class ErrorBoundary extends React.Component<
   React.ComponentProps<any>,
   { error: boolean }
-> {
+  > {
   constructor(props: {}) {
     super(props);
     this.state = { error: false };

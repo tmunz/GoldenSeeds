@@ -1,4 +1,5 @@
 import { Color } from '../../../datatypes/Color';
+import { Point } from '../../../datatypes/Point';
 
 export interface PolarConfig {
   color: Color;
@@ -10,8 +11,8 @@ export interface PolarConfig {
 
 export function draw(
   config: PolarConfig,
-  grid: number[][],
-): { svg: string; points: number[][] } {
+  grid: Point[],
+): { svg: string; points: Point[] } {
   return grid.reduce(
     (agg, p) => {
       const coordinates = calculatePolarGrid(
@@ -22,12 +23,12 @@ export function draw(
       );
       const svg = coordinates
         .map(
-          (coordinate: number[], j: number) =>
+          (coordinate: Point, j: number) =>
             `<line
-        x1="${p[0]}"
-        y1="${p[1]}"
-        x2="${coordinate[0]}"
-        y2="${coordinate[1]}"
+        x1="${p[Point.X]}"
+        y1="${p[Point.Y]}"
+        x2="${coordinate[Point.X]}"
+        y2="${coordinate[Point.Y]}"
         stroke="${config.color.toString(j)}"
         stroke-width="${config.strokeWidth(j, config.items)}"
         vector-effect="non-scaling-stroke"
@@ -39,16 +40,16 @@ export function draw(
         points: [...agg.points, ...coordinates],
       };
     },
-    { svg: '', points: [] as number[][] },
+    { svg: '', points: [] as Point[] },
   );
 }
 
 function calculatePolarGrid(
-  center: number[],
+  center: Point,
   items: number,
   angle: (n: number, items: number) => number,
   distance: (n: number, items: number) => number,
-): number[][] {
+): Point[] {
   const grid = [];
   for (let n = 1; n <= items; n++) {
     const rad = (angle(n, items) / 180) * Math.PI;

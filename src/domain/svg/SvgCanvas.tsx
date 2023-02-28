@@ -7,28 +7,31 @@ import './SvgCanvas.styl';
 
 interface Props {
   config: Config;
-  svgContent: string;
+  svgContent?: string;
 }
 
-export class SvgCanvas extends React.Component<Props> {
-  render() {
-    return (
-      <div className="svg-canvas">
-        <ReactCSSTransitionReplace
-          transitionName="cross-fade"
-          transitionEnterTimeout={1000}
-          transitionLeaveTimeout={1000}
-        >
-          <div
-            className="svg-canvas-wrapper"
-            key={this.props.config.stages.reduce(
-              (id, stage) => id + '_' + stage.id,
-              '',
-            )}
-            dangerouslySetInnerHTML={{ __html: this.props.svgContent ?? '' }}
-          />
-        </ReactCSSTransitionReplace>
-      </div>
-    );
-  }
+export function SvgCanvas(props: Props) {
+  return (
+    <div className="svg-canvas">
+      <ReactCSSTransitionReplace
+        transitionName="cross-fade"
+        transitionEnterTimeout={1000}
+        transitionLeaveTimeout={1000}
+      >
+        {/*<div
+          className="svg-canvas-wrapper"
+          key={props.config.stages.reduce(
+            (id, stage) => id + '_' + stage.id,
+            '',
+          )}
+          dangerouslySetInnerHTML={{ __html: props.svgContent ?? '' }}
+        />*/}
+        <img
+          key={props.config.stages.reduce((id, stage) => id + '_' + stage.id, '')}
+          src={`data:image/svg+xml;base64,${window.btoa(props.svgContent ?? '')}`}
+        />
+      </ReactCSSTransitionReplace>
+    </div>
+  );
+
 }

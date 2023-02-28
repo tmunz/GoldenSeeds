@@ -1,40 +1,38 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { AnimatedButton } from '../../ui/AnimatedButton';
+import { ExporterData } from '../tools/Toolbar';
 
 interface Props {
-  name?: string;
-  getSvg: () => string | null | undefined;
+  getData: () => ExporterData;
 }
 
-export class SvgExporter extends React.Component<Props> {
-  private exportSvgElement: HTMLAnchorElement | null = null;
+export function SvgExporter(props: Props) {
+  const exportSvgElement = createRef<HTMLAnchorElement>();
 
-  render() {
-    return (
-      <div>
-        <a
-          target="_blank"
-          ref={(e) => (this.exportSvgElement = e)}
-          onClick={() => this.exportSvg()}
-        >
-          <AnimatedButton
-            rotation={AnimatedButton.DIRECTION_DOWN}
-            title="save"
-            iconText="svg"
-          />
-        </a>
-      </div>
+  return (
+    <div>
+      <a
+        target="_blank"
+        ref={exportSvgElement}
+        onClick={() => exportSvg(props, exportSvgElement.current)}
+      >
+        <AnimatedButton
+          rotation={AnimatedButton.DIRECTION_DOWN}
+          title="save"
+          iconText="svg"
+        />
+      </a>
+    </div>
+  );
+}
+
+function exportSvg(props: Props, exportSvgElement: HTMLAnchorElement | null) {
+  const data = props.getData();
+  if (exportSvgElement) {
+    const fileName = data.name + '.svg';
+    exportSvgElement.download = fileName;
+    exportSvgElement.href = URL.createObjectURL(
+      new File([data.svg ?? ''], fileName, { type: 'image/svg+xml' }),
     );
-  }
-
-  private exportSvg() {
-    const svg = this.props.getSvg();
-    if (this.exportSvgElement) {
-      const fileName = this.props.name ?? 'default' + '.svg';
-      this.exportSvgElement.download = fileName;
-      this.exportSvgElement.href = URL.createObjectURL(
-        new File([svg ?? ''], fileName, { type: 'image/svg+xml' }),
-      );
-    }
   }
 }

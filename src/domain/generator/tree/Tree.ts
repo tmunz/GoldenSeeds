@@ -1,5 +1,5 @@
 import { random } from '../../../utils/Random';
-import { Point } from './Point';
+import { Point } from '../../../datatypes/Point';
 
 export interface Config {
   depth: number;
@@ -43,12 +43,12 @@ export class Tree {
   }
 
   private static calculateTree(config: Config): { root: Node; limbs: Limb[] } {
-    const rootBranch = { point: { x: 0, y: 0 }, level: 1, angle: Math.PI / 2 };
+    const rootBranch = { point: [0, 0], level: 1, angle: Math.PI / 2 };
     const root: Node = {
-      point: { x: 0, y: -1 },
+      point: [0, -1],
       level: 0,
       angle: 0,
-      branches: [{ point: { x: 0, y: 0 }, level: 1, angle: Math.PI / 2 }],
+      branches: [{ point: [0, 0], level: 1, angle: Math.PI / 2 }],
     };
     const limbs: Limb[] = [
       { from: root.point, to: rootBranch.point, level: 0 },
@@ -87,10 +87,10 @@ export class Tree {
             );
             const length = baseLength * lengthVariation;
 
-            const point = {
-              x: Math.cos(angle) * length + currentNode.point.x,
-              y: Math.sin(angle) * length + currentNode.point.y,
-            };
+            const point = [
+              Math.cos(angle) * length + currentNode.point[Point.X],
+              Math.sin(angle) * length + currentNode.point[Point.Y],
+            ];
             currentNode.branches.push({
               point,
               level: currentNode.level + 1,

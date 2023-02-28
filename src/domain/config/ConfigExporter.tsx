@@ -3,7 +3,7 @@ import { Config } from '../config/Config';
 import { AnimatedButton } from '../../ui/AnimatedButton';
 
 interface Props {
-  config: Config;
+  config?: Config;
 }
 
 export class ConfigExporter extends React.Component<Props> {

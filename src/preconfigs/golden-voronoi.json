@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "name": "golden voronoi"
+  },
+  "stages": [
+    {
+      "type": "polar",
+      "color": "transparent",
+      "strokeWidth": "1",
+      "items": "987",
+      "angle": "n * 360 / goldenRatio",
+      "distance": "Math.pow(n, 1 / goldenRatio)"
+    },
+    {
+      "type": "voronoi",
+      "color": "gold",
+      "style": "filled",
+      "borderWidth": "4"
+    }
+  ]
+}

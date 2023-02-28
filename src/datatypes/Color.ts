@@ -12,7 +12,7 @@ export const COLORS: { [name: string]: number } = {
   magenta: 0xff00ff,
   cyan: 0x00ffff,
 
-  gold: 0xdecd87,
+  gold: 0xdecd87, // 0xffd700
   wood: 0xdecd87,
 
   random: 0xf000000,

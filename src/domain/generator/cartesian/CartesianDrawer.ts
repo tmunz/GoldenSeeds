@@ -1,4 +1,5 @@
 import { Color } from '../../../datatypes/Color';
+import { Point } from '../../../datatypes/Point';
 
 export interface CartesianConfig {
   color: Color;
@@ -11,8 +12,8 @@ export interface CartesianConfig {
 
 export function draw(
   config: CartesianConfig,
-  grid: number[][],
-): { svg: string; points: number[][] } {
+  grid: Point[],
+): { svg: string; points: Point[] } {
   return grid.reduce(
     (agg, p) => {
       const coordinates = calculatePolarGrid(
@@ -23,7 +24,7 @@ export function draw(
         config.yDistance,
       );
       const svg = coordinates
-        .map((coordinate: number[], j: number) => {
+        .map((coordinate: Point, j: number) => {
           const rightIndex = j + 1;
           const downIndex = j + config.x;
           const rightLine =
@@ -42,40 +43,40 @@ export function draw(
         points: [...agg.points, ...coordinates],
       };
     },
-    { svg: '', points: [] as number[][] },
+    { svg: '', points: [] as Point[] },
   );
 }
 
 function calculatePolarGrid(
-  origin: number[],
+  origin: Point,
   items: number,
   x: number,
   xDistance: (n: number, items: number) => number,
   yDistance: (n: number, items: number) => number,
-): number[][] {
-  const grid = [];
+): Point[] {
+  const grid = [] as Point[];
   for (let i = 0; i < items; i++) {
     const calcX = i % x;
     const calcY = Math.floor(i / x);
     grid.push([
-      origin[0] + calcX * xDistance(calcX, x),
-      origin[1] + calcY * yDistance(calcY, Math.floor(items / x)),
+      origin[Point.X] + calcX * xDistance(calcX, x),
+      origin[Point.Y] + calcY * yDistance(calcY, Math.floor(items / x)),
     ]);
   }
   return grid;
 }
 
 function drawLine(
-  from: number[],
-  to: number[],
+  from: Point,
+  to: Point,
   config: CartesianConfig,
   i: number,
 ) {
   return `<line
-      x1="${from[0]}"
-      y1="${from[1]}"
-      x2="${to[0]}"
-      y2="${to[1]}"
+      x1="${from[Point.X]}"
+      y1="${from[Point.Y]}"
+      x2="${to[Point.X]}"
+      y2="${to[Point.Y]}"
       stroke="${config.color.toString(i)}"
       stroke-width="${config.strokeWidth(i, config.items)}"
       vector-effect="non-scaling-stroke"

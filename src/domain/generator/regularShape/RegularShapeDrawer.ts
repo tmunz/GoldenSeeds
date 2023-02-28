@@ -2,6 +2,7 @@ import { DrawStyle } from '../../../datatypes/DrawStyle';
 import { Color } from '../../../datatypes/Color';
 import { BoundingBox } from '../../../datatypes/BoundingBox';
 import { PointUtils } from '../../../utils/PointUtils';
+import { Point } from '../../../datatypes/Point';
 
 export interface RegularShapeConfig {
   style: DrawStyle;
@@ -16,7 +17,7 @@ export interface RegularShapeConfig {
 
 export interface Props {
   config: RegularShapeConfig;
-  grid: number[][];
+  grid: Point[];
 }
 
 interface ItemProps {
@@ -28,9 +29,9 @@ interface ItemProps {
   cutRatio1: number;
 }
 
-export function draw(config: RegularShapeConfig, grid: number[][]): { svg: string, boundingBox: BoundingBox } {
+export function draw(config: RegularShapeConfig, grid: Point[]): { svg: string, boundingBox: BoundingBox } {
   const items: number = grid.length;
-  return grid.reduce((agg, position: number[], i: number) => {
+  return grid.reduce((agg, position: Point, i: number) => {
     const n = i + 1;
     const itemSize: number = config.size(n, items);
     const elementStyle = style(n, config.color, config.style);
@@ -45,8 +46,8 @@ export function draw(config: RegularShapeConfig, grid: number[][]): { svg: strin
       svg = drawArc(position, i, itemSize, startAngle, angle, elementStyle);
     }
     const boundingBox = {
-      min: [position[0] - itemSize / 2, position[1] - itemSize / 2],
-      max: [position[0] + itemSize / 2, position[1] + itemSize / 2],
+      min: [position[Point.X] - itemSize / 2, position[Point.Y] - itemSize / 2],
+      max: [position[Point.X] + itemSize / 2, position[Point.Y] + itemSize / 2],
     }
     return {
       svg: agg.svg + svg,
@@ -69,8 +70,8 @@ function getItemProps(
   return { size, corners, ratio, angle, cutRatio0, cutRatio1 };
 }
 
-function isSamePosition(pA: number[], pB: number[]): boolean {
-  return [0, 1].reduce(
+function isSamePosition(pA: Point, pB: Point): boolean {
+  return [Point.X, Point.Y].reduce(
     (b: boolean, t: number) =>
       b && pA && pB && Math.abs(pA[t] - pB[t]) < 0.0001 /*tolerance*/,
     true,
@@ -78,15 +79,14 @@ function isSamePosition(pA: number[], pB: number[]): boolean {
 }
 
 function drawRegularShape(
-  center: number[],
+  center: Point,
   itemProps: ItemProps,
   style: string,
 ): string {
   const { size, corners, ratio, angle, cutRatio0, cutRatio1 } = itemProps;
 
-  // bring point coordinates in svg format
-  const p = (pt: number[]) => ` ${center[0] - pt[0]},${center[1] - pt[1]} `;
-  let pts: number[][] = [];
+  const p = (pt: Point) => ` ${center[Point.X] - pt[Point.X]},${center[Point.Y] - pt[Point.Y]} `;
+  let pts: Point[] = [];
   let i: number;
 
   for (i = 0; i < corners; i++) {
@@ -95,6 +95,9 @@ function drawRegularShape(
     const rad = (-loopBaseAngle / 180) * Math.PI;
     const rad2 = -Math.PI / corners;
 
+    // 4 point path with bezier anchors
+    // 0 3 4 7 are points on line
+    // 1 2 5 6 the according anchor
     const normalizedPts = [
       rad - rad2,
       rad - rad2 - Math.PI / 2,
@@ -106,7 +109,10 @@ function drawRegularShape(
       rad + rad2,
     ].map((c) => [Math.sin(c), Math.cos(c)]);
 
-    const magicNumber = 1 / 3; // (2/3)*Math.tan(Math.PI/(2*corners)) // ensures a good circle approximation for ratio 1
+    // (2/3)*Math.tan(Math.PI/(2*corners)) // ensures a good circle approximation for ratio 1
+    //  1.5 * Math.pow(corners, -1.189543) // more performant apporximation
+    // TODO variable sharpness
+    const magicNumber = 1 / 3 - corners / 100;
 
     const multipliers = [
       (size / 2) * ratio, //  innerRadius
@@ -123,26 +129,10 @@ function drawRegularShape(
     ];
 
     const basePts = [...mainPts];
-    basePts.splice(
-      1,
-      0,
-      normalizedPts[1].map((c, i) => mainPts[0][i] + c * multipliers[1] * 1),
-    );
-    basePts.splice(
-      2,
-      0,
-      normalizedPts[2].map((c, i) => mainPts[1][i] + c * multipliers[2] * -1),
-    );
-    basePts.splice(
-      5,
-      0,
-      normalizedPts[5].map((c, i) => mainPts[2][i] + c * multipliers[2] * -1),
-    );
-    basePts.splice(
-      6,
-      0,
-      normalizedPts[6].map((c, i) => mainPts[3][i] + c * multipliers[1] * 1),
-    );
+    basePts.splice(1, 0, normalizedPts[1].map((c, i) => mainPts[0][i] + c * multipliers[1] * 1));
+    basePts.splice(2, 0, normalizedPts[2].map((c, i) => mainPts[1][i] + c * multipliers[2] * -1));
+    basePts.splice(5, 0, normalizedPts[5].map((c, i) => mainPts[2][i] + c * multipliers[2] * -1));
+    basePts.splice(6, 0, normalizedPts[6].map((c, i) => mainPts[3][i] + c * multipliers[1] * 1));
 
     if (cutRatio0 < cutRatio1) {
       pts = [
@@ -170,18 +160,18 @@ function drawRegularShape(
   }, '')}" />`;
 }
 
-function sliceBezier(pts: number[][], t: number) {
-  const p01 = [0, 1].map((c) => (pts[1][c] - pts[0][c]) * t + pts[0][c]);
-  const p12 = [0, 1].map((c) => (pts[2][c] - pts[1][c]) * t + pts[1][c]);
-  const p23 = [0, 1].map((c) => (pts[3][c] - pts[2][c]) * t + pts[2][c]);
-  const p012 = [0, 1].map((c) => (p12[c] - p01[c]) * t + p01[c]);
-  const p123 = [0, 1].map((c) => (p23[c] - p12[c]) * t + p12[c]);
-  const pt = [0, 1].map((c) => (p123[c] - p012[c]) * t + p012[c]);
+function sliceBezier(pts: Point[], t: number) {
+  const p01 = [Point.X, Point.Y].map((c) => (pts[1][c] - pts[0][c]) * t + pts[0][c]);
+  const p12 = [Point.X, Point.Y].map((c) => (pts[2][c] - pts[1][c]) * t + pts[1][c]);
+  const p23 = [Point.X, Point.Y].map((c) => (pts[3][c] - pts[2][c]) * t + pts[2][c]);
+  const p012 = [Point.X, Point.Y].map((c) => (p12[c] - p01[c]) * t + p01[c]);
+  const p123 = [Point.X, Point.Y].map((c) => (p23[c] - p12[c]) * t + p12[c]);
+  const pt = [Point.X, Point.Y].map((c) => (p123[c] - p012[c]) * t + p012[c]);
   return [pts[0], p01, p012, pt];
 }
 
 function drawArc(
-  center: number[],
+  center: Point,
   n: number,
   size: number,
   startAngle: number,
@@ -189,20 +179,20 @@ function drawArc(
   style: string,
 ): string {
   if (angle <= -360 || 360 <= angle) {
-    return `<circle ${style} cx="${center[0]}" cy="${center[1]}" r="${
+    return `<circle ${style} cx="${center[Point.X]}" cy="${center[Point.Y]}" r="${
       size / 2
       }" />`;
   } else {
     const r = size / 2;
     const startRad = (startAngle / 180) * Math.PI;
     const startPt = [
-      center[0] + Math.cos(startRad) * r,
-      center[1] + Math.sin(startRad) * r,
+      center[Point.X] + Math.cos(startRad) * r,
+      center[Point.Y] + Math.sin(startRad) * r,
     ];
     const endRad = ((startAngle + angle) / 180) * Math.PI;
     const endPt = [
-      center[0] + Math.cos(endRad) * r,
-      center[1] + Math.sin(endRad) * r,
+      center[Point.X] + Math.cos(endRad) * r,
+      center[Point.Y] + Math.sin(endRad) * r,
     ];
     return `<path ${style} d="${`M ${pointAsSvg(startPt)} A ${r},${r} 0 ${
       angle % 360 < 180 ? 0 : 1
@@ -210,8 +200,8 @@ function drawArc(
   }
 }
 
-function pointAsSvg(p: number[]) {
-  return `${p[0]},${p[1]} `;
+function pointAsSvg(p: Point) {
+  return `${p[Point.X]},${p[Point.Y]} `;
 }
 
 function style(n: number, color: Color, drawStyle: DrawStyle) {
