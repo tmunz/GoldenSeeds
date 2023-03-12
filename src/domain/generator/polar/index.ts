@@ -2,6 +2,7 @@ import { MathUtils } from '../../../utils/MathUtils';
 import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
 import { draw, PolarConfig } from './PolarDrawer';
 import { PointUtils } from '../../../utils/PointUtils';
+import { Point } from '../../../datatypes/Point';
 
 export class PolarGrid implements SvgGenerator {
   static type = 'polar';
@@ -51,12 +52,12 @@ export class PolarGrid implements SvgGenerator {
     // stabilize center if all prev points are centered
     if (
       prev.grid.reduce(
-        (b: boolean, p: number[]) => b && p[0] === 0 && p[1] === 0,
+        (b: boolean, p: number[]) => b && p[Point.X] === 0 && p[Point.Y] === 0,
         true,
       )
     ) {
-      const extremeX = Math.max(-drawingBoundingBox.min[0], drawingBoundingBox.max[0]);
-      const extremeY = Math.max(-drawingBoundingBox.min[1], drawingBoundingBox.max[1]);
+      const extremeX = Math.max(-drawingBoundingBox.min[Point.X], drawingBoundingBox.max[Point.X]);
+      const extremeY = Math.max(-drawingBoundingBox.min[Point.Y], drawingBoundingBox.max[Point.Y]);
       drawingBoundingBox = {
         min: [-extremeX, -extremeY],
         max: [extremeX, extremeY]

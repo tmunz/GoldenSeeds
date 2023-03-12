@@ -1,40 +1,23 @@
 import { SvgGeneratorResult } from '../generator/SvgGenerator';
-import { BehaviorSubject } from 'rxjs';
-import { configService } from '../config/ConfigService';
 import { Stage } from '../stage/Stage';
 import { svgGeneratorService } from '../generator/SvgGeneratorService';
-import { map, filter } from 'rxjs/operators';
 import { PointUtils } from '../../utils/PointUtils';
 
 export class SvgService {
-  svgContent$ = new BehaviorSubject<string>('');
-  width = 1;
-  height = 1;
 
-  constructor() {
-    configService.config$
-      .pipe(filter((value, index) => 1 < index))
-      .pipe(map((c) => c.stages))
-      .subscribe((stages) =>
-        this.setSvgContent(this.width, this.height, stages),
-      );
-  }
+  public generateSvg(
+    stages: Stage[] = [],
+    width: number,
+    height: number,
+  ) {
 
-  setSvgContent(width: number, height: number, stages: Stage[] = []) {
     const generatedStages: SvgGeneratorResult[] = [];
     stages.forEach((stage, i) =>
       generatedStages.push(
         svgGeneratorService.getResult(stage, generatedStages[i - 1]),
       ),
     );
-    this.svgContent$.next(this.generateSvg(width, height, generatedStages));
-  }
 
-  private generateSvg(
-    width: number,
-    height: number,
-    generatedStages: SvgGeneratorResult[],
-  ) {
     return `
     <svg
       xmlns="http://www.w3.org/2000/svg"

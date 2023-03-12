@@ -17,7 +17,7 @@ export class ExpressionConverter extends Converter<
       [0, 1].map((i: number) => expression(i, 100, (n) => n)); //test Expression
       return expression;
     } catch (e) {
-      return this.convertToExpression('n'); // TODO use last valid one
+      return this.convertToExpression('1'); // TODO use last valid one
     }
   };
 

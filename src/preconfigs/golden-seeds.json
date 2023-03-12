@@ -6,16 +6,16 @@
     "type": "polar",
     "color": "transparent",
     "items": "987",
-    "angle": "n * 360 / goldenRatio",
-    "distance": "Math.pow(n, 1 / goldenRatio)"
+    "angle": "n * (360 / goldenRatio)",
+    "distance": "n ** (1 / goldenRatio)"
   }, {
     "type": "regular-shape",
     "corners": "2",
     "color": "gold",
     "style": "filled",
     "angle": "n * 111",
-    "size": "Math.pow(n / 5, 1 / 5)",
-    "ratio": "1 / Math.pow(goldenRatio, 2)",
+    "size": "(n / 5) ** (1 / 5)",
+    "ratio": "1 / (goldenRatio ** 2)",
     "cutRatio0": "0",
     "cutRatio1": "0"
   }]

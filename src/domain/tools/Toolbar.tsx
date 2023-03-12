@@ -7,7 +7,7 @@ import { PreconfigSelector } from '../config/PreconfigSelector';
 import { Input } from '../../ui/input/Input';
 import { Config } from '../config/Config';
 import { configService } from '../config/ConfigService';
-import { PngExporter } from './PngExporter';
+import { PngExporter } from '../png/PngExporter';
 
 import './Toolbar.styl';
 

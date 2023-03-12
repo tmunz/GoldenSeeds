@@ -2,6 +2,7 @@ import { MathUtils } from '../../../utils/MathUtils';
 import { TreeConfig, draw } from './TreeDrawer';
 import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
 import { PointUtils } from '../../../utils/PointUtils';
+import { Point } from '../../../datatypes/Point';
 
 export class Tree implements SvgGenerator {
   static type = 'tree';
@@ -65,12 +66,21 @@ export class Tree implements SvgGenerator {
   generate = (config: TreeConfig, prev: SvgGeneratorResult) => {
     const drawing = draw(config, prev.grid);
 
+    let drawingBoundingBox = PointUtils.boundingBox(drawing.points);
+
+    // stabilize center if all prev points are x-axis-centered
+    if ( prev.grid.reduce( (b: boolean, p: number[]) => b && p[Point.X] === 0, true)) {
+      const extremeX = Math.max(-drawingBoundingBox.min[Point.X], drawingBoundingBox.max[Point.X]);
+      drawingBoundingBox = {
+        min: [-extremeX, drawingBoundingBox.min[Point.Y]],
+        max: [extremeX, drawingBoundingBox.max[Point.Y]]
+      };
+    }
+
     return {
       grid: drawing.points,
       svg: drawing.svg,
-      boundingBox: PointUtils.combineBoundingBoxes(
-        [prev.boundingBox, PointUtils.boundingBox(drawing.points)]
-      ),
+      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, drawingBoundingBox]),
     };
   };
 }

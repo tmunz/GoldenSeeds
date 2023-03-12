@@ -4,13 +4,11 @@ import { GoldenSeedsView } from './view/GoldenSeedsView';
 import { configService } from './domain/config/ConfigService';
 import { editorStateService } from './domain/editor/EditorStateService';
 import { animationService } from './domain/animation/AnimationService';
-import { svgService } from './domain/svg/SvgService';
 
 export function App() {
   const [preconfigIndex, setPreconfigIndex] = useState();
   const [editStageId, setEditStageId] = useState();
   const [config, setConfig] = useState();
-  const [svgContent, setSvgContent] = useState();
 
   useEffect(() => {
     const preconfigSubscription = configService.preconfigIndex$.subscribe(
@@ -22,9 +20,6 @@ export function App() {
     const configSubscription = configService.config$.subscribe(
       setConfig as any,
     );
-    const svgSubscription = svgService.svgContent$.subscribe(
-      setSvgContent as any,
-    );
 
     setTimeout(() => {
       configService.selectPreconfig(0);
@@ -35,7 +30,6 @@ export function App() {
       preconfigSubscription.unsubscribe();
       editStageIdSubscription.unsubscribe();
       configSubscription.unsubscribe();
-      svgSubscription.unsubscribe();
     };
   }, []);
 
@@ -44,7 +38,6 @@ export function App() {
       <GoldenSeedsView
         preconfigIndex={preconfigIndex}
         config={config}
-        svgContent={svgContent}
         editStageId={editStageId}
       />
       {process.env.APP_VERSION}
