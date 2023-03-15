@@ -11,6 +11,7 @@ interface Props {
 }
 
 export function SvgCanvas(props: Props) {
+  const DEBUG_MODE = false;
   return (
     <div className="svg-canvas">
       <ReactCSSTransitionReplace
@@ -18,18 +19,17 @@ export function SvgCanvas(props: Props) {
         transitionEnterTimeout={1000}
         transitionLeaveTimeout={1000}
       >
-        {/*<div
-          className="svg-canvas-wrapper"
-          key={props.config.stages.reduce(
-            (id, stage) => id + '_' + stage.id,
-            '',
-          )}
-          dangerouslySetInnerHTML={{ __html: props.svgContent ?? '' }}
-        />*/}
-        <img
-          key={props.config.stages.reduce((id, stage) => id + '_' + stage.id, '')}
-          src={`data:image/svg+xml;base64,${window.btoa(props.svgContent ?? '')}`}
-        />
+        {
+          DEBUG_MODE
+            ? <div
+              key={props.config.stages.reduce((id, stage) => id + '_' + stage.id, '')}
+              dangerouslySetInnerHTML={{ __html: props.svgContent ?? '' }}
+            />
+            : <img
+              key={props.config.stages.reduce((id, stage) => id + '_' + stage.id, '')}
+              src={`data:image/svg+xml;base64,${window.btoa(props.svgContent ?? '')}`}
+            />
+        }
       </ReactCSSTransitionReplace>
     </div>
   );

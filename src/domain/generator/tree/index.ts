@@ -54,7 +54,7 @@ export class Tree implements SvgGenerator {
       step: 0.05,
     },
     seed: {
-      initial: '0',
+      initial: '999',
       type: 'number' as const,
       min: 0,
       max: 1000,

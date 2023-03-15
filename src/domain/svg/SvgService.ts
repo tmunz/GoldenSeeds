@@ -18,19 +18,9 @@ export class SvgService {
       ),
     );
 
-    return `
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="${width}"
-      height="${height}"
-    >
-      <g transform="${this.centerAndScale(
-      width,
-      height,
-      this.svgBoundingBox(generatedStages),
-      200,
-    )}">
-        ${generatedStages.map((stageResult, i) => stageResult.svg)}
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
+      <g transform="${this.centerAndScale(width, height, this.svgBoundingBox(generatedStages), 140)}">
+        ${generatedStages.map(stageResult => stageResult.svg).join('')}
       </g>
     </svg>`;
   }

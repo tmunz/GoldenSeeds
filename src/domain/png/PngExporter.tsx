@@ -1,6 +1,6 @@
 import React, { createRef, useState, useEffect } from 'react';
 import { AnimatedButton } from '../../ui/AnimatedButton';
-import { ExporterData } from './Toolbar';
+import { ExporterData } from '../tools/Toolbar';
 
 interface Props {
   getData: () => ExporterData;
@@ -21,7 +21,6 @@ export function PngExporter(props: Props) {
   }, [data]);
 
   const drawImageOnCanvas = (data: ExporterData, onCompletion: () => void) => {
-    console.log(data.dimensions)
     const context = canvas.current!.getContext("2d");
     const image = new Image();
     image.src = `data:image/svg+xml;base64,${window.btoa(data.svg)}`;
