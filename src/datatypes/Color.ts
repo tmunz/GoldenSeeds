@@ -1,4 +1,4 @@
-import { randomInt } from '../utils/Random';
+import { randomColor } from '../utils/Random';
 
 export const COLORS: { [name: string]: number } = {
   black: 0x000000,
@@ -30,13 +30,13 @@ export class Color {
 
   toString = (seed = 0): string => {
     if (this.value < 0) {
-      return 'transparent';
+      return 'none';
     } else {
       return (
         '#' +
         (
           0x1000000 +
-          (0xffffff < this.value ? randomInt(0, 0xffffff, seed) : this.value)
+          (0xffffff < this.value ? randomColor(seed) : this.value)
         )
           .toString(16)
           .substring(1, 7)

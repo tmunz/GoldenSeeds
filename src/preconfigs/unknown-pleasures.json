@@ -5,21 +5,28 @@
   "stages": [
     {
       "type": "cartesian",
-      "color": "12996487",
+      "color": "gold",
       "strokeWidth": "0",
       "x": "1",
       "xDistance": "1",
-      "yDistance": "1",
-      "items": "8"
+      "yDistance": "0.015",
+      "items": "80"
     },
     {
       "type": "shape",
-      "color": "gold",
-      "style": "stroke",
-      "corners": "0",
-      "midpoints": "3",
+      "border": "white",
+      "fill": "black",
+      "coordinateType": "cartesian",
+      "edges": "100",
+      "smoothness": "0",
+      "noise": "0.2",
+      "probabilityDistributionMuRandomness": "0.2",
+      "probabilityDistributionSigma": "0.35",
+      "probabilityDistributionSigmaRandomness": "0.1",
+      "probabilityDistributionNoise": "0.15",
+      "angle": "0",
       "size": "1",
-      "ratio": "1",
+      "offset": "0",
       "cutRatio0": "0",
       "cutRatio1": "0"
     }

@@ -1,4 +1,3 @@
-import { DrawStyle } from '../../../datatypes/DrawStyle';
 import { MathUtils } from '../../../utils/MathUtils';
 import { draw, ShapeConfig } from './ShapeDrawer';
 import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
@@ -9,23 +8,61 @@ export class Shape implements SvgGenerator {
   type = Shape.type;
 
   definition = {
-    color: { initial: 'gold', type: 'color' as const },
-    style: {
-      initial: DrawStyle.STROKE,
-      type: 'selection' as const,
-      options: [DrawStyle.FILLED, DrawStyle.STROKE],
-    },
+    border: { initial: 'gold', type: 'color' as const },
+    fill: { initial: 'transparent', type: 'color' as const }, 
     coordinateType: {
       initial: 'cartesian',
       type: 'selection' as const,
       options: ['cartesian', 'polar'],
     },
-    midpoints: {
+    edges: {
+      initial: '1',
+      type: 'number' as const,
+      min: 1,
+      max: MathUtils.fib(12),
+      step: 1,
+    },
+    smoothness: {
+      initial: '0.5',
+      type: 'number' as const,
+      min: 0,
+      max: 2,
+      step: 0.05,
+    },
+    noise: {
       initial: '0',
       type: 'number' as const,
       min: 0,
-      max: MathUtils.fib(8),
-      step: 1,
+      max: 1,
+      step: 0.05,
+    },
+    probabilityDistributionMuRandomness: {
+      initial: '0',
+      type: 'number' as const,
+      min: 0,
+      max: 1,
+      step: 0.05,
+    },
+    probabilityDistributionSigma: {
+      initial: '0',
+      type: 'number' as const,
+      min: 0,
+      max: 1,
+      step: 0.05,
+    },
+    probabilityDistributionSigmaRandomness: {
+      initial: '0',
+      type: 'number' as const,
+      min: 0,
+      max: 1,
+      step: 0.05,
+    },
+    probabilityDistributionNoise: {
+      initial: '0',
+      type: 'number' as const,
+      min: 0,
+      max: 1,
+      step: 0.05,
     },
     angle: {
       initial: '0',
@@ -37,15 +74,15 @@ export class Shape implements SvgGenerator {
     size: {
       initial: '1',
       type: 'expression' as const,
-      min: 0,
+      min: 0.05,
       max: 100,
-      step: 0.1,
+      step: 0.05,
     },
-    ratio: {
-      initial: '1',
+    offset: {
+      initial: '0',
       type: 'expression' as const,
-      min: 0,
-      max: 2,
+      min: -1,
+      max: 1,
       step: 0.05,
     },
     cutRatio0: {

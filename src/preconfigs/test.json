@@ -5,28 +5,27 @@
   "stages": [
     {
       "type": "polar",
-      "color": "11403263",
-      "strokeWidth": "1",
-      "items": "4",
-      "angle": "n * 360 / goldenRatio",
-      "distance": "Math.pow(n, 1 / goldenRatio)"
-    },
-    {
-      "type": "polar",
-      "color": "5885319",
-      "strokeWidth": "1",
-      "items": "21",
-      "angle": "n * 13",
-      "distance": "0.45"
-    },
-    {
-      "type": "regular-shape",
       "color": "gold",
-      "style": "stroke",
-      "corners": "2",
-      "angle": "n * 0",
-      "size": "0.1",
-      "ratio": "1 / Math.pow(goldenRatio, 2)",
+      "strokeWidth": "1",
+      "items": "1",
+      "angle": "0",
+      "distance": "0"
+    },
+    {
+      "type": "shape",
+      "border": "gold",
+      "fill": "transparent",
+      "coordinateType": "polar",
+      "midpoints": "3",
+      "smoothness": "1",
+      "noise": "0",
+      "probabilityDistributionMuRandomness": "0",
+      "probabilityDistributionSigma": "0",
+      "probabilityDistributionSigmaRandomness": "0",
+      "probabilityDistributionNoise": "0",
+      "angle": "0",
+      "size": "1",
+      "offset": "0",
       "cutRatio0": "0",
       "cutRatio1": "0"
     }
