@@ -1,12 +1,11 @@
-
 export const random = (min = 0, max = 1, seed?: number): number => {
   let n: number; // [0, 1[
   if (typeof seed !== 'undefined') {
     // Mulberry32
-    let t = seed += 0x6D2B79F5;
-    t = Math.imul(t ^ t >>> 15, t | 1);
-    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
-    n = ((t ^ t >>> 14) >>> 0) / 0xFFFFFFFF;
+    let t = (seed += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    n = ((t ^ (t >>> 14)) >>> 0) / 0xffffffff;
   } else {
     n = Math.random();
   }

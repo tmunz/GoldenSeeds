@@ -1,10 +1,10 @@
-const path = require("path");
+const path = require('path');
 
 module.exports = {
-  mode: "production",
-  devtool: "hidden-source-map",
+  mode: 'production',
+  devtool: 'hidden-source-map',
   output: {
-    path: path.resolve(__dirname, "..", "./docs"),
+    path: path.resolve(__dirname, '..', './docs'),
     filename: 'bundle.[name].[hash].js',
   },
 };

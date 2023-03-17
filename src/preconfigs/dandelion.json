@@ -2,20 +2,33 @@
   "meta": {
     "name": "dandelion"
   },
-  "stages": [{
-    "type": "polar",
-    "items": "89",
-    "angle": "0",
-    "distance": "0"
-  }, {
-    "type": "regular-shape",
-    "style": "stroke",
-    "corners": "0",
-    "color": "random",
-    "angle": "n * 360 / goldenRatio - 90",
-    "size": "n",
-    "ratio": "1 / Math.pow(goldenRatio, 2)",
-    "cutRatio0": "-4 / 3",
-    "cutRatio1": "0"
-  }]
+  "stages": [
+    {
+      "type": "polar",
+      "color": "gold",
+      "strokeWidth": "1",
+      "items": "89",
+      "angle": "0",
+      "distance": "0"
+    },
+    {
+      "type": "shape",
+      "border": "33344903",
+      "fill": "-2147155969",
+      "coordinateType": "polar",
+      "edges": "1",
+      "smoothness": "0",
+      "noise": "0",
+      "probabilityDistributionMuRandomness": "0",
+      "probabilityDistributionSigma": "0",
+      "probabilityDistributionSigmaRandomness": "0",
+      "probabilityDistributionNoise": "0",
+      "angle": "n * 360 / goldenRatio",
+      "size": "n",
+      "offset": "0",
+      "cutRatio0": "-4 / 3",
+      "cutRatio1": "0",
+      "seed": "999"
+    }
+  ]
 }

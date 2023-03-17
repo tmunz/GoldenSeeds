@@ -34,10 +34,7 @@ export class Color {
     } else {
       return (
         '#' +
-        (
-          0x1000000 +
-          (0xffffff < this.value ? randomColor(seed) : this.value)
-        )
+        (0x1000000 + (0xffffff < this.value ? randomColor(seed) : this.value))
           .toString(16)
           .substring(1, 7)
       );

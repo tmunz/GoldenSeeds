@@ -11,8 +11,11 @@ import { PngExporter } from '../png/PngExporter';
 
 import './Toolbar.styl';
 
-
-export type ExporterData =  { svg: string, name: string, dimensions: { width: number, height: number } };
+export type ExporterData = {
+  svg: string;
+  name: string;
+  dimensions: { width: number; height: number };
+};
 
 interface Props {
   config?: Config;

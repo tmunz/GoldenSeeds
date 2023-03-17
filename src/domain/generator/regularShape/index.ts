@@ -65,7 +65,10 @@ export class RegularShape implements SvgGenerator {
     return {
       grid: prev.grid,
       svg: regularShape.svg,
-      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, regularShape.boundingBox]),
+      boundingBox: PointUtils.combineBoundingBoxes([
+        prev.boundingBox,
+        regularShape.boundingBox,
+      ]),
     };
   };
 }

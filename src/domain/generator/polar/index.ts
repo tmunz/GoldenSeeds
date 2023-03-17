@@ -56,18 +56,27 @@ export class PolarGrid implements SvgGenerator {
         true,
       )
     ) {
-      const extremeX = Math.max(-drawingBoundingBox.min[Point.X], drawingBoundingBox.max[Point.X]);
-      const extremeY = Math.max(-drawingBoundingBox.min[Point.Y], drawingBoundingBox.max[Point.Y]);
+      const extremeX = Math.max(
+        -drawingBoundingBox.min[Point.X],
+        drawingBoundingBox.max[Point.X],
+      );
+      const extremeY = Math.max(
+        -drawingBoundingBox.min[Point.Y],
+        drawingBoundingBox.max[Point.Y],
+      );
       drawingBoundingBox = {
         min: [-extremeX, -extremeY],
-        max: [extremeX, extremeY]
+        max: [extremeX, extremeY],
       };
     }
 
     return {
       grid: drawing.points,
       svg: drawing.svg,
-      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, drawingBoundingBox]),
+      boundingBox: PointUtils.combineBoundingBoxes([
+        prev.boundingBox,
+        drawingBoundingBox,
+      ]),
     };
   };
 }

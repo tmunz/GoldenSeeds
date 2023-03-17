@@ -23,9 +23,9 @@
       "probabilityDistributionSigma": "0",
       "probabilityDistributionSigmaRandomness": "0",
       "probabilityDistributionNoise": "0",
-      "angle": "n",
+      "angle": "180 + n",
       "size": "Math.pow(n, 1 / goldenRatio)",
-      "offset": "(n%2) * 2 / Math.pow(goldenRatio, 2) ",
+      "offset": "2 * (i%2) / Math.pow(goldenRatio, 2) ",
       "cutRatio0": "0",
       "cutRatio1": "0"
     }

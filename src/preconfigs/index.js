@@ -1,6 +1,6 @@
 export const preconfigs = [
   // require('./golden-voronoi.json'),
-  // require('./test.json'),
+  require('./test.json'),
   require('./golden-seeds.json'),
   require('./turbine.json'),
   require('./unknown-pleasures.json'),
@@ -13,5 +13,4 @@ export const preconfigs = [
   require('./golden-circles.json'),
   require('./hinge-third.json'),
   require('./christmas-tree.json'),
-  require('./overlapping-triangles.json'),
 ];

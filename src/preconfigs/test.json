@@ -1,33 +1,35 @@
 {
   "meta": {
-    "name": "test"
+    "name": "christmas-tree"
   },
   "stages": [
     {
-      "type": "polar",
-      "color": "gold",
-      "strokeWidth": "1",
-      "items": "1",
-      "angle": "0",
-      "distance": "0"
+      "type": "cartesian",
+      "color": "none",
+      "strokeWidth": "0",
+      "x": "1",
+      "xDistance": "1",
+      "yDistance": "0",
+      "items": "9"
     },
     {
       "type": "shape",
-      "border": "gold",
+      "border": "11787911",
       "fill": "transparent",
       "coordinateType": "polar",
-      "midpoints": "3",
-      "smoothness": "1",
+      "edges": "12",
+      "smoothness": "(n-0.9)**0.2",
       "noise": "0",
       "probabilityDistributionMuRandomness": "0",
       "probabilityDistributionSigma": "0",
       "probabilityDistributionSigmaRandomness": "0",
       "probabilityDistributionNoise": "0",
       "angle": "0",
-      "size": "1",
-      "offset": "0",
-      "cutRatio0": "0",
-      "cutRatio1": "0"
+      "size": "n**(2/3)",
+      "offset": "i%2 ? 1 : 0.95 * (1 - 1 / (n + (1/3)))",
+      "cutRatio0": "n == items ? 0 : n % 2 ? 0.8 : 0",
+      "cutRatio1": "n == items ? 0 : n % 2 ? 1 : 0.2",
+      "seed": "999"
     }
   ]
 }

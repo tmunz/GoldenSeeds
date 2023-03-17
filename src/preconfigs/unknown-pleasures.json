@@ -18,17 +18,18 @@
       "fill": "black",
       "coordinateType": "cartesian",
       "edges": "100",
-      "smoothness": "0",
-      "noise": "0.2",
-      "probabilityDistributionMuRandomness": "0.2",
-      "probabilityDistributionSigma": "0.35",
-      "probabilityDistributionSigmaRandomness": "0.1",
-      "probabilityDistributionNoise": "0.15",
+      "smoothness": "0.1",
+      "noise": "0.15",
+      "probabilityDistributionMuRandomness": "0.15",
+      "probabilityDistributionSigma": "0.3",
+      "probabilityDistributionSigmaRandomness": "0.15",
+      "probabilityDistributionNoise": "0.3",
       "angle": "0",
       "size": "1",
       "offset": "0",
       "cutRatio0": "0",
-      "cutRatio1": "0"
+      "cutRatio1": "0",
+      "seed": "495"
     }
   ]
 }

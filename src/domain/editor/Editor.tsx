@@ -16,7 +16,6 @@ import { AnimatedButton } from '../../ui/AnimatedButton';
 
 import './Editor.styl';
 
-
 interface Props {
   config: Config;
   editStageId?: string;

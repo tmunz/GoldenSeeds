@@ -49,7 +49,10 @@ export class CartesianGrid implements SvgGenerator {
     return {
       grid: drawing.points,
       svg: drawing.svg,
-      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, PointUtils.boundingBox(drawing.points)]),
+      boundingBox: PointUtils.combineBoundingBoxes([
+        prev.boundingBox,
+        PointUtils.boundingBox(drawing.points),
+      ]),
     };
   };
 }

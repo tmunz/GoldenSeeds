@@ -1,4 +1,4 @@
-import { BoundingBox } from "../../datatypes/BoundingBox";
+import { BoundingBox } from '../../datatypes/BoundingBox';
 
 type ParamDefinitionTypeMinMaxStep = 'expression' | 'number';
 

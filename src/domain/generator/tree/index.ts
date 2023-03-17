@@ -33,11 +33,11 @@ export class Tree implements SvgGenerator {
       step: 0.05,
     },
     splitProbability: {
-      initial: '0.9',
+      initial: '0.95',
       type: 'number' as const,
       min: 0,
       max: 1,
-      step: 0.05,
+      step: 0.01,
     },
     lengthConservation: {
       initial: '0.8',
@@ -57,7 +57,7 @@ export class Tree implements SvgGenerator {
       initial: '999',
       type: 'number' as const,
       min: 0,
-      max: 1000,
+      max: 999,
       step: 1,
       animateable: true,
     },
@@ -69,18 +69,26 @@ export class Tree implements SvgGenerator {
     let drawingBoundingBox = PointUtils.boundingBox(drawing.points);
 
     // stabilize center if all prev points are x-axis-centered
-    if ( prev.grid.reduce( (b: boolean, p: number[]) => b && p[Point.X] === 0, true)) {
-      const extremeX = Math.max(-drawingBoundingBox.min[Point.X], drawingBoundingBox.max[Point.X]);
+    if (
+      prev.grid.reduce((b: boolean, p: number[]) => b && p[Point.X] === 0, true)
+    ) {
+      const extremeX = Math.max(
+        -drawingBoundingBox.min[Point.X],
+        drawingBoundingBox.max[Point.X],
+      );
       drawingBoundingBox = {
         min: [-extremeX, drawingBoundingBox.min[Point.Y]],
-        max: [extremeX, drawingBoundingBox.max[Point.Y]]
+        max: [extremeX, drawingBoundingBox.max[Point.Y]],
       };
     }
 
     return {
       grid: drawing.points,
       svg: drawing.svg,
-      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, drawingBoundingBox]),
+      boundingBox: PointUtils.combineBoundingBoxes([
+        prev.boundingBox,
+        drawingBoundingBox,
+      ]),
     };
   };
 }

@@ -4,15 +4,23 @@
   },
   "stages": [
     {
-      "type": "regular-shape",
-      "color": "-2147299961",
-      "style": "filled",
-      "corners": "0",
+      "type": "shape",
+      "border": "-2145596025",
+      "fill": "transparent",
+      "coordinateType": "polar",
+      "edges": "1",
+      "smoothness": "0",
+      "noise": "0",
+      "probabilityDistributionMuRandomness": "0",
+      "probabilityDistributionSigma": "0",
+      "probabilityDistributionSigmaRandomness": "0",
+      "probabilityDistributionNoise": "0",
       "angle": "0",
       "size": "1400",
-      "ratio": "1",
+      "offset": "0",
       "cutRatio0": "0",
-      "cutRatio1": "0"
+      "cutRatio1": "0",
+      "seed": "999"
     },
     {
       "type": "polar",
@@ -23,15 +31,23 @@
       "distance": "n"
     },
     {
-      "type": "regular-shape",
-      "color": "gold",
-      "style": "stroke",
-      "corners": "0",
+      "type": "shape",
+      "border": "gold",
+      "fill": "-2145910785",
+      "coordinateType": "polar",
+      "edges": "1",
+      "smoothness": "0.5",
+      "noise": "0",
+      "probabilityDistributionMuRandomness": "0",
+      "probabilityDistributionSigma": "0",
+      "probabilityDistributionSigmaRandomness": "0",
+      "probabilityDistributionNoise": "0",
       "angle": "90-n*2",
       "size": "n",
-      "ratio": "0",
+      "offset": "0",
       "cutRatio0": "0",
-      "cutRatio1": "n/items"
+      "cutRatio1": "n/items",
+      "seed": "999"
     }
   ]
 }

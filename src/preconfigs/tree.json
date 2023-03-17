@@ -9,10 +9,10 @@
       "depth": "13",
       "splitAngle": "25",
       "splitVariation": "0.0",
-      "splitProbability": "0.95",
+      "splitProbability": "0.97",
       "lengthConservation": "0.8",
       "lengthVariation": "1",
-      "seed": "228"
+      "seed": "868"
     },
     {
       "type": "regular-shape",

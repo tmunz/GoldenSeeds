@@ -2,7 +2,12 @@ import { MathUtils } from '../../utils/MathUtils';
 import { Converter } from './Converter';
 
 export class ExpressionConverter extends Converter<
-  (n: number, items: number, itemSize: (n: number) => number) => number
+  (
+    n: number,
+    items: number,
+    itemSize: (n: number) => number,
+    i: number,
+  ) => number
 > {
   protected convertFromRaw = (
     rawValue: string,
@@ -10,11 +15,12 @@ export class ExpressionConverter extends Converter<
     n: number,
     items: number,
     itemSize: (n: number) => number,
+    i?: number,
   ) => number) => {
     try {
       const expression = this.convertToExpression(rawValue);
       // don't check everything because of performance reasons
-      [0, 1].map((i: number) => expression(i, 100, (n) => n)); //test Expression
+      [0, 1].map((d: number) => expression(d, 2, (n) => n)); //test Expression
       return expression;
     } catch (e) {
       return this.convertToExpression('1'); // TODO use last valid one
@@ -29,7 +35,7 @@ export class ExpressionConverter extends Converter<
     itemSize: (n: number) => number,
   ) => number) => {
     return eval(
-      `(n, items, itemSize) => ((fib, goldenRatio) => ${expression})(${MathUtils.fib}, ${MathUtils.goldenRatio})`,
+      `(n, items, itemSize, i) => ((fib, goldenRatio) => ${expression})(${MathUtils.fib}, ${MathUtils.goldenRatio})`,
     );
   };
 }

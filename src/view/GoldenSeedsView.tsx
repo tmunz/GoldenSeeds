@@ -50,11 +50,11 @@ export class GoldenSeedsView extends React.Component<Props, State> {
                 }}
               >
                 <SvgCanvas
-                  svgContent={ svgService.generateSvg(
+                  svgContent={svgService.generateSvg(
                     this.props.config.stages,
-                    this.state.width  * 1.04, // must be slightly larger, because of movement
-                    this.state.height
-                  ) }
+                    this.state.width * 1.04, // must be slightly larger, because of movement
+                    this.state.height,
+                  )}
                   config={this.props.config}
                 />
               </div>
@@ -70,8 +70,13 @@ export class GoldenSeedsView extends React.Component<Props, State> {
             getExporterData={() => {
               return {
                 name: this.props.config?.meta.name ?? 'drawing',
-                svg: svgService.generateSvg(this.props.config?.stages, 1000, 1000) ?? '',
-                dimensions: { width: 1000, height: 1000 }
+                svg:
+                  svgService.generateSvg(
+                    this.props.config?.stages,
+                    1000,
+                    1000,
+                  ) ?? '',
+                dimensions: { width: 1000, height: 1000 },
               };
             }}
           />
@@ -93,7 +98,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
 class ErrorBoundary extends React.Component<
   React.ComponentProps<any>,
   { error: boolean }
-  > {
+> {
   constructor(props: {}) {
     super(props);
     this.state = { error: false };

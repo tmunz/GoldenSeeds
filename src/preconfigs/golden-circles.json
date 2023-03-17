@@ -1,31 +1,54 @@
+
 {
   "meta": {
-    "name": "golden-circles"
+    "name": "golden circles"
   },
-  "stages": [{
-    "type": "regular-shape",
-    "style": "filled",
-    "corners": "0",
-    "color": "gold",
-    "angle": "0",
-    "size": "56",
-    "ratio": "0",
-    "cutRatio0": "0",
-    "cutRatio1": "0"
-  }, {
-    "type": "polar",
-    "items": "55",
-    "angle": "0",
-    "distance": "0"
-  }, {
-    "type": "regular-shape",
-    "style": "stroke",
-    "corners": "0",
-    "color": "#000000",
-    "angle": "n * 360 / goldenRatio - 90",
-    "size": "n",
-    "ratio": "1 / Math.pow(goldenRatio, 2)",
-    "cutRatio0": "0",
-    "cutRatio1": "1 - (1 / goldenRatio)"
-  }]
+  "stages": [
+    {
+      "type": "shape",
+      "border": "none",
+      "fill": "gold",
+      "coordinateType": "polar",
+      "edges": "1",
+      "smoothness": "0.5",
+      "noise": "0",
+      "probabilityDistributionMuRandomness": "0",
+      "probabilityDistributionSigma": "0",
+      "probabilityDistributionSigmaRandomness": "0",
+      "probabilityDistributionNoise": "0",
+      "angle": "0",
+      "size": "56",
+      "offset": "0",
+      "cutRatio0": "0",
+      "cutRatio1": "0",
+      "seed": "999"
+    },
+    {
+      "type": "polar",
+      "color": "none",
+      "strokeWidth": "1",
+      "items": "55",
+      "angle": "0",
+      "distance": "0"
+    },
+    {
+      "type": "shape",
+      "border": "black",
+      "fill": "none",
+      "coordinateType": "polar",
+      "edges": "1",
+      "smoothness": "0",
+      "noise": "0",
+      "probabilityDistributionMuRandomness": "0",
+      "probabilityDistributionSigma": "0",
+      "probabilityDistributionSigmaRandomness": "0",
+      "probabilityDistributionNoise": "0",
+      "angle": "n * 360 / goldenRatio - 90",
+      "size": "n",
+      "offset": "0",
+      "cutRatio0": "0",
+      "cutRatio1": "1 - (1 / goldenRatio)",
+      "seed": "999"
+    }
+  ]
 }

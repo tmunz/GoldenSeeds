@@ -1,12 +1,12 @@
-const path = require("path");
-const webpack = require("webpack");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const package = require('../package.json');
 
-module.exports = {
+module.exports = (env) => ({
   entry: {
-    app: path.resolve(__dirname, "..", "./src/index.tsx"),
+    app: path.resolve(__dirname, '..', './src/index.tsx'),
   },
   module: {
     rules: [{
@@ -15,10 +15,10 @@ module.exports = {
     }, {
       test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
       exclude: /\.icon\.svg$/,
-      type: "asset/resource",
+      type: 'asset/resource',
     }, {
       test: /\.jpe?g$|\.gif$|\.png$/i,
-      type: "asset/resource",
+      type: 'asset/resource',
     }, {
       test: /\.css$|\.styl$/,
       use: [
@@ -30,7 +30,7 @@ module.exports = {
             postcssOptions: {
               plugins: [
                 [
-                  "autoprefixer",
+                  'autoprefixer',
                   {
                     // Options
                   },
@@ -47,15 +47,16 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, "..", "./public/index.html"),
+      template: path.resolve(__dirname, '..', './public/index.html'),
     }),
     new webpack.DefinePlugin({
-      'process.env':{
-        'APP_VERSION': JSON.stringify(package.version),
+      "process.env": {
+        "APP_VERSION": JSON.stringify(package.version),
+        "MODE": JSON.stringify(env),
       }
     }),
   ],
   resolve: {
     extensions: ['.js', '.ts', '.tsx', '.styl']
   },
-};
+});

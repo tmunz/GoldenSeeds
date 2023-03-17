@@ -2,21 +2,33 @@
   "meta": {
     "name": "golden seeds"
   },
-  "stages": [{
-    "type": "polar",
-    "color": "transparent",
-    "items": "987",
-    "angle": "n * (360 / goldenRatio)",
-    "distance": "n ** (1 / goldenRatio)"
-  }, {
-    "type": "regular-shape",
-    "corners": "2",
-    "color": "gold",
-    "style": "filled",
-    "angle": "n * 111",
-    "size": "(n / 5) ** (1 / 5)",
-    "ratio": "1 / (goldenRatio ** 2)",
-    "cutRatio0": "0",
-    "cutRatio1": "0"
-  }]
+  "stages": [
+    {
+      "type": "polar",
+      "color": "none",
+      "strokeWidth": "1",
+      "items": "987",
+      "angle": "n * (360 / goldenRatio)",
+      "distance": "n ** (1 / goldenRatio)"
+    },
+    {
+      "type": "shape",
+      "border": "none",
+      "fill": "gold",
+      "coordinateType": "polar",
+      "edges": "4",
+      "smoothness": "0.4",
+      "noise": "0",
+      "probabilityDistributionMuRandomness": "0",
+      "probabilityDistributionSigma": "0",
+      "probabilityDistributionSigmaRandomness": "0",
+      "probabilityDistributionNoise": "0",
+      "angle": "n * 111",
+      "size": "0.4 * (n / 5) ** (1 / 5)",
+      "offset": "i%2",
+      "cutRatio0": "0",
+      "cutRatio1": "0",
+      "seed": "999"
+    }
+  ]
 }

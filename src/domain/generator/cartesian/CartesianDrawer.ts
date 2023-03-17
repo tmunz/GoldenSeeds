@@ -66,12 +66,7 @@ function calculatePolarGrid(
   return grid;
 }
 
-function drawLine(
-  from: Point,
-  to: Point,
-  config: CartesianConfig,
-  i: number,
-) {
+function drawLine(from: Point, to: Point, config: CartesianConfig, i: number) {
   return `<line
       x1="${from[Point.X]}"
       y1="${from[Point.Y]}"

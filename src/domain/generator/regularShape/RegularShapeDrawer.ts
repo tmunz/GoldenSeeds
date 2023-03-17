@@ -29,31 +29,47 @@ interface ItemProps {
   cutRatio1: number;
 }
 
-export function draw(config: RegularShapeConfig, grid: Point[]): { svg: string, boundingBox: BoundingBox } {
+export function draw(
+  config: RegularShapeConfig,
+  grid: Point[],
+): { svg: string; boundingBox: BoundingBox } {
   const items: number = grid.length;
-  return grid.reduce((agg, position: Point, i: number) => {
-    const n = i + 1;
-    const itemSize: number = config.size(n, items);
-    const elementStyle = style(n, config.color, config.style);
-    let svg = '';
-    if (0 < config.corners) {
-      const itemProps = getItemProps(config, n, items, itemSize);
-      svg = drawRegularShape(position, itemProps, elementStyle);
-    } else {
-      const cutRatio1 = config.cutRatio1(n, items, itemSize);
-      const startAngle = 360 * cutRatio1 + config.angle(n, items, itemSize);
-      const angle = 360 * (1 - (cutRatio1 - config.cutRatio0(n, items, itemSize)));
-      svg = drawArc(position, i, itemSize, startAngle, angle, elementStyle);
-    }
-    const boundingBox = {
-      min: [position[Point.X] - itemSize / 2, position[Point.Y] - itemSize / 2],
-      max: [position[Point.X] + itemSize / 2, position[Point.Y] + itemSize / 2],
-    }
-    return {
-      svg: agg.svg + svg,
-      boundingBox: PointUtils.combineBoundingBoxes([agg.boundingBox, boundingBox]),
-    };
-  }, { svg: '', boundingBox: PointUtils.DEFAULT_BOUNDING_BOX });
+  return grid.reduce(
+    (agg, position: Point, i: number) => {
+      const n = i + 1;
+      const itemSize: number = config.size(n, items);
+      const elementStyle = style(n, config.color, config.style);
+      let svg = '';
+      if (0 < config.corners) {
+        const itemProps = getItemProps(config, n, items, itemSize);
+        svg = drawRegularShape(position, itemProps, elementStyle);
+      } else {
+        const cutRatio1 = config.cutRatio1(n, items, itemSize);
+        const startAngle = 360 * cutRatio1 + config.angle(n, items, itemSize);
+        const angle =
+          360 * (1 - (cutRatio1 - config.cutRatio0(n, items, itemSize)));
+        svg = drawArc(position, i, itemSize, startAngle, angle, elementStyle);
+      }
+      const boundingBox = {
+        min: [
+          position[Point.X] - itemSize / 2,
+          position[Point.Y] - itemSize / 2,
+        ],
+        max: [
+          position[Point.X] + itemSize / 2,
+          position[Point.Y] + itemSize / 2,
+        ],
+      };
+      return {
+        svg: agg.svg + svg,
+        boundingBox: PointUtils.combineBoundingBoxes([
+          agg.boundingBox,
+          boundingBox,
+        ]),
+      };
+    },
+    { svg: '', boundingBox: PointUtils.DEFAULT_BOUNDING_BOX },
+  );
 }
 
 function getItemProps(
@@ -85,7 +101,8 @@ function drawRegularShape(
 ): string {
   const { size, corners, ratio, angle, cutRatio0, cutRatio1 } = itemProps;
 
-  const p = (pt: Point) => ` ${center[Point.X] - pt[Point.X]},${center[Point.Y] - pt[Point.Y]} `;
+  const p = (pt: Point) =>
+    ` ${center[Point.X] - pt[Point.X]},${center[Point.Y] - pt[Point.Y]} `;
   let pts: Point[] = [];
   let i: number;
 
@@ -129,10 +146,26 @@ function drawRegularShape(
     ];
 
     const basePts = [...mainPts];
-    basePts.splice(1, 0, normalizedPts[1].map((c, i) => mainPts[0][i] + c * multipliers[1] * 1));
-    basePts.splice(2, 0, normalizedPts[2].map((c, i) => mainPts[1][i] + c * multipliers[2] * -1));
-    basePts.splice(5, 0, normalizedPts[5].map((c, i) => mainPts[2][i] + c * multipliers[2] * -1));
-    basePts.splice(6, 0, normalizedPts[6].map((c, i) => mainPts[3][i] + c * multipliers[1] * 1));
+    basePts.splice(
+      1,
+      0,
+      normalizedPts[1].map((c, i) => mainPts[0][i] + c * multipliers[1] * 1),
+    );
+    basePts.splice(
+      2,
+      0,
+      normalizedPts[2].map((c, i) => mainPts[1][i] + c * multipliers[2] * -1),
+    );
+    basePts.splice(
+      5,
+      0,
+      normalizedPts[5].map((c, i) => mainPts[2][i] + c * multipliers[2] * -1),
+    );
+    basePts.splice(
+      6,
+      0,
+      normalizedPts[6].map((c, i) => mainPts[3][i] + c * multipliers[1] * 1),
+    );
 
     if (cutRatio0 < cutRatio1) {
       pts = [
@@ -161,9 +194,15 @@ function drawRegularShape(
 }
 
 function sliceBezier(pts: Point[], t: number) {
-  const p01 = [Point.X, Point.Y].map((c) => (pts[1][c] - pts[0][c]) * t + pts[0][c]);
-  const p12 = [Point.X, Point.Y].map((c) => (pts[2][c] - pts[1][c]) * t + pts[1][c]);
-  const p23 = [Point.X, Point.Y].map((c) => (pts[3][c] - pts[2][c]) * t + pts[2][c]);
+  const p01 = [Point.X, Point.Y].map(
+    (c) => (pts[1][c] - pts[0][c]) * t + pts[0][c],
+  );
+  const p12 = [Point.X, Point.Y].map(
+    (c) => (pts[2][c] - pts[1][c]) * t + pts[1][c],
+  );
+  const p23 = [Point.X, Point.Y].map(
+    (c) => (pts[3][c] - pts[2][c]) * t + pts[2][c],
+  );
   const p012 = [Point.X, Point.Y].map((c) => (p12[c] - p01[c]) * t + p01[c]);
   const p123 = [Point.X, Point.Y].map((c) => (p23[c] - p12[c]) * t + p12[c]);
   const pt = [Point.X, Point.Y].map((c) => (p123[c] - p012[c]) * t + p012[c]);
@@ -179,9 +218,9 @@ function drawArc(
   style: string,
 ): string {
   if (angle <= -360 || 360 <= angle) {
-    return `<circle ${style} cx="${center[Point.X]}" cy="${center[Point.Y]}" r="${
-      size / 2
-      }" />`;
+    return `<circle ${style} cx="${center[Point.X]}" cy="${
+      center[Point.Y]
+    }" r="${size / 2}" />`;
   } else {
     const r = size / 2;
     const startRad = (startAngle / 180) * Math.PI;
@@ -196,7 +235,7 @@ function drawArc(
     ];
     return `<path ${style} d="${`M ${pointAsSvg(startPt)} A ${r},${r} 0 ${
       angle % 360 < 180 ? 0 : 1
-      }  1 ${pointAsSvg(endPt)}`}" />`;
+    }  1 ${pointAsSvg(endPt)}`}" />`;
   }
 }
 

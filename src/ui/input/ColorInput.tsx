@@ -61,7 +61,7 @@ export class ColorInput extends React.Component<Props> {
     );
   }
 
-  private convertValue(channel: any, inputColor?: InputColor) {
+  private convertValue(channel: any, inputColor?: InputColor): number {
     const value = this.props.rangeValue ?? 0;
     return channel < 0
       ? -0x80000000 | value
@@ -73,6 +73,6 @@ export class ColorInput extends React.Component<Props> {
             ? (value & 0xff00ff) | ((Number(channel) & 0xff) << 8)
             : inputColor === InputColor.BLUE
               ? (value & 0xffff00) | ((Number(channel) & 0xff) << 0)
-              : undefined;
+              : 0;
   }
 }
