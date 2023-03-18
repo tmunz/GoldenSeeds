@@ -1,9 +1,9 @@
 {
   "name": "golden-seeds",
-  "version": "2.0.0-alpha.16",
+  "version": "2.0.0-alpha.17",
   "repository": "https://github.com/tmunz/GoldenSeeds",
-  "description": "",
-  "main": "index.js",
+  "description": "Golden Seeds - SVG Generator",
+  "main": "src/index.tsx",
   "scripts": {
     "start": "webpack serve --config webpack/webpack.config.js --env env=development",
     "build": "del-cli -f ./docs/* && webpack --config webpack/webpack.config.js --env env=production",
@@ -11,14 +11,14 @@
     "lint": "eslint --fix ./src/**/*{.js,.ts*}"
   },
   "keywords": [],
-  "author": "",
+  "author": "Tobias Munzert",
   "license": "MIT",
   "dependencies": {
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-css-transition-replace": "5.0.0-beta.0",
     "react-dom": "^18.2.0",
-    "rxjs": "^6.5.4",
-    "uuid": "^9.0.0"
+    "rxjs": "^6.5.4"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
@@ -30,8 +30,8 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "@types/jest": "^24.9.0",
     "@types/react": "^18.0.17",
-    "@types/react-dom": "^18.0.6",
-    "@types/uuid": "^9.0.1",
+    "@types/react-beautiful-dnd": "^13.1.3",
+    "@types/react-dom": "^18.0.6", 
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
     "@webpack-cli/serve": "^2.0.1",

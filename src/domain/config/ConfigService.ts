@@ -8,6 +8,7 @@ import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 import { Stage } from '../stage/Stage';
 
 export class ConfigService {
+
   preconfigIndex$ = new BehaviorSubject<number>(-1);
   config$ = new BehaviorSubject<Config>({ meta: { name: '' }, stages: [] });
 
@@ -58,10 +59,11 @@ export class ConfigService {
     this.config$.next(nextConfig);
   }
 
-  swapStages(a: number, b: number): void {
+  moveToIndex(stageId: string, newIndex: number) {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
-    nextConfig.stages[a] = nextConfig.stages.splice(b, 1, nextConfig.stages[a])[0];
+    const currentIndex = this.findIndexByStageId(stageId);
+    nextConfig.stages.splice(newIndex, 0, nextConfig.stages.splice(currentIndex, 1)[0]);
     this.config$.next(nextConfig);
   }
 

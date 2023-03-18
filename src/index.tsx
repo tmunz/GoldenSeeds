@@ -1,9 +1,9 @@
-import { render } from 'react-dom';
 import React from 'react';
-
+import ReactDOM from 'react-dom/client';
 import { App } from './App';
 
 import './variables.styl';
 import './index.styl';
 
-render(<App />, document.getElementById('app'));
+const root = ReactDOM.createRoot(document.getElementById('app') as HTMLElement);
+root.render(<App />);
