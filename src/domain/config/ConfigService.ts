@@ -27,6 +27,11 @@ export class ConfigService {
     this.config$.next(this.convertRawToConfig(configRaw));
   }
 
+  selectPreconfigByName(name: string | null) {
+    const index = preconfigs.findIndex(p => p.meta.name === name);
+    this.selectPreconfig(Math.max(0, index));
+  }
+
   selectPreconfig(preconfigIndex: number) {
     this.setRawConfig(preconfigs[preconfigIndex], preconfigIndex);
   }

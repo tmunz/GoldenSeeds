@@ -16,7 +16,8 @@ export function App() {
     const configSubscription = configService.config$.subscribe(setConfig as any);
 
     setTimeout(() => {
-      configService.selectPreconfig(0);
+      const preconfig = new URLSearchParams(window.location.search).get('name');
+      configService.selectPreconfigByName(preconfig);
       animationService.animateDefault();
     }, 500);
 
