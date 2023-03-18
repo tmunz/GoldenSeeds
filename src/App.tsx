@@ -11,15 +11,9 @@ export function App() {
   const [config, setConfig] = useState();
 
   useEffect(() => {
-    const preconfigSubscription = configService.preconfigIndex$.subscribe(
-      setPreconfigIndex as any,
-    );
-    const editStageIdSubscription = editorStateService.editStageId$.subscribe(
-      setEditStageId as any,
-    );
-    const configSubscription = configService.config$.subscribe(
-      setConfig as any,
-    );
+    const preconfigSubscription = configService.preconfigIndex$.subscribe(setPreconfigIndex as any);
+    const editStageIdSubscription = editorStateService.editStageId$.subscribe(setEditStageId as any);
+    const configSubscription = configService.config$.subscribe(setConfig as any);
 
     setTimeout(() => {
       configService.selectPreconfig(0);
@@ -35,11 +29,7 @@ export function App() {
 
   return (
     <React.Fragment>
-      <GoldenSeedsView
-        preconfigIndex={preconfigIndex}
-        config={config}
-        editStageId={editStageId}
-      />
+      <GoldenSeedsView preconfigIndex={preconfigIndex} config={config} editStageId={editStageId} />
       {process.env.APP_VERSION}
     </React.Fragment>
   );

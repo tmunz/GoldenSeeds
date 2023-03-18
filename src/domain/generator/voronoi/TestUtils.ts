@@ -12,10 +12,7 @@ declare global {
 }
 
 const isSamePoint = (received: Point, expected: Point): boolean => {
-  return (
-    Math.abs(received.x - expected.x) <= Math.pow(10, -3) &&
-    Math.abs(received.y - expected.y) <= Math.pow(10, -3)
-  );
+  return Math.abs(received.x - expected.x) <= Math.pow(10, -3) && Math.abs(received.y - expected.y) <= Math.pow(10, -3);
 };
 
 expect.extend({
@@ -24,40 +21,27 @@ expect.extend({
     if (pass) {
       return {
         message: () =>
-          `expected \n   ${JSON.stringify(
-            received,
-          )} \nnot to be close to \n   ${JSON.stringify(expected)}`,
+          `expected \n   ${JSON.stringify(received)} \nnot to be close to \n   ${JSON.stringify(expected)}`,
         pass: true,
       };
     } else {
       return {
-        message: () =>
-          `expected \n   ${JSON.stringify(
-            received,
-          )} \n to be close to \n   ${JSON.stringify(expected)}`,
+        message: () => `expected \n   ${JSON.stringify(received)} \n to be close to \n   ${JSON.stringify(expected)}`,
         pass: false,
       };
     }
   },
   pathToBeCloseTo(received: Point[], expected: Point[]) {
-    const pass = received.reduce(
-      (acc: boolean, actual, i) => acc && isSamePoint(actual, expected[i]),
-      true,
-    );
+    const pass = received.reduce((acc: boolean, actual, i) => acc && isSamePoint(actual, expected[i]), true);
     if (pass) {
       return {
         message: () =>
-          `expected \n   ${JSON.stringify(
-            received,
-          )} \nnot to be close to \n   ${JSON.stringify(expected)}`,
+          `expected \n   ${JSON.stringify(received)} \nnot to be close to \n   ${JSON.stringify(expected)}`,
         pass: true,
       };
     } else {
       return {
-        message: () =>
-          `expected \n   ${JSON.stringify(
-            received,
-          )} \n to be close to \n   ${JSON.stringify(expected)}`,
+        message: () => `expected \n   ${JSON.stringify(received)} \n to be close to \n   ${JSON.stringify(expected)}`,
         pass: false,
       };
     }

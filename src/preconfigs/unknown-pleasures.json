@@ -19,7 +19,7 @@
       "coordinateType": "cartesian",
       "edges": "100",
       "smoothness": "0.1",
-      "noise": "0.15",
+      "noise": "0.02",
       "probabilityDistributionMuRandomness": "0.15",
       "probabilityDistributionSigma": "0.3",
       "probabilityDistributionSigmaRandomness": "0.15",

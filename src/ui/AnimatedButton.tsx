@@ -32,9 +32,7 @@ export class AnimatedButton extends React.Component<Props, State> {
   render() {
     return (
       <div
-        className={['animated-button', this.state.hover ? 'hover' : ''].join(
-          ' ',
-        )}
+        className={['animated-button', this.state.hover ? 'hover' : ''].join(' ')}
         onClick={() => this.props.onClick && this.props.onClick()}
         onMouseEnter={() => this.setState({ hover: true })}
         onMouseLeave={() => this.setState({ hover: false })}

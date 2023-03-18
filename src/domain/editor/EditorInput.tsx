@@ -24,11 +24,7 @@ export class EditorInput extends React.Component<Props> {
         <div>
           <Input
             onChange={(value: any) =>
-              this.props.onChange(
-                this.props.convertToString
-                  ? this.props.convertToString(value)
-                  : `${value}`,
-              )
+              this.props.onChange(this.props.convertToString ? this.props.convertToString(value) : `${value}`)
             }
             label={this.props.label}
             className={this.props.valid ? '' : 'invalid range-invalid'}

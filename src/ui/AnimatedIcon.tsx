@@ -23,9 +23,7 @@ export function AnimatedIcon(props: Props) {
   });
 
   const toPath = (ps: number[][] | string) => {
-    return typeof ps === 'string'
-      ? ps
-      : ps.reduce((agg, p) => agg + ` ${p[0]},${p[1]}`, '');
+    return typeof ps === 'string' ? ps : ps.reduce((agg, p) => agg + ` ${p[0]},${p[1]}`, '');
   };
 
   return (
@@ -37,19 +35,17 @@ export function AnimatedIcon(props: Props) {
         vectorEffect="non-scaling-stroke"
         fill="none"
       >
-        {(props.points as any[]).map(
-          (points: string | number[][], i: number) => (
-            <animate
-              key={i}
-              begin="indefinite"
-              fill="freeze"
-              attributeName="points"
-              dur="500ms"
-              ref={refs[i]}
-              to={toPath(points)}
-            />
-          ),
-        )}
+        {(props.points as any[]).map((points: string | number[][], i: number) => (
+          <animate
+            key={i}
+            begin="indefinite"
+            fill="freeze"
+            attributeName="points"
+            dur="500ms"
+            ref={refs[i]}
+            to={toPath(points)}
+          />
+        ))}
       </polyline>
     </svg>
   );

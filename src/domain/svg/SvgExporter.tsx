@@ -11,16 +11,8 @@ export function SvgExporter(props: Props) {
 
   return (
     <div>
-      <a
-        target="_blank"
-        ref={exportSvgElement}
-        onClick={() => exportSvg(props, exportSvgElement.current)}
-      >
-        <AnimatedButton
-          rotation={AnimatedButton.DIRECTION_DOWN}
-          title="save"
-          iconText="svg"
-        />
+      <a target="_blank" ref={exportSvgElement} onClick={() => exportSvg(props, exportSvgElement.current)}>
+        <AnimatedButton rotation={AnimatedButton.DIRECTION_DOWN} title="save" iconText="svg" />
       </a>
     </div>
   );
@@ -31,8 +23,6 @@ function exportSvg(props: Props, exportSvgElement: HTMLAnchorElement | null) {
   if (exportSvgElement) {
     const fileName = data.name + '.svg';
     exportSvgElement.download = fileName;
-    exportSvgElement.href = URL.createObjectURL(
-      new File([data.svg ?? ''], fileName, { type: 'image/svg+xml' }),
-    );
+    exportSvgElement.href = URL.createObjectURL(new File([data.svg ?? ''], fileName, { type: 'image/svg+xml' }));
   }
 }

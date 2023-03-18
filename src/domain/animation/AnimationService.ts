@@ -10,11 +10,7 @@ export class AnimationService {
   animate = (stageId: string, id: string, target: number) => {
     if (!this.isAnimating) {
       this.isAnimating = true;
-      configService.setAnimationValue(
-        stageId,
-        id,
-        '' + AnimationService.START_VALUE,
-      );
+      configService.setAnimationValue(stageId, id, '' + AnimationService.START_VALUE);
       const tStart = new Date().getTime();
       this.animateHelper(stageId, id, target, tStart);
     }
@@ -31,19 +27,10 @@ export class AnimationService {
     }
   }
 
-  private animateHelper = (
-    stageId: string,
-    id: string,
-    target: number,
-    tStart: number,
-  ) => {
+  private animateHelper = (stageId: string, id: string, target: number, tStart: number) => {
     const t = new Date().getTime() - tStart;
     const progress = t / AnimationService.DURATION;
-    const raw = AnimationUtils.easeInOut(
-      AnimationService.START_VALUE,
-      target,
-      progress,
-    );
+    const raw = AnimationUtils.easeInOut(AnimationService.START_VALUE, target, progress);
     const value: number = Math.max(0, Math.min(target, Math.round(raw)));
     configService.setAnimationValue(stageId, id, '' + value);
     const isComplete = target <= value;
@@ -51,9 +38,7 @@ export class AnimationService {
       this.isAnimating = false;
       configService.setAnimationValue(stageId);
     } else {
-      requestAnimationFrame(() =>
-        this.animateHelper(stageId, id, target, tStart),
-      );
+      requestAnimationFrame(() => this.animateHelper(stageId, id, target, tStart));
     }
   };
 }

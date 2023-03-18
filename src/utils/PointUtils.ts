@@ -20,20 +20,14 @@ export class PointUtils {
   static combineBoundingBoxes(boundingBoxes: BoundingBox[]): BoundingBox {
     return boundingBoxes.reduce(
       (agg, boundingBox) => ({
-        min: [Point.X, Point.Y].map((d) =>
-          Math.min(agg.min[d], boundingBox.min[d]),
-        ),
-        max: [Point.X, Point.Y].map((d) =>
-          Math.max(agg.max[d], boundingBox.max[d]),
-        ),
+        min: [Point.X, Point.Y].map((d) => Math.min(agg.min[d], boundingBox.min[d])),
+        max: [Point.X, Point.Y].map((d) => Math.max(agg.max[d], boundingBox.max[d])),
       }),
       PointUtils.DEFAULT_BOUNDING_BOX,
     );
   }
 
   static distance(a: Point, b: Point): number {
-    return Math.sqrt(
-      (b[Point.X] - a[Point.X]) ** 2 + (b[Point.Y] - a[Point.Y]) ** 2,
-    );
+    return Math.sqrt((b[Point.X] - a[Point.X]) ** 2 + (b[Point.Y] - a[Point.Y]) ** 2);
   }
 }

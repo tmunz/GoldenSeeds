@@ -25,16 +25,8 @@ export class ColorInput extends React.Component<Props> {
       <div className="input color-input">
         <label>{this.props.label}</label>
         <div className="input-container">
-          {[InputColor.RED, InputColor.GREEN, InputColor.BLUE].map(
-            (c: InputColor, i: number) =>
-              this.getInputField(
-                value < 0
-                  ? value
-                  : value > 0xffffff
-                    ? 0x100
-                    : (value >> ((2 - i) * 8)) & 0xff,
-                c,
-              ),
+          {[InputColor.RED, InputColor.GREEN, InputColor.BLUE].map((c: InputColor, i: number) =>
+            this.getInputField(value < 0 ? value : value > 0xffffff ? 0x100 : (value >> ((2 - i) * 8)) & 0xff, c),
           )}
         </div>
       </div>
@@ -46,9 +38,7 @@ export class ColorInput extends React.Component<Props> {
       <RangeInput
         key={inputColor}
         className={[
-          typeof this.props.className !== 'undefined'
-            ? this.props.className
-            : '',
+          typeof this.props.className !== 'undefined' ? this.props.className : '',
           inputColor ? 'color-input-range-' + inputColor : '',
         ].join(' ')}
         onChange={(n) => this.props.onChange(this.convertValue(n, inputColor))}

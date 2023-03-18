@@ -42,28 +42,18 @@ export function PngExporter(props: Props) {
   };
 
   const resetCanvas = () => {
-    canvas
-      .current!.getContext('2d')!
-      .clearRect(0, 0, data.dimensions.width, data.dimensions.height);
+    canvas.current!.getContext('2d')!.clearRect(0, 0, data.dimensions.width, data.dimensions.height);
     setData(initialData);
   };
 
   return (
     <div>
       <a target="_blank" onClick={(e) => setData(props.getData())}>
-        <AnimatedButton
-          rotation={AnimatedButton.DIRECTION_DOWN}
-          title="save"
-          iconText="png"
-        />
+        <AnimatedButton rotation={AnimatedButton.DIRECTION_DOWN} title="save" iconText="png" />
       </a>
       <div style={{ display: 'none' }}>
         <a ref={exportPngElement}></a>
-        <canvas
-          ref={canvas}
-          width={data.dimensions.width}
-          height={data.dimensions.height}
-        >
+        <canvas ref={canvas} width={data.dimensions.width} height={data.dimensions.height}>
           Your browser does not support the PNG export
         </canvas>
       </div>

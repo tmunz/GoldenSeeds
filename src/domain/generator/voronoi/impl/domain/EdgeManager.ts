@@ -26,16 +26,8 @@ export class EdgeManager extends AbstractMemoryFactory<Edge> {
     const cleanedEdges: Edge[] = [];
 
     this.createdObjects.forEach((edge) => {
-      const couldConnectEdge = edge.connectWith(
-        boundary,
-        this.vertexFactory,
-        this.siteAreaStore,
-      );
-      const couldClipEdge = edge.clipTo(
-        boundary,
-        this.vertexFactory,
-        this.siteAreaStore,
-      );
+      const couldConnectEdge = edge.connectWith(boundary, this.vertexFactory, this.siteAreaStore);
+      const couldClipEdge = edge.clipTo(boundary, this.vertexFactory, this.siteAreaStore);
       if (couldConnectEdge && couldClipEdge && edge.hasMinLength()) {
         cleanedEdges.push(edge);
       } else {

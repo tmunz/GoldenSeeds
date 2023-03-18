@@ -41,29 +41,15 @@ export class PolarGrid implements SvgGenerator {
     },
   };
 
-  generate = (
-    config: PolarConfig,
-    prev: SvgGeneratorResult,
-  ): SvgGeneratorResult => {
+  generate = (config: PolarConfig, prev: SvgGeneratorResult): SvgGeneratorResult => {
     const drawing = draw(config, prev.grid);
 
     let drawingBoundingBox = PointUtils.boundingBox(drawing.points);
 
     // stabilize center if all prev points are centered
-    if (
-      prev.grid.reduce(
-        (b: boolean, p: number[]) => b && p[Point.X] === 0 && p[Point.Y] === 0,
-        true,
-      )
-    ) {
-      const extremeX = Math.max(
-        -drawingBoundingBox.min[Point.X],
-        drawingBoundingBox.max[Point.X],
-      );
-      const extremeY = Math.max(
-        -drawingBoundingBox.min[Point.Y],
-        drawingBoundingBox.max[Point.Y],
-      );
+    if (prev.grid.reduce((b: boolean, p: number[]) => b && p[Point.X] === 0 && p[Point.Y] === 0, true)) {
+      const extremeX = Math.max(-drawingBoundingBox.min[Point.X], drawingBoundingBox.max[Point.X]);
+      const extremeY = Math.max(-drawingBoundingBox.min[Point.Y], drawingBoundingBox.max[Point.Y]);
       drawingBoundingBox = {
         min: [-extremeX, -extremeY],
         max: [extremeX, extremeY],
@@ -73,10 +59,7 @@ export class PolarGrid implements SvgGenerator {
     return {
       grid: drawing.points,
       svg: drawing.svg,
-      boundingBox: PointUtils.combineBoundingBoxes([
-        prev.boundingBox,
-        drawingBoundingBox,
-      ]),
+      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, drawingBoundingBox]),
     };
   };
 }

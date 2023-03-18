@@ -2,9 +2,7 @@ export class DistanceHelper {
   static tolerance = 1e-9;
 
   static isEqualWithTolerance(a: number, b: number): boolean {
-    return (
-      isFinite(a) && isFinite(b) && Math.abs(a - b) < DistanceHelper.tolerance
-    );
+    return isFinite(a) && isFinite(b) && Math.abs(a - b) < DistanceHelper.tolerance;
   }
 
   static isSamePosition(...points: { x: number; y: number }[]): boolean {

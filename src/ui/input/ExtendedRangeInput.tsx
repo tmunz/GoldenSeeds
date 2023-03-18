@@ -20,9 +20,7 @@ export class ExtendedRangeInput extends React.Component<Props> {
     return (
       <div className="extended-range-input">
         <TextInput {...this.props} />
-        <RangeInput
-          {...{ ...this.props, label: undefined, value: undefined }}
-        />
+        <RangeInput {...{ ...this.props, label: undefined, value: undefined }} />
       </div>
     );
   }

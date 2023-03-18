@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "name": "christmas cutout"
+  },
+  "stages": [
+    {
+      "type": "shape",
+      "border": "gold",
+      "fill": "-2132882042",
+      "coordinateType": "polar",
+      "edges": "10",
+      "smoothness": "0.5",
+      "noise": "0",
+      "probabilityDistributionMuRandomness": "0",
+      "probabilityDistributionSigma": "0",
+      "probabilityDistributionSigmaRandomness": "0",
+      "probabilityDistributionNoise": "0",
+      "angle": "0",
+      "size": "0.9",
+      "offset": "i%2 ? 0.2 : 1",
+      "cutRatio0": "i == 2 || i == 10 ? 0 : (i == 1 ? 0.4 : i == 9 ? 0.65 : 1)",
+      "cutRatio1": "i == 1 || i == 9 ? 1 : (i == 2 ? 0.35 : i == 10 ? 0.6 : 1)",
+      "seed": "999"
+    },
+    {
+      "type": "polar",
+      "color": "-2145530489",
+      "strokeWidth": "1",
+      "items": "1",
+      "angle": "-90",
+      "distance": "0.9"
+    },
+    {
+      "type": "shape",
+      "border": "gold",
+      "fill": "0",
+      "coordinateType": "polar",
+      "edges": "1",
+      "smoothness": "1",
+      "noise": "0",
+      "probabilityDistributionMuRandomness": "0",
+      "probabilityDistributionSigma": "0",
+      "probabilityDistributionSigmaRandomness": "0",
+      "probabilityDistributionNoise": "0",
+      "angle": "0",
+      "size": "0.1",
+      "offset": "0",
+      "cutRatio0": "0",
+      "cutRatio1": "0",
+      "seed": "999"
+    },
+    {
+      "type": "polar",
+      "color": "-2146579065",
+      "strokeWidth": "1",
+      "items": "8",
+      "angle": "90",
+      "distance": "1"
+    },
+    {
+      "type": "shape",
+      "border": "11787911",
+      "fill": "transparent",
+      "coordinateType": "polar",
+      "edges": "12",
+      "smoothness": "(n-0.9)**0.2",
+      "noise": "0",
+      "probabilityDistributionMuRandomness": "0",
+      "probabilityDistributionSigma": "0",
+      "probabilityDistributionSigmaRandomness": "0",
+      "probabilityDistributionNoise": "0",
+      "angle": "0",
+      "size": "(n+1)**(2/3)",
+      "offset": "i%2 ? 1 : 0.95 * (1 - 1 / ((n+1) + (1/3)))",
+      "cutRatio0": "n == items ? 1 : ((n+1)+i) % 2 ?  0.8 : 0",
+      "cutRatio1": "((n+1)+i) % 2 ? 1 : 0.2",
+      "seed": "999"
+    }
+  ]
+}

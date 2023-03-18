@@ -16,20 +16,12 @@ export class AnimationController extends React.Component<Props> {
       <a
         className={this.props.currentlyAnimating ? 'active' : ''}
         target="_blank"
-        onClick={() =>
-          animationService.animate(
-            this.props.stageId,
-            this.props.id,
-            this.props.value,
-          )
-        }
+        onClick={() => animationService.animate(this.props.stageId, this.props.id, this.props.value)}
       >
         <AnimatedButton
           title="play"
           points={[PlayNone, PlayRegular, PlayFlipped]}
-          iconText={
-            this.props.currentlyAnimating ? '' + this.props.value : undefined
-          }
+          iconText={this.props.currentlyAnimating ? '' + this.props.value : undefined}
         />
       </a>
     );

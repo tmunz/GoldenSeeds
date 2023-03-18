@@ -29,9 +29,7 @@ export class Themer extends React.Component<{}, { show: boolean }> {
           <div
             className="action"
             onClick={() => {
-              lightThemeActive
-                ? this.root.classList.remove('light-theme')
-                : this.root.classList.add('light-theme');
+              lightThemeActive ? this.root.classList.remove('light-theme') : this.root.classList.add('light-theme');
               this.forceUpdate();
             }}
           >
@@ -48,18 +46,11 @@ export class Themer extends React.Component<{}, { show: boolean }> {
   }
 
   private setColor(id: string, c: Color) {
-    (document.querySelector(':root') as HTMLElement).style.setProperty(
-      `--${id}Color`,
-      c.toString(),
-    );
+    (document.querySelector(':root') as HTMLElement).style.setProperty(`--${id}Color`, c.toString());
     this.forceUpdate();
   }
 
   private getColor(id: string): Color {
-    return new Color(
-      getComputedStyle(document.querySelector(':root'))
-        .getPropertyValue(`--${id}Color`)
-        .trim(),
-    );
+    return new Color(getComputedStyle(document.querySelector(':root')).getPropertyValue(`--${id}Color`).trim());
   }
 }

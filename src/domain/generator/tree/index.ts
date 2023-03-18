@@ -69,13 +69,8 @@ export class Tree implements SvgGenerator {
     let drawingBoundingBox = PointUtils.boundingBox(drawing.points);
 
     // stabilize center if all prev points are x-axis-centered
-    if (
-      prev.grid.reduce((b: boolean, p: number[]) => b && p[Point.X] === 0, true)
-    ) {
-      const extremeX = Math.max(
-        -drawingBoundingBox.min[Point.X],
-        drawingBoundingBox.max[Point.X],
-      );
+    if (prev.grid.reduce((b: boolean, p: number[]) => b && p[Point.X] === 0, true)) {
+      const extremeX = Math.max(-drawingBoundingBox.min[Point.X], drawingBoundingBox.max[Point.X]);
       drawingBoundingBox = {
         min: [-extremeX, drawingBoundingBox.min[Point.Y]],
         max: [extremeX, drawingBoundingBox.max[Point.Y]],
@@ -85,10 +80,7 @@ export class Tree implements SvgGenerator {
     return {
       grid: drawing.points,
       svg: drawing.svg,
-      boundingBox: PointUtils.combineBoundingBoxes([
-        prev.boundingBox,
-        drawingBoundingBox,
-      ]),
+      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, drawingBoundingBox]),
     };
   };
 }

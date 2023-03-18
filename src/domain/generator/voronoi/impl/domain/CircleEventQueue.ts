@@ -95,10 +95,7 @@ export class CircleEventQueue {
     let node: CircleEvent = this.dataTree.getRoot();
 
     while (node) {
-      if (
-        circleEvent.y < node.y ||
-        (circleEvent.y === node.y && circleEvent.x <= node.x)
-      ) {
+      if (circleEvent.y < node.y || (circleEvent.y === node.y && circleEvent.x <= node.x)) {
         if (node.left) {
           node = node.left;
         } else {

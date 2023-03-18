@@ -15,15 +15,23 @@
       "seed": "868"
     },
     {
-      "type": "regular-shape",
-      "color": "#b3de87",
-      "style": "filled",
-      "corners": "1",
+      "type": "shape",
+      "border": "none",
+      "fill": "11787911",
+      "coordinateType": "polar",
+      "edges": "3",
+      "smoothness": "0.2",
+      "noise": "0",
+      "probabilityDistributionMuRandomness": "0",
+      "probabilityDistributionSigma": "0",
+      "probabilityDistributionSigmaRandomness": "0",
+      "probabilityDistributionNoise": "0",
       "angle": "n*111",
-      "size": "n < 2**3 ? 0 : 0.1",
-      "ratio": "0.5",
+      "size": "n < 2**3 ? 0 : 0.025",
+      "offset": "i%2",
       "cutRatio0": "0",
-      "cutRatio1": "0"
+      "cutRatio1": "0",
+      "seed": "999"
     }
   ]
 }

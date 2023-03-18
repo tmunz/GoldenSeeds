@@ -24,12 +24,7 @@ export class Boundary {
   }
 
   isPointInside(point: { x: number; y: number }): boolean {
-    return (
-      this.left() <= point.x &&
-      point.x <= this.right() &&
-      this.top() <= point.y &&
-      point.y <= this.bottom()
-    );
+    return this.left() <= point.x && point.x <= this.right() && this.top() <= point.y && point.y <= this.bottom();
   }
 
   left(): number {

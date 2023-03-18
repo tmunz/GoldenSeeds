@@ -9,18 +9,10 @@ export interface PolarConfig {
   distance: (n: number, items: number) => number;
 }
 
-export function draw(
-  config: PolarConfig,
-  grid: Point[],
-): { svg: string; points: Point[] } {
+export function draw(config: PolarConfig, grid: Point[]): { svg: string; points: Point[] } {
   return grid.reduce(
     (agg, p) => {
-      const coordinates = calculatePolarGrid(
-        p,
-        config.items,
-        config.angle,
-        config.distance,
-      );
+      const coordinates = calculatePolarGrid(p, config.items, config.angle, config.distance);
       const svg = coordinates
         .map(
           (coordinate: Point, j: number) =>
@@ -53,11 +45,7 @@ function calculatePolarGrid(
   const grid = [];
   for (let n = 1; n <= items; n++) {
     const rad = (angle(n, items) / 180) * Math.PI;
-    grid.push(
-      [Math.cos(rad), Math.sin(rad)].map(
-        (trig, i) => center[i] + distance(n, items) * trig,
-      ),
-    );
+    grid.push([Math.cos(rad), Math.sin(rad)].map((trig, i) => center[i] + distance(n, items) * trig));
   }
   return grid;
 }

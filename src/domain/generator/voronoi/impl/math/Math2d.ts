@@ -3,9 +3,7 @@ export class Math2d {
     const a = Math2d.distanceBetween(p1, p0);
     const b = Math2d.distanceBetween(p1, hinge);
     const c = Math2d.distanceBetween(hinge, p0);
-    return Math.acos(
-      (Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2)) / (2 * b * c),
-    );
+    return Math.acos((Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2)) / (2 * b * c));
   }
 
   static distanceBetween(p0: Point, p1: Point): number {
@@ -39,12 +37,7 @@ export class Math2d {
     }
   }
 
-  static calculatePointWithAngleAndDistance(
-    a: Point,
-    b: Point,
-    rads: number,
-    distanceAC: number,
-  ): Point {
+  static calculatePointWithAngleAndDistance(a: Point, b: Point, rads: number, distanceAC: number): Point {
     const slopeAbRads = Math2d.slopeAngle(a, b);
     const c = {
       x: Math.cos(rads + slopeAbRads) * distanceAC + a.x,

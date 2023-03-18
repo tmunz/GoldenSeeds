@@ -32,12 +32,7 @@ export class Color {
     if (this.value < 0) {
       return 'none';
     } else {
-      return (
-        '#' +
-        (0x1000000 + (0xffffff < this.value ? randomColor(seed) : this.value))
-          .toString(16)
-          .substring(1, 7)
-      );
+      return '#' + (0x1000000 + (0xffffff < this.value ? randomColor(seed) : this.value)).toString(16).substring(1, 7);
     }
   };
 
@@ -86,10 +81,7 @@ export class Color {
       }
       if (raw.length === 4) {
         // enable #fff as well as #ffffff
-        const tmp =
-          ((parsedValue & 0xf00) << 8) |
-          ((parsedValue & 0x0f0) << 4) |
-          (parsedValue & 0x00f);
+        const tmp = ((parsedValue & 0xf00) << 8) | ((parsedValue & 0x0f0) << 4) | (parsedValue & 0x00f);
         return tmp | (tmp << 4);
       }
     } else {

@@ -53,12 +53,12 @@ describe('offsetPath', () => {
     ];
 
     const offsetPath = ConvexPolygonTools.offsetPath(path, 1);
-    expect(
-      Math2d.angleAt(offsetPath[1], offsetPath[0], offsetPath[2]),
-    ).toBeCloseTo(Math2d.angleAt(path[1], path[0], path[2]));
-    expect(
-      Math2d.angleAt(offsetPath[0], offsetPath[1], offsetPath[2]),
-    ).toBeCloseTo(Math2d.angleAt(path[0], path[1], path[3]));
+    expect(Math2d.angleAt(offsetPath[1], offsetPath[0], offsetPath[2])).toBeCloseTo(
+      Math2d.angleAt(path[1], path[0], path[2]),
+    );
+    expect(Math2d.angleAt(offsetPath[0], offsetPath[1], offsetPath[2])).toBeCloseTo(
+      Math2d.angleAt(path[0], path[1], path[3]),
+    );
     expect(offsetPath).pathToBeCloseTo(expected);
   });
   test('calculates overlapping correct (no intersections after offset) for 90°/unspecific polygon', () => {
@@ -75,12 +75,12 @@ describe('offsetPath', () => {
     ];
 
     const offsetPath = ConvexPolygonTools.offsetPath(path, 1.5);
-    expect(
-      Math2d.angleAt(offsetPath[1], offsetPath[0], offsetPath[2]),
-    ).toBeCloseTo(Math2d.angleAt(path[1], path[0], path[2]));
-    expect(
-      Math2d.angleAt(offsetPath[0], offsetPath[1], offsetPath[2]),
-    ).toBeCloseTo(Math2d.angleAt(path[0], path[1], path[3]));
+    expect(Math2d.angleAt(offsetPath[1], offsetPath[0], offsetPath[2])).toBeCloseTo(
+      Math2d.angleAt(path[1], path[0], path[2]),
+    );
+    expect(Math2d.angleAt(offsetPath[0], offsetPath[1], offsetPath[2])).toBeCloseTo(
+      Math2d.angleAt(path[0], path[1], path[3]),
+    );
     expect(offsetPath).pathToBeCloseTo(expected);
   });
 });

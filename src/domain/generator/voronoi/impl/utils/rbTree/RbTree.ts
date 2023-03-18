@@ -183,10 +183,7 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
           sibling = parent.right;
         }
 
-        if (
-          (sibling.left && sibling.left.red) ||
-          (sibling.right && sibling.right.red)
-        ) {
+        if ((sibling.left && sibling.left.red) || (sibling.right && sibling.right.red)) {
           if (!sibling.right || !sibling.right.red) {
             sibling.left.red = false;
             sibling.red = true;
@@ -208,10 +205,7 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
           sibling = parent.left;
         }
 
-        if (
-          (sibling.left && sibling.left.red) ||
-          (sibling.right && sibling.right.red)
-        ) {
+        if ((sibling.left && sibling.left.red) || (sibling.right && sibling.right.red)) {
           if (!sibling.left || !sibling.left.red) {
             sibling.right.red = false;
             sibling.red = true;

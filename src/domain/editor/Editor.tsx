@@ -33,33 +33,16 @@ export class Editor extends React.Component<Props> {
             return (
               <div key={stageId} className="stage" id={'stage-' + stageId}>
                 <div className="stage-header">
-                  <h1
-                    className="action"
-                    onClick={() =>
-                      editorStateService.setEditMode(editMode ? null : stageId)
-                    }
-                  >
+                  <h1 className="action" onClick={() => editorStateService.setEditMode(editMode ? null : stageId)}>
                     {stage.generator.type}
                   </h1>
                   <div className="controls">
-                    <a
-                      target="_blank"
-                      onClick={() =>
-                        0 < i && configService.swapStages(i, i - 1)
-                      }
-                    >
-                      <AnimatedButton
-                        title="upmove"
-                        rotation={AnimatedButton.DIRECTION_UP}
-                        disabled={!(0 < i)}
-                      />
+                    <a target="_blank" onClick={() => 0 < i && configService.swapStages(i, i - 1)}>
+                      <AnimatedButton title="upmove" rotation={AnimatedButton.DIRECTION_UP} disabled={!(0 < i)} />
                     </a>
                     <a
                       target="_blank"
-                      onClick={() =>
-                        i < this.props.config.stages.length - 1 &&
-                        configService.swapStages(i, i + 1)
-                      }
+                      onClick={() => i < this.props.config.stages.length - 1 && configService.swapStages(i, i + 1)}
                     >
                       <AnimatedButton
                         title="downmove"
@@ -67,15 +50,8 @@ export class Editor extends React.Component<Props> {
                         disabled={!(i < this.props.config.stages.length - 1)}
                       />
                     </a>
-                    <a
-                      target="_blank"
-                      onClick={() => configService.deleteStage(stageId)}
-                    >
-                      <AnimatedButton
-                        title="remove"
-                        points={[PlusNone, PlusRegular, PlusRotated]}
-                        rotation={45}
-                      />
+                    <a target="_blank" onClick={() => configService.deleteStage(stageId)}>
+                      <AnimatedButton title="remove" points={[PlusNone, PlusRegular, PlusRotated]} rotation={45} />
                     </a>
                   </div>
                 </div>
@@ -84,24 +60,15 @@ export class Editor extends React.Component<Props> {
                     label="type"
                     inputType={InputType.RANGE}
                     textValue={stage.generator.type}
-                    rangeValue={types.findIndex(
-                      (s: string) => s === stage.generator.type,
-                    )}
+                    rangeValue={types.findIndex((s: string) => s === stage.generator.type)}
                     min={0}
                     max={types.length - 1}
                     valid
                     convertToString={(i) => types[i]}
-                    onChange={(type: string) =>
-                      configService.setType(stageId, type)
-                    }
+                    onChange={(type: string) => configService.setType(stageId, type)}
                   />
                   {Object.keys(stage.state).map((key: string) =>
-                    this.generateEntryModifier(
-                      stage,
-                      key,
-                      stage.generator.definition[key],
-                      stage.state[key],
-                    ),
+                    this.generateEntryModifier(stage, key, stage.generator.definition[key], stage.state[key]),
                   )}
                 </Collapsable>
               </div>
@@ -109,10 +76,7 @@ export class Editor extends React.Component<Props> {
           })}
           <div className="stage-header" key="add">
             <a target="_blank" onClick={() => configService.addStage()}>
-              <AnimatedButton
-                title="add"
-                points={[PlusNone, PlusRegular, PlusRotated]}
-              />
+              <AnimatedButton title="add" points={[PlusNone, PlusRegular, PlusRotated]} />
             </a>
           </div>
         </div>
@@ -120,28 +84,12 @@ export class Editor extends React.Component<Props> {
     );
   }
 
-  private generateEntryModifier(
-    stage: Stage,
-    id: string,
-    definition: ParamDefinition,
-    state: StageState<any>,
-  ) {
-    const props = editorService.getInputFieldConfiguration(
-      definition.type,
-      stage.id,
-      id,
-      definition,
-      state,
-    );
+  private generateEntryModifier(stage: Stage, id: string, definition: ParamDefinition, state: StageState<any>) {
+    const props = editorService.getInputFieldConfiguration(definition.type, stage.id, id, definition, state);
 
     return (
       <div className="editor-item" key={id}>
-        <EditorInput
-          {...props}
-          onChange={(rawValue: any) =>
-            configService.setConfigValue(stage.id, id, rawValue)
-          }
-        />
+        <EditorInput {...props} onChange={(rawValue: any) => configService.setConfigValue(stage.id, id, rawValue)} />
         {definition.animateable && (
           <AnimationController
             stageId={stage.id}

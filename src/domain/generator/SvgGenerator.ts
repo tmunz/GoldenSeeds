@@ -2,11 +2,7 @@ import { BoundingBox } from '../../datatypes/BoundingBox';
 
 type ParamDefinitionTypeMinMaxStep = 'expression' | 'number';
 
-export type ParamDefinitionType =
-  | ParamDefinitionTypeMinMaxStep
-  | 'color'
-  | 'selection'
-  | 'string';
+export type ParamDefinitionType = ParamDefinitionTypeMinMaxStep | 'color' | 'selection' | 'string';
 export type ParamDefinitionMinMaxStep = {
   type: ParamDefinitionTypeMinMaxStep;
   min: number;

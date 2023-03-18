@@ -21,9 +21,7 @@ export class RangeInput extends React.Component<Props> {
           className={this.props.className}
           type="range"
           onChange={(e) => this.props.onChange(parseFloat(e.target.value))}
-          value={`${
-            isFinite(this.props.rangeValue) ? this.props.rangeValue : ''
-          }`}
+          value={`${isFinite(this.props.rangeValue) ? this.props.rangeValue : ''}`}
           min={this.props.min}
           max={this.props.max}
           step={this.props.step}

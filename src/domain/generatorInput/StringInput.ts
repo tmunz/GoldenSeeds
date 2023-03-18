@@ -4,12 +4,7 @@ import { InputType } from '../../ui/input/Input';
 import { SvgGeneratorInput } from './SvgGeneratorInput';
 
 export class StringInput extends SvgGeneratorInput<string> {
-  inputConfig(
-    stageId: string,
-    name: string,
-    definition: ParamDefinition,
-    state: StageState<string>,
-  ) {
+  inputConfig(stageId: string, name: string, definition: ParamDefinition, state: StageState<string>) {
     return {
       inputType: InputType.TEXT,
     };

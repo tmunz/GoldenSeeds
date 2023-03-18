@@ -10,19 +10,10 @@ export interface CartesianConfig {
   yDistance: (n: number, items: number) => number;
 }
 
-export function draw(
-  config: CartesianConfig,
-  grid: Point[],
-): { svg: string; points: Point[] } {
+export function draw(config: CartesianConfig, grid: Point[]): { svg: string; points: Point[] } {
   return grid.reduce(
     (agg, p) => {
-      const coordinates = calculatePolarGrid(
-        p,
-        config.items,
-        config.x,
-        config.xDistance,
-        config.yDistance,
-      );
+      const coordinates = calculatePolarGrid(p, config.items, config.x, config.xDistance, config.yDistance);
       const svg = coordinates
         .map((coordinate: Point, j: number) => {
           const rightIndex = j + 1;
@@ -32,9 +23,7 @@ export function draw(
               ? drawLine(coordinate, coordinates[rightIndex], config, j * 2)
               : '';
           const downLine =
-            downIndex < config.items
-              ? drawLine(coordinate, coordinates[downIndex], config, j * 2 + 1)
-              : '';
+            downIndex < config.items ? drawLine(coordinate, coordinates[downIndex], config, j * 2 + 1) : '';
           return rightLine + downLine;
         })
         .join('');

@@ -2,10 +2,7 @@ import React from 'react';
 import { RangeInput, Props as RangeInputProps } from './RangeInput';
 import { TextInput, Props as TextInputProps } from './TextInput';
 import { ColorInput, Props as ColorInputProps } from './ColorInput';
-import {
-  ExtendedRangeInput,
-  Props as ExtendedRangeInputProps,
-} from './ExtendedRangeInput';
+import { ExtendedRangeInput, Props as ExtendedRangeInputProps } from './ExtendedRangeInput';
 
 import './Input.styl';
 
@@ -16,12 +13,10 @@ export enum InputType {
   EXTENDED_RANGE = 'extended-range',
 }
 
-type Props = (
-  | RangeInputProps
-  | TextInputProps
-  | ColorInputProps
-  | ExtendedRangeInputProps
-) & { type?: InputType; onChange: (e: any) => void };
+type Props = (RangeInputProps | TextInputProps | ColorInputProps | ExtendedRangeInputProps) & {
+  type?: InputType;
+  onChange: (e: any) => void;
+};
 
 export class Input extends React.Component<Props> {
   render() {

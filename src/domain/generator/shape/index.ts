@@ -11,7 +11,7 @@ export class Shape implements SvgGenerator {
     border: { initial: 'gold', type: 'color' as const },
     fill: { initial: 'transparent', type: 'color' as const },
     coordinateType: {
-      initial: 'cartesian',
+      initial: 'polar',
       type: 'selection' as const,
       options: ['cartesian', 'polar'],
     },
@@ -34,7 +34,7 @@ export class Shape implements SvgGenerator {
       type: 'number' as const,
       min: 0,
       max: 1,
-      step: 0.05,
+      step: 0.01,
     },
     probabilityDistributionMuRandomness: {
       initial: '0',
@@ -115,10 +115,7 @@ export class Shape implements SvgGenerator {
     return {
       grid: prev.grid,
       svg: shape.svg,
-      boundingBox: PointUtils.combineBoundingBoxes([
-        prev.boundingBox,
-        shape.boundingBox,
-      ]),
+      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, shape.boundingBox]),
     };
   };
 }

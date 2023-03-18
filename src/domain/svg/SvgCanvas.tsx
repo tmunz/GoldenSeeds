@@ -11,10 +11,7 @@ interface Props {
 }
 
 export function SvgCanvas(props: Props) {
-  const key = props.config.stages.reduce(
-    (id, stage) => id + '_' + stage.id,
-    '',
-  );
+  const key = props.config.stages.reduce((id, stage) => id + '_' + stage.id, '');
   const svgContent = props.svgContent ?? '';
   return (
     <div className="svg-canvas">
@@ -24,10 +21,7 @@ export function SvgCanvas(props: Props) {
         transitionLeaveTimeout={1000}
       >
         {process.env.MODE === 'production' ? (
-          <img
-            key={key}
-            src={`data:image/svg+xml;base64,${window.btoa(svgContent)}`}
-          />
+          <img key={key} src={`data:image/svg+xml;base64,${window.btoa(svgContent)}`} />
         ) : (
           <div key={key} dangerouslySetInnerHTML={{ __html: svgContent }} />
         )}

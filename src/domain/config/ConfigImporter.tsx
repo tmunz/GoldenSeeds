@@ -19,11 +19,7 @@ export class ConfigImporter extends React.Component<Props> {
           onChange={(event) => this.openConfig(event)}
         />
         <a target="_blank" onClick={() => this.importConfigElement?.click()}>
-          <AnimatedButton
-            rotation={AnimatedButton.DIRECTION_UP}
-            title="load"
-            iconText="json"
-          />
+          <AnimatedButton rotation={AnimatedButton.DIRECTION_UP} title="load" iconText="json" />
         </a>
       </div>
     );
@@ -32,8 +28,7 @@ export class ConfigImporter extends React.Component<Props> {
   private loadConfig(file: Blob, onLoad: (config: any) => void) {
     if (typeof file !== 'undefined') {
       const fileReader = new FileReader();
-      fileReader.onload = (event) =>
-        onLoad(JSON.parse(event.target?.result as string));
+      fileReader.onload = (event) => onLoad(JSON.parse(event.target?.result as string));
       fileReader.readAsText(file);
     }
   }

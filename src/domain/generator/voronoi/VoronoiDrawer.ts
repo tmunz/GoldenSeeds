@@ -12,11 +12,7 @@ export function draw(config: VoronoiConfig, grid: number[][]) {
   const boundary: Boundary = new Boundary(boundingBox(grid));
   const offset = config.borderWidth / 10;
   const voronoi = new Voronoi(grid, boundary, offset);
-  return voronoi.cells
-    .map((cell: Cell, i: number) =>
-      drawElement(cell, style(i, config.color, config.style)),
-    )
-    .join('');
+  return voronoi.cells.map((cell: Cell, i: number) => drawElement(cell, style(i, config.color, config.style))).join('');
 }
 
 function boundingBox(grid: number[][]): BoundingBox {

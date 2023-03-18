@@ -12,16 +12,8 @@ export class ConfigExporter extends React.Component<Props> {
   render() {
     return (
       <div>
-        <a
-          target="_blank"
-          ref={(e) => (this.exportConfigElement = e)}
-          onClick={() => this.exportConfig()}
-        >
-          <AnimatedButton
-            rotation={AnimatedButton.DIRECTION_DOWN}
-            title="save"
-            iconText="json"
-          />
+        <a target="_blank" ref={(e) => (this.exportConfigElement = e)} onClick={() => this.exportConfig()}>
+          <AnimatedButton rotation={AnimatedButton.DIRECTION_DOWN} title="save" iconText="json" />
         </a>
       </div>
     );
@@ -43,10 +35,9 @@ export class ConfigExporter extends React.Component<Props> {
 
   private convertConfigToJson(config: Config): any {
     const stages = config.stages.map((stage) =>
-      Object.keys(stage.state).reduce(
-        (agg, key) => ({ ...agg, [key]: stage.state[key].rawValue }),
-        { type: stage.generator.type },
-      ),
+      Object.keys(stage.state).reduce((agg, key) => ({ ...agg, [key]: stage.state[key].rawValue }), {
+        type: stage.generator.type,
+      }),
     );
     return {
       meta: config.meta,

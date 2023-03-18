@@ -14,11 +14,7 @@ export class Stage {
   state: { [key: string]: StageState<any> };
   animatedId?: string;
 
-  constructor(
-    generator: SvgGenerator | null,
-    state?: { [key: string]: string },
-    stageId: string = uuid(),
-  ) {
+  constructor(generator: SvgGenerator | null, state?: { [key: string]: string }, stageId: string = uuid()) {
     this.id = stageId;
     this.generator = generator ?? {
       type: 'default',
@@ -48,10 +44,7 @@ export class Stage {
       .reduce(
         (agg, key) => ({
           ...agg,
-          [key]: converterService.convert(
-            this.generator.definition[key].type,
-            stateRaw[key],
-          ),
+          [key]: converterService.convert(this.generator.definition[key].type, stateRaw[key]),
         }),
         {},
       );

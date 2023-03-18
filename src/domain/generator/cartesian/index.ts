@@ -15,6 +15,14 @@ export class CartesianGrid implements SvgGenerator {
       max: 10,
       step: 0.05,
     },
+    items: {
+      initial: '20',
+      type: 'number' as const,
+      min: 1,
+      max: 625,
+      step: 1,
+      animateable: true,
+    },
     x: { initial: '5', type: 'number' as const, min: 1, max: 25, step: 1 },
     xDistance: {
       initial: '1',
@@ -30,29 +38,15 @@ export class CartesianGrid implements SvgGenerator {
       max: 2,
       step: 0.05,
     },
-    items: {
-      initial: '20',
-      type: 'number' as const,
-      min: 1,
-      max: 625,
-      step: 1,
-      animateable: true,
-    },
   };
 
-  generate = (
-    config: CartesianConfig,
-    prev: SvgGeneratorResult,
-  ): SvgGeneratorResult => {
+  generate = (config: CartesianConfig, prev: SvgGeneratorResult): SvgGeneratorResult => {
     const drawing = draw(config, prev.grid);
 
     return {
       grid: drawing.points,
       svg: drawing.svg,
-      boundingBox: PointUtils.combineBoundingBoxes([
-        prev.boundingBox,
-        PointUtils.boundingBox(drawing.points),
-      ]),
+      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, PointUtils.boundingBox(drawing.points)]),
     };
   };
 }

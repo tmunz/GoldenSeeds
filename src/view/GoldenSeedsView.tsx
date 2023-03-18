@@ -58,10 +58,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
                   config={this.props.config}
                 />
               </div>
-              <Editor
-                editStageId={this.props.editStageId}
-                config={this.props.config}
-              />
+              <Editor editStageId={this.props.editStageId} config={this.props.config} />
             </React.Fragment>
           )}
           <Toolbar
@@ -70,12 +67,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
             getExporterData={() => {
               return {
                 name: this.props.config?.meta.name ?? 'drawing',
-                svg:
-                  svgService.generateSvg(
-                    this.props.config?.stages,
-                    1000,
-                    1000,
-                  ) ?? '',
+                svg: svgService.generateSvg(this.props.config?.stages, 1000, 1000) ?? '',
                 dimensions: { width: 1000, height: 1000 },
               };
             }}
@@ -95,10 +87,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
   }
 }
 
-class ErrorBoundary extends React.Component<
-  React.ComponentProps<any>,
-  { error: boolean }
-> {
+class ErrorBoundary extends React.Component<React.ComponentProps<any>, { error: boolean }> {
   constructor(props: {}) {
     super(props);
     this.state = { error: false };
@@ -118,8 +107,7 @@ class ErrorBoundary extends React.Component<
       return (
         <React.Fragment>
           <div className="error">
-            Something went wrong - this is currently the alpha version of v2.0;
-            work in progress :-(
+            Something went wrong - this is currently the alpha version of v2.0; work in progress :-(
           </div>
           <a onClick={() => location.reload()}>continue</a>
         </React.Fragment>

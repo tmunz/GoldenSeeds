@@ -6,10 +6,7 @@ export interface TreeConfig extends TreeImplConfig {
   color: Color;
 }
 
-export function draw(
-  config: TreeConfig,
-  grid: Point[],
-): { svg: string; points: Point[] } {
+export function draw(config: TreeConfig, grid: Point[]): { svg: string; points: Point[] } {
   return grid.reduce(
     (agg, p, i) => {
       const tree = new Tree({ ...config, seed: config.seed + i });
@@ -23,17 +20,15 @@ export function draw(
             x2="${p[Point.X] + limb.to[Point.X]}"
             y2="${p[Point.Y] - limb.to[Point.Y]}"
             stroke="${color}"
-            stroke-width="${
-  Math.pow(config.lengthConservation, limb.level) * 5
-}"
+            stroke-width="${Math.pow(config.lengthConservation, limb.level) * 5}"
             vector-effect="non-scaling-stroke"
           />`,
         )
         .join('');
-      const currentPoints: Point[] = [
-        tree.limbs[0].from,
-        ...tree.limbs.map((l) => l.to),
-      ].map((lp) => [p[Point.X] + lp[Point.X], p[Point.Y] - lp[Point.Y]]);
+      const currentPoints: Point[] = [tree.limbs[0].from, ...tree.limbs.map((l) => l.to)].map((lp) => [
+        p[Point.X] + lp[Point.X],
+        p[Point.Y] - lp[Point.Y],
+      ]);
       return {
         svg: agg.svg + svg,
         points: [...agg.points, ...currentPoints],

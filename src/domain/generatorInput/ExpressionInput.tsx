@@ -1,8 +1,5 @@
 import { SvgGeneratorInput } from './SvgGeneratorInput';
-import {
-  ParamDefinition,
-  ParamDefinitionMinMaxStep,
-} from '../generator/SvgGenerator';
+import { ParamDefinition, ParamDefinitionMinMaxStep } from '../generator/SvgGenerator';
 import { StageState } from '../stage/Stage';
 import { InputType } from '../../ui/input/Input';
 
@@ -13,9 +10,7 @@ export class ExpressionInput extends SvgGeneratorInput<
     stageId: string,
     name: string,
     definition: ParamDefinition,
-    state: StageState<
-      (n: number, items: number, itemSize: (n: number) => number) => number
-    >,
+    state: StageState<(n: number, items: number, itemSize: (n: number) => number) => number>,
   ) => {
     const regexResult = state.rawValue.match(/^\s*(n\s\*\s*(.*\S)?)\s*$/);
     const nMode: boolean = regexResult ? true : false;
@@ -32,8 +27,7 @@ export class ExpressionInput extends SvgGeneratorInput<
       max: (definition as ParamDefinitionMinMaxStep)?.max,
       step: (definition as ParamDefinitionMinMaxStep)?.step,
       // controls,
-      convertToString: (i: any) =>
-        `${nMode && typeof i === 'number' ? 'n * ' : ''}${i}`,
+      convertToString: (i: any) => `${nMode && typeof i === 'number' ? 'n * ' : ''}${i}`,
     };
   };
 

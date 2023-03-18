@@ -24,16 +24,10 @@ export class Voronoi {
     const worker = new VoronoiWorker();
     const siteQueue: Queue<Site> = this.createSiteQueue(inputPoints);
 
-    const {
-      edges,
-      vertices: domainVertices,
-      siteAreas,
-    } = worker.process(siteQueue, boundary);
+    const { edges, vertices: domainVertices, siteAreas } = worker.process(siteQueue, boundary);
 
     this.edges = edges.map((edge) => this.convertToEdge(edge));
-    this.vertices = domainVertices
-      .filter((p) => boundary.isPointInside(p))
-      .map((p) => this.convertToPoint(p));
+    this.vertices = domainVertices.filter((p) => boundary.isPointInside(p)).map((p) => this.convertToPoint(p));
     this.cells = siteAreas.map((siteArea) => {
       const cell = this.convertToCell(siteArea);
       cell.path = ConvexPolygonTools.offsetPath(cell.path, cellOffset);
@@ -46,8 +40,7 @@ export class Voronoi {
 
   private createSiteQueue(points: number[][]): Queue<Site> {
     // this prevents breaking calculations, where javascript number presicion is not enough for input during some calculations
-    const limitPrecision = (n: number) =>
-      Math.floor(n / DistanceHelper.tolerance) * DistanceHelper.tolerance;
+    const limitPrecision = (n: number) => Math.floor(n / DistanceHelper.tolerance) * DistanceHelper.tolerance;
 
     const cleanedSites = points
       .sort((a, b) => (b[1] - a[1] ? b[1] - a[1] : b[0] - a[0]))
@@ -56,13 +49,7 @@ export class Voronoi {
         x: limitPrecision(p[0]),
         y: limitPrecision(p[1]),
       }))
-      .reduce(
-        (arr, site) =>
-          arr.find((s) => DistanceHelper.isSamePosition(s, site))
-            ? arr
-            : [...arr, site],
-        [],
-      );
+      .reduce((arr, site) => (arr.find((s) => DistanceHelper.isSamePosition(s, site)) ? arr : [...arr, site]), []);
     return new Queue(...cleanedSites.map((site, id) => ({ id, ...site })));
   }
 
@@ -96,10 +83,7 @@ export class Voronoi {
     }
 
     while (queue.length > 0) {
-      let nextInPath: Point = this.retrieveStartpointAsNext(
-        path[path.length - 1],
-        queue,
-      );
+      let nextInPath: Point = this.retrieveStartpointAsNext(path[path.length - 1], queue);
       if (!nextInPath) {
         nextInPath = this.retrieveEndpointAsNext(path[path.length - 1], queue);
       }
@@ -109,10 +93,7 @@ export class Voronoi {
     return path;
   }
 
-  private retrieveStartpointAsNext(
-    nextPointToFind: Vertex,
-    queue: HalfEdge[],
-  ): Point {
+  private retrieveStartpointAsNext(nextPointToFind: Vertex, queue: HalfEdge[]): Point {
     return this.retrieveNextFormQueue(
       nextPointToFind,
       queue,
@@ -121,10 +102,7 @@ export class Voronoi {
     );
   }
 
-  private retrieveEndpointAsNext(
-    nextPointToFind: Vertex,
-    queue: HalfEdge[],
-  ): Point {
+  private retrieveEndpointAsNext(nextPointToFind: Vertex, queue: HalfEdge[]): Point {
     return this.retrieveNextFormQueue(
       nextPointToFind,
       queue,
@@ -139,9 +117,7 @@ export class Voronoi {
     findFun: (h: HalfEdge) => Vertex,
     setFun: (h: HalfEdge) => Vertex,
   ): Point {
-    const nextIndex: number = queue.findIndex((edge) =>
-      DistanceHelper.isSamePosition(nextPointToFind, findFun(edge)),
-    );
+    const nextIndex: number = queue.findIndex((edge) => DistanceHelper.isSamePosition(nextPointToFind, findFun(edge)));
     if (nextIndex >= 0) {
       return setFun(queue.splice(nextIndex, 1)[0]);
     }

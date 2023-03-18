@@ -2,11 +2,7 @@ import { Math2d } from './Math2d';
 
 describe('angleAt', () => {
   test('calculates point on straight line correct', () => {
-    const rads = Math2d.angleAt(
-      { x: 0, y: 0 },
-      { x: -1, y: 0 },
-      { x: 1, y: 0 },
-    );
+    const rads = Math2d.angleAt({ x: 0, y: 0 }, { x: -1, y: 0 }, { x: 1, y: 0 });
     expect(rads).toBeCloseTo(Math.PI);
   });
   test('calculates point at right angle correct', () => {
@@ -14,11 +10,7 @@ describe('angleAt', () => {
     expect(rads).toBeCloseTo(Math.PI / 2);
   });
   test('calculates point at right angle in opposite direction correct', () => {
-    const rads = Math2d.angleAt(
-      { x: 0, y: 0 },
-      { x: -1, y: 0 },
-      { x: 0, y: 1 },
-    );
+    const rads = Math2d.angleAt({ x: 0, y: 0 }, { x: -1, y: 0 }, { x: 0, y: 1 });
     expect(rads).toBeCloseTo(Math.PI / 2);
   });
   test('calculates point at 45° correct', () => {
@@ -144,62 +136,32 @@ describe('slopeAngle', () => {
 
 describe('calculatePointWithAngleAndDistance', () => {
   test('calculates distance for base parallel to x-axis (positive) correct', () => {
-    const p = Math2d.calculatePointWithAngleAndDistance(
-      { x: 0, y: 0 },
-      { x: 1, y: 0 },
-      0.4637339,
-      Math.sqrt(5),
-    );
+    const p = Math2d.calculatePointWithAngleAndDistance({ x: 0, y: 0 }, { x: 1, y: 0 }, 0.4637339, Math.sqrt(5));
     expect(p.x).toBeCloseTo(2);
     expect(p.y).toBeCloseTo(1);
   });
   test('calculates distance for base parallel to x-axis (negative) correct', () => {
-    const p = Math2d.calculatePointWithAngleAndDistance(
-      { x: 0, y: 0 },
-      { x: -1, y: 0 },
-      0.4637339,
-      Math.sqrt(5),
-    );
+    const p = Math2d.calculatePointWithAngleAndDistance({ x: 0, y: 0 }, { x: -1, y: 0 }, 0.4637339, Math.sqrt(5));
     expect(p.x).toBeCloseTo(-2);
     expect(p.y).toBeCloseTo(-1);
   });
   test('calculates distance for base parallel to y-axis (poitive) correct', () => {
-    const p = Math2d.calculatePointWithAngleAndDistance(
-      { x: 0, y: 0 },
-      { x: 0, y: 1 },
-      0.4637339,
-      Math.sqrt(5),
-    );
+    const p = Math2d.calculatePointWithAngleAndDistance({ x: 0, y: 0 }, { x: 0, y: 1 }, 0.4637339, Math.sqrt(5));
     expect(p.x).toBeCloseTo(-1);
     expect(p.y).toBeCloseTo(2);
   });
   test('calculates distance for base parallel to y-axis (negative) correct', () => {
-    const p = Math2d.calculatePointWithAngleAndDistance(
-      { x: 0, y: 0 },
-      { x: 0, y: -1 },
-      0.4637339,
-      Math.sqrt(5),
-    );
+    const p = Math2d.calculatePointWithAngleAndDistance({ x: 0, y: 0 }, { x: 0, y: -1 }, 0.4637339, Math.sqrt(5));
     expect(p.x).toBeCloseTo(1);
     expect(p.y).toBeCloseTo(-2);
   });
   test('calculates distance for unspecific original positioning correct', () => {
-    const p = Math2d.calculatePointWithAngleAndDistance(
-      { x: 0, y: 0 },
-      { x: 1, y: 2 },
-      0.4637339,
-      2,
-    );
+    const p = Math2d.calculatePointWithAngleAndDistance({ x: 0, y: 0 }, { x: 1, y: 2 }, 0.4637339, 2);
     expect(p.x).toBeCloseTo(0);
     expect(p.y).toBeCloseTo(2);
   });
   test('calculates distance for unspecific positioning correct', () => {
-    const p = Math2d.calculatePointWithAngleAndDistance(
-      { x: 6, y: 6 },
-      { x: 7, y: 7 },
-      Math.PI / 4,
-      1,
-    );
+    const p = Math2d.calculatePointWithAngleAndDistance({ x: 6, y: 6 }, { x: 7, y: 7 }, Math.PI / 4, 1);
     expect(p.x).toBeCloseTo(6);
     expect(p.y).toBeCloseTo(7);
   });

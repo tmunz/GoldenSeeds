@@ -56,27 +56,19 @@ export class ConfigService {
   swapStages(a: number, b: number): void {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
-    nextConfig.stages[a] = nextConfig.stages.splice(
-      b,
-      1,
-      nextConfig.stages[a],
-    )[0];
+    nextConfig.stages[a] = nextConfig.stages.splice(b, 1, nextConfig.stages[a])[0];
     this.config$.next(nextConfig);
   }
 
   addStage(): void {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
-    nextConfig.stages.push(
-      new Stage(svgGeneratorRegistry.getDefaultGenerator()),
-    );
+    nextConfig.stages.push(new Stage(svgGeneratorRegistry.getDefaultGenerator()));
     this.config$.next(nextConfig);
   }
 
   setAnimationValue(stageId: string, id?: string, rawValue?: string) {
-    typeof id === 'string' &&
-      typeof rawValue === 'string' &&
-      this.setConfigValue(stageId, id, rawValue);
+    typeof id === 'string' && typeof rawValue === 'string' && this.setConfigValue(stageId, id, rawValue);
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
     const stageIndex = this.findIndexByStageId(stageId);
@@ -95,8 +87,7 @@ export class ConfigService {
     return {
       meta: configRaw.meta,
       stages: configRaw.stages.map(
-        (stageRaw: any) =>
-          new Stage(svgGeneratorRegistry.newInstance(stageRaw.type), stageRaw),
+        (stageRaw: any) => new Stage(svgGeneratorRegistry.newInstance(stageRaw.type), stageRaw),
       ),
     };
   }
