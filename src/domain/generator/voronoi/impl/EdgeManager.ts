@@ -16,7 +16,7 @@ export class EdgeManager extends AbstractMemoryFactory<Edge> {
     this.siteAreaStore = siteAreaStore;
   }
 
-  create(leftSite: Site, rightSite: Site, va?: Point, vb?: Point): Edge {
+  create(leftSite: Site | null, rightSite: Site | null, va: Point, vb: Point): Edge {
     const edge: Edge = new Edge(leftSite, rightSite, va, vb);
     this.memorize(edge);
     return edge;

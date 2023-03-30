@@ -9,6 +9,7 @@ import { SiteArea } from './SiteArea';
 import { HalfEdge } from './HalfEdge';
 import { SiteAreaStore } from './SiteAreaStore';
 import { PointUtils } from '../../../../utils/PointUtils';
+import { Point } from '../../../../datatypes/Point';
 
 export interface BeachSection {
   site?: Site;
@@ -20,7 +21,7 @@ export interface BeachSection {
   centerY?: number;
 }
 
-export interface BeachSectionNode extends BeachSection, RbTreeNode<BeachSectionNode> {}
+export interface BeachSectionNode extends BeachSection, RbTreeNode<BeachSectionNode> { }
 
 export class BeachLine {
   private dataTree = new RbTree<BeachSectionNode>();
@@ -71,8 +72,8 @@ export class BeachLine {
       this.circleEvents.detachCurrent(leftSection);
       this.circleEvents.detachCurrent(rightSection);
 
-      const collapsingPoint = this.calculateCenterOfOutcircle(leftSection.site, site, rightSection.site);
-      const vertex = this.vertexFactory.create(collapsingPoint.x, collapsingPoint.y);
+      const collapsingPoint = this.calculateCenterOfOutcircle(leftSection.site?.point, site.point, rightSection.site?.point);
+      const vertex = this.vertexFactory.create(collapsingPoint[Point.X], collapsingPoint[Point.Y]);
 
       this.createNewEdgeFrom(vertex, leftSection, rightSection);
 
@@ -101,11 +102,11 @@ export class BeachLine {
     let leftSection, rightSection;
 
     while (node) {
-      const leftBreakPointRelativeX = this.calculateLeftBreakPointX(node, site.y) - site.x;
+      const leftBreakPointRelativeX = this.calculateLeftBreakPointX(node, site.point[Point.Y]) - site.point[Point.X];
       if (leftBreakPointRelativeX > PointUtils.TOLERANCE) {
         node = node.left;
       } else {
-        const rightBreakPointRelativeX = site.x - this.calculateRightBreakPointX(node, site.y);
+        const rightBreakPointRelativeX = site.point[Point.X] - this.calculateRightBreakPointX(node, site.point[Point.Y]);
 
         // x greaterThanWithTolerance boundary.right() => falls somewhere after the right edge of the beachsection
         if (rightBreakPointRelativeX > PointUtils.TOLERANCE) {
@@ -143,7 +144,7 @@ export class BeachLine {
     previousSection: BeachSectionNode,
     beachSection: BeachSectionNode,
     nextSection: BeachSectionNode,
-    vertex: Vertex,
+    vertex: Point,
   ) {
     const leftBeach: BeachSection[] = this.getLeftBeach(previousSection, vertex);
     this.circleEvents.detachCurrent(leftBeach[0]);
@@ -167,7 +168,7 @@ export class BeachLine {
     this.circleEvents.attachCircleEventIfNeededOnCollapse(rightSection);
   }
 
-  private getLeftBeach(section: BeachSectionNode, vertex: Vertex): BeachSection[] {
+  private getLeftBeach(section: BeachSectionNode, vertex: Point): BeachSection[] {
     const leftBeach: BeachSection[] = [];
     let previousSection = section;
     let leftSection_ = section;
@@ -205,25 +206,25 @@ export class BeachLine {
     return rightBeach;
   }
 
-  private createNewEdgeFrom(vertex: Vertex, leftSection: BeachSection, rightSection: BeachSection) {
+  private createNewEdgeFrom(vertex: Point, leftSection: BeachSection, rightSection: BeachSection) {
     rightSection.edge.createStartpoint(vertex, leftSection.site, rightSection.site);
   }
 
   private calculateCenterOfOutcircle(
-    a: { x: number; y: number },
-    b: { x: number; y: number },
-    c: { x: number; y: number },
+    a: Point,
+    b: Point,
+    c: Point,
   ) {
     // set origin to point a
-    const d = { x: b.x - a.x, y: b.y - a.y };
-    const e = { x: c.x - a.x, y: c.y - a.y };
+    const d = [b[Point.X] - a[Point.X], b[Point.Y] - a[Point.Y]];
+    const e = [c[Point.X] - a[Point.X], c[Point.Y] - a[Point.Y]];
 
-    const f = 2 * (d.x * e.y - d.y * e.x);
-    const hd = Math.pow(d.x, 2) + Math.pow(d.y, 2);
-    const he = Math.pow(e.x, 2) + Math.pow(e.y, 2);
-    const x = (e.y * hd - d.y * he) / f + a.x;
-    const y = (d.x * hd - e.x * he) / f + a.y;
-    return { x, y };
+    const f = 2 * (d[Point.X] * e[Point.Y] - d[Point.Y] * e[Point.X]);
+    const hd = Math.pow(d[Point.X], 2) + Math.pow(d[Point.Y], 2);
+    const he = Math.pow(e[Point.X], 2) + Math.pow(e[Point.Y], 2);
+    const x = (e[Point.Y] * hd - d[Point.Y] * he) / f + a[Point.X];
+    const y = (d[Point.X] * hd - e[Point.X] * he) / f + a[Point.Y];
+    return [x, y];
   }
 
   private detachSection(beachSection: BeachSection, circleEvents: CircleEventQueue): void {
@@ -233,8 +234,8 @@ export class BeachLine {
 
   private calculateLeftBreakPointX(beachSection: BeachSectionNode, sweepLineX: number): number {
     let site = beachSection.site;
-    const rfocx = site.x;
-    const rfocy = site.y;
+    const rfocx = site.point[Point.X];
+    const rfocy = site.point[Point.Y];
     const pby2 = rfocy - sweepLineX;
 
     if (!pby2) {
@@ -247,8 +248,8 @@ export class BeachLine {
     }
 
     site = leftSection.site;
-    const lfocx = site.x;
-    const lfocy = site.y;
+    const lfocx = site.point[Point.X];
+    const lfocy = site.point[Point.Y];
     const plby2 = lfocy - sweepLineX;
 
     if (!plby2) {
@@ -275,7 +276,7 @@ export class BeachLine {
       return this.calculateLeftBreakPointX(rightSection, sweepLineX);
     } else {
       const site = beachSection.site;
-      return site.y === sweepLineX ? site.x : Infinity;
+      return site.point[Point.Y] === sweepLineX ? site.point[Point.X] : Infinity;
     }
   }
 
@@ -288,7 +289,7 @@ export class BeachLine {
     this.dataTree.removeNode(beachSection);
   }
 
-  private addNewEdge(leftSite: Site, rightSite: Site, va?: Vertex, vb?: Vertex): Edge {
+  private addNewEdge(leftSite: Site, rightSite: Site, va?: Point, vb?: Point): Edge {
     const edge: Edge = this.edgeManager.create(leftSite, rightSite);
     if (va) {
       edge.createStartpoint(va, leftSite, rightSite);

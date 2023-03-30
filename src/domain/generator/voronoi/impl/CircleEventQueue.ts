@@ -2,6 +2,7 @@ import { RbTree } from './utils/rbTree/RbTree';
 import { RbTreeNode } from './utils/rbTree/RbTreeNode';
 import { BeachSection } from './BeachLine';
 import { Site } from './Site';
+import { Point } from '../../../../datatypes/Point';
 
 export interface CircleEvent extends BeachSection, RbTreeNode<CircleEvent> { }
 
@@ -25,12 +26,12 @@ export class CircleEventQueue {
   }
 
   private circumCircle(a: Site, b: Site, c: Site): { x: number, y: number, centerY: number, bx: number } | undefined {
-    const bx = b.x;
-    const by = b.y;
-    const ax = a.x - bx;
-    const ay = a.y - by;
-    const cx = c.x - bx;
-    const cy = c.y - by;
+    const bx = b.point[Point.X];
+    const by = b.point[Point.Y];
+    const ax = a.point[Point.X] - bx;
+    const ay = a.point[Point.Y] - by;
+    const cx = c.point[Point.X] - bx;
+    const cy = c.point[Point.Y] - by;
 
     const d = 2 * (ax * cy - ay * cx);
     if (d < -2e-12) {
@@ -66,7 +67,6 @@ export class CircleEventQueue {
   private push(circleEvent: CircleEvent): void {
     let predecessor: CircleEvent | null = null;
     let node: CircleEvent = this.dataTree.getRoot();
-
     while (node) {
       if (circleEvent.y < node.y || (circleEvent.y === node.y && circleEvent.x <= node.x)) {
         if (node.left) {

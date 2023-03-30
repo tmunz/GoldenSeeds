@@ -48,46 +48,57 @@ export class Edge {
     if (this.getEndPoint()) {
       return true;
     } else {
-      const center: { x: number; y: number } = {
-        x: (this.leftSite.x + this.rightSite.x) / 2,
-        y: (this.leftSite.y + this.rightSite.y) / 2,
-      };
+      const center: Point = [
+        (this.leftSite.point[Point.X] + this.rightSite.point[Point.X]) / 2,
+        (this.leftSite.point[Point.Y] + this.rightSite.point[Point.Y]) / 2,
+      ];
       let slope: number = 0;
       let fb: number = 0;
 
       siteAreaStore.get(this.leftSite.id).canBeClosed = true;
       siteAreaStore.get(this.rightSite.id).canBeClosed = true;
 
-      if (!PointUtils.isEqualWithTolerance(this.leftSite.y, this.rightSite.y)) {
-        slope = (this.leftSite.x - this.rightSite.x) / (-this.leftSite.y + this.rightSite.y);
-        fb = center.y - slope * center.x;
+      if (!PointUtils.isEqualWithTolerance(this.leftSite.point[Point.Y], this.rightSite.point[Point.Y])) {
+        slope = (this.leftSite.point[Point.X] - this.rightSite.point[Point.X]) / (-this.leftSite.point[Point.Y] + this.rightSite.point[Point.Y]);
+        fb = center[Point.Y] - slope * center[Point.X];
       }
 
       if (!isFinite(slope)) {
         if (!boundary.isPointInside(center)) {
           return false;
         }
-        if (this.leftSite.x < this.rightSite.x) {
+        if (this.leftSite.point[Point.X] < this.rightSite.point[Point.X]) {
           this.calculateUpward(center, boundary, vertexFactory);
         } else {
           this.calculateDownward(center, boundary, vertexFactory);
         }
-      }
-
-      // closer to vertical than horizontal, connect start point to the
-      // top or bottom side of the bounding box
-      else if (slope < -1 || 1 < slope) {
+      } else if (-1 <= slope && slope <= 1) {
+        // rightward
+        if (this.leftSite.point[Point.Y] < this.rightSite.point[Point.Y]) {
+          if (!this.vertices[0] || this.vertices[0][Point.X] < boundary.min[Point.X]) {
+            this.vertices[0] = vertexFactory.create(boundary.min[Point.X], slope * boundary.min[Point.X] + fb);
+          } else if (this.vertices[0][Point.X] >= boundary.max[Point.X]) {
+            return false;
+          }
+          this.vertices[1] = vertexFactory.create(boundary.max[Point.X], slope * boundary.max[Point.X] + fb);
+        } else { // leftward
+          if (!this.vertices[0] || this.vertices[0][Point.X] > boundary.max[Point.X]) {
+            this.vertices[0] = vertexFactory.create(boundary.max[Point.X], slope * boundary.max[Point.X] + fb);
+          } else if (this.vertices[0][Point.X] < boundary.min[Point.X]) {
+            return false;
+          }
+          this.vertices[1] = vertexFactory.create(boundary.min[Point.X], slope * boundary.min[Point.X] + fb);
+        }
+      } else {
         // downward
-        if (this.leftSite.x > this.rightSite.x) {
+        if (this.leftSite.point[Point.X] > this.rightSite.point[Point.X]) {
           if (!this.vertices[0] || this.vertices[0][Point.Y] < boundary.min[Point.Y]) {
             this.vertices[0] = vertexFactory.create((boundary.min[Point.Y] - fb) / slope, boundary.min[Point.Y]);
           } else if (this.vertices[0][Point.Y] >= boundary.max[Point.Y]) {
             return false;
           }
           this.vertices[1] = vertexFactory.create((boundary.max[Point.Y] - fb) / slope, boundary.max[Point.Y]);
-        }
-        // upward
-        else {
+        } else { // upward
           if (!this.vertices[0] || this.vertices[0][Point.Y] > boundary.max[Point.Y]) {
             this.vertices[0] = vertexFactory.create((boundary.max[Point.Y] - fb) / slope, boundary.max[Point.Y]);
           } else if (this.vertices[0][Point.Y] < boundary.min[Point.Y]) {
@@ -96,54 +107,32 @@ export class Edge {
           this.vertices[1] = vertexFactory.create((boundary.min[Point.Y] - fb) / slope, boundary.min[Point.Y]);
         }
       }
-
-      // closer to horizontal than vertical, connect start point to the
-      // left or right side of the bounding box
-      else {
-        // rightward
-        if (this.leftSite.y < this.rightSite.y) {
-          if (!this.vertices[0] || this.vertices[0][Point.X] < boundary.min[Point.X]) {
-            this.vertices[0] = vertexFactory.create(boundary.min[Point.X], slope * boundary.min[Point.X] + fb);
-          } else if (this.vertices[0][Point.X] >= boundary.max[Point.X]) {
-            return false;
-          }
-          this.vertices[1] = vertexFactory.create(boundary.max[Point.X], slope * boundary.max[Point.X] + fb);
-        }
-
-        // leftward
-        else {
-          if (!this.vertices[0] || this.vertices[0][Point.X] > boundary.max[Point.X]) {
-            this.vertices[0] = vertexFactory.create(boundary.max[Point.X], slope * boundary.max[Point.X] + fb);
-          } else if (this.vertices[0][Point.X] < boundary.min[Point.X]) {
-            return false;
-          }
-          this.vertices[1] = vertexFactory.create(boundary.min[Point.X], slope * boundary.min[Point.X] + fb);
-        }
-      }
       return true;
     }
+
+
   }
 
-  private calculateUpward(center: { x: number; y: number }, boundary: Boundary, vertexFactory: VertexFactory) {
+  private calculateUpward(center: Point, boundary: Boundary, vertexFactory: VertexFactory) {
     const boundaryA = boundary.max[Point.Y];
     const boundaryB = boundary.min[Point.Y]
     if (!this.getStartPoint() || this.getStartPoint()[Point.Y] > boundaryA) {
-      this.vertices[0] = vertexFactory.create(center.x, boundaryA);
+      this.vertices[0] = vertexFactory.create(center[Point.X], boundaryA);
     } else if (this.vertices[0][Point.Y] < boundaryB) {
       return false;
     }
-    this.vertices[1] = vertexFactory.create(center.x, boundaryB);
+    this.vertices[1] = vertexFactory.create(center[Point.X], boundaryB);
   }
 
-  private calculateDownward(center: { x: number; y: number }, boundary: Boundary, vertexFactory: VertexFactory) {
+  private calculateDownward(center: Point, boundary: Boundary, vertexFactory: VertexFactory) {
     const boundaryA = boundary.min[Point.Y];
     const boundaryB = boundary.max[Point.Y];
     if (!this.getStartPoint() || this.getStartPoint()[Point.Y] < boundaryA) {
-      this.vertices[0] = vertexFactory.create(center.x, boundaryA);
+      this.vertices[0] = vertexFactory.create(center[Point.X], boundaryA);
     } else if (this.vertices[0][Point.Y] >= boundaryB) {
       return false;
     }
-    this.vertices[1] = vertexFactory.create(center.x, boundaryB);
+    this.vertices[1] = vertexFactory.create(center[Point.X], boundaryB);
   }
 
   clipTo(boundary: Boundary, vertexFactory: VertexFactory, siteAreaStore: SiteAreaStore): boolean {

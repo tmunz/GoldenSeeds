@@ -35,17 +35,13 @@ export class Voronoi {
     const limitPrecision = (n: number) => Math.floor(n / PointUtils.TOLERANCE) * PointUtils.TOLERANCE;
     const cleanedSites = points
       .sort((a, b) => (b[1] - a[1] ? b[1] - a[1] : b[0] - a[0]))
-      .map((p, id) => ({
-        id,
-        x: limitPrecision(p[0]),
-        y: limitPrecision(p[1]),
-      }))
-      .reduce((arr, site) => (arr.find((s) => PointUtils.isSamePoint([s.x, s.y], [site.x, site.y])) ? arr : [...arr, site]), [] as Site[]);
+      .map((p, id) => ({ point: [limitPrecision(p[0]), limitPrecision(p[1])], id }))
+      .reduce((arr, site) => (arr.find((s) => PointUtils.isSamePoint(s.point, site.point)) ? arr : [...arr, site]), [] as Site[]);
     return new Queue(...cleanedSites.map((site, id) => ({ id, ...site })));
   }
 
   private convertToCell(siteArea: SiteArea): Cell {
-    const center = [siteArea.site.x, siteArea.site.y];
+    const center = siteArea.site.point;
     const path = this.createPath(siteArea.halfEdges);
     return { center, path };
   }
@@ -63,6 +59,8 @@ export class Voronoi {
       if (next) {
         queue.splice(next.index, 1);
         path.push(next.point);
+      } else {
+        break;
       }
     }
     return path;

@@ -12,7 +12,7 @@ export class HalfEdge {
     this.edge = edge;
     this.angle =
       leftSite && rightSite
-        ? Math.atan2(rightSite.y - leftSite.y, rightSite.x - leftSite.x)
+        ? Math.atan2(rightSite.point[Point.Y] - leftSite.point[Point.Y], rightSite.point[Point.X] - leftSite.point[Point.X])
         : Math.atan2(this.getEndpoint()[Point.X] - this.getStartpoint()[Point.X],
          this.getEndpoint()[Point.Y] - this.getStartpoint()[Point.Y]);
   }
