@@ -1,6 +1,6 @@
-import { Vertex } from './Vertex';
 import { Edge } from './Edge';
 import { Site } from './Site';
+import { Point } from '../../../../datatypes/Point';
 
 export class HalfEdge {
   site: Site;
@@ -13,14 +13,15 @@ export class HalfEdge {
     this.angle =
       leftSite && rightSite
         ? Math.atan2(rightSite.y - leftSite.y, rightSite.x - leftSite.x)
-        : Math.atan2(this.getEndpoint().x - this.getStartpoint().x, this.getEndpoint().y - this.getStartpoint().y);
+        : Math.atan2(this.getEndpoint()[Point.X] - this.getStartpoint()[Point.X],
+         this.getEndpoint()[Point.Y] - this.getStartpoint()[Point.Y]);
   }
 
-  getStartpoint(): Vertex {
+  getStartpoint(): Point {
     return this.site === this.edge.leftSite ? this.edge.getStartPoint() : this.edge.getEndPoint();
   }
 
-  getEndpoint(): Vertex {
+  getEndpoint(): Point {
     return this.site === this.edge.leftSite ? this.edge.getEndPoint() : this.edge.getStartPoint();
   }
 }

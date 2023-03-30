@@ -2,7 +2,7 @@ import { Site } from './Site';
 import { HalfEdge } from './HalfEdge';
 import { Boundary } from './Boundary';
 import { Edge } from './Edge';
-import { Vertex } from './Vertex';
+import { Point } from '../../../../datatypes/Point';
 
 export class SiteArea {
   site: Site;
@@ -15,7 +15,7 @@ export class SiteArea {
     this.canBeClosed = false;
   }
 
-  close(createBorderEdge: (site: Site, a: Vertex, b: Vertex) => Edge, boundary: Boundary) {
+  close(createBorderEdge: (site: Site, vertexA: Point, vertexB: Point) => Edge, boundary: Boundary) {
     const halfEdges = this.halfEdges
       .filter((halfEdge) => halfEdge.edge.isConnected())
       .sort((a, b: HalfEdge) => b.angle - a.angle);

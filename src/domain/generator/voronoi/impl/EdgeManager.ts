@@ -1,10 +1,10 @@
 import { Edge } from './Edge';
 import { VertexFactory } from './VertexFactory';
-import { AbstractMemoryFactory } from '../utils/AbstractMemoryFactory';
+import { AbstractMemoryFactory } from './utils/AbstractMemoryFactory';
 import { Site } from './Site';
 import { SiteAreaStore } from './SiteAreaStore';
 import { Boundary } from './Boundary';
-import { Vertex } from './Vertex';
+import { Point } from '../../../../datatypes/Point';
 
 export class EdgeManager extends AbstractMemoryFactory<Edge> {
   private vertexFactory: VertexFactory;
@@ -16,7 +16,7 @@ export class EdgeManager extends AbstractMemoryFactory<Edge> {
     this.siteAreaStore = siteAreaStore;
   }
 
-  create(leftSite: Site, rightSite: Site, va?: Vertex, vb?: Vertex): Edge {
+  create(leftSite: Site, rightSite: Site, va?: Point, vb?: Point): Edge {
     const edge: Edge = new Edge(leftSite, rightSite, va, vb);
     this.memorize(edge);
     return edge;

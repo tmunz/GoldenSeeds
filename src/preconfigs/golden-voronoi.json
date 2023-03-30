@@ -7,7 +7,7 @@
       "type": "polar",
       "color": "transparent",
       "strokeWidth": "1",
-      "items": "987",
+      "items": "101",
       "angle": "n * 360 / goldenRatio",
       "distance": "Math.pow(n, 1 / goldenRatio)"
     },

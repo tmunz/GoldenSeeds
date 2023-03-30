@@ -25,7 +25,7 @@ export class Voronoi implements SvgGenerator {
   generate = (config: VoronoiConfig, prev: SvgGeneratorResult) => {
     return {
       boundingBox: prev.boundingBox,
-      svg: draw(config, prev.grid),
+      svg: draw(config, prev.grid, prev.boundingBox),
       grid: prev.grid,
     };
   };

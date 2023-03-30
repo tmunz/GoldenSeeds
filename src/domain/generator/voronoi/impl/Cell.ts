@@ -1,4 +1,4 @@
-import { Point } from './Point';
+import { Point } from "../../../../datatypes/Point";
 
 export interface Cell {
   center: Point;

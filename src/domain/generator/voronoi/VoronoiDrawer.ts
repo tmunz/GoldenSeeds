@@ -1,6 +1,10 @@
-import { Boundary, Cell, Point, Voronoi } from './impl/index';
 import { DrawStyle } from '../../../datatypes/DrawStyle';
 import { Color } from '../../../datatypes/Color';
+import { BoundingBox } from '../../../datatypes/BoundingBox';
+import { Boundary } from './impl/Boundary';
+import { Cell } from './impl/Cell';
+import { Point } from '../../../datatypes/Point';
+import { Voronoi } from './impl/Voronoi';
 
 export interface VoronoiConfig {
   style: DrawStyle;
@@ -8,45 +12,20 @@ export interface VoronoiConfig {
   borderWidth: number;
 }
 
-export function draw(config: VoronoiConfig, grid: number[][]) {
-  const boundary: Boundary = new Boundary(boundingBox(grid));
+export function draw(config: VoronoiConfig, grid: number[][], boundingBox: BoundingBox) {
+  const boundary: Boundary = new Boundary(boundingBox);
   const offset = config.borderWidth / 10;
   const voronoi = new Voronoi(grid, boundary, offset);
   return voronoi.cells.map((cell: Cell, i: number) => drawElement(cell, style(i, config.color, config.style))).join('');
-}
-
-function boundingBox(grid: number[][]): BoundingBox {
-  const { min, max } = grid.reduce(
-    (agg, pos, i) => {
-      if (!isFinite(agg.min.x) || pos[0] < agg.min.x) {
-        agg.min.x = pos[0];
-      }
-      if (!isFinite(agg.min.y) || pos[1] < agg.min.y) {
-        agg.min.y = pos[1];
-      }
-      if (!isFinite(agg.max.x) || agg.max.x < pos[0]) {
-        agg.max.x = pos[0];
-      }
-      if (!isFinite(agg.max.y) || agg.max.y < pos[1]) {
-        agg.max.y = pos[1];
-      }
-      return agg;
-    },
-    {
-      min: { x: undefined, y: undefined },
-      max: { x: undefined, y: undefined },
-    },
-  );
-  return { x: min.x, y: min.y, w: max.x - min.x, h: max.y - min.y };
 }
 
 function drawElement(cell: Cell, style: string) {
   return `<path ${style} d="${
     cell.path.reduce((s: string, point: Point, i: number) => {
       if (i === 0) {
-        return `M ${point.x}, ${point.y} `;
+        return `M ${point[Point.X]}, ${point[Point.Y]} `;
       } else {
-        return `${s} L ${point.x}, ${point.y} `;
+        return `${s} L ${point[Point.X]}, ${point[Point.Y]} `;
       }
     }, '') + 'z'
   }" />`;

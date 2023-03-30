@@ -1,4 +1,6 @@
+import { Point } from "./Point";
+
 export interface BoundingBox {
-  min: number[];
-  max: number[];
+  min: Point;
+  max: Point;
 }

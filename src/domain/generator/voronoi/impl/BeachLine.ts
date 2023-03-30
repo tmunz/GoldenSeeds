@@ -1,15 +1,14 @@
-import { RbTree } from '../utils/rbTree/RbTree';
-import { RbTreeNode } from '../utils/rbTree/RbTreeNode';
+import { RbTree } from './utils/rbTree/RbTree';
+import { RbTreeNode } from './utils/rbTree/RbTreeNode';
 import { Edge } from './Edge';
 import { CircleEventQueue } from './CircleEventQueue';
 import { EdgeManager } from './EdgeManager';
-import { Vertex } from './Vertex';
 import { Site } from './Site';
 import { VertexFactory } from './VertexFactory';
 import { SiteArea } from './SiteArea';
-import { DistanceHelper } from './DistanceHelper';
 import { HalfEdge } from './HalfEdge';
 import { SiteAreaStore } from './SiteAreaStore';
+import { PointUtils } from '../../../../utils/PointUtils';
 
 export interface BeachSection {
   site?: Site;
@@ -103,26 +102,26 @@ export class BeachLine {
 
     while (node) {
       const leftBreakPointRelativeX = this.calculateLeftBreakPointX(node, site.y) - site.x;
-      if (leftBreakPointRelativeX > DistanceHelper.tolerance) {
+      if (leftBreakPointRelativeX > PointUtils.TOLERANCE) {
         node = node.left;
       } else {
         const rightBreakPointRelativeX = site.x - this.calculateRightBreakPointX(node, site.y);
 
         // x greaterThanWithTolerance boundary.right() => falls somewhere after the right edge of the beachsection
-        if (rightBreakPointRelativeX > DistanceHelper.tolerance) {
+        if (rightBreakPointRelativeX > PointUtils.TOLERANCE) {
           if (!node.right) {
             return { leftSection: node, rightSection: null };
           }
           node = node.right;
         } else {
           // x isEqualWithTolerance boundary.left() => falls exactly on the left edge of the beachsection
-          if (leftBreakPointRelativeX > -DistanceHelper.tolerance) {
+          if (leftBreakPointRelativeX > -PointUtils.TOLERANCE) {
             leftSection = node.prev;
             rightSection = node;
           }
 
           // x isEqualWithTolerance boundary.right() => falls exactly on the right edge of the beachsection
-          else if (rightBreakPointRelativeX > -DistanceHelper.tolerance) {
+          else if (rightBreakPointRelativeX > -PointUtils.TOLERANCE) {
             leftSection = node;
             rightSection = node.next;
           }
@@ -174,8 +173,8 @@ export class BeachLine {
     let leftSection_ = section;
     while (
       leftSection_.circleEvent &&
-      Math.abs(vertex.x - leftSection_.circleEvent.x) < DistanceHelper.tolerance &&
-      Math.abs(vertex.y - leftSection_.circleEvent.centerY) < DistanceHelper.tolerance
+      Math.abs(vertex.x - leftSection_.circleEvent.x) < PointUtils.TOLERANCE &&
+      Math.abs(vertex.y - leftSection_.circleEvent.centerY) < PointUtils.TOLERANCE
     ) {
       previousSection = leftSection_.prev;
       leftBeach.unshift(leftSection_);
@@ -193,8 +192,8 @@ export class BeachLine {
     let rightSection_ = section;
     while (
       rightSection_.circleEvent &&
-      Math.abs(vertex.x - rightSection_.circleEvent.x) < DistanceHelper.tolerance &&
-      Math.abs(vertex.y - rightSection_.circleEvent.centerY) < DistanceHelper.tolerance
+      Math.abs(vertex.x - rightSection_.circleEvent.x) < PointUtils.TOLERANCE &&
+      Math.abs(vertex.y - rightSection_.circleEvent.centerY) < PointUtils.TOLERANCE
     ) {
       nextSection = rightSection_.next;
       rightBeach.push(rightSection_);

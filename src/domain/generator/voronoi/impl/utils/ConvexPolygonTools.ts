@@ -1,4 +1,5 @@
-import { Math2d } from '../math/Math2d';
+import { Point } from '../../../../../datatypes/Point';
+import { PointUtils } from '../../../../../utils/PointUtils';
 
 export class ConvexPolygonTools {
   static offsetPath(path: Point[], offset = 0): Point[] {
@@ -11,18 +12,18 @@ export class ConvexPolygonTools {
     rawOffsets.forEach((curr, i, arr) => {
       const prev = arr[(i - 1 + arr.length) % arr.length];
 
-      const originalDistance = Math2d.distanceBetween(prev.originalPoint, curr.originalPoint);
+      const originalDistance = PointUtils.distance(prev.originalPoint, curr.originalPoint);
       const currOverlapsWithPrev = originalDistance + offset < curr.baseDistance + prev.baseDistance;
       let cleanedPoint = curr.offsetPoint;
 
       if (currOverlapsWithPrev) {
         cleanedPath.pop();
-        const sideA = Math2d.distanceBetween(curr.offsetPoint, prev.offsetPoint);
+        const sideA = PointUtils.distance(curr.offsetPoint, prev.offsetPoint);
         const gamma = Math.PI - 2 * prev.bisectorAngle;
         const beta = Math.PI - 2 * curr.bisectorAngle;
         const alpha = Math.PI - beta - gamma;
-        const newPointDistanceFromPrevOffsetPoint = Math2d.triangleSideB(sideA, alpha, beta);
-        cleanedPoint = Math2d.calculatePointWithAngleAndDistance(
+        const newPointDistanceFromPrevOffsetPoint = PointUtils.triangleSideB(sideA, alpha, beta);
+        cleanedPoint = PointUtils.calculatePointWithAngleAndDistance(
           prev.offsetPoint,
           curr.offsetPoint,
           -gamma,
@@ -44,7 +45,7 @@ export class ConvexPolygonTools {
     let signedArea = 0;
     path.forEach((curr, i, arr) => {
       const next = arr[(i + 1) % arr.length];
-      signedArea += curr.x * next.y - next.x * curr.y;
+      signedArea += curr[Point.X] * next[Point.Y] - next[Point.X] * curr[Point.Y];
     });
     return signedArea / 2;
   }
@@ -61,9 +62,9 @@ export class ConvexPolygonTools {
     return path.map((point, i, arr) => {
       const prev = arr[(i - 1 + arr.length) % arr.length];
       const next = arr[(i + 1) % arr.length];
-      const bisectorAngle = Math2d.angleAt(point, prev, next) / 2;
-      const baseDistance = Math2d.triangleSideB(offset, bisectorAngle, Math.PI / 2);
-      const offsetPoint: Point = Math2d.calculatePointWithAngleAndDistance(point, next, bisectorAngle, baseDistance);
+      const bisectorAngle = PointUtils.angleAt(point, prev, next) / 2;
+      const baseDistance = PointUtils.triangleSideB(offset, bisectorAngle, Math.PI / 2);
+      const offsetPoint: Point = PointUtils.calculatePointWithAngleAndDistance(point, next, bisectorAngle, baseDistance);
       return { originalPoint: point, offsetPoint, baseDistance, bisectorAngle };
     });
   }

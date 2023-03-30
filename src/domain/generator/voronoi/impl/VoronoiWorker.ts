@@ -3,13 +3,13 @@ import { VertexFactory } from './VertexFactory';
 import { SiteAreaStore } from './SiteAreaStore';
 import { EdgeManager } from './EdgeManager';
 import { BeachLine, BeachSection } from './BeachLine';
-import { Queue } from '../utils/Queue';
+import { Queue } from './utils/Queue';
 import { Site } from './Site';
 import { Boundary } from './Boundary';
 import { Edge } from './Edge';
 import { Vertex } from './Vertex';
-import { DistanceHelper } from './DistanceHelper';
 import { SiteArea } from './SiteArea';
+import { PointUtils } from '../../../../utils/PointUtils';
 
 export class VoronoiWorker {
   private circleEvents: CircleEventQueue = new CircleEventQueue();
@@ -57,7 +57,7 @@ export class VoronoiWorker {
   }
 
   private shouldIgnoreSite(site: Site, previousSite: Site) {
-    return previousSite && DistanceHelper.isSamePosition(previousSite, site);
+    return previousSite && PointUtils.isSamePoint([previousSite.x, previousSite.y], [site.x, site.y]);
   }
 
   private addNewBeachSectionFor(site: Site): void {
