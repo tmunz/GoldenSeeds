@@ -51,7 +51,8 @@ export class VoronoiWorker {
       site &&
       (!this.circleEvents.getCurrent() ||
         site.point[Point.Y] < this.circleEvents.getCurrent().y ||
-        (site.point[Point.Y] === this.circleEvents.getCurrent().y && site.point[Point.X] < this.circleEvents.getCurrent().x))
+        (site.point[Point.Y] === this.circleEvents.getCurrent().y &&
+          site.point[Point.X] < this.circleEvents.getCurrent().x))
     );
   }
 

@@ -1,4 +1,4 @@
-import { Point } from "../../../../datatypes/Point";
+import { Point } from '../../../../datatypes/Point';
 
 export interface Site {
   point: Point;

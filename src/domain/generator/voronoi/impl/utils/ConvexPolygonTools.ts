@@ -64,7 +64,12 @@ export class ConvexPolygonTools {
       const next = arr[(i + 1) % arr.length];
       const bisectorAngle = PointUtils.angleAt(point, prev, next) / 2;
       const baseDistance = PointUtils.triangleSideB(offset, bisectorAngle, Math.PI / 2);
-      const offsetPoint: Point = PointUtils.calculatePointWithAngleAndDistance(point, next, bisectorAngle, baseDistance);
+      const offsetPoint: Point = PointUtils.calculatePointWithAngleAndDistance(
+        point,
+        next,
+        bisectorAngle,
+        baseDistance,
+      );
       return { originalPoint: point, offsetPoint, baseDistance, bisectorAngle };
     });
   }

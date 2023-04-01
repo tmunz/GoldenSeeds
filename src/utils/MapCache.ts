@@ -1,5 +1,4 @@
 export class MapCache<K, V> extends Map<K, V> {
-
   keyHistory: K[] = [];
 
   constructor(private cacheSize: number) {

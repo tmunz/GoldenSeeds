@@ -21,7 +21,7 @@ export interface BeachSection {
   centerY?: number;
 }
 
-export interface BeachSectionNode extends BeachSection, RbTreeNode<BeachSectionNode> { }
+export interface BeachSectionNode extends BeachSection, RbTreeNode<BeachSectionNode> {}
 
 export class BeachLine {
   private dataTree = new RbTree<BeachSectionNode>();
@@ -46,7 +46,6 @@ export class BeachLine {
   addSectionFor(site: Site): void {
     this.siteAreaStore.put(site.id, new SiteArea(site));
     let { leftSection, rightSection } = this.getSectionsFor(site);
-
     const newArc: BeachSection = this.addNewSectionToExisting({ site }, leftSection);
 
     // the new section ...
@@ -72,9 +71,12 @@ export class BeachLine {
       this.circleEvents.detachCurrent(leftSection);
       this.circleEvents.detachCurrent(rightSection);
 
-      const collapsingPoint = this.calculateCenterOfOutcircle(leftSection.site?.point, site.point, rightSection.site?.point);
+      const collapsingPoint = this.calculateCenterOfOutcircle(
+        leftSection.site?.point,
+        site.point,
+        rightSection.site?.point,
+      );
       const vertex = this.vertexFactory.create(collapsingPoint[Point.X], collapsingPoint[Point.Y]);
-
       this.createNewEdgeFrom(vertex, leftSection, rightSection);
 
       newArc.edge = this.addNewEdge(leftSection.site, site, undefined, vertex);
@@ -95,23 +97,25 @@ export class BeachLine {
   }
 
   private getSectionsFor(site: Site): {
-    leftSection: BeachSection;
-    rightSection: BeachSection;
+    leftSection: BeachSection | undefined;
+    rightSection: BeachSection | undefined;
   } {
     let node = this.dataTree.getRoot();
-    let leftSection, rightSection;
+    let leftSection = undefined;
+    let rightSection = undefined;
 
     while (node) {
       const leftBreakPointRelativeX = this.calculateLeftBreakPointX(node, site.point[Point.Y]) - site.point[Point.X];
       if (leftBreakPointRelativeX > PointUtils.TOLERANCE) {
         node = node.left;
       } else {
-        const rightBreakPointRelativeX = site.point[Point.X] - this.calculateRightBreakPointX(node, site.point[Point.Y]);
+        const rightBreakPointRelativeX =
+          site.point[Point.X] - this.calculateRightBreakPointX(node, site.point[Point.Y]);
 
         // x greaterThanWithTolerance boundary.right() => falls somewhere after the right edge of the beachsection
         if (rightBreakPointRelativeX > PointUtils.TOLERANCE) {
           if (!node.right) {
-            return { leftSection: node, rightSection: null };
+            return { leftSection: node, rightSection: undefined };
           }
           node = node.right;
         } else {
@@ -210,11 +214,7 @@ export class BeachLine {
     rightSection.edge.createStartpoint(vertex, leftSection.site, rightSection.site);
   }
 
-  private calculateCenterOfOutcircle(
-    a: Point,
-    b: Point,
-    c: Point,
-  ) {
+  private calculateCenterOfOutcircle(a: Point, b: Point, c: Point) {
     // set origin to point a
     const d = [b[Point.X] - a[Point.X], b[Point.Y] - a[Point.Y]];
     const e = [c[Point.X] - a[Point.X], c[Point.Y] - a[Point.Y]];

@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "name": "test voronoi"
+  },
+  "stages": [
+    {
+      "type": "cartesian",
+      "color": "gold",
+      "strokeWidth": "3.75",
+      "items": "11",
+      "x": "4",
+      "xDistance": "10",
+      "yDistance": "10"
+    },
+    {
+      "type": "voronoi",
+      "color": "30199175",
+      "style": "filled",
+      "gap": "0"
+    },
+    {
+      "type": "shape",
+      "border": "gold",
+      "fill": "16646144",
+      "coordinateType": "polar",
+      "edges": "1",
+      "smoothness": "0.5",
+      "noise": "0",
+      "probabilityDistributionMuRandomness": "0",
+      "probabilityDistributionSigma": "0",
+      "probabilityDistributionSigmaRandomness": "0",
+      "probabilityDistributionNoise": "0",
+      "angle": "0",
+      "size": "1",
+      "offset": "0",
+      "cutRatio0": "0",
+      "cutRatio1": "0",
+      "seed": "999"
+    }
+  ]
+}

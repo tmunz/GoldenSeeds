@@ -8,7 +8,6 @@ import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 import { Stage } from '../stage/Stage';
 
 export class ConfigService {
-
   preconfigIndex$ = new BehaviorSubject<number>(-1);
   config$ = new BehaviorSubject<Config>({ meta: { name: '' }, stages: [] });
 
@@ -29,7 +28,7 @@ export class ConfigService {
   }
 
   selectPreconfigByName(name: string | null) {
-    const index = preconfigs.findIndex(p => p.meta.name === name);
+    const index = preconfigs.findIndex((p) => p.meta.name === name);
     this.selectPreconfig(Math.max(0, index));
   }
 

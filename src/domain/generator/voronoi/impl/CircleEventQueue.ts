@@ -1,10 +1,17 @@
 import { RbTree } from './utils/rbTree/RbTree';
 import { RbTreeNode } from './utils/rbTree/RbTreeNode';
-import { BeachSection } from './BeachLine';
 import { Site } from './Site';
 import { Point } from '../../../../datatypes/Point';
+import { BeachSectionNode } from './BeachLine';
 
-export interface CircleEvent extends BeachSection, RbTreeNode<CircleEvent> { }
+export interface CircleEvent extends RbTreeNode<CircleEvent> {
+  x: number;
+  y: number;
+  site: Site;
+  arc: BeachSectionNode;
+  centerY: number;
+  circleEvent?: CircleEvent;
+}
 
 export class CircleEventQueue {
   private dataTree = new RbTree<CircleEvent>();
@@ -25,7 +32,7 @@ export class CircleEventQueue {
     }
   }
 
-  private circumCircle(a: Site, b: Site, c: Site): { x: number, y: number, centerY: number, bx: number } | undefined {
+  private circumCircle(a: Site, b: Site, c: Site): { x: number; y: number; centerY: number; bx: number } | undefined {
     const bx = b.point[Point.X];
     const by = b.point[Point.Y];
     const ax = a.point[Point.X] - bx;
@@ -40,10 +47,9 @@ export class CircleEventQueue {
       const x = (cy * ha - ay * hc) / d;
       const y = (ax * hc - cx * ha) / d;
       const centerY = y + by;
-      return { x, y, centerY, bx }
+      return { x, y, centerY, bx };
     }
   }
-
 
   attachCircleEventIfNeededOnCollapse(arc: CircleEvent): void {
     const lArc = arc.prev;
@@ -65,8 +71,9 @@ export class CircleEventQueue {
   }
 
   private push(circleEvent: CircleEvent): void {
-    let predecessor: CircleEvent | null = null;
-    let node: CircleEvent = this.dataTree.getRoot();
+    let predecessor: CircleEvent | undefined;
+    let node: CircleEvent | undefined = this.dataTree.getRoot();
+
     while (node) {
       if (circleEvent.y < node.y || (circleEvent.y === node.y && circleEvent.x <= node.x)) {
         if (node.left) {
@@ -85,10 +92,10 @@ export class CircleEventQueue {
       }
     }
 
-    this.insert(predecessor, circleEvent);
+    this.insert(circleEvent, predecessor);
   }
 
-  private insert(predecessor: CircleEvent, circleEvent: CircleEvent) {
+  private insert(circleEvent: CircleEvent, predecessor?: CircleEvent) {
     this.dataTree.insertAsSuccessorTo(circleEvent, predecessor);
     if (!predecessor) {
       this.current = circleEvent;

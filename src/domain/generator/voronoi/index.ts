@@ -13,12 +13,12 @@ export class Voronoi implements SvgGenerator {
       type: 'selection' as const,
       options: [DrawStyle.FILLED, DrawStyle.STROKE],
     },
-    borderWidth: {
-      initial: '2',
+    gap: {
+      initial: '0.1',
       type: 'number' as const,
       min: 0,
       max: 10,
-      step: 1,
+      step: 0.1,
     },
   };
 

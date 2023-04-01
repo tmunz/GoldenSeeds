@@ -2,7 +2,6 @@ import { BoundingBox } from '../datatypes/BoundingBox';
 import { Point } from '../datatypes/Point';
 
 export class PointUtils {
-
   static TOLERANCE = 1e-9;
 
   static DEFAULT_BOUNDING_BOX: BoundingBox = {
@@ -35,10 +34,13 @@ export class PointUtils {
   }
 
   static isSamePoint(...points: Point[]): boolean {
-    return 1 < points.length ? points.every((p) =>
-      PointUtils.isEqualWithTolerance(p[Point.X], points[0][Point.X]) &&
-      PointUtils.isEqualWithTolerance(p[Point.Y], points[0][Point.Y]),
-    ) : true;
+    return 1 < points.length
+      ? points.every(
+        (p) =>
+          PointUtils.isEqualWithTolerance(p[Point.X], points[0][Point.X]) &&
+            PointUtils.isEqualWithTolerance(p[Point.Y], points[0][Point.Y]),
+      )
+      : true;
   }
 
   static isEqualWithTolerance(a: number, b: number): boolean {
@@ -67,18 +69,11 @@ export class PointUtils {
 
   static slopeAngle(p0: Point, p1: Point): number {
     const slope = PointUtils.slope(p0, p1);
-    const slopeAngleRaw = Math.atan(slope);
-    if (p0[Point.X] <= p1[Point.X] && p0[Point.Y] <= p1[Point.Y]) {
-      return slopeAngleRaw;
-    } else if (p0[Point.X] > p1[Point.X] && p0[Point.Y] <= p1[Point.Y]) {
-      return Math.PI + slopeAngleRaw;
-    } else if (p0[Point.X] > p1[Point.X] && p0[Point.Y] > p1[Point.Y]) {
-      return Math.PI + slopeAngleRaw;
-    } else if (p0[Point.X] <= p1[Point.X] && p0[Point.Y] > p1[Point.Y]) {
-      return 2 * Math.PI + slopeAngleRaw;
-    } else {
-      return 0;
+    const angle = Math.atan(slope);
+    if (p1[Point.X] < p0[Point.X]) {
+      return Math.PI + angle;
     }
+    return ((angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
   }
 
   static calculatePointWithAngleAndDistance(a: Point, b: Point, rads: number, distanceAC: number): Point {

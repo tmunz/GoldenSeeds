@@ -3,7 +3,6 @@ import { Stage, StageState } from '../stage/Stage';
 import { PointUtils } from '../../utils/PointUtils';
 import { MapCache } from '../../utils/MapCache';
 
-
 export class SvgGeneratorService {
   static DEFAULT_RESULT: SvgGeneratorResult = {
     grid: [[0, 0]],
@@ -23,7 +22,7 @@ export class SvgGeneratorService {
     if (!this.cache.has(stageKey)) {
       this.cache.set(stageKey, stage.generator.generate(stageConfig, prev));
     }
-    return this.cache.get(stageKey) as SvgGeneratorResult;  
+    return this.cache.get(stageKey) as SvgGeneratorResult;
   }
 
   private convertToValue(obj: { [key: string]: StageState<any> }): {

@@ -22,9 +22,10 @@ export class Boundary implements BoundingBox {
 
   isPointInside(point: Point): boolean {
     return (
-      this.min[Point.X] <= point[Point.X] && point[Point.X] <= this.max[Point.X]
-      &&
-      this.min[Point.Y] <= point[Point.Y] && point[Point.Y] <= this.max[Point.Y]
+      this.min[Point.X] <= point[Point.X] &&
+      point[Point.X] <= this.max[Point.X] &&
+      this.min[Point.Y] <= point[Point.Y] &&
+      point[Point.Y] <= this.max[Point.Y]
     );
   }
 }

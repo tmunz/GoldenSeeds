@@ -1,4 +1,6 @@
+export type PointDimension = 0 | 1;
+
 export class Point extends Array<number> {
-  static X = 0;
-  static Y = 1;
+  static X: PointDimension = 0;
+  static Y: PointDimension = 1;
 }

@@ -68,19 +68,19 @@ export function draw(config: ShapeConfig, grid: Point[]): { svg: string; boundin
         const points = [
           () => generateShape(config.edges, (i: number) => config.offset(n, items, size, i)),
           (pnts: Point[]) =>
-            0 < config.probabilityDistributionSigma ? probabilityDistribution(
-              pnts,
-              n,
-              config.probabilityDistributionMuRandomness,
-              config.probabilityDistributionSigma,
-              config.probabilityDistributionSigmaRandomness,
-              config.probabilityDistributionNoise,
-              config.seed,
-            ): pnts,
-          (pnts: Point[]) => 
-            0 < config.noise ? noise(pnts, n, config.noise, config.seed) : pnts,
-          (pnts: Point[]) => 
-            config.coordinateType === 'polar' ? toPolar(pnts) : pnts,
+            0 < config.probabilityDistributionSigma
+              ? probabilityDistribution(
+                pnts,
+                n,
+                config.probabilityDistributionMuRandomness,
+                config.probabilityDistributionSigma,
+                config.probabilityDistributionSigmaRandomness,
+                config.probabilityDistributionNoise,
+                config.seed,
+              )
+              : pnts,
+          (pnts: Point[]) => (0 < config.noise ? noise(pnts, n, config.noise, config.seed) : pnts),
+          (pnts: Point[]) => (config.coordinateType === 'polar' ? toPolar(pnts) : pnts),
           (pnts: Point[]) => smooth(pnts, itemProps.smoothness),
           // after smooth => [..., controlToPrev, linePoint, controlToNext, ...]
           (pnts: Point[]) => transform(pnts, position, itemProps.size, itemProps.angle),
@@ -151,13 +151,13 @@ function smooth(pnts: Point[], smoothness: number): Point[] {
   return pnts.reduce((smoothedPnts, pnt, i, arr) => {
     let prevX = 0;
     let prevY = 0;
-    let nextX = 0; 
+    let nextX = 0;
     let nextY = 0;
 
     // performance reasons, although should work as expected for smoothness == 0
     if (0 < smoothness) {
       const n = arr.length - 1;
-      const correctionFactor = n === 1 ? 1 : 2 / 3 * Math.tan(Math.PI / 2 / n) / Math.sin(Math.PI / n);
+      const correctionFactor = n === 1 ? 1 : ((2 / 3) * Math.tan(Math.PI / 2 / n)) / Math.sin(Math.PI / n);
 
       const pntPrev = arr[(i === 0 ? arr.length - 1 : i) - 1];
       const pntNext = arr[(i === arr.length - 1 ? 0 : i) + 1];
@@ -265,7 +265,8 @@ function drawArc(center: Point, size: number, startAngle: number, angle: number,
 }
 
 function drawShapeSvg(points: (Point | undefined)[], style: string): string {
-  return `<path ${style} d="${points.slice(0, -1)
+  return `<path ${style} d="${points
+    .slice(0, -1)
     .reduce((sArr, pnt, i) => {
       if (typeof pnt === 'undefined') {
         if (['M', 'C'].indexOf(sArr[sArr.length - 1]) < 0) {

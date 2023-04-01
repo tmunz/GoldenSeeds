@@ -5,18 +5,18 @@ import { RbTreeNode } from './RbTreeNode';
 // https://github.com/fbuihuu/libtree/blob/master/rb.c
 //
 export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
-  private root: TreeNode;
+  private root: TreeNode | undefined;
 
   constructor() {
-    this.root = null;
+    this.root = undefined;
   }
 
-  getRoot(): TreeNode {
+  getRoot(): TreeNode | undefined {
     return this.root;
   }
 
-  insertAsSuccessorTo(successor: TreeNode, node: TreeNode): void {
-    let parent: TreeNode;
+  insertAsSuccessorTo(successor: TreeNode, node: TreeNode | undefined): void {
+    let parent: TreeNode | undefined;
 
     if (node) {
       successor.prev = node;
@@ -39,32 +39,34 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
       parent = node;
     } else if (this.root) {
       node = this.getFirst(this.root);
-      successor.prev = null;
+      successor.prev = undefined;
       successor.next = node;
       node.prev = successor;
 
       node.left = successor;
       parent = node;
     } else {
-      successor.prev = successor.next = null;
+      successor.prev = undefined;
+      successor.next = undefined;
 
       this.root = successor;
-      parent = null;
+      parent = undefined;
     }
 
-    successor.left = successor.right = null;
+    successor.left = undefined;
+    successor.right = undefined;
     successor.parent = parent;
     successor.red = true;
-
-    let grandpa: TreeNode;
-    let uncle: TreeNode;
+    let grandpa: TreeNode | undefined;
+    let uncle: TreeNode | undefined;
     node = successor;
     while (parent && parent.red) {
       grandpa = parent.parent;
-      if (parent === grandpa.left) {
+      if (grandpa && parent === grandpa.left) {
         uncle = grandpa.right;
         if (uncle && uncle.red) {
-          parent.red = uncle.red = false;
+          parent.red = false;
+          uncle.red = false;
           grandpa.red = true;
           node = grandpa;
         } else {
@@ -73,11 +75,13 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
             node = parent;
             parent = node.parent;
           }
-          parent.red = false;
-          grandpa.red = true;
-          this.rotateRight(grandpa);
+          if (parent) {
+            parent.red = false;
+            grandpa.red = true;
+            this.rotateRight(grandpa);
+          }
         }
-      } else {
+      } else if (grandpa) {
         uncle = grandpa.left;
         if (uncle && uncle.red) {
           parent.red = uncle.red = false;
@@ -89,15 +93,19 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
             node = parent;
             parent = node.parent;
           }
-          parent.red = false;
-          grandpa.red = true;
-          this.rotateLeft(grandpa);
+          if (parent) {
+            parent.red = false;
+            grandpa.red = true;
+            this.rotateLeft(grandpa);
+          }
         }
       }
       parent = node.parent;
     }
 
-    this.root.red = false;
+    if (this.root) {
+      this.root.red = false;
+    }
   }
 
   removeNode(node: TreeNode): void {
@@ -107,12 +115,13 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
     if (node.prev) {
       node.prev.next = node.next;
     }
-    node.next = node.prev = null;
+    node.next = undefined;
+    node.prev = undefined;
 
-    let parent: TreeNode = node.parent;
-    const left: TreeNode = node.left;
-    const right: TreeNode = node.right;
-    let next: TreeNode = null;
+    let parent: TreeNode | undefined = node.parent;
+    const left: TreeNode | undefined = node.left;
+    const right: TreeNode | undefined = node.right;
+    let next: TreeNode | undefined;
 
     if (!left) {
       next = right;
@@ -132,9 +141,9 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
       this.root = next;
     }
 
-    let isRed: boolean;
-    if (left && right) {
-      isRed = next.red;
+    let isRed = false;
+    if (next && left && right) {
+      isRed = next.red ?? false;
       next.red = node.red;
       next.left = left;
       left.parent = next;
@@ -151,7 +160,7 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
         node = next.right;
       }
     } else {
-      isRed = node.red;
+      isRed = node.red ?? false;
       node = next;
     }
 
@@ -257,8 +266,8 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
 
   private rotateRight(node: TreeNode): void {
     const p: TreeNode = node;
-    const q: TreeNode = node.left;
-    const parent: TreeNode = p.parent;
+    const q: TreeNode | undefined = node.left;
+    const parent: TreeNode | undefined = p.parent;
     if (parent) {
       if (parent.left === p) {
         parent.left = q;
@@ -269,14 +278,16 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
       this.root = q;
     }
 
-    q.parent = parent;
-    p.parent = q;
-    p.left = q.right;
+    if (q) {
+      q.parent = parent;
+      p.parent = q;
+      p.left = q.right;
 
-    if (p.left) {
-      p.left.parent = p;
+      if (p.left) {
+        p.left.parent = p;
+      }
+      q.right = p;
     }
-    q.right = p;
   }
 
   private getFirst(node: TreeNode): TreeNode {
