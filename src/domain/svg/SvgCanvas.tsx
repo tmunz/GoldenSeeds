@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactCSSTransitionReplace from 'react-css-transition-replace';
 
 import { Config } from '../config/Config';
 
@@ -15,17 +14,11 @@ export function SvgCanvas(props: Props) {
   const svgContent = props.svgContent ?? '';
   return (
     <div className="svg-canvas">
-      <ReactCSSTransitionReplace
-        transitionName="cross-fade"
-        transitionEnterTimeout={1000}
-        transitionLeaveTimeout={1000}
-      >
-        {process.env.MODE === 'production' ? (
-          <img key={key} src={`data:image/svg+xml;base64,${window.btoa(svgContent)}`} />
-        ) : (
+      {process.env.MODE === 'production' ? (
+        <img key={key} src={`data:image/svg+xml;base64,${window.btoa(svgContent)}`} />
+      ) : (
           <div key={key} dangerouslySetInnerHTML={{ __html: svgContent }} />
         )}
-      </ReactCSSTransitionReplace>
     </div>
   );
 }
