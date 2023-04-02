@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "name": "golden spiral"
+  },
+  "stages": [
+    {
+      "type": "function",
+      "color": "-2147103353",
+      "strokeWidth": "10",
+      "items": "8",
+      "functionX": "[0, 0, 1, 1, -1, -1, 4, 4, -9, -9, 25, 25, -64, -64, 169, 169, -441, -441, 1156, 1156, -3025, -3025, 7921, 7921, -20736, -20736]",
+      "functionY": "[0, 0, 0, -1, -1, 2, 2, -6, -6, 15, 15, -40, -40, 104, 104, -273, -273, 714, 714, -1870, -1870, 4895, 4895, -12816, -12816, -33552]"
+    },
+    {
+      "type": "shape",
+      "border": "gold",
+      "fill": "transparent",
+      "projection": "circular",
+      "circlularProjectionFullAngle": "360",
+      "edges": "1",
+      "smoothness": "0.5",
+      "noise": "0",
+      "probabilityDistributionMuRandomness": "0",
+      "probabilityDistributionSigma": "0",
+      "probabilityDistributionSigmaRandomness": "0",
+      "probabilityDistributionNoise": "0",
+      "angle": "n*90",
+      "size": "2*fib(n)",
+      "offset": "0",
+      "cutRatio0": "0",
+      "cutRatio1": "0.75",
+      "seed": "999"
+    }
+  ]
+}

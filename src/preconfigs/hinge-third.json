@@ -7,7 +7,8 @@
       "type": "shape",
       "border": "none",
       "fill": "gold",
-      "coordinateType": "polar",
+      "projection": "circular",
+      "circlularProjectionFullAngle": "360",
       "edges": "1",
       "smoothness": "0",
       "noise": "0",
@@ -23,18 +24,19 @@
       "seed": "999"
     },
     {
-      "type": "polar",
+      "type": "function",
       "color": "gold",
       "strokeWidth": "1",
       "items": "60",
-      "angle": "0",
-      "distance": "0"
+      "functionX": "0",
+      "functionY": "0"
     },
     {
       "type": "shape",
       "border": "black",
       "fill": "-2144665601",
-      "coordinateType": "polar",
+      "projection": "circular",
+      "circlularProjectionFullAngle": "360",
       "edges": "1",
       "smoothness": "0.5",
       "noise": "0",

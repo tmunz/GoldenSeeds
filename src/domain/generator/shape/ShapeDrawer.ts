@@ -15,7 +15,8 @@ export interface ShapeConfig {
   size: (n: number, items: number) => number;
   angle: (n: number, items: number, size: number) => number;
 
-  coordinateType: 'cartesian' | 'polar';
+  projection: 'circular' | 'linear';
+  circlularProjectionFullAngle: number;
   edges: number;
   offset: (n: number, items: number, size: number, i: number) => number;
 
@@ -54,7 +55,7 @@ export function draw(config: ShapeConfig, grid: Point[]): { svg: string; boundin
       const elementStyle = style(n, config.border, config.fill);
       let svg = '';
       let boundingBox;
-      if (config.edges <= 1 && config.coordinateType === 'polar') {
+      if (config.edges <= 1 && config.projection === 'circular') {
         const cutRatio1 = config.cutRatio1(n, items, size, 1);
         const startAngle = 360 * cutRatio1 + config.angle(n, items, size);
         const angle = 360 * (1 - (cutRatio1 - config.cutRatio0(n, items, size, 1)));
@@ -80,7 +81,8 @@ export function draw(config: ShapeConfig, grid: Point[]): { svg: string; boundin
               )
               : pnts,
           (pnts: Point[]) => (0 < config.noise ? noise(pnts, n, config.noise, config.seed) : pnts),
-          (pnts: Point[]) => (config.coordinateType === 'polar' ? toPolar(pnts) : pnts),
+          (pnts: Point[]) =>
+            config.projection === 'circular' ? toCircularProjection(pnts, config.circlularProjectionFullAngle) : pnts,
           (pnts: Point[]) => smooth(pnts, itemProps.smoothness),
           // after smooth => [..., controlToPrev, linePoint, controlToNext, ...]
           (pnts: Point[]) => transform(pnts, position, itemProps.size, itemProps.angle),
@@ -139,10 +141,10 @@ function noise(pnts: Point[], n: number, noise: number, seed: number): Point[] {
   });
 }
 
-function toPolar(pnts: Point[]): Point[] {
+function toCircularProjection(pnts: Point[], fullAngle: number): Point[] {
   return pnts.map((pnt) => {
     const d = pnt[Point.Y] + POLAR_BASE_D;
-    const rads = -(pnt[Point.X] + 0.5) * Math.PI * 2 - Math.PI / 2;
+    const rads = (-(pnt[Point.X] + 0.5) * Math.PI * 2 * fullAngle / 360) - Math.PI / 2;
     return [d * Math.cos(rads), d * Math.sin(rads)];
   });
 }

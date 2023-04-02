@@ -52,8 +52,11 @@ export class Edge {
       const right = this.rightSite.point;
       const center = [(left[Point.X] + right[Point.X]) / 2, (left[Point.Y] + right[Point.Y]) / 2];
       const slope =
-        right[Point.Y] !== left[Point.Y] ? (left[Point.X] - right[Point.X]) / (right[Point.Y] - left[Point.Y])
-          : left[Point.X] < right[Point.X] ? Number.POSITIVE_INFINITY : Number.NEGATIVE_INFINITY;
+        right[Point.Y] !== left[Point.Y]
+          ? (left[Point.X] - right[Point.X]) / (right[Point.Y] - left[Point.Y])
+          : left[Point.X] < right[Point.X]
+            ? Number.POSITIVE_INFINITY
+            : Number.NEGATIVE_INFINITY;
       const fb = center[Point.Y] - slope * center[Point.X];
 
       this.leftSite && (siteAreaStore.get(this.leftSite.id).canBeClosed = true);

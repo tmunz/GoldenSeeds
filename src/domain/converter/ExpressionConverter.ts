@@ -3,7 +3,7 @@ import { Converter } from './Converter';
 
 export class ExpressionConverter extends Converter<
   (n: number, items: number, itemSize: (n: number) => number, i: number) => number
-> {
+  > {
   protected convertFromRaw = (
     rawValue: string,
   ): ((n: number, items: number, itemSize: (n: number) => number, i?: number) => number) => {
@@ -13,6 +13,7 @@ export class ExpressionConverter extends Converter<
       [0, 1].map((d: number) => expression(d, 2, (n) => n)); //test Expression
       return expression;
     } catch (e) {
+      console.warn(e);
       return this.convertToExpression('1'); // TODO use last valid one
     }
   };
@@ -21,7 +22,7 @@ export class ExpressionConverter extends Converter<
     expression: string,
   ): ((n: number, items: number, itemSize: (n: number) => number) => number) => {
     return eval(
-      `(n, items, itemSize, i) => ((fib, goldenRatio) => ${expression})(${MathUtils.fib}, ${MathUtils.goldenRatio})`,
+      `(n, items, itemSize, i) => ((fib, goldenRatio) => ${expression})(${(v: number) => MathUtils.fib(v)}, ${MathUtils.goldenRatio})`,
     );
   };
 }

@@ -17,8 +17,8 @@ export function SvgCanvas(props: Props) {
       {process.env.MODE === 'production' ? (
         <img key={key} src={`data:image/svg+xml;base64,${window.btoa(svgContent)}`} />
       ) : (
-          <div key={key} dangerouslySetInnerHTML={{ __html: svgContent }} />
-        )}
+        <div key={key} dangerouslySetInnerHTML={{ __html: svgContent }} />
+      )}
     </div>
   );
 }

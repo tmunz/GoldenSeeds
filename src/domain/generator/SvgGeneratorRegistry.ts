@@ -4,12 +4,13 @@ import { Voronoi } from './voronoi';
 import { Tree } from './tree';
 import { SvgGenerator } from './SvgGenerator';
 import { Shape } from './shape';
+import { FunctionGrid } from './function';
 
 export class SvgGeneratorRegistry {
   private registry: Map<string, () => SvgGenerator> = new Map();
 
   constructor() {
-    const classes = [Shape, PolarGrid, CartesianGrid, Voronoi, Tree];
+    const classes = [Shape, FunctionGrid, PolarGrid, CartesianGrid, Voronoi, Tree];
     classes.forEach((c: any) => this.register(c.type, () => new c()));
   }
 

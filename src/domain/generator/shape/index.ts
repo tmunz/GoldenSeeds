@@ -10,10 +10,17 @@ export class Shape implements SvgGenerator {
   definition = {
     border: { initial: 'gold', type: 'color' as const },
     fill: { initial: 'transparent', type: 'color' as const },
-    coordinateType: {
-      initial: 'polar',
+    projection: {
+      initial: 'circular',
       type: 'selection' as const,
-      options: ['cartesian', 'polar'],
+      options: ['linear', 'circular'],
+    },
+    circlularProjectionFullAngle: {
+      initial: '360',
+      type: 'number' as const,
+      min: -3 * 360,
+      max: +3 * 360,
+      step: 1,
     },
     edges: {
       initial: '1',

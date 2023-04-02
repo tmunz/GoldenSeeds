@@ -2,6 +2,8 @@ export const preconfigs = [
   // require('./test-voronoi.json'),
   // require('./test.json'),
   require('./golden-seeds.json'),
+  // require('./spiral.json'),
+  require('./golden-spiral.json'),
   require('./turbine.json'),
   require('./unknown-pleasures.json'),
   require('./tree.json'),

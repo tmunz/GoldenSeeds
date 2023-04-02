@@ -1,15 +1,15 @@
 {
   "meta": {
-    "name": "turbine"
+    "name": "spiral"
   },
   "stages": [
     {
       "type": "function",
-      "color": "gold",
-      "strokeWidth": "1",
-      "items": "35",
-      "functionX": "0",
-      "functionY": "0"
+      "color": "-2147103353",
+      "strokeWidth": "10",
+      "items": "8",
+      "functionX": "Math.floor(((n-1) % 4) / 2) / 2",
+      "functionY": "Math.floor((n% 4) / 2) / 2"
     },
     {
       "type": "shape",
@@ -17,18 +17,18 @@
       "fill": "transparent",
       "projection": "circular",
       "circlularProjectionFullAngle": "360",
-      "edges": "18",
+      "edges": "1",
       "smoothness": "0.5",
       "noise": "0",
       "probabilityDistributionMuRandomness": "0",
       "probabilityDistributionSigma": "0",
       "probabilityDistributionSigmaRandomness": "0",
       "probabilityDistributionNoise": "0",
-      "angle": "180 + n",
-      "size": "Math.pow(n, 1 / goldenRatio)",
-      "offset": "2 * (i%2) / Math.pow(goldenRatio, 2) ",
+      "angle": "n*90",
+      "size": "n",
+      "offset": "0",
       "cutRatio0": "0",
-      "cutRatio1": "0",
+      "cutRatio1": "0.75",
       "seed": "999"
     }
   ]
