@@ -1,12 +1,11 @@
 import { MathUtils } from '../../../utils/MathUtils';
 import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
 import { PointUtils } from '../../../utils/PointUtils';
-import { Point } from '../../../datatypes/Point';
-import { draw, FunctionConfig } from './FunctionDrawer';
+import { plot, FunctionPlotterConfig } from './FunctionPlotter';
 
-export class FunctionGrid implements SvgGenerator {
+export class FunctionPlotter implements SvgGenerator {
   static type = 'function';
-  type = FunctionGrid.type;
+  type = FunctionPlotter.type;
 
   definition = {
     color: { initial: 'gold', type: 'color' as const },
@@ -17,8 +16,21 @@ export class FunctionGrid implements SvgGenerator {
       max: 10,
       step: 0.05,
     },
+    output: {
+      initial: 'generated',
+      type: 'selection' as const,
+      options: ['origin', 'generated'],
+    },
+    start: {
+      initial: '0',
+      type: 'number' as const,
+      min: -100,
+      max: 100,
+      step: 1,
+      animateable: true,
+    },
     items: {
-      initial: '1',
+      initial: '10',
       type: 'number' as const,
       min: 1,
       max: MathUtils.fib(16),
@@ -26,40 +38,34 @@ export class FunctionGrid implements SvgGenerator {
       animateable: true,
     },
     functionX: {
-      initial: '0',
+      initial: 'n',
       type: 'expression' as const,
       min: -10,
       max: 10,
       step: 0.1,
     },
     functionY: {
-      initial: '0',
+      initial: 'Math.sin(n)',
       type: 'expression' as const,
       min: -10,
       max: 10,
       step: 0.1,
-    }
+    },
+    resolution: {
+      initial: '10',
+      type: 'number' as const,
+      min: 1,
+      max: 10,
+      step: 1,
+    },
   };
 
-  generate = (config: FunctionConfig, prev: SvgGeneratorResult): SvgGeneratorResult => {
-    const drawing = draw(config, prev.grid);
-
-    let drawingBoundingBox = PointUtils.boundingBox(drawing.points);
-
-    // stabilize center if all prev points are centered
-    if (prev.grid.reduce((b: boolean, p: number[]) => b && p[Point.X] === 0 && p[Point.Y] === 0, true)) {
-      const extremeX = Math.max(-drawingBoundingBox.min[Point.X], drawingBoundingBox.max[Point.X]);
-      const extremeY = Math.max(-drawingBoundingBox.min[Point.Y], drawingBoundingBox.max[Point.Y]);
-      drawingBoundingBox = {
-        min: [-extremeX, -extremeY],
-        max: [extremeX, extremeY],
-      };
-    }
-
+  generate = (config: FunctionPlotterConfig, prev: SvgGeneratorResult): SvgGeneratorResult => {
+    const plotting = plot(config, prev.grid);
     return {
-      grid: drawing.points,
-      svg: drawing.svg,
-      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, drawingBoundingBox]),
+      grid: config.output === 'origin' ? prev.grid : plotting.points,
+      svg: plotting.svg,
+      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, PointUtils.boundingBox(plotting.points)]),
     };
   };
 }

@@ -1,6 +1,6 @@
 {
   "name": "golden-seeds",
-  "version": "2.0.0-alpha.19",
+  "version": "2.0.0-alpha.20",
   "repository": "https://github.com/tmunz/GoldenSeeds",
   "description": "Golden Seeds - SVG Generator",
   "main": "src/index.tsx",

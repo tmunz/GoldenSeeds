@@ -5,11 +5,14 @@
   "stages": [
     {
       "type": "function",
-      "color": "-2147103353",
-      "strokeWidth": "10",
-      "items": "8",
+      "color": "transparent",
+      "strokeWidth": "1",
+      "output": "generated",
+      "start": "0",
+      "items": "11",
       "functionX": "[0, 0, 1, 1, -1, -1, 4, 4, -9, -9, 25, 25, -64, -64, 169, 169, -441, -441, 1156, 1156, -3025, -3025, 7921, 7921, -20736, -20736]",
-      "functionY": "[0, 0, 0, -1, -1, 2, 2, -6, -6, 15, 15, -40, -40, 104, 104, -273, -273, 714, 714, -1870, -1870, 4895, 4895, -12816, -12816, -33552]"
+      "functionY": "[0, 0, 0, -1, -1, 2, 2, -6, -6, 15, 15, -40, -40, 104, 104, -273, -273, 714, 714, -1870, -1870, 4895, 4895, -12816, -12816, 33552]",
+      "resolution": "1"
     },
     {
       "type": "shape",
@@ -25,7 +28,7 @@
       "probabilityDistributionSigmaRandomness": "0",
       "probabilityDistributionNoise": "0",
       "angle": "n*90",
-      "size": "2*fib(n)",
+      "size": "n <= 8 ? 2*fib(n) : 0",
       "offset": "0",
       "cutRatio0": "0",
       "cutRatio1": "0.75",

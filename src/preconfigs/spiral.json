@@ -5,8 +5,8 @@
   "stages": [
     {
       "type": "function",
-      "color": "-2147103353",
-      "strokeWidth": "10",
+      "color": "transparent",
+      "strokeWidth": "1",
       "items": "8",
       "functionX": "Math.floor(((n-1) % 4) / 2) / 2",
       "functionY": "Math.floor((n% 4) / 2) / 2"

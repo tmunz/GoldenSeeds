@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "name": "cos & sin"
+  },
+  "stages": [
+    {
+      "type": "function",
+      "color": "11787911",
+      "strokeWidth": "1",
+      "output": "origin",
+      "start": "0",
+      "items": "13",
+      "functionX": "n",
+      "functionY": "Math.sin(n)",
+      "resolution": "10"
+    },
+    {
+      "type": "function",
+      "color": "gold",
+      "strokeWidth": "1",
+      "output": "origin",
+      "start": "0",
+      "items": "12",
+      "functionX": "n",
+      "functionY": "Math.cos(n)",
+      "resolution": "10"
+    },
+    {
+      "type": "polar",
+      "color": "16777215",
+      "strokeWidth": "1",
+      "items": "4",
+      "angle": "180+90*n",
+      "distance": "n==1 ? 2  : n==2 ? 12 : 0.5"
+    }
+  ]
+}
