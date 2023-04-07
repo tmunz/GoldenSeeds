@@ -9,29 +9,36 @@ import { MathUtils } from '../../../utils/MathUtils';
 const POLAR_BASE_D = 0.5;
 
 export interface ShapeConfig {
-  border: Color;
-  fill: Color;
-
-  size: (n: number, items: number) => number;
-  angle: (n: number, items: number, size: number) => number;
-
-  projection: 'circular' | 'linear';
-  circlularProjectionFullAngle: number;
-  edges: number;
-  offset: (n: number, items: number, size: number, i: number) => number;
-
-  smoothness: (n: number, items: number, size: number) => number;
-  noise: number;
-
-  probabilityDistributionMuRandomness: number;
-  probabilityDistributionSigma: number;
-  probabilityDistributionSigmaRandomness: number;
-  probabilityDistributionNoise: number;
-
-  cutRatio0: (n: number, items: number, size: number, i: number) => number;
-  cutRatio1: (n: number, items: number, size: number, i: number) => number;
-
-  seed: number;
+  style: {
+    fillColor: Color,
+    strokeColor: Color,
+    strokeWidth: number,
+    smoothness: (n: number, items: number, size: number) => number;
+    noise: number;
+  },
+  projection: {
+    type: 'circular' | 'linear';
+    circlularProjectionFullAngle: number,
+  },
+  shape: {
+    edges: number,
+    offset: (n: number, items: number, size: number, i: number) => number;
+    cutRatio0: (n: number, items: number, size: number, i: number) => number;
+    cutRatio1: (n: number, items: number, size: number, i: number) => number;
+  },
+  probabilityDistribution: {
+    muRandomness: number,
+    sigma: number,
+    sigmaRandomness: number,
+    noise: number,
+  },
+  variation: {
+    seed: number,
+  },
+  transformation: {
+    angle: (n: number, items: number, size: number) => number,
+    size: (n: number, items: number) => number,
+  },
 }
 
 export interface Props {
@@ -46,20 +53,27 @@ interface ItemProps {
   smoothness: number;
 }
 
+function getItemProps(config: ShapeConfig, n: number, items: number, size: number): ItemProps {
+  const edges = config.shape.edges;
+  const angle = config.transformation.angle(n, items, size);
+  const smoothness = config.style.smoothness(n, items, size);
+  return { size, edges, angle, smoothness };
+}
+
 export function draw(config: ShapeConfig, grid: Point[]): { svg: string; boundingBox: BoundingBox } {
   const items: number = grid.length;
   return grid.reduce(
     (agg, position: Point, m: number) => {
       const n = m + 1;
-      const size: number = config.size(n, items);
-      const elementStyle = style(n, config.border, config.fill);
+      const size: number = config.transformation.size(n, items);
+      const elementStyle = style(n, config.style.fillColor, config.style.strokeColor, config.style.strokeWidth);
       let svg = '';
       let boundingBox;
-      if (config.edges <= 1 && config.projection === 'circular') {
-        const cutRatio1 = config.cutRatio1(n, items, size, 1);
-        const startAngle = 360 * cutRatio1 + config.angle(n, items, size);
-        const angle = 360 * (1 - (cutRatio1 - config.cutRatio0(n, items, size, 1)));
-        svg = drawArc(position, size + 2 * config.offset(n, items, size, 1), startAngle, angle, elementStyle);
+      if (config.shape.edges <= 1 && config.projection.type === 'circular') {
+        const cutRatio1 = config.shape.cutRatio1(n, items, size, 1);
+        const startAngle = 360 * cutRatio1 + config.transformation.angle(n, items, size);
+        const angle = 360 * (1 - (cutRatio1 - config.shape.cutRatio0(n, items, size, 1)));
+        svg = drawArc(position, size + 2 * config.shape.offset(n, items, size, 1), startAngle, angle, elementStyle);
         boundingBox = {
           min: [position[Point.X] - size / 2, position[Point.Y] - size / 2],
           max: [position[Point.X] + size / 2, position[Point.Y] + size / 2],
@@ -67,28 +81,28 @@ export function draw(config: ShapeConfig, grid: Point[]): { svg: string; boundin
       } else {
         const itemProps = getItemProps(config, n, items, size);
         const points = [
-          () => generateShape(config.edges, (i: number) => config.offset(n, items, size, i)),
+          () => generateShape(config.shape.edges, (i: number) => config.shape.offset(n, items, size, i)),
           (pnts: Point[]) =>
-            0 < config.probabilityDistributionSigma
+            0 < config.probabilityDistribution.sigma
               ? probabilityDistribution(
                 pnts,
                 n,
-                config.probabilityDistributionMuRandomness,
-                config.probabilityDistributionSigma,
-                config.probabilityDistributionSigmaRandomness,
-                config.probabilityDistributionNoise,
-                config.seed,
+                config.probabilityDistribution.muRandomness,
+                config.probabilityDistribution.sigma,
+                config.probabilityDistribution.sigmaRandomness,
+                config.probabilityDistribution.noise,
+                config.variation.seed,
               )
               : pnts,
-          (pnts: Point[]) => (0 < config.noise ? noise(pnts, n, config.noise, config.seed) : pnts),
+          (pnts: Point[]) => (0 < config.style.noise ? noise(pnts, n, config.style.noise, config.variation.seed) : pnts),
           (pnts: Point[]) =>
-            config.projection === 'circular' ? toCircularProjection(pnts, config.circlularProjectionFullAngle) : pnts,
+            config.projection.type === 'circular' ? toCircularProjection(pnts, config.projection.circlularProjectionFullAngle) : pnts,
           (pnts: Point[]) => smooth(pnts, itemProps.smoothness),
           // after smooth => [..., controlToPrev, linePoint, controlToNext, ...]
           (pnts: Point[]) => transform(pnts, position, itemProps.size, itemProps.angle),
         ].reduce((pnts, fun) => fun(pnts), [] as Point[]);
-        const cutRatio0Fun = (i: number) => config.cutRatio0(n, items, size, i);
-        const cutRatio1Fun = (i: number) => config.cutRatio1(n, items, size, i);
+        const cutRatio0Fun = (i: number) => config.shape.cutRatio0(n, items, size, i);
+        const cutRatio1Fun = (i: number) => config.shape.cutRatio1(n, items, size, i);
         svg = drawShapeSvg(cut(points, cutRatio0Fun, cutRatio1Fun), elementStyle);
         boundingBox = PointUtils.boundingBox(points);
       }
@@ -203,13 +217,6 @@ function transform(points: Point[], origin: Point, size: number, angle: number):
   return points.map((pt) => absolutePosition(origin, scaleAndRotate(pt)));
 }
 
-function getItemProps(config: ShapeConfig, n: number, items: number, size: number): ItemProps {
-  const edges = config.edges;
-  const angle = config.angle(n, items, size);
-  const smoothness = config.smoothness(n, items, size);
-  return { size, edges, angle, smoothness };
-}
-
 function cut(pnts: Point[], cutRatio0: (i: number) => number, cutRatio1: (i: number) => number): (Point | undefined)[] {
   const cutPoints: (Point | undefined)[] = [undefined];
   for (let i = 1, j = 1; i < pnts.length; i += 3, j++) {
@@ -244,10 +251,15 @@ function pointAsSvg(p: Point) {
   return `${p[Point.X]},${p[Point.Y]}`;
 }
 
-function style(n: number, border: Color, fill: Color) {
-  const borderColor = border.toString(n);
-  const fillColor = fill.toString(n);
-  return `fill="${fillColor}" stroke="${borderColor}" stroke-width="1" vector-effect="non-scaling-stroke"`;
+function style(n: number, fillColor: Color, strokeColor: Color, strokeWidth: number) {
+  return `
+    fill="${fillColor.toRgbHex(n)}"
+    fill-opacity="${fillColor.alpha}"  
+    stroke="${strokeColor.toRgbHex(n)}" 
+    stroke-opacity="${strokeColor.alpha}" 
+    stroke-width="${strokeWidth}"
+    vector-effect="non-scaling-stroke"
+  `;
 }
 
 function drawArc(center: Point, size: number, startAngle: number, angle: number, style: string): string {

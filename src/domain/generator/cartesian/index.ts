@@ -7,36 +7,40 @@ export class CartesianGrid implements SvgGenerator {
   type = CartesianGrid.type;
 
   definition = {
-    color: { initial: 'gold', type: 'color' as const },
-    strokeWidth: {
-      initial: '1',
-      type: 'expression' as const,
-      min: 0,
-      max: 10,
-      step: 0.05,
+    style: {
+      color: { initial: 'gold', type: 'color' as const },
+      strokeWidth: {
+        initial: '1',
+        type: 'expression' as const,
+        min: 0,
+        max: 10,
+        step: 0.05,
+      },
     },
-    items: {
-      initial: '20',
-      type: 'number' as const,
-      min: 1,
-      max: 625,
-      step: 1,
-      animateable: true,
-    },
-    x: { initial: '5', type: 'number' as const, min: 1, max: 25, step: 1 },
-    xDistance: {
-      initial: '1',
-      type: 'expression' as const,
-      min: 0,
-      max: 2,
-      step: 0.05,
-    },
-    yDistance: {
-      initial: '1',
-      type: 'expression' as const,
-      min: 0,
-      max: 2,
-      step: 0.05,
+    grid: {
+      items: {
+        initial: '20',
+        type: 'number' as const,
+        min: 1,
+        max: 625,
+        step: 1,
+        animateable: true,
+      },
+      x: { initial: '5', type: 'number' as const, min: 1, max: 25, step: 1 },
+      xDistance: {
+        initial: '1',
+        type: 'expression' as const,
+        min: 0,
+        max: 2,
+        step: 0.05,
+      },
+      yDistance: {
+        initial: '1',
+        type: 'expression' as const,
+        min: 0,
+        max: 2,
+        step: 0.05,
+      },
     },
   };
 

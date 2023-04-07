@@ -7,7 +7,8 @@ import {
   SelectionInput,
   StringInput,
 } from '../generatorInput';
-import { StageState } from '../stage/Stage';
+import { StageItemState } from '../stage/Stage';
+import { SvgGeneratorInputProps } from '../generatorInput/SvgGeneratorInput';
 
 export class EditorService {
   private registry: Map<ParamDefinitionType, SvgGeneratorInput<any>> = new Map();
@@ -26,12 +27,11 @@ export class EditorService {
 
   getInputFieldConfiguration(
     type: ParamDefinitionType,
-    stageId: string,
-    name: string,
+    id: string,
     definition: ParamDefinition,
-    state: StageState<any>,
-  ) {
-    return this.registry.get(type).getInputFieldConfiguration(stageId, name, definition, state);
+    state: StageItemState<any>,
+  ): SvgGeneratorInputProps {
+    return this.registry.get(type)!.getInputFieldConfiguration(id, definition, state);
   }
 }
 

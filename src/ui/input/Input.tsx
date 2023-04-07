@@ -6,6 +6,7 @@ import { ExtendedRangeInput, Props as ExtendedRangeInputProps } from './Extended
 
 import './Input.styl';
 
+
 export enum InputType {
   RANGE = 'range',
   TEXT = 'text',
@@ -15,7 +16,8 @@ export enum InputType {
 
 type Props = (RangeInputProps | TextInputProps | ColorInputProps | ExtendedRangeInputProps) & {
   type?: InputType;
-  onChange: (e: any) => void;
+  value?: any;
+  onChange: (value: any) => void;
 };
 
 export class Input extends React.Component<Props> {

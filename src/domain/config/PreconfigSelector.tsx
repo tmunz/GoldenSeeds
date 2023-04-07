@@ -13,7 +13,7 @@ export class PreconfigSelector extends React.Component<Props> {
     return (
       <Input
         type={InputType.RANGE}
-        rangeValue={this.props.preconfigIndex}
+        value={this.props.preconfigIndex}
         min={0}
         max={preconfigs.length - 1}
         onChange={(index: number) => configService.selectPreconfig(index)}

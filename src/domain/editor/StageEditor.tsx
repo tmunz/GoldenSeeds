@@ -1,10 +1,10 @@
-import React, { ComponentProps } from 'react';
+import React, { ComponentProps, Fragment } from 'react';
 
 import { InputType } from '../../ui/input/Input';
 import { Collapsable } from '../../ui/Collapsable';
 import { editorStateService } from './EditorStateService';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
-import { Stage, StageState } from '../stage/Stage';
+import { Stage, StageItemState } from '../stage/Stage';
 import { configService } from '../config/ConfigService';
 import { AnimatedButton } from '../../ui/AnimatedButton';
 import { PlusNone, PlusRegular, PlusRotated } from '../../ui/icon/Plus';
@@ -18,20 +18,24 @@ export interface Props extends ComponentProps<'div'> {
   i: number;
   stagesTotal: number;
   editMode: boolean;
+  dragHandleProps: any;
 }
 
-export function StageEditor({ stage, i, stagesTotal, editMode }: Props) {
+export function StageEditor({ stage, i, stagesTotal, editMode, dragHandleProps }: Props) {
   const types = svgGeneratorRegistry.types;
 
-  const generateEntryModifier = (stage: Stage, id: string, definition: ParamDefinition, state: StageState<any>) => (
-    <div className="editor-item" key={id}>
+  const generateEntryModifier = (stage: Stage, groupId: string, id: string, definition: ParamDefinition, state: StageItemState<any>) => (
+   <div className="editor-item" key={id}>
       <EditorInput
-        {...editorService.getInputFieldConfiguration(definition.type, stage.id, id, definition, state)}
-        onChange={(rawValue: any) => configService.setConfigValue(stage.id, id, rawValue)}
+        {...editorService.getInputFieldConfiguration(definition.type, id, definition, state)}
+        onChange={(rawValue: any) => {
+          configService.setConfigValue(stage.id, groupId, id, rawValue)
+        }}
       />
       {definition.animateable && (
         <AnimationController
           stageId={stage.id}
+          groupId={groupId}
           id={id}
           value={state.value}
           currentlyAnimating={id === stage.animatedId}
@@ -42,7 +46,7 @@ export function StageEditor({ stage, i, stagesTotal, editMode }: Props) {
 
   return (
     <div key={stage.id} className="stage" id={'stage-' + stage.id}>
-      <div className="stage-header">
+      <div className="stage-header" {...dragHandleProps}>
         <h1 className="action" onClick={() => editorStateService.setEditMode(editMode ? null : stage.id)}>
           {stage.generator.type}
         </h1>
@@ -66,16 +70,20 @@ export function StageEditor({ stage, i, stagesTotal, editMode }: Props) {
         <EditorInput
           label="type"
           inputType={InputType.RANGE}
-          textValue={stage.generator.type}
-          rangeValue={types.findIndex((s: string) => s === stage.generator.type)}
+          output={stage.generator.type}
+          value={types.findIndex((s: string) => s === stage.generator.type)}
           min={0}
           max={types.length - 1}
           valid
-          convertToString={(i) => types[i]}
-          onChange={(type: string) => configService.setType(stage.id, type)}
+          onChange={(index) => configService.setType(stage.id, types[index])}
         />
-        {Object.keys(stage.state).map((key: string) =>
-          generateEntryModifier(stage, key, stage.generator.definition[key], stage.state[key]),
+        {Object.keys(stage.state.data).map(groupId =>
+          <Fragment key={groupId}>
+            <div>{groupId}</div>
+            {Object.keys(stage.state.data[groupId]).map((id: string) =>
+              generateEntryModifier(stage, groupId, id, stage.generator.definition[groupId][id], stage.state.data[groupId][id]),
+            )}
+          </Fragment>
         )}
       </Collapsable>
     </div>

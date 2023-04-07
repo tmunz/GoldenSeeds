@@ -2,34 +2,54 @@
   "meta": {
     "name": "turbine"
   },
-  "stages": [
-    {
+  "stages": [{
       "type": "function",
-      "color": "gold",
-      "strokeWidth": "1",
-      "items": "35",
-      "functionX": "0",
-      "functionY": "0"
+      "data": {
+        "style": {
+          "strokeColor": "gold",
+          "strokeWidth": "1"
+        },
+        "plot": {
+          "items": "35",
+          "functionX": "0",
+          "functionY": "0"
+        }
+      }
     },
     {
       "type": "shape",
-      "border": "gold",
-      "fill": "transparent",
-      "projection": "circular",
-      "circlularProjectionFullAngle": "360",
-      "edges": "18",
-      "smoothness": "0.5",
-      "noise": "0",
-      "probabilityDistributionMuRandomness": "0",
-      "probabilityDistributionSigma": "0",
-      "probabilityDistributionSigmaRandomness": "0",
-      "probabilityDistributionNoise": "0",
-      "angle": "180 + n",
-      "size": "Math.pow(n, 1 / goldenRatio)",
-      "offset": "2 * (i%2) / Math.pow(goldenRatio, 2) ",
-      "cutRatio0": "0",
-      "cutRatio1": "0",
-      "seed": "999"
+      "data": {
+        "style": {
+          "fillColor": "transparent",
+          "strokeColor": "gold",
+          "strokeWidth": "1",
+          "smoothness": "0.5",
+          "noise": "0"
+        },
+        "projection": {
+          "type": "circular",
+          "circlularProjectionFullAngle": "360"
+        },
+        "shape": {
+          "edges": "18",
+          "offset": "2 * (i%2) / Math.pow(goldenRatio, 2)",
+          "cutRatio0": "0",
+          "cutRatio1": "0"
+        },
+        "probabilityDistribution": {
+          "muRandomness": "0",
+          "sigma": "0",
+          "sigmaRandomness": "0",
+          "noise": "0"
+        },
+        "variation": {
+          "seed": "999"
+        },
+        "transformation": {
+          "angle": "180 + n",
+          "size": "Math.pow(n, 1 / goldenRatio)"
+        }
+      }
     }
   ]
 }

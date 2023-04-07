@@ -1,28 +1,27 @@
 import { ParamDefinition } from '../generator/SvgGenerator';
-import { StageState } from '../stage/Stage';
+import { StageItemState } from '../stage/Stage';
 import { InputType } from '../../ui/input/Input';
 import { Props as EditorInputProps } from '../editor/EditorInput';
 
+export type SvgGeneratorInputProps = EditorInputProps; 
+
 export abstract class SvgGeneratorInput<T> {
   protected abstract inputConfig(
-    stageId: string,
-    name: string,
     definition: ParamDefinition,
-    state: StageState<T>,
+    state: StageItemState<T>,
   ): Partial<EditorInputProps> & { inputType: InputType };
 
   getInputFieldConfiguration(
-    stageId: string,
     name: string,
     definition: ParamDefinition,
-    state: StageState<T>,
+    state: StageItemState<T>,
   ): EditorInputProps {
     return {
       label: name,
-      textValue: state.value.toString(),
-      rangeValue: Number(state.value),
+      output: '' + state.value,
+      value: Number(state.value),
       valid: state.valid,
-      ...this.inputConfig(stageId, name, definition, state),
+      ...this.inputConfig(definition, state),
     };
   }
 }

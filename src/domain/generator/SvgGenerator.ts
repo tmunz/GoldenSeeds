@@ -1,7 +1,8 @@
 import { BoundingBox } from '../../datatypes/BoundingBox';
 
-type ParamDefinitionTypeMinMaxStep = 'expression' | 'number';
+export type SvgGeneratorConfig = any;
 
+type ParamDefinitionTypeMinMaxStep = 'expression' | 'number';
 export type ParamDefinitionType = ParamDefinitionTypeMinMaxStep | 'color' | 'selection' | 'string';
 export type ParamDefinitionMinMaxStep = {
   type: ParamDefinitionTypeMinMaxStep;
@@ -25,6 +26,6 @@ export interface SvgGeneratorResult {
 
 export interface SvgGenerator {
   type: string;
-  definition: { [key: string]: ParamDefinition };
-  generate: (props: any, prev: SvgGeneratorResult) => SvgGeneratorResult;
+  definition: Record<string, Record<string, ParamDefinition>>;
+  generate: (config: SvgGeneratorConfig, prev: SvgGeneratorResult) => SvgGeneratorResult;
 }

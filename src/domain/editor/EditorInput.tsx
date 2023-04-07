@@ -5,16 +5,15 @@ import { InputType, Input } from '../../ui/input/Input';
 import './EditorInput.styl';
 
 export interface Props {
+  inputType: InputType;
   label: string;
-  textValue: string;
-  rangeValue?: number;
+  output: string;
+  value?: any;
   min?: number;
   max?: number;
   step?: number;
   valid?: boolean;
-  onChange?: (rawValue: string) => void;
-  convertToString?: (value: any) => string;
-  inputType: InputType;
+  onChange?: (value: any) => void;
 }
 
 export class EditorInput extends React.Component<Props> {
@@ -23,18 +22,15 @@ export class EditorInput extends React.Component<Props> {
       <div className="draw-config-input">
         <div>
           <Input
-            onChange={(value: any) =>
-              this.props.onChange(this.props.convertToString ? this.props.convertToString(value) : `${value}`)
-            }
+            onChange={(rawValue: any) => this.props.onChange && this.props.onChange(rawValue)}
             label={this.props.label}
             className={this.props.valid ? '' : 'invalid range-invalid'}
-            value={this.props.textValue}
-            rangeValue={this.props.rangeValue}
+            output={this.props.output}
+            value={this.props.value}
             type={this.props.inputType}
             min={this.props.min}
             max={this.props.max}
             step={this.props.step}
-            random={true}
           />
         </div>
       </div>

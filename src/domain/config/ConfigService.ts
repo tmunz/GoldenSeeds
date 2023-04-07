@@ -11,12 +11,12 @@ export class ConfigService {
   preconfigIndex$ = new BehaviorSubject<number>(-1);
   config$ = new BehaviorSubject<Config>({ meta: { name: '' }, stages: [] });
 
-  setConfigValue(stageId: string, id: string, rawValue: string) {
+  setConfigValue(stageId: string, groupId: string, id: string, rawValue: string) {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
     const index = this.findIndexByStageId(stageId);
-    nextConfig.stages[index].state[id] = converterService.convert(
-      config.stages[index].generator.definition[id].type,
+    nextConfig.stages[index].state.data[groupId][id] = converterService.convert(
+      config.stages[index].generator.definition[groupId][id].type,
       rawValue,
     ) as any;
     this.config$.next(nextConfig);
@@ -45,7 +45,7 @@ export class ConfigService {
     const nextConfig = { ...config, stages: [...config.stages] };
     nextConfig.stages[this.findIndexByStageId(stageId)] = new Stage(
       svgGeneratorRegistry.newInstance(type),
-      {},
+      undefined,
       stageId,
     );
     this.config$.next(nextConfig);
@@ -73,8 +73,8 @@ export class ConfigService {
     this.config$.next(nextConfig);
   }
 
-  setAnimationValue(stageId: string, id?: string, rawValue?: string) {
-    typeof id === 'string' && typeof rawValue === 'string' && this.setConfigValue(stageId, id, rawValue);
+  setAnimationValue(stageId: string, groupId: string, id: string, rawValue?: string) {
+    typeof groupId === 'string' && typeof id === 'string' && typeof rawValue === 'string' && this.setConfigValue(stageId, groupId, id, rawValue);
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
     const stageIndex = this.findIndexByStageId(stageId);
@@ -89,10 +89,10 @@ export class ConfigService {
     return this.config$.value.stages.findIndex((s) => s.id === stageId);
   }
 
-  private convertRawToConfig(configRaw: any) {
+  private convertRawToConfig(value: any) {
     return {
-      meta: configRaw.meta,
-      stages: configRaw.stages.map(
+      meta: value.meta,
+      stages: value.stages.map(
         (stageRaw: any) => new Stage(svgGeneratorRegistry.newInstance(stageRaw.type), stageRaw),
       ),
     };

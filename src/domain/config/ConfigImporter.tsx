@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { AnimatedButton } from '../../ui/AnimatedButton';
+import { configService } from './ConfigService';
 
-interface Props {
-  onConfigChanged: (configRaw: any) => void;
-}
+interface Props {}
 
 export class ConfigImporter extends React.Component<Props> {
   private importConfigElement: HTMLInputElement | null = null;
@@ -25,10 +24,10 @@ export class ConfigImporter extends React.Component<Props> {
     );
   }
 
-  private loadConfig(file: Blob, onLoad: (config: any) => void) {
+  private loadConfig(file: Blob) {
     if (typeof file !== 'undefined') {
       const fileReader = new FileReader();
-      fileReader.onload = (event) => onLoad(JSON.parse(event.target?.result as string));
+      fileReader.onload = (event) => configService.setRawConfig(JSON.parse(event.target?.result as string));
       fileReader.readAsText(file);
     }
   }
@@ -36,7 +35,7 @@ export class ConfigImporter extends React.Component<Props> {
   private openConfig(event: React.ChangeEvent<HTMLInputElement>) {
     const file: Blob | null = (event.target.files ?? [])[0];
     if (file && this.importConfigElement) {
-      this.loadConfig(file, this.props.onConfigChanged);
+      this.loadConfig(file);
       this.importConfigElement.value = '';
     }
   }

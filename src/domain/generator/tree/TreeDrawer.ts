@@ -1,16 +1,17 @@
 import { Color } from '../../../datatypes/Color';
-import { Tree, Config as TreeImplConfig } from './Tree';
+import { Tree, Config } from './Tree';
 import { Point } from '../../../datatypes/Point';
 
-export interface TreeConfig extends TreeImplConfig {
-  color: Color;
+export interface TreeConfig extends Config {
+  style: {
+    color: Color,
+  }
 }
 
 export function draw(config: TreeConfig, grid: Point[]): { svg: string; points: Point[] } {
   return grid.reduce(
     (agg, p, i) => {
-      const tree = new Tree({ ...config, seed: config.seed + i });
-      const color = config.color.toString(i);
+      const tree = new Tree({ ...config, tree: { ...config.tree, seed: config.tree.seed + i } });
       const svg = tree.limbs
         .map(
           (limb) =>
@@ -19,8 +20,9 @@ export function draw(config: TreeConfig, grid: Point[]): { svg: string; points: 
             y1="${p[Point.Y] - limb.from[Point.Y]}"
             x2="${p[Point.X] + limb.to[Point.X]}"
             y2="${p[Point.Y] - limb.to[Point.Y]}"
-            stroke="${color}"
-            stroke-width="${Math.pow(config.lengthConservation, limb.level) * 5}"
+            stroke="${config.style.color.toRgbHex(i)}"
+            stroke-opacity="${config.style.color.alpha}"
+            stroke-width="${Math.pow(config.length.conservation, limb.level) * 5}"
             vector-effect="non-scaling-stroke"
           />`,
         )

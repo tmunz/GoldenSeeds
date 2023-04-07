@@ -2,54 +2,89 @@
   "meta": {
     "name": "color-sunflower"
   },
-  "stages": [
-    {
+  "stages": [{
       "type": "shape",
-      "border": "gold",
-      "fill": "14601607",
-      "projection": "circular",
-      "circlularProjectionFullAngle": "360",
-      "edges": "1",
-      "smoothness": "0",
-      "noise": "0",
-      "probabilityDistributionMuRandomness": "0",
-      "probabilityDistributionSigma": "0",
-      "probabilityDistributionSigmaRandomness": "0",
-      "probabilityDistributionNoise": "0",
-      "angle": "0",
-      "size": "65",
-      "offset": "0",
-      "cutRatio0": "0",
-      "cutRatio1": "0",
-      "seed": "999"
+      "data": {
+        "style": {
+          "fillColor": "gold",
+          "strokeColor": "transparent",
+          "strokeWidth": "0",
+          "smoothness": "0.5",
+          "noise": "0"
+        },
+        "projection": {
+          "type": "circular",
+          "circlularProjectionFullAngle": "360"
+        },
+        "shape": {
+          "edges": "1",
+          "offset": "0",
+          "cutRatio0": "0",
+          "cutRatio1": "0"
+        },
+        "probabilityDistribution": {
+          "muRandomness": "0",
+          "sigma": "0",
+          "sigmaRandomness": "0",
+          "noise": "0"
+        },
+        "variation": {
+          "seed": "999"
+        },
+        "transformation": {
+          "angle": "0",
+          "size": "65"
+        }
+      }
     },
     {
       "type": "polar",
-      "color": "-2147299961",
-      "strokeWidth": "1",
-      "items": "233",
-      "angle": "n * 360 / goldenRatio",
-      "distance": "Math.pow(n, 1 / goldenRatio)"
+      "data": {
+        "style": {
+          "color": "transparent",
+          "strokeWidth": "1"
+        },
+        "grid": {
+          "items": "233",
+          "angle": "n * 360 / goldenRatio",
+          "distance": "Math.pow(n, 1 / goldenRatio)"
+        }
+      }
     },
     {
       "type": "shape",
-      "border": "-2142826496",
-      "fill": "32767999",
-      "projection": "circular",
-      "circlularProjectionFullAngle": "360",
-      "edges": "4",
-      "smoothness": "0.5",
-      "noise": "0",
-      "probabilityDistributionMuRandomness": "0",
-      "probabilityDistributionSigma": "0",
-      "probabilityDistributionSigmaRandomness": "0",
-      "probabilityDistributionNoise": "0",
-      "angle": "n * 360 / goldenRatio - 110",
-      "size": "Math.max(Math.pow(n, 1 / 4), 1) / 3",
-      "offset": "0.8 + 0.2 * (i%2)",
-      "cutRatio0": "0",
-      "cutRatio1": "0",
-      "seed": "999"
+      "data": {
+        "style": {
+          "fillColor": "random",
+          "strokeColor": "transparent",
+          "strokeWidth": "0",
+          "smoothness": "0.5",
+          "noise": "0"
+        },
+        "projection": {
+          "type": "circular",
+          "circlularProjectionFullAngle": "360"
+        },
+        "shape": {
+          "edges": "4",
+          "offset": "0.8 + 0.2 * (i%2)",
+          "cutRatio0": "0",
+          "cutRatio1": "0"
+        },
+        "probabilityDistribution": {
+          "muRandomness": "0",
+          "sigma": "0",
+          "sigmaRandomness": "0",
+          "noise": "0"
+        },
+        "variation": {
+          "seed": "999"
+        },
+        "transformation": {
+          "angle": "n * 360 / goldenRatio - 110",
+          "size": "Math.max(Math.pow(n, 1 / 4), 1) / 3"
+        }
+      }
     }
   ]
 }

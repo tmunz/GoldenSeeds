@@ -1,10 +1,10 @@
 import { ParamDefinitionMinMaxStep, ParamDefinition } from '../generator/SvgGenerator';
-import { StageState } from '../stage/Stage';
+import { StageItemState } from '../stage/Stage';
 import { InputType } from '../../ui/input/Input';
 import { SvgGeneratorInput } from './SvgGeneratorInput';
 
 export class NumberInput extends SvgGeneratorInput<number> {
-  inputConfig(stageId: string, name: string, definition: ParamDefinition, state: StageState<number>) {
+  inputConfig(definition: ParamDefinition, state: StageItemState<number>) {
     return {
       inputType: InputType.RANGE,
       min: (definition as ParamDefinitionMinMaxStep)?.min,

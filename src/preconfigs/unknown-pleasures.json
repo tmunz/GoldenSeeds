@@ -2,35 +2,55 @@
   "meta": {
     "name": "unknown pleasures"
   },
-  "stages": [
-    {
+  "stages": [{
       "type": "cartesian",
-      "color": "gold",
-      "strokeWidth": "0",
-      "x": "1",
-      "xDistance": "1",
-      "yDistance": "0.015",
-      "items": "80"
+      "data": {
+        "style": {
+          "color": "gold",
+          "strokeWidth": "0"
+        },
+        "grid": {
+          "x": "1",
+          "xDistance": "1",
+          "yDistance": "0.015",
+          "items": "80"
+        }
+      }
     },
     {
       "type": "shape",
-      "border": "white",
-      "fill": "black",
-      "projection": "linear",
-      "circlularProjectionFullAngle": "360",
-      "edges": "100",
-      "smoothness": "0.1",
-      "noise": "0.02",
-      "probabilityDistributionMuRandomness": "0.15",
-      "probabilityDistributionSigma": "0.3",
-      "probabilityDistributionSigmaRandomness": "0.15",
-      "probabilityDistributionNoise": "0.3",
-      "angle": "0",
-      "size": "1",
-      "offset": "0",
-      "cutRatio0": "0",
-      "cutRatio1": "0",
-      "seed": "495"
+      "data": {
+        "style": {
+          "fillColor": "black",
+          "strokeColor": "white",
+          "strokeWidth": "1",
+          "smoothness": "0.1",
+          "noise": "0.02"
+        },
+        "projection": {
+          "type": "linear",
+          "circlularProjectionFullAngle": "360"
+        },
+        "shape": {
+          "edges": "100",
+          "offset": "0",
+          "cutRatio0": "0",
+          "cutRatio1": "0"
+        },
+        "probabilityDistribution": {
+          "muRandomness": "0.15",
+          "sigma": "0.3",
+          "sigmaRandomness": "0.15",
+          "noise": "0.3"
+        },
+        "variation": {
+          "seed": "495"
+        },
+        "transformation": {
+          "angle": "0",
+          "size": "1"
+        }
+      }
     }
   ]
 }

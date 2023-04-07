@@ -1,20 +1,23 @@
 import { converterService } from '../converter/ConverterService';
-import { SvgGenerator, SvgGeneratorResult } from '../generator/SvgGenerator';
+import { SvgGenerator, SvgGeneratorResult, ParamDefinition } from '../generator/SvgGenerator';
 import { random } from '../../utils/Random';
 
-export interface StageState<T> {
+export interface StageItemState<T> {
   rawValue: string;
   value: T;
   valid: boolean;
 }
 
+export type StageState<T> = { type: string, data: Record<string, Record<string, StageItemState<T>>> };
+export type StageRawState = { type: string, data: Record<string, Record<string, string>> };
+
 export class Stage {
   id: string;
   generator: SvgGenerator;
-  state: { [key: string]: StageState<any> };
+  state: StageState<any>;
   animatedId?: string;
 
-  constructor(generator: SvgGenerator | null, state?: { [key: string]: string }, stageId: string = '' + random()) {
+  constructor(generator: SvgGenerator | null, rawState: StageRawState = { type: 'default', data: {} }, stageId: string = '' + random()) {
     this.id = stageId;
     this.generator = generator ?? {
       type: 'default',
@@ -25,28 +28,20 @@ export class Stage {
         boundingBox: prev.boundingBox,
       }),
     };
-    this.state = this.initialState(state);
+    this.state = this.getFromRaw(rawState.type, rawState.data, this.generator.definition);
   }
 
-  private initialState(state?: { [key: string]: string }) {
-    const stateRaw: { [key: string]: string } = {
-      ...Object.keys(this.generator.definition).reduce(
-        (agg, key) => ({
-          ...agg,
-          [key]: this.generator.definition[key].initial,
-        }),
-        {},
-      ),
-      ...(state ? state : {}),
-    };
-    return Object.keys(this.generator.definition)
-      .filter((key) => key !== 'type')
-      .reduce(
-        (agg, key) => ({
-          ...agg,
-          [key]: converterService.convert(this.generator.definition[key].type, stateRaw[key]),
-        }),
-        {},
-      );
+  getFromRaw(type: string, data: Record<string, Record<string, string>> = {}, generatorDefinition: Record<string, Record<string, ParamDefinition>>): StageState<any> {
+    const converted: StageState<any> = { type, data: {} };
+    const groupIds = Object.keys(generatorDefinition);
+    groupIds.forEach(groupId => {
+      converted.data[groupId] = {};
+      Object.keys(generatorDefinition[groupId]).forEach((id) => {
+        const initialValue = generatorDefinition[groupId][id].initial;
+        const rawValue = data[groupId] ? data[groupId][id] : undefined;
+        converted.data[groupId][id] = converterService.convert(generatorDefinition[groupId][id].type, rawValue ?? initialValue);
+      });
+    });
+    return converted;
   }
 }

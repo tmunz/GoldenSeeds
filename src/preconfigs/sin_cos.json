@@ -1,0 +1,55 @@
+{
+  "meta": {
+    "name": "sin/cos"
+  },
+  "stages": [{
+      "type": "function",
+      "data": {
+        "style": {
+          "strokeColor": "patina",
+          "strokeWidth": "1",
+          "resolution": "10"
+        },
+        "plot": {
+          "output": "origin",
+          "start": "0",
+          "items": "13",
+          "functionX": "n",
+          "functionY": "Math.sin(n)"
+
+        }
+      }
+    },
+    {
+      "type": "function",
+      "data": {
+        "style": {
+          "strokeColor": "gold",
+          "strokeWidth": "1",
+          "resolution": "10"
+        },
+        "plot": {
+          "output": "origin",
+          "start": "0",
+          "items": "12",
+          "functionX": "n",
+          "functionY": "Math.cos(n)"
+        }
+      }
+    },
+    {
+      "type": "polar",
+      "data": {
+        "style": {
+          "color": "white",
+          "strokeWidth": "1"
+        },
+        "grid": {
+          "items": "4",
+          "angle": "180+90*n",
+          "distance": "n==1 ? 2  : n==2 ? 12 : 0.5"
+        }
+      }
+    }
+  ]
+}

@@ -2,13 +2,19 @@ import { random } from '../../../utils/Random';
 import { Point } from '../../../datatypes/Point';
 
 export interface Config {
-  depth: number;
-  splitAngle: number;
-  splitVariation: number;
-  splitProbability: number;
-  lengthConservation: number;
-  lengthVariation: number;
-  seed: number;
+  tree: {
+    depth: number,
+    seed: number,
+  },
+  split: {
+    angle: number,
+    variation: number,
+    probability: number,
+  }
+  length: {
+    conservation: number,
+    variation: number,
+  }
 }
 
 interface Node {
@@ -53,24 +59,24 @@ export class Tree {
     const limbs: Limb[] = [{ from: root.point, to: rootBranch.point, level: 0 }];
 
     const queue = [rootBranch];
-    let seed = config.seed;
+    let seed = config.tree.seed;
     let currentNode: Node | undefined = rootBranch;
 
     do {
       currentNode = queue.pop();
-      if (currentNode && currentNode.level < config.depth) {
+      if (currentNode && currentNode.level < config.tree.depth) {
         currentNode.branches = [];
         const branchAmount = 2;
         for (let i = 0; i < branchAmount; i++) {
           seed++;
-          if (1 - config.splitProbability <= random(0, 1, seed)) {
+          if (1 - config.split.probability <= random(0, 1, seed)) {
             const branchInRange = i * branchAmount - branchAmount / 2;
-            const relativeAngle = branchInRange * ((config.splitAngle * Math.PI) / 180);
-            const splitVariation = random(-config.splitVariation / 2, config.splitVariation / 2, seed + 1000);
+            const relativeAngle = branchInRange * ((config.split.angle * Math.PI) / 180);
+            const splitVariation = random(-config.split.variation / 2, config.split.variation / 2, seed + 1000);
             const angle = currentNode.angle + relativeAngle + splitVariation;
 
-            const baseLength = Math.pow(config.lengthConservation, currentNode.level);
-            const lengthVariation = random(1 - config.lengthVariation, 1, seed + 500);
+            const baseLength = Math.pow(config.length.conservation, currentNode.level);
+            const lengthVariation = random(1 - config.length.variation, 1, seed + 500);
             const length = baseLength * lengthVariation;
 
             const point = [

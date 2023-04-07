@@ -7,6 +7,7 @@ import {
   Converter,
 } from './';
 import { ParamDefinitionType } from '../generator/SvgGenerator';
+import { StageItemState } from '../stage/Stage';
 
 export class ConverterService {
   private registry: Map<ParamDefinitionType, Converter<any>> = new Map();
@@ -23,8 +24,8 @@ export class ConverterService {
     this.registry.set(type, stageCreator);
   }
 
-  convert(type: ParamDefinitionType, rawValue: string) {
-    return this.registry.get(type).convert(rawValue);
+  convert(type: ParamDefinitionType, rawValue: string): Partial<StageItemState<any>> {
+    return this.registry.get(type)!.convert(rawValue);
   }
 }
 

@@ -3,6 +3,6 @@ import { Converter } from './Converter';
 
 export class ColorConverter extends Converter<Color> {
   convertFromRaw(rawValue: string): Color {
-    return Color.convertToColor(rawValue);
+    return new Color(rawValue);
   }
 }

@@ -7,9 +7,9 @@ import './ExtendedRangeInput.styl';
 export interface Props {
   className?: string;
   label?: string;
-  value?: string;
-  rangeValue?: number;
-  onChange: (value: any) => void;
+  value?: number;
+  output?: string;
+  onChange: (value: string) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -20,7 +20,7 @@ export class ExtendedRangeInput extends React.Component<Props> {
     return (
       <div className="extended-range-input">
         <TextInput {...this.props} />
-        <RangeInput {...{ ...this.props, label: undefined, value: undefined }} />
+        <RangeInput {...{ ...this.props, label: undefined, output: undefined }} />
       </div>
     );
   }

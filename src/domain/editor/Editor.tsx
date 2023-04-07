@@ -31,9 +31,10 @@ export class Editor extends React.Component<Props> {
                 <div ref={provided.innerRef} {...provided.droppableProps}>
                   {this.props.config.stages.map((stage, i) => (
                     <Draggable key={stage.id} draggableId={stage.id} index={i}>
-                      {(provided) => (
-                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                      {(provided, snapshot) => (
+                        <div ref={provided.innerRef} {...provided.draggableProps}>
                           <StageEditor
+                            dragHandleProps={provided.dragHandleProps}
                             stage={stage}
                             stagesTotal={this.props.config.stages.length}
                             i={i}

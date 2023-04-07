@@ -1,33 +1,28 @@
 import { SvgGeneratorInput } from './SvgGeneratorInput';
 import { ParamDefinition, ParamDefinitionMinMaxStep } from '../generator/SvgGenerator';
-import { StageState } from '../stage/Stage';
+import { StageItemState } from '../stage/Stage';
 import { InputType } from '../../ui/input/Input';
 
 export class ExpressionInput extends SvgGeneratorInput<
   (n: number, items: number, itemSize: (n: number) => number) => number
 > {
   inputConfig = (
-    stageId: string,
-    name: string,
     definition: ParamDefinition,
-    state: StageState<(n: number, items: number, itemSize: (n: number) => number) => number>,
+    state: StageItemState<(n: number, items: number, itemSize: (n: number) => number) => number>,
   ) => {
-    const regexResult = state.rawValue.match(/^\s*(n\s\*\s*(.*\S)?)\s*$/);
-    const nMode: boolean = regexResult ? true : false;
-    const nLessValue: string = nMode ? regexResult[2] : state.rawValue;
-    const rangeValue: number = parseFloat(nLessValue);
+    // const regexResult = state.rawValue.match(/^\s*(n\s\*\s*(.*\S)?)\s*$/);
+    // const nMode: boolean = regexResult ? true : false;
     // const controls = [this.generateNControl(stage, nLessValue, nMode)];
 
     return {
-      textValue: state.rawValue,
+      value: state.rawValue,
       inputType: InputType.EXTENDED_RANGE,
       canExpertMode: true,
-      rangeValue,
       min: (definition as ParamDefinitionMinMaxStep)?.min,
       max: (definition as ParamDefinitionMinMaxStep)?.max,
       step: (definition as ParamDefinitionMinMaxStep)?.step,
       // controls,
-      convertToString: (i: any) => `${nMode && typeof i === 'number' ? 'n * ' : ''}${i}`,
+      // convertToString: (i: any) => `${nMode && typeof i === 'number' ? 'n * ' : ''}${i}`,
     };
   };
 

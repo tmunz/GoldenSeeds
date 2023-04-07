@@ -9,57 +9,65 @@ export class Tree implements SvgGenerator {
   type = Tree.type;
 
   definition = {
-    color: { initial: 'gold', type: 'color' as const },
-    depth: {
-      initial: '8',
-      type: 'number' as const,
-      min: 0,
-      max: MathUtils.fib(7),
-      step: 1,
-      animateable: true,
+    style: {
+      color: { initial: 'gold', type: 'color' as const },
     },
-    splitAngle: {
-      initial: '25',
-      type: 'number' as const,
-      min: 0,
-      max: 90,
-      step: 1,
+    tree: {
+      depth: {
+        initial: '8',
+        type: 'number' as const,
+        min: 0,
+        max: MathUtils.fib(7),
+        step: 1,
+        animateable: true,
+      },
+      seed: {
+        initial: '999',
+        type: 'number' as const,
+        min: 0,
+        max: 999,
+        step: 1,
+        animateable: true,
+      },
     },
-    splitVariation: {
-      initial: '0.0',
-      type: 'number' as const,
-      min: -1,
-      max: 1,
-      step: 0.05,
+    split: {
+      angle: {
+        initial: '25',
+        type: 'number' as const,
+        min: 0,
+        max: 90,
+        step: 1,
+      },
+      variation: {
+        initial: '0.0',
+        type: 'number' as const,
+        min: -1,
+        max: 1,
+        step: 0.05,
+      },
+      probability: {
+        initial: '0.95',
+        type: 'number' as const,
+        min: 0,
+        max: 1,
+        step: 0.01,
+      },
     },
-    splitProbability: {
-      initial: '0.95',
-      type: 'number' as const,
-      min: 0,
-      max: 1,
-      step: 0.01,
-    },
-    lengthConservation: {
-      initial: '0.8',
-      type: 'number' as const,
-      min: 0,
-      max: 1,
-      step: 0.05,
-    },
-    lengthVariation: {
-      initial: '1',
-      type: 'number' as const,
-      min: 0,
-      max: 1,
-      step: 0.05,
-    },
-    seed: {
-      initial: '999',
-      type: 'number' as const,
-      min: 0,
-      max: 999,
-      step: 1,
-      animateable: true,
+    length: {
+      conservation: {
+        initial: '0.8',
+        type: 'number' as const,
+        min: 0,
+        max: 1,
+        step: 0.05,
+      },
+      variation: {
+        initial: '1',
+        type: 'number' as const,
+        min: 0,
+        max: 1,
+        step: 0.05,
+      },
     },
   };
 

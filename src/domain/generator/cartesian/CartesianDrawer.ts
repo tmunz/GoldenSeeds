@@ -2,28 +2,32 @@ import { Color } from '../../../datatypes/Color';
 import { Point } from '../../../datatypes/Point';
 
 export interface CartesianConfig {
-  color: Color;
-  strokeWidth: (n: number, items: number) => number;
-  items: number;
-  x: number;
-  xDistance: (n: number, items: number) => number;
-  yDistance: (n: number, items: number) => number;
+  style: {
+    color: Color;
+    strokeWidth: (n: number, items: number) => number;
+  },
+  grid: {
+    items: number;
+    x: number;
+    xDistance: (n: number, items: number) => number;
+    yDistance: (n: number, items: number) => number;
+  },
 }
 
 export function draw(config: CartesianConfig, grid: Point[]): { svg: string; points: Point[] } {
   return grid.reduce(
     (agg, p) => {
-      const coordinates = calculatePolarGrid(p, config.items, config.x, config.xDistance, config.yDistance);
+      const coordinates = calculatePolarGrid(p, config.grid.items, config.grid.x, config.grid.xDistance, config.grid.yDistance);
       const svg = coordinates
         .map((coordinate: Point, j: number) => {
           const rightIndex = j + 1;
-          const downIndex = j + config.x;
+          const downIndex = j + config.grid.x;
           const rightLine =
-            rightIndex % config.x !== 0 && rightIndex < config.items
+            rightIndex % config.grid.x !== 0 && rightIndex < config.grid.items
               ? drawLine(coordinate, coordinates[rightIndex], config, j * 2)
               : '';
           const downLine =
-            downIndex < config.items ? drawLine(coordinate, coordinates[downIndex], config, j * 2 + 1) : '';
+            downIndex < config.grid.items ? drawLine(coordinate, coordinates[downIndex], config, j * 2 + 1) : '';
           return rightLine + downLine;
         })
         .join('');
@@ -61,8 +65,9 @@ function drawLine(from: Point, to: Point, config: CartesianConfig, i: number) {
       y1="${from[Point.Y]}"
       x2="${to[Point.X]}"
       y2="${to[Point.Y]}"
-      stroke="${config.color.toString(i)}"
-      stroke-width="${config.strokeWidth(i, config.items)}"
+      stroke="${config.style.color.toRgbHex(i)}"
+      stroke-opacity="${config.style.color.alpha}"
+      stroke-width="${config.style.strokeWidth(i, config.grid.items)}"
       vector-effect="non-scaling-stroke"
     />`;
 }

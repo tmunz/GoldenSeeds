@@ -25,10 +25,15 @@ export class SvgGeneratorService {
     return this.cache.get(stageKey) as SvgGeneratorResult;
   }
 
-  private convertToValue(obj: { [key: string]: StageState<any> }): {
-    [key: string]: any;
-  } {
-    return Object.keys(obj).reduce((agg, key) => ({ ...agg, [key]: obj[key].value }), {});
+  private convertToValue(state: StageState<any>): Record<string, Record<string, any>> {
+    const values: Record<string, Record<string, any>> = {};
+    Object.keys(state.data).forEach(groupId => {
+      values[groupId] = {};
+      Object.keys(state.data[groupId]).forEach(id => {
+        values[groupId][id] = state.data[groupId][id].value;
+      })
+    });
+    return values;
   }
 }
 

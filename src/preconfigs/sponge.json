@@ -4,13 +4,23 @@
   },
   "stages": [{
     "type": "tree",
-    "color": "gold",
-    "depth": "13",
-    "splitAngle": "60",
-    "splitVariation": "0.6",
-    "splitProbability": "1",
-    "lengthConservation": "0.75",
-    "lengthVariation": "0",
-    "seed": "48"
+    "data": {
+      "style": {
+        "color": "gold"
+      },
+      "tree": {
+        "depth": "13",
+        "seed": "48"
+      },
+      "split": {
+        "angle": "60",
+        "variation": "0.6",
+        "probability": "1"
+      },
+      "length": {
+        "conservation": "0.75",
+        "variation": "0"
+      }
+    }
   }]
 }

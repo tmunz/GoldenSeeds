@@ -4,14 +4,27 @@
   },
   "stages": [{
     "type": "polar",
-    "color": "transparent",
-    "items": "34",
-    "angle": "n * 360 / goldenRatio",
-    "distance": "Math.pow(n, 1 / goldenRatio)"
+    "data": {
+      "style": {
+        "color": "transparent",
+        "items": "34"
+      },
+      "grid": {
+        "angle": "n * 360 / goldenRatio",
+        "distance": "Math.pow(n, 1 / goldenRatio)"
+      }
+    }
   }, {
     "type": "voronoi",
-    "color": "random",
-    "style": "filled",
-    "gap": "0.1"
+    "data": {
+      "style": {
+        "fillColor": "random",
+        "strokeColor": "gold",
+        "strokeWidth": "1"
+      },
+      "cells": {
+        "gap": "0.1"
+      }
+    }
   }]
 }

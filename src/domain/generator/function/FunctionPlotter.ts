@@ -2,24 +2,31 @@ import { Color } from '../../../datatypes/Color';
 import { Point } from '../../../datatypes/Point';
 
 export interface FunctionPlotterConfig {
-  color: Color;
-  strokeWidth: (n: number, items: number) => number;
-  output: string;
-  start: number;
-  items: number;
-  functionX: (n: number, items: number) => number | number[];
-  functionY: (n: number, items: number) => number | number[];
-  resolution: number;
+  style: {
+    fillColor: Color,
+    strokeColor: Color,
+    strokeWidth: (n: number, items: number) => number,
+    resolution: number,
+  },
+  plot: {
+    start: number,
+    items: number,
+    functionX: (n: number, items: number) => number | number[],
+    functionY: (n: number, items: number) => number | number[],
+    output: string,
+  }
 }
 
 export function plot(config: FunctionPlotterConfig, grid: Point[]): { svg: string; points: Point[] } {
   return grid.reduce(
     (agg, p, j) => {
-      const coordinates = calculateFunctionPlot(p, config.start, config.items, config.functionX, config.functionY, config.resolution);
+      const coordinates = calculateFunctionPlot(p, config.plot.start, config.plot.items, config.plot.functionX, config.plot.functionY, config.style.resolution);
       const svg = `<path 
-        fill="none"
-        stroke="${config.color.toString(j)}"
-        stroke-width="${config.strokeWidth(j, config.items)}"
+        fill="${config.style.fillColor.toRgbHex(j)}"
+        fill-opacity="${config.style.fillColor.alpha}"
+        stroke="${config.style.strokeColor.toRgbHex(j)}"
+        stroke-opacity="${config.style.strokeColor.alpha}"
+        stroke-width="${config.style.strokeWidth(j, config.plot.items)}"
         vector-effect="non-scaling-stroke"
         d="${
         coordinates.highResolution.reduce((s: string, point: Point, i: number) => {

@@ -2,37 +2,58 @@
   "meta": {
     "name": "golden spiral"
   },
-  "stages": [
-    {
+  "stages": [{
       "type": "function",
-      "color": "transparent",
-      "strokeWidth": "1",
-      "output": "generated",
-      "start": "0",
-      "items": "11",
-      "functionX": "[0, 0, 1, 1, -1, -1, 4, 4, -9, -9, 25, 25, -64, -64, 169, 169, -441, -441, 1156, 1156, -3025, -3025, 7921, 7921, -20736, -20736]",
-      "functionY": "[0, 0, 0, -1, -1, 2, 2, -6, -6, 15, 15, -40, -40, 104, 104, -273, -273, 714, 714, -1870, -1870, 4895, 4895, -12816, -12816, 33552]",
-      "resolution": "1"
+      "data": {
+        "style": {
+          "fillColor": "transparent",
+          "strokeColor": "white",
+          "strokeWidth": "1",
+          "resolution": "1"
+        },
+        "plot": {
+          "start": "0",
+          "items": "11",
+          "functionX": "[0, 0, 1, 1, -1, -1, 4, 4, -9, -9, 25, 25, -64, -64, 169, 169, -441, -441, 1156, 1156, -3025, -3025, 7921, 7921, -20736, -20736]",
+          "functionY": "[0, 0, 0, -1, -1, 2, 2, -6, -6, 15, 15, -40, -40, 104, 104, -273, -273, 714, 714, -1870, -1870, 4895, 4895, -12816, -12816, 33552]",
+          "output": "generated"
+        }
+      }
     },
     {
       "type": "shape",
-      "border": "gold",
-      "fill": "transparent",
-      "projection": "circular",
-      "circlularProjectionFullAngle": "360",
-      "edges": "1",
-      "smoothness": "0.5",
-      "noise": "0",
-      "probabilityDistributionMuRandomness": "0",
-      "probabilityDistributionSigma": "0",
-      "probabilityDistributionSigmaRandomness": "0",
-      "probabilityDistributionNoise": "0",
-      "angle": "n*90",
-      "size": "n <= 8 ? 2*fib(n) : 0",
-      "offset": "0",
-      "cutRatio0": "0",
-      "cutRatio1": "0.75",
-      "seed": "999"
+      "data": {
+        "style": {
+          "fillColor": "transparent",
+          "strokeColor": "gold",
+          "strokeWidth": "1",
+          "smoothness": "0.5",
+          "noise": "0"
+        },
+        "projection": {
+          "type": "circular",
+          "circlularProjectionFullAngle": "360"
+        },
+        "shape": {
+          "edges": "1",
+          "offset": "0",
+          "cutRatio0": "0",
+          "cutRatio1": "0.75"
+        },
+        "probabilityDistribution": {
+          "muRandomness": "0",
+          "sigma": "0",
+          "sigmaRandomness": "0",
+          "noise": "0"
+        },
+        "variation": {
+          "seed": "999"
+        },
+        "transformation": {
+          "angle": "n*90",
+          "size": "n <= 8 ? 2*fib(n) : 0"
+        }
+      }
     }
   ]
 }

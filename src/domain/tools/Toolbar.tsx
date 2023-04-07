@@ -28,14 +28,10 @@ export class Toolbar extends React.Component<Props> {
     const name = this.props.config?.meta?.name;
     return (
       <div className="toolbar">
-        <Input value={name} onChange={(name) => configService.setName(name)} label={'name'} />
+        <Input value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
         <PreconfigSelector preconfigIndex={this.props.preconfigIndex} />
         <div className="actions">
-          <ConfigImporter
-            onConfigChanged={(rawConfig) => {
-              configService.setRawConfig(rawConfig);
-            }}
-          />
+          <ConfigImporter />
           <ConfigExporter config={this.props.config} />
           <SvgExporter getData={() => this.props.getExporterData()} />
           <PngExporter getData={() => this.props.getExporterData()} />

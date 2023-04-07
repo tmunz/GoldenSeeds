@@ -1,7 +1,5 @@
-import { DrawStyle } from '../../../datatypes/DrawStyle';
 import { Color } from '../../../datatypes/Color';
 import { BoundingBox } from '../../../datatypes/BoundingBox';
-import { Boundary } from './impl/Boundary';
 import { Cell } from './impl/Cell';
 import { Point } from '../../../datatypes/Point';
 import { Voronoi } from './impl/Voronoi';
@@ -9,19 +7,28 @@ import { SiteArea } from './impl/SiteArea';
 import { Edge } from './impl/Edge';
 import { HalfEdge } from './impl/HalfEdge';
 
+const DEBUG = false;
+
 export interface VoronoiConfig {
-  style: DrawStyle;
-  color: Color;
-  gap: number;
+  style: {
+    fillColor: Color,
+    strokeColor: Color,
+    strokeWidth: number,
+  }
+  cells: {
+    gap: number,
+  }
 }
 
 export function draw(config: VoronoiConfig, grid: number[][], boundingBox: BoundingBox) {
-  const voronoi = new Voronoi(grid, boundingBox, config.gap / 2);
+  const voronoi = new Voronoi(grid, boundingBox, config.cells.gap / 2);
   let svg = '';
-  svg += voronoi.cells.map((cell: Cell, i: number) => drawCell(cell, style(i, config.color, config.style))).join('');
-  // svg += voronoi.siteAreas.map((siteArea: SiteArea) => drawSiteArea(siteArea)).join('');
-  // svg += voronoi.edges.map((edge: Edge) => drawEdge(edge)).join('');
-  // svg += voronoi.vertices.map((vertex: Point) => drawPoint(vertex)).join('');
+  svg += voronoi.cells.map((cell: Cell, i: number) => drawCell(cell, style(i, config.style))).join('');
+  if (DEBUG) {
+    svg += voronoi.siteAreas.map((siteArea: SiteArea) => drawSiteArea(siteArea)).join('');
+    svg += voronoi.edges.map((edge: Edge) => drawEdge(edge)).join('');
+    svg += voronoi.vertices.map((vertex: Point) => drawPoint(vertex)).join('');
+  }
   return svg;
 }
 
@@ -34,7 +41,7 @@ function drawSiteArea(siteArea: SiteArea) {
         return `${s} L ${halfEdge.getStartpoint()[Point.X]},${halfEdge.getStartpoint()[Point.Y]} `;
       }
     }, '') + 'z'
-  }" />`;
+    }" />`;
 }
 
 function drawEdge(edge: Edge) {
@@ -59,12 +66,16 @@ function drawCell(cell: Cell, style: string) {
         return `${s} L ${point[Point.X]}, ${point[Point.Y]} `;
       }
     }, '') + 'z'
-  }" />`;
+    }" />`;
 }
 
-function style(n: number, color: Color, drawStyle: DrawStyle) {
-  const itemColor = color.toString(n);
-  return drawStyle === DrawStyle.FILLED
-    ? `fill="${itemColor}"`
-    : `fill="none" stroke="${itemColor}" stroke-width="1" vector-effect="non-scaling-stroke"`;
+function style(n: number, style: { fillColor: Color, strokeColor: Color, strokeWidth: number }) {
+  return `
+    fill="${style.fillColor.toRgbHex(n)}" 
+    fill-opacity="${style.fillColor.alpha}"
+    stroke="${style.strokeColor.toRgbHex(n)}" 
+    stroke-opacity="${style.strokeColor.alpha}"
+    stroke-width="${style.strokeWidth}" 
+    vector-effect="non-scaling-stroke"
+  `;
 }

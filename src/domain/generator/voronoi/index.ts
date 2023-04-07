@@ -1,5 +1,4 @@
 import { VoronoiConfig, draw } from './VoronoiDrawer';
-import { DrawStyle } from '../../../datatypes/DrawStyle';
 import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
 
 export class Voronoi implements SvgGenerator {
@@ -7,18 +6,25 @@ export class Voronoi implements SvgGenerator {
   type = Voronoi.type;
 
   definition = {
-    color: { initial: 'gold', type: 'color' as const },
     style: {
-      initial: DrawStyle.STROKE,
-      type: 'selection' as const,
-      options: [DrawStyle.FILLED, DrawStyle.STROKE],
+      fillColor: { initial: 'transparent', type: 'color' as const },
+      strokeColor: { initial: 'gold', type: 'color' as const },
+      strokeWidth: {
+        initial: '1',
+        type: 'number' as const,
+        min: 0,
+        max: 10,
+        step: 0.1,
+      },
     },
-    gap: {
-      initial: '0.1',
-      type: 'number' as const,
-      min: 0,
-      max: 10,
-      step: 0.1,
+    cells: {
+      gap: {
+        initial: '0.1',
+        type: 'number' as const,
+        min: 0,
+        max: 10,
+        step: 0.1,
+      },
     },
   };
 
