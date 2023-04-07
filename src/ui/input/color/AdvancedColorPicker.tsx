@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Color } from '../../../datatypes/Color';
 import { CustomPicker, ChromePicker } from 'react-color';
 
 export function AdvancedColorPicker(props: { color?: Color, onChange: (color: Color) => void }) {
   return <div>
     <ChromePicker
-      color={props.color?.toRgbHex()}
+      color={ props.color?.toRgba() }
+      onChangeComplete={value => props.onChange(new Color(value.rgb))}
       onChange={value => props.onChange(new Color(value.rgb))}
     />
   </div>;

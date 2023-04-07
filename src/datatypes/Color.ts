@@ -29,6 +29,10 @@ export class Color {
     }
   };
 
+  toRgba(): { r: number, g: number, b: number, a?: number } {
+    return { r: this.red, g: this.green, b: this.blue, a: this.alpha };
+  }
+
   fromRaw(raw: string): Color {
     const value = COLORS[raw];
     if (value !== undefined) {
