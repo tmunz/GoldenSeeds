@@ -11,7 +11,7 @@ import './Editor.styl';
 
 interface Props {
   config: Config;
-  editStageId?: string;
+  editStageId: string | null;
 }
 
 export class Editor extends React.Component<Props> {

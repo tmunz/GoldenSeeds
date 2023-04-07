@@ -35,18 +35,19 @@ export class Themer extends React.Component<{}, { show: boolean }> {
           >
             {lightThemeActive ? 'dark' : 'light'}
           </div>
-          {/*<ColorInput
+          <ColorInput
             label="accent"
-            rangeValue={this.getColor('accent').get()}
+            value={this.getColor('accent')}
             onChange={(c) => this.setColor('accent', new Color(c))}
-          />*/}
+            simple
+          />
         </Collapsable>
       </div>
     );
   }
 
   private setColor(id: string, c: Color) {
-    (document.querySelector(':root') as HTMLElement).style.setProperty(`--${id}Color`, c.toString());
+    (document.querySelector(':root') as HTMLElement).style.setProperty(`--${id}Color`, c.toRgbHex());
     this.forceUpdate();
   }
 

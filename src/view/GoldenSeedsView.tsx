@@ -12,7 +12,7 @@ import './GoldenSeedsView.styl';
 type Props = {
   config?: Config;
   preconfigIndex?: number;
-  editStageId?: string;
+  editStageId: string | null;
 };
 
 interface State {
