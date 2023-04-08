@@ -3,7 +3,7 @@ import { SvgGenerator, SvgGeneratorResult, ParamDefinition } from '../generator/
 import { random } from '../../utils/Random';
 
 export interface StageItemState<T> {
-  rawValue: string;
+  textValue: string;
   value: T;
   valid: boolean;
 }
@@ -38,8 +38,8 @@ export class Stage {
       converted.data[groupId] = {};
       Object.keys(generatorDefinition[groupId]).forEach((id) => {
         const initialValue = generatorDefinition[groupId][id].initial;
-        const rawValue = data[groupId] ? data[groupId][id] : undefined;
-        converted.data[groupId][id] = converterService.convert(generatorDefinition[groupId][id].type, rawValue ?? initialValue);
+        const textValue = data[groupId] ? data[groupId][id] : undefined;
+        converted.data[groupId][id] = converterService.convert(generatorDefinition[groupId][id].type, textValue ?? initialValue);
       });
     });
     return converted;

@@ -4,11 +4,11 @@ import { Converter } from './Converter';
 export class ExpressionConverter extends Converter<
   (n: number, items: number, itemSize: (n: number) => number, i: number) => number
   > {
-  protected convertFromRaw = (
-    rawValue: string,
+  protected textToValue = (
+    textValue: string,
   ): ((n: number, items: number, itemSize: (n: number) => number, i?: number) => number) => {
     try {
-      const expression = this.convertToExpression(rawValue);
+      const expression = this.convertToExpression(textValue);
       // don't check everything because of performance reasons
       [0, 1].map((d: number) => expression(d, 2, (n) => n)); //test Expression
       return expression;

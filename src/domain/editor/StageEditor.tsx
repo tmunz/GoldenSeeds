@@ -25,12 +25,10 @@ export function StageEditor({ stage, i, stagesTotal, editMode, dragHandleProps }
   const types = svgGeneratorRegistry.types;
 
   const generateEntryModifier = (stage: Stage, groupId: string, id: string, definition: ParamDefinition, state: StageItemState<any>) => (
-   <div className="editor-item" key={id}>
+    <div className="editor-item" key={id}>
       <EditorInput
         {...editorService.getInputFieldConfiguration(definition.type, id, definition, state)}
-        onChange={(rawValue: any) => {
-          configService.setConfigValue(stage.id, groupId, id, rawValue)
-        }}
+        onChange={(textValue: any) => configService.setConfigValue(stage.id, groupId, id, textValue)}
       />
       {definition.animateable && (
         <AnimationController

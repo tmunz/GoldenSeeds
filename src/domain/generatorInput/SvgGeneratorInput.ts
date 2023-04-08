@@ -18,8 +18,8 @@ export abstract class SvgGeneratorInput<T> {
   ): EditorInputProps {
     return {
       label: name,
-      output: '' + state.value,
-      value: Number(state.value),
+      output: `${state.value}`,
+      value: state.value,
       valid: state.valid,
       ...this.inputConfig(definition, state),
     };

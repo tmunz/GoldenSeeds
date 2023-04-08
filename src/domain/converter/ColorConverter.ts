@@ -2,7 +2,7 @@ import { Color } from '../../datatypes/Color';
 import { Converter } from './Converter';
 
 export class ColorConverter extends Converter<Color> {
-  convertFromRaw(rawValue: string): Color {
-    return new Color(rawValue);
+  protected textToValue(textValue: string): Color {
+    return new Color(textValue);
   }
 }

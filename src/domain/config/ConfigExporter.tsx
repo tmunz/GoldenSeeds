@@ -39,7 +39,7 @@ export class ConfigExporter extends React.Component<Props> {
       Object.keys(stage.state.data).forEach(groupId => {
         rawState.data[groupId] = {};
         Object.keys(stage.state.data[groupId]).forEach(id => {
-          rawState.data[groupId][id] = stage.state.data[groupId][id].rawValue;
+          rawState.data[groupId][id] = stage.state.data[groupId][id].textValue;
         })
       });
       return rawState;

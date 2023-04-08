@@ -10,12 +10,12 @@ export class ExpressionInput extends SvgGeneratorInput<
     definition: ParamDefinition,
     state: StageItemState<(n: number, items: number, itemSize: (n: number) => number) => number>,
   ) => {
-    // const regexResult = state.rawValue.match(/^\s*(n\s\*\s*(.*\S)?)\s*$/);
+    // const regexResult = state.textValue.match(/^\s*(n\s\*\s*(.*\S)?)\s*$/);
     // const nMode: boolean = regexResult ? true : false;
     // const controls = [this.generateNControl(stage, nLessValue, nMode)];
 
     return {
-      value: state.rawValue,
+      value: state.textValue,
       inputType: InputType.EXTENDED_RANGE,
       canExpertMode: true,
       min: (definition as ParamDefinitionMinMaxStep)?.min,

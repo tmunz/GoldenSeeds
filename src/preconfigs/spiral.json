@@ -15,8 +15,8 @@
         "plot": {
           "start": "0",
           "items": "8",
-          "functionX": "Math.floor(((n-1) % 4) / 2) / 2",
-          "functionY": "Math.floor((n% 4) / 2) / 2",
+          "functionX": "Math.floor((n % 4) / 2) / 2",
+          "functionY": "Math.floor(((n+1)% 4) / 2) / 2",
           "output": "generated"
         }
       }
@@ -51,7 +51,7 @@
           "seed": "999"
         },
         "transformation": {
-          "angle": "(n-1)*90",
+          "angle": "n*90",
           "size": "n"
         }
       }

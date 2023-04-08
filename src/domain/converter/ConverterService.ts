@@ -24,8 +24,8 @@ export class ConverterService {
     this.registry.set(type, stageCreator);
   }
 
-  convert(type: ParamDefinitionType, rawValue: string): Partial<StageItemState<any>> {
-    return this.registry.get(type)!.convert(rawValue);
+  convert(type: ParamDefinitionType, textValue: string): Partial<StageItemState<any>> {
+    return this.registry.get(type)!.convert(textValue);
   }
 }
 
