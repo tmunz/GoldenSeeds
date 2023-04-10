@@ -36,11 +36,11 @@ export class ConfigExporter extends React.Component<Props> {
   private convertConfigToJson(config: Config): any {
     const stages = config.stages.map((stage) => {
       const rawState = { type: stage.state.type, data: {} as Record<string, Record<string, string>> };
-      Object.keys(stage.state.data).forEach(groupId => {
+      Object.keys(stage.state.data).forEach((groupId) => {
         rawState.data[groupId] = {};
-        Object.keys(stage.state.data[groupId]).forEach(id => {
+        Object.keys(stage.state.data[groupId]).forEach((id) => {
           rawState.data[groupId][id] = stage.state.data[groupId][id].textValue;
-        })
+        });
       });
       return rawState;
     });

@@ -24,7 +24,13 @@ export interface Props extends ComponentProps<'div'> {
 export function StageEditor({ stage, i, stagesTotal, editMode, dragHandleProps }: Props) {
   const types = svgGeneratorRegistry.types;
 
-  const generateEntryModifier = (stage: Stage, groupId: string, id: string, definition: ParamDefinition, state: StageItemState<any>) => (
+  const generateEntryModifier = (
+    stage: Stage,
+    groupId: string,
+    id: string,
+    definition: ParamDefinition,
+    state: StageItemState<any>,
+  ) => (
     <div className="editor-item" key={id}>
       <EditorInput
         {...editorService.getInputFieldConfiguration(definition.type, id, definition, state)}
@@ -75,14 +81,20 @@ export function StageEditor({ stage, i, stagesTotal, editMode, dragHandleProps }
           valid
           onChange={(index) => configService.setType(stage.id, types[index])}
         />
-        {Object.keys(stage.state.data).map(groupId =>
+        {Object.keys(stage.state.data).map((groupId) => (
           <Fragment key={groupId}>
             <div>{groupId}</div>
             {Object.keys(stage.state.data[groupId]).map((id: string) =>
-              generateEntryModifier(stage, groupId, id, stage.generator.definition[groupId][id], stage.state.data[groupId][id]),
+              generateEntryModifier(
+                stage,
+                groupId,
+                id,
+                stage.generator.definition[groupId][id],
+                stage.state.data[groupId][id],
+              ),
             )}
           </Fragment>
-        )}
+        ))}
       </Collapsable>
     </div>
   );

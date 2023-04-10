@@ -47,7 +47,7 @@ export class PolarGrid implements SvgGenerator {
   generate = (config: PolarConfig, prev: SvgGeneratorResult): SvgGeneratorResult => {
     const drawing = draw(config, prev.grid);
 
-    let drawingBoundingBox = PointUtils.boundingBox(drawing.points);
+    const drawingBoundingBox = PointUtils.boundingBox(drawing.points);
 
     /*
     // stabilize center if all prev points are centered

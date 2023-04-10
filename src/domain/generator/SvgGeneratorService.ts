@@ -14,7 +14,7 @@ export class SvgGeneratorService {
 
   getResult(stage: Stage, prev: SvgGeneratorResult = SvgGeneratorService.DEFAULT_RESULT): SvgGeneratorResult {
     const stageConfig = this.convertToValue(stage.state);
-    const stageKey = JSON.stringify({
+    /*const stageKey = JSON.stringify({
       stage: stage.state,
       prevGrid: prev.grid,
       prevBoundingBox: prev.boundingBox,
@@ -22,16 +22,17 @@ export class SvgGeneratorService {
     if (!this.cache.has(stageKey)) {
       this.cache.set(stageKey, stage.generator.generate(stageConfig, prev));
     }
-    return this.cache.get(stageKey) as SvgGeneratorResult;
+    return this.cache.get(stageKey) as SvgGeneratorResult;*/
+    return stage.generator.generate(stageConfig, prev);
   }
 
   private convertToValue(state: StageState<any>): Record<string, Record<string, any>> {
     const values: Record<string, Record<string, any>> = {};
-    Object.keys(state.data).forEach(groupId => {
+    Object.keys(state.data).forEach((groupId) => {
       values[groupId] = {};
-      Object.keys(state.data[groupId]).forEach(id => {
+      Object.keys(state.data[groupId]).forEach((id) => {
         values[groupId][id] = state.data[groupId][id].value;
-      })
+      });
     });
     return values;
   }

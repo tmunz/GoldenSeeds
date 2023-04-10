@@ -17,7 +17,9 @@ export class AnimationController extends React.Component<Props> {
       <a
         className={this.props.currentlyAnimating ? 'active' : ''}
         target="_blank"
-        onClick={() => animationService.animate(this.props.stageId, this.props.groupId, this.props.id, this.props.value)}
+        onClick={() =>
+          animationService.animate(this.props.stageId, this.props.groupId, this.props.id, this.props.value)
+        }
       >
         <AnimatedButton
           title="play"

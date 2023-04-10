@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "name": "smartify"
+  },
+  "stages": [
+    {
+      "type": "shape",
+      "data": {
+        "style": {
+          "fillColor": "0x0ffdecd87",
+          "strokeColor": "gold",
+          "strokeWidth": 0,
+          "smoothness": "1",
+          "noise": "0"
+        },
+        "projection": {
+          "type": "circular",
+          "circlularProjectionFullAngle": "360"
+        },
+        "shape": {
+          "edges": 86,
+          "offset": "0",
+          "cutRatio0": "0",
+          "cutRatio1": "0"
+        },
+        "probabilityDistribution": {
+          "muRandomness": 0,
+          "sigma": 0.3,
+          "sigmaRandomness": 0,
+          "noise": 0
+        },
+        "variation": {
+          "seed": "999"
+        },
+        "transformation": {
+          "angle": "125",
+          "size": "1.2"
+        }
+      }
+    },
+    {
+      "type": "text",
+      "data": {
+        "style": {
+          "color": "0x0ff000000"
+        },
+        "text": {
+          "content": "S!",
+          "font": "/signika-bold.otf",
+          "size": "0.75"
+        }
+      }
+    },
+    {
+      "type": "shape",
+      "data": {
+        "style": {
+          "fillColor": "transparent",
+          "strokeColor": "0x0ffff00ff",
+          "strokeWidth": "1",
+          "smoothness": "0.5",
+          "noise": "0"
+        },
+        "projection": {
+          "type": "circular",
+          "circlularProjectionFullAngle": "360"
+        },
+        "shape": {
+          "edges": "1",
+          "offset": "0",
+          "cutRatio0": "0",
+          "cutRatio1": "0"
+        },
+        "probabilityDistribution": {
+          "muRandomness": "0",
+          "sigma": "0",
+          "sigmaRandomness": "0",
+          "noise": "0"
+        },
+        "variation": {
+          "seed": "999"
+        },
+        "transformation": {
+          "angle": "0",
+          "size": "1"
+        }
+      }
+    }
+  ]
+}

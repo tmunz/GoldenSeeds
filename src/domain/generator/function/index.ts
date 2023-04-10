@@ -62,7 +62,7 @@ export class FunctionPlotter implements SvgGenerator {
         type: 'selection' as const,
         options: ['origin', 'generated'],
       },
-    }
+    },
   };
 
   generate = (config: FunctionPlotterConfig, prev: SvgGeneratorResult): SvgGeneratorResult => {

@@ -7,7 +7,6 @@ import { AnimatedButton } from '../AnimatedButton';
 import { CirclePicker } from 'react-color';
 import { Input } from './Input';
 
-
 export interface Props {
   className?: string;
   label?: string;
@@ -17,7 +16,6 @@ export interface Props {
 }
 
 export function ColorInput(props: Props) {
-
   const [selectedPage, setSelectedPage] = useState<number>(0);
 
   const pages = [
@@ -25,14 +23,12 @@ export function ColorInput(props: Props) {
       width="180px"
       color={props.value?.toRgba()}
       onChange={(value: any) => props.onChange(new Color(value.rgb).toRaw())}
-      colors={['gold', 'patina', 'black', 'white', 'red', 'green', 'blue', 'yellow', 'cyan', 'magenta']
-        .map(c => new Color(c).toRgbHex())}
+      colors={['gold', 'patina', 'black', 'white', 'red', 'green', 'blue', 'yellow', 'cyan', 'magenta'].map((c) =>
+        new Color(c).toRgbHex(),
+      )}
     />,
     <div>
-      <Input
-        value={props.value?.toRgbHex()}
-        onChange={(value: any) => props.onChange(new Color(value).toRaw())}
-      />
+      <Input value={props.value?.toRgbHex()} onChange={(value: any) => props.onChange(new Color(value).toRaw())} />
     </div>,
     <AdvancedColorPicker
       color={props.value?.toRgba()}
@@ -42,7 +38,7 @@ export function ColorInput(props: Props) {
 
   return (
     <div className="input color-input">
-      {!props.simple &&
+      {!props.simple && (
         <Fragment>
           <label>{props.label}</label>
           <AnimatedButton
@@ -54,15 +50,9 @@ export function ColorInput(props: Props) {
             onClick={() => setSelectedPage((selectedPage + pages.length - 1) % pages.length)}
           />
         </Fragment>
-      }
-      <div className="color-selection-page">
-        {pages[selectedPage]}
-      </div>
-      {!props.simple &&
-        <div onClick={() => props.onChange(new Color('random').toRaw())}>
-          random
-        </div>
-      }
+      )}
+      <div className="color-selection-page">{pages[selectedPage]}</div>
+      {!props.simple && <div onClick={() => props.onChange(new Color('random').toRaw())}>random</div>}
     </div>
   );
 }

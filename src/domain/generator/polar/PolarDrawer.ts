@@ -5,12 +5,12 @@ export interface PolarConfig {
   style: {
     color: Color;
     strokeWidth: (n: number, items: number) => number;
-  },
+  };
   grid: {
     items: number;
     angle: (n: number, items: number) => number;
     distance: (n: number, items: number) => number;
-  }
+  };
 }
 
 export function draw(config: PolarConfig, grid: Point[]): { svg: string; points: Point[] } {

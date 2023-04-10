@@ -10,13 +10,17 @@ export class TextDrawer implements SvgGenerator {
     style: {
       color: {
         initial: 'gold',
-        type: 'color' as const
+        type: 'color' as const,
       },
     },
     text: {
       content: {
         initial: 'text',
         type: 'string' as const,
+      },
+      font: {
+        initial: '/signika-bold.otf',
+        type: 'font' as const,
       },
       size: {
         initial: '1',
@@ -34,7 +38,7 @@ export class TextDrawer implements SvgGenerator {
     return {
       grid: prev.grid,
       svg: drawing.svg,
-      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, PointUtils.boundingBox(drawing.points)]),
+      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, drawing.boundingBox]),
     };
   };
 }

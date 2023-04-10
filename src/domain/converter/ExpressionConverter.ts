@@ -3,7 +3,7 @@ import { Converter } from './Converter';
 
 export class ExpressionConverter extends Converter<
   (n: number, items: number, itemSize: (n: number) => number, i: number) => number
-  > {
+> {
   protected textToValue = (
     textValue: string,
   ): ((n: number, items: number, itemSize: (n: number) => number, i?: number) => number) => {
@@ -22,7 +22,9 @@ export class ExpressionConverter extends Converter<
     expression: string,
   ): ((n: number, items: number, itemSize: (n: number) => number) => number) => {
     return eval(
-      `(n, items, itemSize, i) => ((fib, goldenRatio) => ${expression})(${(v: number) => MathUtils.fib(v)}, ${MathUtils.goldenRatio})`,
+      `(n, items, itemSize, i) => ((fib, goldenRatio) => ${expression})(${(v: number) => MathUtils.fib(v)}, ${
+        MathUtils.goldenRatio
+      })`,
     );
   };
 }

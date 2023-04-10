@@ -3,8 +3,8 @@ import {
   ColorConverter,
   ExpressionConverter,
   StringConverter,
-  SelectionConverter,
   Converter,
+  FontConverter,
 } from './';
 import { ParamDefinitionType } from '../generator/SvgGenerator';
 import { StageItemState } from '../stage/Stage';
@@ -16,15 +16,16 @@ export class ConverterService {
     this.register('color', new ColorConverter());
     this.register('expression', new ExpressionConverter());
     this.register('number', new NumberConverter());
-    this.register('selection', new SelectionConverter());
+    this.register('selection', new StringConverter());
     this.register('string', new StringConverter());
+    this.register('font', new FontConverter());
   }
 
   private register(type: ParamDefinitionType, stageCreator: Converter<any>) {
     this.registry.set(type, stageCreator);
   }
 
-  convert(type: ParamDefinitionType, textValue: string): Partial<StageItemState<any>> {
+  convertTextToValue(type: ParamDefinitionType, textValue: string): Promise<Partial<StageItemState<any>>> {
     return this.registry.get(type)!.convert(textValue);
   }
 }

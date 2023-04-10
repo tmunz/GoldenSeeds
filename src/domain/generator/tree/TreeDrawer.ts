@@ -4,8 +4,8 @@ import { Point } from '../../../datatypes/Point';
 
 export interface TreeConfig extends Config {
   style: {
-    color: Color,
-  }
+    color: Color;
+  };
 }
 
 export function draw(config: TreeConfig, grid: Point[]): { svg: string; points: Point[] } {

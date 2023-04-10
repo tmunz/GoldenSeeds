@@ -3,24 +3,31 @@ import { Point } from '../../../datatypes/Point';
 
 export interface FunctionPlotterConfig {
   style: {
-    fillColor: Color,
-    strokeColor: Color,
-    strokeWidth: (n: number, items: number) => number,
-    resolution: number,
-  },
+    fillColor: Color;
+    strokeColor: Color;
+    strokeWidth: (n: number, items: number) => number;
+    resolution: number;
+  };
   plot: {
-    start: number,
-    items: number,
-    functionX: (n: number, items: number) => number | number[],
-    functionY: (n: number, items: number) => number | number[],
-    output: string,
-  }
+    start: number;
+    items: number;
+    functionX: (n: number, items: number) => number | number[];
+    functionY: (n: number, items: number) => number | number[];
+    output: string;
+  };
 }
 
 export function plot(config: FunctionPlotterConfig, grid: Point[]): { svg: string; points: Point[] } {
   return grid.reduce(
     (agg, p, j) => {
-      const coordinates = calculateFunctionPlot(p, config.plot.start, config.plot.items, config.plot.functionX, config.plot.functionY, config.style.resolution);
+      const coordinates = calculateFunctionPlot(
+        p,
+        config.plot.start,
+        config.plot.items,
+        config.plot.functionX,
+        config.plot.functionY,
+        config.style.resolution,
+      );
       const svg = `<path 
         fill="${config.style.fillColor.toRgbHex(j)}"
         fill-opacity="${config.style.fillColor.alpha}"
@@ -28,15 +35,13 @@ export function plot(config: FunctionPlotterConfig, grid: Point[]): { svg: strin
         stroke-opacity="${config.style.strokeColor.alpha}"
         stroke-width="${config.style.strokeWidth(j, config.plot.items)}"
         vector-effect="non-scaling-stroke"
-        d="${
-        coordinates.highResolution.reduce((s: string, point: Point, i: number) => {
+        d="${coordinates.highResolution.reduce((s: string, point: Point, i: number) => {
           if (i === 0) {
             return `M ${point[Point.X]}, ${point[Point.Y]} `;
           } else {
             return `${s} L ${point[Point.X]}, ${point[Point.Y]} `;
           }
-        }, '')
-        }" />`;
+        }, '')}" />`;
       return {
         svg: agg.svg + svg,
         points: [...agg.points, ...coordinates.mainPoints],
@@ -53,11 +58,11 @@ function calculateFunctionPlot(
   funX: (n: number, items: number) => number | number[],
   funY: (n: number, items: number) => number | number[],
   resolution: number,
-): { mainPoints: Point[], highResolution: Point[] } {
+): { mainPoints: Point[]; highResolution: Point[] } {
   const mainPoints: Point[] = [];
   const highResolution: Point[] = [];
   for (let n = 0; n <= (items - 1) * resolution; n++) {
-    const value = start + (n / resolution);
+    const value = start + n / resolution;
     let x = funX(value, items);
     let y = funY(value, items);
     if (Array.isArray(x)) {

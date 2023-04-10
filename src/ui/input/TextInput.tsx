@@ -17,7 +17,7 @@ export class TextInput extends React.Component<Props> {
         <input
           className={this.props.className}
           type="text"
-          onChange={e => this.props.onChange(e.target.value)}
+          onChange={(e) => this.props.onChange(e.target.value)}
           value={typeof value !== 'undefined' ? value : ''}
         />
         <label className={value === '' || typeof value === 'undefined' ? 'input-empty' : ''}>{this.props.label}</label>

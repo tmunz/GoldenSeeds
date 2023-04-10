@@ -5,19 +5,25 @@ export interface CartesianConfig {
   style: {
     color: Color;
     strokeWidth: (n: number, items: number) => number;
-  },
+  };
   grid: {
     items: number;
     x: number;
     xDistance: (n: number, items: number) => number;
     yDistance: (n: number, items: number) => number;
-  },
+  };
 }
 
 export function draw(config: CartesianConfig, grid: Point[]): { svg: string; points: Point[] } {
   return grid.reduce(
     (agg, p) => {
-      const coordinates = calculatePolarGrid(p, config.grid.items, config.grid.x, config.grid.xDistance, config.grid.yDistance);
+      const coordinates = calculatePolarGrid(
+        p,
+        config.grid.items,
+        config.grid.x,
+        config.grid.xDistance,
+        config.grid.yDistance,
+      );
       const svg = coordinates
         .map((coordinate: Point, j: number) => {
           const rightIndex = j + 1;

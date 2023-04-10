@@ -20,12 +20,14 @@ export class ExtendedRangeInput extends React.Component<Props> {
     return (
       <div className="extended-range-input">
         <TextInput {...this.props} />
-        <RangeInput {...{
-          ...this.props,
-          label: undefined,
-          output: undefined,
-          onChange: (value: number) => this.props.onChange(`${value}`),
-        }} />
+        <RangeInput
+          {...{
+            ...this.props,
+            label: undefined,
+            output: undefined,
+            onChange: (value: number) => this.props.onChange(`${value}`),
+          }}
+        />
       </div>
     );
   }

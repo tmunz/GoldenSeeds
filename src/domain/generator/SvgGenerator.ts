@@ -3,7 +3,7 @@ import { BoundingBox } from '../../datatypes/BoundingBox';
 export type SvgGeneratorConfig = any;
 
 type ParamDefinitionTypeMinMaxStep = 'expression' | 'number';
-export type ParamDefinitionType = ParamDefinitionTypeMinMaxStep | 'color' | 'selection' | 'string';
+export type ParamDefinitionType = ParamDefinitionTypeMinMaxStep | 'color' | 'selection' | 'string' | 'font';
 export type ParamDefinitionMinMaxStep = {
   type: ParamDefinitionTypeMinMaxStep;
   min: number;

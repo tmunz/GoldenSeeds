@@ -19,6 +19,7 @@ export class EditorService {
     this.register('number', new NumberInput());
     this.register('selection', new SelectionInput());
     this.register('string', new StringInput());
+    this.register('font', new StringInput());
   }
 
   private register(type: ParamDefinitionType, stageCreator: SvgGeneratorInput<any>) {

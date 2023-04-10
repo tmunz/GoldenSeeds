@@ -10,35 +10,35 @@ const POLAR_BASE_D = 0.5;
 
 export interface ShapeConfig {
   style: {
-    fillColor: Color,
-    strokeColor: Color,
-    strokeWidth: number,
+    fillColor: Color;
+    strokeColor: Color;
+    strokeWidth: number;
     smoothness: (n: number, items: number, size: number) => number;
     noise: number;
-  },
+  };
   projection: {
     type: 'circular' | 'linear';
-    circlularProjectionFullAngle: number,
-  },
+    circlularProjectionFullAngle: number;
+  };
   shape: {
-    edges: number,
+    edges: number;
     offset: (n: number, items: number, size: number, i: number) => number;
     cutRatio0: (n: number, items: number, size: number, i: number) => number;
     cutRatio1: (n: number, items: number, size: number, i: number) => number;
-  },
+  };
   probabilityDistribution: {
-    muRandomness: number,
-    sigma: number,
-    sigmaRandomness: number,
-    noise: number,
-  },
+    muRandomness: number;
+    sigma: number;
+    sigmaRandomness: number;
+    noise: number;
+  };
   variation: {
-    seed: number,
-  },
+    seed: number;
+  };
   transformation: {
-    angle: (n: number, items: number, size: number) => number,
-    size: (n: number, items: number) => number,
-  },
+    angle: (n: number, items: number, size: number) => number;
+    size: (n: number, items: number) => number;
+  };
 }
 
 export interface Props {
@@ -94,9 +94,12 @@ export function draw(config: ShapeConfig, grid: Point[]): { svg: string; boundin
                 config.variation.seed,
               )
               : pnts,
-          (pnts: Point[]) => (0 < config.style.noise ? noise(pnts, n, config.style.noise, config.variation.seed) : pnts),
           (pnts: Point[]) =>
-            config.projection.type === 'circular' ? toCircularProjection(pnts, config.projection.circlularProjectionFullAngle) : pnts,
+            0 < config.style.noise ? noise(pnts, n, config.style.noise, config.variation.seed) : pnts,
+          (pnts: Point[]) =>
+            config.projection.type === 'circular'
+              ? toCircularProjection(pnts, config.projection.circlularProjectionFullAngle)
+              : pnts,
           (pnts: Point[]) => smooth(pnts, itemProps.smoothness),
           // after smooth => [..., controlToPrev, linePoint, controlToNext, ...]
           (pnts: Point[]) => transform(pnts, position, itemProps.size, itemProps.angle),
@@ -158,7 +161,7 @@ function noise(pnts: Point[], n: number, noise: number, seed: number): Point[] {
 function toCircularProjection(pnts: Point[], fullAngle: number): Point[] {
   return pnts.map((pnt) => {
     const d = pnt[Point.Y] + POLAR_BASE_D;
-    const rads = (-(pnt[Point.X] + 0.5) * Math.PI * 2 * fullAngle / 360) - Math.PI / 2;
+    const rads = (-(pnt[Point.X] + 0.5) * Math.PI * 2 * fullAngle) / 360 - Math.PI / 2;
     return [d * Math.cos(rads), d * Math.sin(rads)];
   });
 }

@@ -11,13 +11,13 @@ const DEBUG = false;
 
 export interface VoronoiConfig {
   style: {
-    fillColor: Color,
-    strokeColor: Color,
-    strokeWidth: number,
-  }
+    fillColor: Color;
+    strokeColor: Color;
+    strokeWidth: number;
+  };
   cells: {
-    gap: number,
-  }
+    gap: number;
+  };
 }
 
 export function draw(config: VoronoiConfig, grid: number[][], boundingBox: BoundingBox) {
@@ -41,7 +41,7 @@ function drawSiteArea(siteArea: SiteArea) {
         return `${s} L ${halfEdge.getStartpoint()[Point.X]},${halfEdge.getStartpoint()[Point.Y]} `;
       }
     }, '') + 'z'
-    }" />`;
+  }" />`;
 }
 
 function drawEdge(edge: Edge) {
@@ -66,10 +66,10 @@ function drawCell(cell: Cell, style: string) {
         return `${s} L ${point[Point.X]}, ${point[Point.Y]} `;
       }
     }, '') + 'z'
-    }" />`;
+  }" />`;
 }
 
-function style(n: number, style: { fillColor: Color, strokeColor: Color, strokeWidth: number }) {
+function style(n: number, style: { fillColor: Color; strokeColor: Color; strokeWidth: number }) {
   return `
     fill="${style.fillColor.toRgbHex(n)}" 
     fill-opacity="${style.fillColor.alpha}"

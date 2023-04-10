@@ -3,18 +3,18 @@ import { Point } from '../../../datatypes/Point';
 
 export interface Config {
   tree: {
-    depth: number,
-    seed: number,
-  },
+    depth: number;
+    seed: number;
+  };
   split: {
-    angle: number,
-    variation: number,
-    probability: number,
-  }
+    angle: number;
+    variation: number;
+    probability: number;
+  };
   length: {
-    conservation: number,
-    variation: number,
-  }
+    conservation: number;
+    variation: number;
+  };
 }
 
 interface Node {

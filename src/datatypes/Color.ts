@@ -1,13 +1,13 @@
 import { randomColor } from '../utils/Random';
 
 export class Color {
-  red: number = 0;
-  green: number = 0;
-  blue: number = 0;
-  alpha: number = 1;
-  random: boolean = false;
+  red = 0;
+  green = 0;
+  blue = 0;
+  alpha = 1;
+  random = false;
 
-  constructor(value: { r: number, g: number, b: number, a?: number, random?: boolean } | string) {
+  constructor(value: { r: number; g: number; b: number; a?: number; random?: boolean } | string) {
     if (typeof value === 'string') {
       this.fromRaw(value);
     } else {
@@ -25,12 +25,12 @@ export class Color {
     } else if (this.random) {
       return '#' + (0xf000000 | randomColor(seed)).toString(16).substring(1, 7);
     } else {
-      return '#' + (0xf000000 | this.red << 16 | this.green << 8 | this.blue).toString(16).substring(1, 7);
+      return '#' + (0xf000000 | (this.red << 16) | (this.green << 8) | this.blue).toString(16).substring(1, 7);
     }
-  };
+  }
 
-  toRgba(): { r: number, g: number, b: number, a?: number} {
-    return { r: this.red, g: this.green, b: this.blue, a: this.alpha};
+  toRgba(): { r: number; g: number; b: number; a?: number } {
+    return { r: this.red, g: this.green, b: this.blue, a: this.alpha };
   }
 
   fromRaw(raw: string): Color {
@@ -53,14 +53,13 @@ export class Color {
       const parsedValue = parseInt(raw.substring(1), 16);
       if (isFinite(parsedValue)) {
         if (raw.length === 7) {
-          this.red = 0xff & parsedValue >> 16;
-          this.green = 0xff & parsedValue >> 8;
+          this.red = 0xff & (parsedValue >> 16);
+          this.green = 0xff & (parsedValue >> 8);
           this.blue = 0xff & parsedValue;
-        }
-        else if (raw.length === 4) {
+        } else if (raw.length === 4) {
           // enable #fff as well as #ffffff
-          this.red = 0xff & parsedValue >> 8;
-          this.green = 0xff & parsedValue >> 4;
+          this.red = 0xff & (parsedValue >> 8);
+          this.green = 0xff & (parsedValue >> 4);
           this.blue = 0xff & parsedValue;
         }
       }
@@ -81,7 +80,7 @@ export class Color {
   }
 }
 
-export const COLORS: Record<string, { r?: number, g?: number, b?: number, a?: number, random?: boolean }> = {
+export const COLORS: Record<string, { r?: number; g?: number; b?: number; a?: number; random?: boolean }> = {
   black: { r: 0x00, g: 0x00, b: 0x00 },
   white: { r: 0xff, g: 0xff, b: 0xff },
 

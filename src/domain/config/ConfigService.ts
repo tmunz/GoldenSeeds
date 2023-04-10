@@ -5,26 +5,36 @@ import { preconfigs } from '../../preconfigs';
 import { Config } from './Config';
 import { converterService } from '../converter/ConverterService';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
-import { Stage } from '../stage/Stage';
+import { Stage, StageRawState } from '../stage/Stage';
+import { SvgGenerator } from '../generator/SvgGenerator';
 
 export class ConfigService {
   preconfigIndex$ = new BehaviorSubject<number>(-1);
   config$ = new BehaviorSubject<Config>({ meta: { name: '' }, stages: [] });
 
-  setConfigValue(stageId: string, groupId: string, id: string, textValue: string) {
+  async setConfigValue(stageId: string, groupId: string, id: string, textValue: string) {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
     const index = this.findIndexByStageId(stageId);
-    nextConfig.stages[index].state.data[groupId][id] = converterService.convert(
+    const nextStageItemState = await converterService.convertTextToValue(
       config.stages[index].generator.definition[groupId][id].type,
       textValue,
-    ) as any;
+    );
+    const stageItemState = nextConfig.stages[index].state.data[groupId][id];
+    nextConfig.stages[index].state.data[groupId][id] = { ...stageItemState, ...nextStageItemState };
     this.config$.next(nextConfig);
   }
 
-  setRawConfig(configRaw: any, preconfigIndex = -1) {
+  async setRawConfig(configRaw: any, preconfigIndex = -1) {
     this.preconfigIndex$.next(preconfigIndex);
-    this.config$.next(this.convertRawToConfig(configRaw));
+    this.config$.next({
+      meta: configRaw.meta,
+      stages: await Promise.all(
+        configRaw.stages.map((stageRaw: any) =>
+          this.createStage(svgGeneratorRegistry.newInstance(stageRaw.type), stageRaw),
+        ),
+      ),
+    });
   }
 
   selectPreconfigByName(name: string | null) {
@@ -40,10 +50,10 @@ export class ConfigService {
     this.config$.next({ ...this.config$.value, meta: { name } });
   }
 
-  setType(stageId: string, type: string) {
+  async setType(stageId: string, type: string) {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
-    nextConfig.stages[this.findIndexByStageId(stageId)] = new Stage(
+    nextConfig.stages[this.findIndexByStageId(stageId)] = await this.createStage(
       svgGeneratorRegistry.newInstance(type),
       undefined,
       stageId,
@@ -66,36 +76,27 @@ export class ConfigService {
     this.config$.next(nextConfig);
   }
 
-  addStage(): void {
+  async addStage(): Promise<void> {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
-    nextConfig.stages.push(new Stage(svgGeneratorRegistry.getDefaultGenerator()));
+    nextConfig.stages.push(await this.createStage(svgGeneratorRegistry.getDefaultGenerator()));
     this.config$.next(nextConfig);
   }
 
-  setAnimationValue(stageId: string, groupId: string, id: string, textValue?: string) {
-    typeof groupId === 'string' && typeof id === 'string' && typeof textValue === 'string' && this.setConfigValue(stageId, groupId, id, textValue);
-    const config = this.config$.value;
-    const nextConfig = { ...config, stages: [...config.stages] };
-    const stageIndex = this.findIndexByStageId(stageId);
-    nextConfig.stages[stageIndex] = {
-      ...nextConfig.stages[stageIndex],
-      animatedId: id,
-    } as Stage;
-    this.config$.next(nextConfig);
+  setAnimationValue(stageId: string, groupId: string, id: string, textValue: string) {
+    this.setConfigValue(stageId, groupId, id, textValue);
   }
 
   private findIndexByStageId(stageId: string): number {
     return this.config$.value.stages.findIndex((s) => s.id === stageId);
   }
 
-  private convertRawToConfig(value: any) {
-    return {
-      meta: value.meta,
-      stages: value.stages.map(
-        (stageRaw: any) => new Stage(svgGeneratorRegistry.newInstance(stageRaw.type), stageRaw),
-      ),
-    };
+  private async createStage(
+    generator: SvgGenerator | null,
+    rawState?: StageRawState,
+    stageId?: string,
+  ): Promise<Stage> {
+    return new Stage(generator, rawState, stageId).convertTextToValues();
   }
 }
 

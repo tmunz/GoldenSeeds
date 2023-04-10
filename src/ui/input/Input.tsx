@@ -6,7 +6,6 @@ import { ExtendedRangeInput, Props as ExtendedRangeInputProps } from './Extended
 
 import './Input.styl';
 
-
 export enum InputType {
   RANGE = 'range',
   TEXT = 'text',
