@@ -46,7 +46,7 @@
         },
         "text": {
           "content": "S!",
-          "font": "/signika-bold.otf",
+          "font": "https://tmunz.github.io/GoldenSeeds/signika-bold.otf",
           "size": "0.75"
         }
       }
