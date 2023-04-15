@@ -1,4 +1,4 @@
-import { Font } from 'opentype.js';
+import { parse, Font } from 'opentype.js';
 
 import { Color } from '../../../datatypes/Color';
 import { Point } from '../../../datatypes/Point';
@@ -11,16 +11,17 @@ export interface TextDrawerConfig {
   };
   text: {
     content: string;
-    font: Font;
+    font: ArrayBuffer;
     size: (n: number, items: number) => number;
   };
 }
 
 export function draw(config: TextDrawerConfig, grid: Point[]): { svg: string; boundingBox: BoundingBox } {
+  const font = parse(config.text.font);
   return grid.reduce(
     (agg, p, n) => {
       const size = config.text.size(n, grid.length);
-      const text = drawFont(p, config, size);
+      const text = drawFont(p, config, font, size);
       return {
         svg: agg.svg + text.svg,
         boundingBox: PointUtils.combineBoundingBoxes([agg.boundingBox, text.boundingBox]),
@@ -30,8 +31,13 @@ export function draw(config: TextDrawerConfig, grid: Point[]): { svg: string; bo
   );
 }
 
-function drawFont(p: Point, config: TextDrawerConfig, size: number): { svg: string; boundingBox: BoundingBox } {
-  const path = config.text.font.getPath(config.text.content, p[Point.X], p[Point.Y], size, { kerning: true });
+function drawFont(
+  p: Point,
+  config: TextDrawerConfig,
+  font: Font,
+  size: number,
+): { svg: string; boundingBox: BoundingBox } {
+  const path = font.getPath(config.text.content, p[Point.X], p[Point.Y], size, { kerning: true });
   const boundingBox_ = path.getBoundingBox();
   const boundingBox = { min: [boundingBox_.x1, boundingBox_.y1], max: [boundingBox_.x2, boundingBox_.y2] };
   const translateX = -(boundingBox.max[Point.X] - boundingBox.min[Point.X]) / 2;

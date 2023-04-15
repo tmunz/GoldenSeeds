@@ -1,11 +1,8 @@
-import { parse, Font } from 'opentype.js';
-
 import { Converter } from './Converter';
 
-export class FontConverter extends Converter<Font> {
-  protected async asyncTextToValue(textValue: string): Promise<Font> {
-    const font = parse(await (await fetch(textValue)).arrayBuffer());
-    console.log('loaded and supported', font.supported);
+export class FontConverter extends Converter<ArrayBuffer> {
+  protected async asyncTextToValue(textValue: string): Promise<ArrayBuffer> {
+    const font = await (await fetch(textValue)).arrayBuffer();
     return font;
   }
 }

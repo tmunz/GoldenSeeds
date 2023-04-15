@@ -16,13 +16,15 @@ export class ConfigService {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
     const index = this.findIndexByStageId(stageId);
-    const nextStageItemState = await converterService.convertTextToValue(
-      config.stages[index].generator.definition[groupId][id].type,
-      textValue,
-    );
-    const stageItemState = nextConfig.stages[index].state.data[groupId][id];
-    nextConfig.stages[index].state.data[groupId][id] = { ...stageItemState, ...nextStageItemState };
-    this.config$.next(nextConfig);
+    if (config.stages[index]?.generator) {
+      const nextStageItemState = await converterService.convertTextToValue(
+        config.stages[index].generator.definition[groupId][id].type,
+        textValue,
+      );
+      const stageItemState = nextConfig.stages[index].state.data[groupId][id];
+      nextConfig.stages[index].state.data[groupId][id] = { ...stageItemState, ...nextStageItemState };
+      this.config$.next(nextConfig);
+    }
   }
 
   async setRawConfig(configRaw: any, preconfigIndex = -1) {

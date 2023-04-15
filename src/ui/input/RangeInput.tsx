@@ -1,5 +1,6 @@
 import React from 'react';
 
+import './Input.styl';
 import './RangeInput.styl';
 
 export interface Props<T> {
@@ -8,7 +9,7 @@ export interface Props<T> {
   value?: number;
   output?: string;
   options?: T[];
-  onChange: (value?: T | number) => void;
+  onChange: (value: T) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -23,7 +24,7 @@ export class RangeInput<T> extends React.Component<Props<T>> {
           type="range"
           onChange={(e) => {
             const targetValue = parseFloat(e.target.value);
-            this.props.onChange(this.props.options ? this.props.options[targetValue] : targetValue);
+            this.props.onChange(this.props.options ? this.props.options[targetValue] : targetValue as unknown as T);
           }}
           value={this.props.value}
           min={this.props.min}

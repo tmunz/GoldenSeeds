@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { preconfigs } from '../../preconfigs/index';
-import { Input, InputType } from '../../ui/input/Input';
 import { configService } from '../config/ConfigService';
+import { RangeInput } from '../../ui/input/RangeInput';
 
 interface Props {
   preconfigIndex?: number;
@@ -11,12 +11,11 @@ interface Props {
 export class PreconfigSelector extends React.Component<Props> {
   render() {
     return (
-      <Input
-        type={InputType.RANGE}
+      <RangeInput<number>
         value={this.props.preconfigIndex}
         min={0}
         max={preconfigs.length - 1}
-        onChange={(index: number) => configService.selectPreconfig(index)}
+        onChange={index => configService.selectPreconfig(index)}
       />
     );
   }

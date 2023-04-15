@@ -1,18 +1,19 @@
 import React, { useState, Fragment } from 'react';
-import { Color, COLORS } from '../../datatypes/Color';
+import { CirclePicker } from 'react-color';
+import { Color } from '../../datatypes/Color';
 import AdvancedColorPicker from './color/AdvancedColorPicker';
+import { AnimatedButton } from '../AnimatedButton';
+import { TextInput } from './TextInput';
 
 import './ColorInput.styl';
-import { AnimatedButton } from '../AnimatedButton';
-import { CirclePicker } from 'react-color';
-import { Input } from './Input';
+
 
 export interface Props {
   className?: string;
   label?: string;
-  value?: Color;
+  value: Color | null;
   onChange: (value: string) => void;
-  simple: boolean;
+  simple?: boolean;
 }
 
 export function ColorInput(props: Props) {
@@ -28,7 +29,7 @@ export function ColorInput(props: Props) {
       )}
     />,
     <div>
-      <Input value={props.value?.toRgbHex()} onChange={(value: any) => props.onChange(new Color(value).toRaw())} />
+      <TextInput value={props.value?.toRgbHex()} onChange={(value: any) => props.onChange(new Color(value).toRaw())} />
     </div>,
     <AdvancedColorPicker
       color={props.value?.toRgba()}

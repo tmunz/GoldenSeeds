@@ -38,7 +38,7 @@ export class AnimationService {
     const isComplete = target <= value;
     if (isComplete) {
       this.isAnimating = false;
-      configService.setAnimationValue(stageId, groupId, id);
+      configService.setAnimationValue(stageId, groupId, id, '' + target);
     } else {
       requestAnimationFrame(() => this.animateHelper(stageId, groupId, id, target, tStart));
     }

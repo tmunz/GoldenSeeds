@@ -1,11 +1,4 @@
-import {
-  NumberConverter,
-  ColorConverter,
-  ExpressionConverter,
-  StringConverter,
-  Converter,
-  FontConverter,
-} from './';
+import { NumberConverter, ColorConverter, ExpressionConverter, StringConverter, Converter, FontConverter } from './';
 import { ParamDefinitionType } from '../generator/SvgGenerator';
 import { StageItemState } from '../stage/Stage';
 

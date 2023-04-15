@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { first, filter } from 'rxjs/operators';
 
 import { GoldenSeedsView } from './view/GoldenSeedsView';
 import { configService } from './domain/config/ConfigService';
 import { Config } from './domain/config/Config';
-import { editorStateService } from './domain/editor/EditorStateService';
+import { editorService } from './domain/editor/EditorService';
 import { animationService } from './domain/animation/AnimationService';
 
 export function App() {
@@ -13,13 +14,16 @@ export function App() {
 
   useEffect(() => {
     const preconfigSubscription = configService.preconfigIndex$.subscribe(setPreconfigIndex);
-    const editStageIdSubscription = editorStateService.editStageId$.subscribe(setEditStageId);
+    const editStageIdSubscription = editorService.editStageId$.subscribe(setEditStageId);
     const configSubscription = configService.config$.subscribe(setConfig);
+    configService.config$
+      .pipe(filter((c) => c.stages.length > 1))
+      .pipe(first())
+      .subscribe(() => animationService.animateDefault());
 
     setTimeout(() => {
       const preconfig = new URLSearchParams(window.location.search).get('name');
       configService.selectPreconfigByName(preconfig);
-      animationService.animateDefault();
     }, 500);
 
     return () => {

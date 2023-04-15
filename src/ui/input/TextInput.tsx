@@ -1,5 +1,6 @@
 import React from 'react';
 
+import './Input.styl';
 import './TextInput.styl';
 
 export interface Props {
