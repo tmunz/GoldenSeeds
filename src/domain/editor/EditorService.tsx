@@ -1,27 +1,25 @@
 import { ReactNode } from 'react';
 import { ParamDefinitionType, ParamDefinition } from '../generator/SvgGenerator';
-import { StageItemState } from '../stage/Stage';
-import { ColorEditor } from './ui/ColorEditor';
-import { ExpressionEditor } from './ui/ExpressionEditor';
-import { NumberEditor } from './ui/NumberEditor';
-import { SelectionEditor } from './ui/SelectionEditor';
-import { StringEditor } from './ui/StringEditor';
+import { StageItemState } from '../config/Stage';
+import { ColorEditor } from './editorInput/ColorEditor';
+import { ExpressionEditor } from './editorInput/ExpressionEditor';
+import { NumberEditor } from './editorInput/NumberEditor';
+import { SelectionEditor } from './editorInput/SelectionEditor';
+import { StringEditor } from './editorInput/StringEditor';
 import { BehaviorSubject } from 'rxjs';
-import { EditorInput } from './ui/EditorInput';
-import { FontEditor } from './ui/FontEditor';
-
+import { EditorInput } from './editorInput/EditorInput';
+import { FontEditor } from './editorInput/FontEditor';
 
 export class EditorService {
-
   editStageId$ = new BehaviorSubject<string | null>(null);
 
-  private editorUis: Record<ParamDefinitionType, EditorInput<any>> = {
-    'color': new ColorEditor(),
-    'expression': new ExpressionEditor(),
-    'number': new NumberEditor(),
-    'selection': new SelectionEditor(),
-    'string': new StringEditor(),
-    'font': new FontEditor(), 
+  private editorInputUis: Record<ParamDefinitionType, EditorInput<any>> = {
+    color: new ColorEditor(),
+    expression: new ExpressionEditor(),
+    number: new NumberEditor(),
+    selection: new SelectionEditor(),
+    string: new StringEditor(),
+    font: new FontEditor(),
   };
 
   setEditMode(stageId: string | null) {
@@ -35,7 +33,7 @@ export class EditorService {
     state: StageItemState<T>,
     action: (value: string) => void,
   ): ReactNode {
-    return this.editorUis[type].getEditorInput(name, definition, state, action);
+    return this.editorInputUis[type].getEditorInput(name, definition, state, action);
   }
 }
 

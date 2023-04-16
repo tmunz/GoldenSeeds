@@ -1,5 +1,5 @@
 import { SvgGeneratorResult } from './SvgGenerator';
-import { Stage, StageState } from '../stage/Stage';
+import { Stage, StageState } from '../config/Stage';
 import { PointUtils } from '../../utils/PointUtils';
 import { MapCache } from '../../utils/MapCache';
 

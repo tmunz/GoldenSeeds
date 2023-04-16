@@ -11,7 +11,6 @@ import { TextInput } from '../../ui/input/TextInput';
 
 import './Toolbar.styl';
 
-
 export type ExporterData = {
   svg: string;
   name: string;

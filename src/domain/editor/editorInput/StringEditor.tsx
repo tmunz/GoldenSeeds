@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import { EditorInput } from './EditorInput';
 import { ParamDefinition } from '../../generator/SvgGenerator';
-import { StageItemState } from '../../stage/Stage';
+import { StageItemState } from '../../config/Stage';
 import { TextInput } from '../../../ui/input/TextInput';
 
 export class StringEditor extends EditorInput<string> {

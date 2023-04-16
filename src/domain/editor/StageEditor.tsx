@@ -2,7 +2,7 @@ import React, { ComponentProps, Fragment } from 'react';
 
 import { Collapsable } from '../../ui/Collapsable';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
-import { Stage, StageItemState } from '../stage/Stage';
+import { Stage, StageItemState } from '../config/Stage';
 import { configService } from '../config/ConfigService';
 import { AnimatedButton } from '../../ui/AnimatedButton';
 import { PlusNone, PlusRegular, PlusRotated } from '../../ui/icon/Plus';

@@ -1,5 +1,5 @@
 import { SvgGeneratorResult } from '../generator/SvgGenerator';
-import { Stage } from '../stage/Stage';
+import { Stage } from '../config/Stage';
 import { svgGeneratorService } from '../generator/SvgGeneratorService';
 import { PointUtils } from '../../utils/PointUtils';
 

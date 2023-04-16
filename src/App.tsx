@@ -6,6 +6,7 @@ import { configService } from './domain/config/ConfigService';
 import { Config } from './domain/config/Config';
 import { editorService } from './domain/editor/EditorService';
 import { animationService } from './domain/animation/AnimationService';
+import { fontService } from './domain/font/FontService';
 
 export function App() {
   const [preconfigIndex, setPreconfigIndex] = useState<number>();

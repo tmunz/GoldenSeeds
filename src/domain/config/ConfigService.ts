@@ -5,7 +5,7 @@ import { preconfigs } from '../../preconfigs';
 import { Config } from './Config';
 import { converterService } from '../converter/ConverterService';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
-import { Stage, StageRawState } from '../stage/Stage';
+import { Stage, StageRawState } from './Stage';
 import { SvgGenerator } from '../generator/SvgGenerator';
 
 export class ConfigService {

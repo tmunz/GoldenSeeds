@@ -15,7 +15,7 @@ export class PreconfigSelector extends React.Component<Props> {
         value={this.props.preconfigIndex}
         min={0}
         max={preconfigs.length - 1}
-        onChange={index => configService.selectPreconfig(index)}
+        onChange={(index) => configService.selectPreconfig(index)}
       />
     );
   }

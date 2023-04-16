@@ -1,4 +1,4 @@
-import { StageItemState } from '../stage/Stage';
+import { StageItemState } from '../config/Stage';
 
 export abstract class Converter<T> {
   protected textToValue(textValue: string): T {

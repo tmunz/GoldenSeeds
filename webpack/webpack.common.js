@@ -13,8 +13,7 @@ module.exports = (env) => ({
       test: /\.(j|t)sx?$/,
       loader: 'babel-loader',
     }, {
-      test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-      exclude: /\.icon\.svg$/,
+      test: /\.(ttf|eot|svg|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
       type: 'asset/resource',
     }, {
       test: /\.jpe?g$|\.gif$|\.png$/i,

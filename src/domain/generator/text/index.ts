@@ -19,7 +19,7 @@ export class TextDrawer implements SvgGenerator {
         type: 'string' as const,
       },
       font: {
-        initial: '/signika-bold.otf',
+        initial: 'Signika-Bold',
         type: 'font' as const,
       },
       size: {

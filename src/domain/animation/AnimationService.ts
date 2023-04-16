@@ -1,4 +1,4 @@
-import { AnimationUtils } from '../../utils/AnimationUtils';
+import { AnimationUtils } from './AnimationUtils';
 import { configService } from '../config/ConfigService';
 
 export class AnimationService {

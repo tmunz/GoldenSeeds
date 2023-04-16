@@ -7,7 +7,6 @@ import { TextInput } from './TextInput';
 
 import './ColorInput.styl';
 
-
 export interface Props {
   className?: string;
   label?: string;

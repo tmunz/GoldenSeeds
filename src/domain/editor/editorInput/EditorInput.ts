@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { StageItemState } from '../../stage/Stage';
+import { StageItemState } from '../../config/Stage';
 import { ParamDefinition } from '../../generator/SvgGenerator';
 
 export abstract class EditorInput<T> {
