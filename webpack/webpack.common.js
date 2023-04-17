@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const package = require('../package.json');
 
 module.exports = (env) => ({
@@ -45,8 +46,13 @@ module.exports = (env) => ({
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: path.resolve(__dirname, '..', './public/') }
+      ]
+    }),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '..', './public/index.html'),
+      template: path.resolve(__dirname, '..', './template/index.html'),
     }),
     new webpack.DefinePlugin({
       "process.env": {

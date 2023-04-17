@@ -13,6 +13,6 @@ export const preconfigs = [
   require('./seashell.json'),
   require('./golden-circles.json'),
   require('./hinge-third.json'),
-  require('./christmas-cutout.json'),
   require('./smartify.json'),
+  require('./christmas-cutout.json'),
 ];
