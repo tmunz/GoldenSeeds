@@ -69,11 +69,10 @@ export class FontService {
       dbOpenEvent.addEventListener('upgradeneeded', (event: Event) => {
         const db = (event.target as any).result as IDBDatabase;
         if (!db.objectStoreNames.contains(FontService.DB_TABLE)) {
-          const objectStore = db.createObjectStore(FontService.DB_TABLE, {
+          db.createObjectStore(FontService.DB_TABLE, {
             autoIncrement: false,
             keyPath: FontService.DB_KEY,
           });
-          objectStore.createIndex('data', 'data', { unique: false });
         }
       });
       dbOpenEvent.addEventListener('success', (event: Event) => {

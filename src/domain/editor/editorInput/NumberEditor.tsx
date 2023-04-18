@@ -11,10 +11,11 @@ export class NumberEditor extends EditorInput<number> {
     state: StageItemState<number>,
     action: (value: string) => void,
   ): ReactNode {
+    const value = Number.parseFloat(state.textValue);
     return (
-      <RangeInput
+      <RangeInput<number>
         label={name}
-        value={Number.parseFloat(state.textValue)}
+        value={isFinite(value) ? value : 0}
         onChange={(value) => action(`${value}`)}
         className={state.valid ? '' : 'invalid range-invalid'}
         output={state.textValue}

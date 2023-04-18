@@ -45,9 +45,9 @@ const FontSelector = (props: { name: string; state: StageItemState<number>; acti
       <div>{name}</div>
       <div>{props.state.textValue}</div>
       <div>
-        {fonts.map((font) => (
-          <div>
-            <a onClick={() => props.action(font)}>{font}</a>
+        {fonts.map((fontName) => (
+          <div key={fontName}>
+            <a onClick={() => props.action(fontName)}>{fontName}</a>
           </div>
         ))}
       </div>

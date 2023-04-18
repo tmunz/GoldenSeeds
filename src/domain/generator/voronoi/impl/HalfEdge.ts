@@ -18,8 +18,8 @@ export class HalfEdge {
         )
         : Math.atan2(
           this.getEndpoint()[Point.X] - this.getStartpoint()[Point.X],
-            this.getEndpoint()[Point.Y] - this.getStartpoint()[Point.Y],
-          );
+          this.getEndpoint()[Point.Y] - this.getStartpoint()[Point.Y],
+        );
   }
 
   getStartpoint(): Point {

@@ -15,7 +15,7 @@ export class SelectionEditor extends EditorInput<string> {
     return (
       <RangeInput<string>
         label={name}
-        value={options.indexOf(state.textValue)}
+        value={options.indexOf(state.textValue) ?? ''}
         output={state.textValue}
         onChange={action}
         min={0}

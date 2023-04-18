@@ -20,7 +20,7 @@ export class ExpressionEditor extends EditorInput<
     return (
       <ExtendedRangeInput
         label={name}
-        value={state.textValue}
+        value={state.textValue ?? ''}
         onChange={action}
         className={state.valid ? '' : 'invalid range-invalid'}
         min={(definition as ParamDefinitionMinMaxStep)?.min}

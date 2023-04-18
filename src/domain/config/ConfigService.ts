@@ -1,15 +1,13 @@
 import { BehaviorSubject } from 'rxjs';
 
-import { preconfigs } from '../../preconfigs';
-
 import { Config } from './Config';
 import { converterService } from '../converter/ConverterService';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 import { Stage, StageRawState } from './Stage';
 import { SvgGenerator } from '../generator/SvgGenerator';
+import { RawConfig } from './RawConfig';
 
 export class ConfigService {
-  preconfigIndex$ = new BehaviorSubject<number>(-1);
   config$ = new BehaviorSubject<Config>({ meta: { name: '' }, stages: [] });
 
   async setConfigValue(stageId: string, groupId: string, id: string, textValue: string) {
@@ -27,8 +25,7 @@ export class ConfigService {
     }
   }
 
-  async setRawConfig(configRaw: any, preconfigIndex = -1) {
-    this.preconfigIndex$.next(preconfigIndex);
+  async setRawConfig(configRaw: RawConfig) {
     this.config$.next({
       meta: configRaw.meta,
       stages: await Promise.all(
@@ -38,16 +35,7 @@ export class ConfigService {
       ),
     });
   }
-
-  selectPreconfigByName(name: string | null) {
-    const index = preconfigs.findIndex((p) => p.meta.name === name);
-    this.selectPreconfig(Math.max(0, index));
-  }
-
-  selectPreconfig(preconfigIndex: number) {
-    this.setRawConfig(preconfigs[preconfigIndex], preconfigIndex);
-  }
-
+  
   setName(name: string) {
     this.config$.next({ ...this.config$.value, meta: { name } });
   }

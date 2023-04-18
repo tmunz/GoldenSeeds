@@ -11,7 +11,7 @@ import './GoldenSeedsView.styl';
 
 type Props = {
   config?: Config;
-  preconfigIndex?: number;
+  selectedPreconfig?: string;
   editStageId: string | null;
 };
 
@@ -63,7 +63,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
           )}
           <Toolbar
             config={this.props.config}
-            preconfigIndex={this.props.preconfigIndex}
+            selectedPreconfig={this.props.selectedPreconfig}
             getExporterData={() => {
               return {
                 name: this.props.config?.meta.name ?? 'drawing',

@@ -36,12 +36,12 @@ export function plot(config: FunctionPlotterConfig, grid: Point[]): { svg: strin
         stroke-width="${config.style.strokeWidth(j, config.plot.items)}"
         vector-effect="non-scaling-stroke"
         d="${coordinates.highResolution.reduce((s: string, point: Point, i: number) => {
-          if (i === 0) {
-            return `M ${point[Point.X]}, ${point[Point.Y]} `;
-          } else {
-            return `${s} L ${point[Point.X]}, ${point[Point.Y]} `;
-          }
-        }, '')}" />`;
+    if (i === 0) {
+      return `M ${point[Point.X]}, ${point[Point.Y]} `;
+    } else {
+      return `${s} L ${point[Point.X]}, ${point[Point.Y]} `;
+    }
+  }, '')}" />`;
       return {
         svg: agg.svg + svg,
         points: [...agg.points, ...coordinates.mainPoints],

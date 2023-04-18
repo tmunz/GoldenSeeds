@@ -11,6 +11,6 @@ export class StringEditor extends EditorInput<string> {
     state: StageItemState<string>,
     action: (value: string) => void,
   ): ReactNode {
-    return <TextInput label={name} value={state.textValue} onChange={action} />;
+    return <TextInput label={name} value={state.textValue ?? ''} onChange={action} />;
   }
 }

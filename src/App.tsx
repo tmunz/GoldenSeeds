@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { first, filter } from 'rxjs/operators';
 
 import { GoldenSeedsView } from './view/GoldenSeedsView';
-import { configService } from './domain/config/ConfigService';
+import { preconfigService } from './domain/preconfig/PreconfigService';
 import { Config } from './domain/config/Config';
 import { editorService } from './domain/editor/EditorService';
 import { animationService } from './domain/animation/AnimationService';
-import { fontService } from './domain/font/FontService';
+import { configService } from './domain/config/ConfigService';
 
 export function App() {
-  const [preconfigIndex, setPreconfigIndex] = useState<number>();
+  const [selectedPreconfig, setSelectedPreconfig] = useState<string>();
   const [editStageId, setEditStageId] = useState<string | null>(null);
   const [config, setConfig] = useState<Config>();
 
   useEffect(() => {
-    const preconfigSubscription = configService.preconfigIndex$.subscribe(setPreconfigIndex);
+    const preconfigSubscription = preconfigService.preconfig$.subscribe(setSelectedPreconfig);
     const editStageIdSubscription = editorService.editStageId$.subscribe(setEditStageId);
     const configSubscription = configService.config$.subscribe(setConfig);
     configService.config$
@@ -24,7 +24,7 @@ export function App() {
 
     setTimeout(() => {
       const preconfig = new URLSearchParams(window.location.search).get('name');
-      configService.selectPreconfigByName(preconfig);
+      preconfigService.selectPreconfigByName(preconfig ? preconfig : undefined);
     }, 500);
 
     return () => {
@@ -36,7 +36,7 @@ export function App() {
 
   return (
     <React.Fragment>
-      <GoldenSeedsView preconfigIndex={preconfigIndex} config={config} editStageId={editStageId} />
+      <GoldenSeedsView selectedPreconfig={selectedPreconfig} config={config} editStageId={editStageId} />
       {process.env.APP_VERSION}
     </React.Fragment>
   );

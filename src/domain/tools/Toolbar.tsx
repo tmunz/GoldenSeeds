@@ -3,7 +3,7 @@ import React from 'react';
 import { SvgExporter } from '../svg/SvgExporter';
 import { ConfigExporter } from '../config/ConfigExporter';
 import { ConfigImporter } from '../config/ConfigImporter';
-import { PreconfigSelector } from '../config/PreconfigSelector';
+import { PreconfigSelector } from '../preconfig/PreconfigSelector';
 import { Config } from '../config/Config';
 import { configService } from '../config/ConfigService';
 import { PngExporter } from '../png/PngExporter';
@@ -19,7 +19,7 @@ export type ExporterData = {
 
 interface Props {
   config?: Config;
-  preconfigIndex?: number;
+  selectedPreconfig?: string;
   getExporterData: () => ExporterData;
 }
 
@@ -29,7 +29,7 @@ export class Toolbar extends React.Component<Props> {
     return (
       <div className="toolbar">
         <TextInput value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
-        <PreconfigSelector preconfigIndex={this.props.preconfigIndex} />
+        <PreconfigSelector selectedPreconfig={this.props.selectedPreconfig} />
         <div className="actions">
           <ConfigImporter />
           <ConfigExporter config={this.props.config} />

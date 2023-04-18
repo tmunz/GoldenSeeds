@@ -18,13 +18,14 @@ export interface Props {
 
 export class ExtendedRangeInput extends React.Component<Props> {
   render() {
+    const value = Number.parseFloat(this.props.value);
     return (
       <div className="extended-range-input">
         <TextInput {...this.props} />
-        <RangeInput
+        <RangeInput<number>
           {...{
             ...this.props,
-            value: Number.parseFloat(this.props.value) ?? 0,
+            value: isFinite(value) ? value : 0,
             label: undefined,
             output: undefined,
             onChange: (value) => this.props.onChange(`${value}`),
