@@ -1,16 +1,25 @@
 import React from 'react';
 
-import { Toolbar } from '../domain/tools/Toolbar';
 import { Editor } from '../domain/editor/Editor';
 import { SvgCanvas } from '../domain/svg/SvgCanvas';
 import { Config } from '../domain/config/Config';
 import { Themer } from '../themer/Themer';
 import { svgService } from '../domain/svg/SvgService';
+import { RawConfig } from '../domain/config/RawConfig';
+import { PngExporter } from '../domain/png/PngExporter';
+import { SvgExporter } from '../domain/svg/SvgExporter';
+import { ConfigImporter } from '../domain/config/ConfigImporter';
+import { ConfigExporter } from '../domain/config/ConfigExporter';
+import { configService } from '../domain/config/ConfigService';
+import { TextInput } from '../ui/input/TextInput';
+import { PreconfigSelector } from '../domain/preconfig/PreconfigSelector';
 
 import './GoldenSeedsView.styl';
 
+
 type Props = {
   config?: Config;
+  preconfigs?: { name: string; rawConfig: RawConfig; svg: string; }[];
   selectedPreconfig?: string;
   editStageId: string | null;
 };
@@ -38,6 +47,14 @@ export class GoldenSeedsView extends React.Component<Props, State> {
   }
 
   render() {
+    const name = this.props.config?.meta?.name;
+    const getExporterData = () => {
+      return {
+        name: this.props.config?.meta.name ?? 'drawing',
+        svg: svgService.generateSvg(this.props.config?.stages, 1000, 1000) ?? '',
+        dimensions: { width: 1000, height: 1000 },
+      };
+    };
     return (
       <div className="golden-seeds-view">
         <ErrorBoundary>
@@ -54,6 +71,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
                     this.props.config.stages,
                     this.state.width * 1.04, // must be slightly larger, because of movement
                     this.state.height,
+                    140,
                   )}
                   config={this.props.config}
                 />
@@ -61,17 +79,19 @@ export class GoldenSeedsView extends React.Component<Props, State> {
               <Editor editStageId={this.props.editStageId} config={this.props.config} />
             </React.Fragment>
           )}
-          <Toolbar
-            config={this.props.config}
-            selectedPreconfig={this.props.selectedPreconfig}
-            getExporterData={() => {
-              return {
-                name: this.props.config?.meta.name ?? 'drawing',
-                svg: svgService.generateSvg(this.props.config?.stages, 1000, 1000) ?? '',
-                dimensions: { width: 1000, height: 1000 },
-              };
-            }}
-          />
+
+          <div className="toolbar">
+            <TextInput value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
+            <div className="actions">
+              <ConfigImporter />
+              <ConfigExporter config={this.props.config} />
+              <SvgExporter getData={() => getExporterData()} />
+              <PngExporter getData={() => getExporterData()} />
+            </div>
+            <div className="preconfigs">
+              <PreconfigSelector preconfigs={this.props.preconfigs} selectedPreconfig={this.props.selectedPreconfig} />
+            </div>
+          </div>
           <Themer />
         </ErrorBoundary>
       </div>

@@ -1,29 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import { preconfigService } from '../preconfig/PreconfigService';
 import { RawConfig } from '../config/RawConfig';
 
 interface Props {
+  preconfigs?: { name: string; rawConfig: RawConfig; svg: string; }[];
   selectedPreconfig?: string;
 }
 
 export function PreconfigSelector(props: Props) {
 
-  const [preconfigs, setPreconfigs] = useState<{ name: string, rawConfig: RawConfig }[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      setPreconfigs(await preconfigService.list());
-    })();
-  }, []);
-
   return (
     <div>
-      <div>{props.selectedPreconfig}</div>
+      <div>{/*props.selectedPreconfig*/}</div>
       <div>
-        {preconfigs.map((preconfig) => (
+        {props.preconfigs?.map((preconfig) => (
           <div key={preconfig.name}>
-            <a onClick={() => preconfigService.selectPreconfigByName(preconfig.name)}>{preconfig.name}</a>
+            <a onClick={() => preconfigService.selectPreconfigByName(preconfig.name)}>
+              {preconfig.name}
+              <div dangerouslySetInnerHTML={{ __html: preconfig.svg }} />
+            </a>
           </div>
         ))}
       </div>

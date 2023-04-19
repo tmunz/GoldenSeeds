@@ -23,6 +23,25 @@
     position: absolute;
     top: 20px;
     right: 20px;
+    bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-end;
+    align-content: flex-start;
+    &>.actions {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: flex-start;
+      align-content: flex-start;
+    }
+    &>.preconfigs {
+      margin-top: 20px;
+      overflow: auto;
+    }
   }
 
   &>.themer {

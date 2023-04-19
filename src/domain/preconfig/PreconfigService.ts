@@ -1,42 +1,55 @@
-import { preconfigs } from './data';
 import { configService } from '../config/ConfigService';
 import { BehaviorSubject } from 'rxjs';
 import { RawConfig } from '../config/RawConfig';
+import { svgService } from '../svg/SvgService';
 
 export class PreconfigService {
-  preconfig$ = new BehaviorSubject<string>('golden seeds');
+
+  preconfigs$ = new BehaviorSubject<{ name: string; rawConfig: RawConfig; svg: string; }[]>([]);
+  selectedPreconfig$ = new BehaviorSubject<string>('golden seeds');
 
   private static DB_NAME = 'config';
   private static DB_TABLE = 'configData';
   private static DB_KEY = 'name';
 
   async selectPreconfigByName(name = 'golden seeds') {
-    this.selectPreconfig(await this.get(name));
+    const preconfig = await this.get(name);
+    this.selectPreconfig(preconfig.rawConfig);
   }
 
   selectPreconfig(rawConfig: RawConfig) {
-    this.preconfig$.next(rawConfig.meta.name);
+    this.selectedPreconfig$.next(rawConfig.meta.name);
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('name', rawConfig.meta.name);
+    const newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
+    history.pushState(null, '', newRelativePathQuery);
     configService.setRawConfig(rawConfig);
   }
 
-  save(rawConfig: RawConfig): string {
+  async save(rawConfig: RawConfig, i?: number): Promise<{ name: string; rawConfig: RawConfig; svg: string; }> {
     const name = rawConfig.meta.name;
-    this.database().then((db) => {
-      const transaction = db.transaction([PreconfigService.DB_TABLE], 'readwrite');
-      const objectStore = transaction.objectStore(PreconfigService.DB_TABLE);
-      objectStore.add({ name, data: rawConfig });
+    return new Promise((resolve, reject) => {
+      return this.database().then(async (db) => {
+        const config = await configService.convert(rawConfig);
+        const svg = svgService.generateSvg(config.stages, 100, 100);
+        const transaction = db.transaction([PreconfigService.DB_TABLE], 'readwrite');
+        const objectStore = transaction.objectStore(PreconfigService.DB_TABLE);
+        const data = { name, rawConfig, svg };
+        objectStore.put({ ...data, sortIndex: i });
+        this.preconfigs$.next([...this.preconfigs$.value, data]);
+        resolve(data);
+      }).catch((event) => reject(event));
     });
-    return name;
   }
 
-  async list(): Promise<{ name: string, rawConfig: RawConfig }[]> {
+  async list(): Promise<{ name: string, rawConfig: RawConfig, svg: string }[]> {
     return new Promise((resolve, reject) => {
       this.database().then((db) => {
         const transaction = db.transaction(PreconfigService.DB_TABLE);
         const objectStore = transaction.objectStore(PreconfigService.DB_TABLE);
         const getRequest = objectStore.getAll();
         getRequest.addEventListener('success', (event) => {
-          const list = (event.target as any).result as { name: string, rawConfig: RawConfig, sortIndex: number }[];
+          const list = (event.target as any).result as { name: string, rawConfig: RawConfig, svg: string, sortIndex: number }[];
           resolve(list.sort((a, b) => a.sortIndex - b.sortIndex));
         });
         getRequest.addEventListener('error', (event) => {
@@ -46,14 +59,14 @@ export class PreconfigService {
     });
   }
 
-  private async get(name: string): Promise<RawConfig> {
+  private async get(name: string): Promise<{ name: string, rawConfig: RawConfig, svg: string }> {
     return new Promise((resolve, reject) => {
       this.database().then((db) => {
         const transaction = db.transaction(PreconfigService.DB_TABLE);
         const objectStore = transaction.objectStore(PreconfigService.DB_TABLE);
         const getRequest = objectStore.get(name);
         getRequest.addEventListener('success', (event) => {
-          const data = (event.target as any).result?.rawConfig;
+          const data = (event.target as any).result;
           resolve(data);
         });
         getRequest.addEventListener('error', (event) => {
@@ -74,8 +87,6 @@ export class PreconfigService {
             keyPath: PreconfigService.DB_KEY,
           });
           objectStore.createIndex('sortIndex', 'sortIndex', { unique: true });
-          preconfigs.forEach((preconfig, i) =>
-            objectStore.add({ name: preconfig.meta.name, sortIndex: i, rawConfig: preconfig }));
         }
       });
       dbOpenEvent.addEventListener('success', (event: Event) => {

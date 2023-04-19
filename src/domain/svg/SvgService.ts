@@ -4,12 +4,12 @@ import { svgGeneratorService } from '../generator/SvgGeneratorService';
 import { PointUtils } from '../../utils/PointUtils';
 
 export class SvgService {
-  public generateSvg(stages: Stage[] = [], width: number, height: number) {
+  public generateSvg(stages: Stage[] = [], width: number, height: number, offset = 0) {
     const generatedStages: SvgGeneratorResult[] = [];
     stages.forEach((stage, i) => generatedStages.push(svgGeneratorService.getResult(stage, generatedStages[i - 1])));
 
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-      <g transform="${this.centerAndScale(width, height, this.svgBoundingBox(generatedStages), 140)}">
+      <g transform="${this.centerAndScale(width, height, this.svgBoundingBox(generatedStages), offset)}">
         ${generatedStages.map((stageResult) => stageResult.svg).join('')}
       </g>
     </svg>`;

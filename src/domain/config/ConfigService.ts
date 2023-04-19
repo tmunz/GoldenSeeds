@@ -25,15 +25,19 @@ export class ConfigService {
     }
   }
 
-  async setRawConfig(configRaw: RawConfig) {
-    this.config$.next({
-      meta: configRaw.meta,
+  async setRawConfig(rawConfig: RawConfig) {
+    this.config$.next(await this.convert(rawConfig));
+  }
+
+  async convert(rawConfig: RawConfig) {
+    return {
+      meta: rawConfig.meta,
       stages: await Promise.all(
-        configRaw.stages.map((stageRaw: any) =>
+        rawConfig.stages.map((stageRaw: any) =>
           this.createStage(svgGeneratorRegistry.newInstance(stageRaw.type), stageRaw),
         ),
       ),
-    });
+    }
   }
   
   setName(name: string) {
