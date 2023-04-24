@@ -27,19 +27,19 @@ export class FunctionPlotter implements SvgGenerator {
       },
     },
     plot: {
-      start: {
-        initial: '0',
-        type: 'number' as const,
-        min: -100,
-        max: 100,
-        step: 1,
-        animateable: true,
-      },
       items: {
         initial: '10',
         type: 'number' as const,
         min: 1,
         max: MathUtils.fib(16),
+        step: 1,
+        animateable: true,
+      },
+      start: {
+        initial: '0',
+        type: 'number' as const,
+        min: -100,
+        max: 100,
         step: 1,
         animateable: true,
       },

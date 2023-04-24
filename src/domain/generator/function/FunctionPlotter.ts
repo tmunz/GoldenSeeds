@@ -9,8 +9,8 @@ export interface FunctionPlotterConfig {
     resolution: number;
   };
   plot: {
-    start: number;
     items: number;
+    start: number;
     functionX: (n: number, items: number) => number | number[];
     functionY: (n: number, items: number) => number | number[];
     output: string;

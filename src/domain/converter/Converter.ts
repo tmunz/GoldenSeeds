@@ -9,7 +9,7 @@ export abstract class Converter<T> {
     return Promise.resolve(this.textToValue(textValue));
   }
 
-  convert = async (textValue: string): Promise<Partial<StageItemState<T>>> => {
+  async convert (textValue: string): Promise<Partial<StageItemState<T>>> {
     const value = await this.asyncTextToValue(textValue);
     const valid = typeof value !== 'undefined' && value !== null;
     const converted: Partial<StageItemState<T>> = { textValue, valid };

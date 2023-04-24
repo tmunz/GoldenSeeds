@@ -76,18 +76,20 @@ export class GoldenSeedsView extends React.Component<Props, State> {
                   config={this.props.config}
                 />
               </div>
-              <Editor editStageId={this.props.editStageId} config={this.props.config} />
+              <div className="side-bar">
+                <TextInput value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
+                <div className="actions">
+                  <ConfigImporter />
+                  <ConfigExporter config={this.props.config} />
+                  <SvgExporter getData={() => getExporterData()} />
+                  <PngExporter getData={() => getExporterData()} />
+                </div>
+                <Editor editStageId={this.props.editStageId} config={this.props.config} />
+              </div>
             </React.Fragment>
           )}
 
           <div className="toolbar">
-            <TextInput value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
-            <div className="actions">
-              <ConfigImporter />
-              <ConfigExporter config={this.props.config} />
-              <SvgExporter getData={() => getExporterData()} />
-              <PngExporter getData={() => getExporterData()} />
-            </div>
             <div className="preconfigs">
               <PreconfigSelector preconfigs={this.props.preconfigs} selectedPreconfig={this.props.selectedPreconfig} />
             </div>

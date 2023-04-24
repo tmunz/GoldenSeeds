@@ -5,28 +5,24 @@ export class FontService {
   private static DB_TABLE = 'fontData';
   private static DB_KEY = 'fontName';
 
-  constructor() {
-    this.init();
-  }
-
-  async init() {
-    this.saveBuffer(await (await fetch(require('./signika-bold.otf'))).arrayBuffer());
-  }
-
   async saveFromPath(path: string) {
     const buffer = await (await fetch(path)).arrayBuffer();
     this.saveBuffer(buffer);
   }
 
-  saveBuffer(buffer: ArrayBuffer): string {
-    const font = parse(buffer);
-    const fontName = font.names.fullName.en;
-    this.database().then((db) => {
-      const transaction = db.transaction([FontService.DB_TABLE], 'readwrite');
-      const objectStore = transaction.objectStore(FontService.DB_TABLE);
-      objectStore.add({ fontName, data: buffer });
+  saveBuffer(buffer: ArrayBuffer): Promise<{ fontName: string, font: Font }> {
+    return new Promise((resolve, reject) => {
+      const font = parse(buffer);
+      const fontName = font.names.fullName.en;
+      this.database()
+        .then((db) => {
+          const transaction = db.transaction([FontService.DB_TABLE], 'readwrite');
+          const objectStore = transaction.objectStore(FontService.DB_TABLE);
+          objectStore.add({ fontName, data: buffer });
+          resolve({ fontName, font });
+        })
+        .catch((e) => reject(e));
     });
-    return fontName;
   }
 
   async listFonts(): Promise<string[]> {

@@ -9,6 +9,7 @@ import { animationService } from './domain/animation/AnimationService';
 import { configService } from './domain/config/ConfigService';
 import { preconfigs as predefinedConfigs } from './domain/preconfig/data';
 import { RawConfig } from './domain/config/RawConfig';
+import { fontService } from './domain/font/FontService';
 
 export function App() {
   const [preconfigs, setPreconfigs] = useState<{ name: string; rawConfig: RawConfig; svg: string; }[]>();
@@ -19,6 +20,7 @@ export function App() {
   async function setup() {
     // wait for preconfigs to be loaded, but at least some initial time to animate
     const start = Date.now();
+    await fontService.saveBuffer(await (await fetch(require('./domain/font/signika-bold.otf'))).arrayBuffer());
     let persisted = await preconfigService.list();
     if (persisted.length === 0) {
       await Promise.all(predefinedConfigs.map((preconfig, i) => {

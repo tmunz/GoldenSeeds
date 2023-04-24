@@ -31,13 +31,21 @@ export class PreconfigService {
     return new Promise((resolve, reject) => {
       return this.database().then(async (db) => {
         const config = await configService.convert(rawConfig);
-        const svg = svgService.generateSvg(config.stages, 100, 100);
+        const svg = svgService.generateSvg(config.stages, 1000, 1000);
         const transaction = db.transaction([PreconfigService.DB_TABLE], 'readwrite');
         const objectStore = transaction.objectStore(PreconfigService.DB_TABLE);
         const data = { name, rawConfig, svg };
-        objectStore.put({ ...data, sortIndex: i });
-        this.preconfigs$.next([...this.preconfigs$.value, data]);
-        resolve(data);
+        const putRequest = objectStore.put({ ...data, sortIndex: i });
+        putRequest.addEventListener('success', () => {
+          if (i !== undefined) {
+            const next = [...this.preconfigs$.value];
+            next.splice(i, 0, data);
+            this.preconfigs$.next(next);
+          } else {
+            this.preconfigs$.next([...this.preconfigs$.value, data]);
+          }
+          resolve(data);
+        });
       }).catch((event) => reject(event));
     });
   }

@@ -4,6 +4,6 @@ import { fontService } from '../font/FontService';
 
 export class FontConverter extends Converter<Font> {
   protected async asyncTextToValue(textValue: string): Promise<Font> {
-    return await fontService.get(textValue);
+    return fontService.get(textValue);
   }
 }
