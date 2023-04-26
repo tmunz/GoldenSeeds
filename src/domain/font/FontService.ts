@@ -12,16 +12,19 @@ export class FontService {
 
   saveBuffer(buffer: ArrayBuffer): Promise<{ fontName: string, font: Font }> {
     return new Promise((resolve, reject) => {
-      const font = parse(buffer);
-      const fontName = font.names.fullName.en;
       this.database()
         .then((db) => {
+          const font = parse(buffer);
+          const fontName = font.names.fullName.en;
           const transaction = db.transaction([FontService.DB_TABLE], 'readwrite');
           const objectStore = transaction.objectStore(FontService.DB_TABLE);
           objectStore.add({ fontName, data: buffer });
           resolve({ fontName, font });
         })
-        .catch((e) => reject(e));
+        .catch((e) => {
+          console.warn('font could not be saved');
+          reject(e);
+        });
     });
   }
 
@@ -35,9 +38,9 @@ export class FontService {
           const list = (event.target as any).result;
           resolve(list);
         });
-        getRequest.addEventListener('error', (event) => {
-          reject(event);
-        });
+      }).catch(() => {
+        console.warn('fonts could not be loaded');
+        resolve([]);
       });
     });
   }
@@ -52,9 +55,10 @@ export class FontService {
           const data = (event.target as any).result?.data;
           resolve(parse(data));
         });
-        getRequest.addEventListener('error', (event) => {
-          reject(event);
-        });
+      }).catch(async () => {
+        console.warn(`font ${fontName} could not be loaded use default`);
+        const data = await (await fetch(require('./signika-bold.otf'))).arrayBuffer();
+        resolve(parse(data));
       });
     });
   }
@@ -74,6 +78,9 @@ export class FontService {
       dbOpenEvent.addEventListener('success', (event: Event) => {
         const db = (event.target as any).result as IDBDatabase;
         resolve(db);
+      });
+      dbOpenEvent.addEventListener('error', (event: Event) => {
+        reject(event);
       });
     });
   }

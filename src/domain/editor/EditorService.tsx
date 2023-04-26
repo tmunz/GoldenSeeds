@@ -11,7 +11,6 @@ import { EditorInput } from './editorInput/EditorInput';
 import { FontEditor } from './editorInput/FontEditor';
 
 export class EditorService {
-  editStageId$ = new BehaviorSubject<string | null>(null);
 
   private editorInputUis: Record<ParamDefinitionType, EditorInput<any>> = {
     color: new ColorEditor(),
@@ -21,10 +20,6 @@ export class EditorService {
     string: new StringEditor(),
     font: new FontEditor(),
   };
-
-  setEditMode(stageId: string | null) {
-    this.editStageId$.next(stageId);
-  }
 
   getEditorInput<T>(
     type: ParamDefinitionType,

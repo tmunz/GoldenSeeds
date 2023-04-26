@@ -17,9 +17,10 @@ export interface Props extends ComponentProps<'div'> {
   stagesTotal: number;
   editMode: boolean;
   dragHandleProps: any;
+  setEditMode: (id: string | null) => void;
 }
 
-export function StageEditor({ stage, i, stagesTotal, editMode, dragHandleProps }: Props) {
+export function StageEditor({ stage, i, stagesTotal, editMode, dragHandleProps, setEditMode }: Props) {
   const types = svgGeneratorRegistry.types;
 
   const generateEntryModifier = (
@@ -50,7 +51,7 @@ export function StageEditor({ stage, i, stagesTotal, editMode, dragHandleProps }
   return (
     <div key={stage.id} className="stage" id={'stage-' + stage.id}>
       <div className="stage-header" {...dragHandleProps}>
-        <h1 className="action" onClick={() => editorService.setEditMode(editMode ? null : stage.id)}>
+        <h1 className="action" onClick={() => setEditMode(editMode ? null : stage.id)}>
           {stage.generator.type}
         </h1>
         <div className="controls">

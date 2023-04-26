@@ -12,7 +12,7 @@
     z-index: -1;
   }
 
-  &>.side-bar {
+  &>.sidebar {
     position: absolute;
     top: 0;
     left: 0;
@@ -26,32 +26,40 @@
     justify-content: flex-start;
     align-items: flex-start;
     align-content: flex-start;
+    transition: all 0.5s ease-in-out;
+    clip-path: circle(80%);
 
-    &:before {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      backdrop-filter: blur(6px);
-      mask: linear-gradient(-90deg, transparent, black 80%);
+    &.hidden {
+      clip-path: circle(25px at 33px 42px);
     }
 
-    &>.actions {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      align-items: flex-start;
-      align-content: flex-start;
-      margin-bottom: 20px;
-    }
+    &>.sidebar-content {
+      &:before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        backdrop-filter: blur(4px);
+        /*mask: linear-gradient(-90deg, transparent, black 80%);*/
+      }
 
-    &>.editor {
-      margin-left: -10px;
-      padding-left: 10px;
+      &>.actions {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+        align-content: flex-start;
+        margin-bottom: 20px;
+      }
+
+      &>.editor {
+        margin-left: -10px;
+        padding-left: 10px;
+      }
     }
   }
 
@@ -79,8 +87,8 @@
       left: 0;
       right: 0;
       bottom: 0;
-      backdrop-filter: blur(6px);
-      mask: linear-gradient(90deg, transparent, black 80%);
+      backdrop-filter: blur(4px);
+      /* mask: linear-gradient(90deg, transparent, black 80%);*/
     }
 
     &>* {

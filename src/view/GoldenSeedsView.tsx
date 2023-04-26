@@ -13,6 +13,8 @@ import { ConfigExporter } from '../domain/config/ConfigExporter';
 import { configService } from '../domain/config/ConfigService';
 import { TextInput } from '../ui/input/TextInput';
 import { PreconfigSelector } from '../domain/preconfig/PreconfigSelector';
+import { AnimatedButton } from '../ui/AnimatedButton';
+import { EditorNone, EditorClose, EditorRegular } from '../ui/icon/Editor';
 
 import './GoldenSeedsView.styl';
 
@@ -21,12 +23,13 @@ type Props = {
   config?: Config;
   preconfigs?: { name: string; rawConfig: RawConfig; svg: string; }[];
   selectedPreconfig?: string;
-  editStageId: string | null;
 };
 
 interface State {
   width: number;
   height: number;
+  editMode: string | null;
+  sidebarOpen: boolean;
 }
 
 export class GoldenSeedsView extends React.Component<Props, State> {
@@ -34,6 +37,8 @@ export class GoldenSeedsView extends React.Component<Props, State> {
     super(props);
     this.state = {
       ...this.dimension,
+      editMode: null,
+      sidebarOpen: true,
     };
   }
 
@@ -63,7 +68,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
               <div
                 className="canvas"
                 style={{
-                  left: this.props.editStageId !== null ? '52vw' : '50vw',
+                  left: this.state.editMode !== null ? '52vw' : '50vw',
                 }}
               >
                 <SvgCanvas
@@ -76,15 +81,23 @@ export class GoldenSeedsView extends React.Component<Props, State> {
                   config={this.props.config}
                 />
               </div>
-              <div className="side-bar">
-                <TextInput value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
-                <div className="actions">
-                  <ConfigImporter />
-                  <ConfigExporter config={this.props.config} />
-                  <SvgExporter getData={() => getExporterData()} />
-                  <PngExporter getData={() => getExporterData()} />
+              <div className={["sidebar", this.state.sidebarOpen ? '' : 'hidden'].join(" ")}>
+                <AnimatedButton
+                  points={[EditorNone, EditorClose, EditorRegular]}
+                  useAsToggle
+                  iconText="editor"
+                  onClick={(active) => this.setState({ sidebarOpen: active ?? true })}
+                />
+                <div className="sidebar-content">
+                  <TextInput value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
+                  <div className="actions">
+                    <ConfigImporter />
+                    <ConfigExporter config={this.props.config} />
+                    <SvgExporter getData={() => getExporterData()} />
+                    <PngExporter getData={() => getExporterData()} />
+                  </div>
+                  <Editor editStageId={this.state.editMode} setEditMode={(stageId) => this.setState({ editMode: stageId })} config={this.props.config} />
                 </div>
-                <Editor editStageId={this.props.editStageId} config={this.props.config} />
               </div>
             </React.Fragment>
           )}

@@ -14,13 +14,13 @@ import { fontService } from './domain/font/FontService';
 export function App() {
   const [preconfigs, setPreconfigs] = useState<{ name: string; rawConfig: RawConfig; svg: string; }[]>();
   const [selectedPreconfig, setSelectedPreconfig] = useState<string>();
-  const [editStageId, setEditStageId] = useState<string | null>(null);
   const [config, setConfig] = useState<Config>();
 
   async function setup() {
     // wait for preconfigs to be loaded, but at least some initial time to animate
     const start = Date.now();
-    await fontService.saveBuffer(await (await fetch(require('./domain/font/signika-bold.otf'))).arrayBuffer());
+    const buffer = await (await fetch(require('./domain/font/signika-bold.otf'))).arrayBuffer();
+    await fontService.saveBuffer(buffer).catch(() => {});
     let persisted = await preconfigService.list();
     if (persisted.length === 0) {
       await Promise.all(predefinedConfigs.map((preconfig, i) => {
@@ -38,7 +38,6 @@ export function App() {
   useEffect(() => {
     const preconfigsSubsription = preconfigService.preconfigs$.subscribe(setPreconfigs);
     const selectedPreconfigSubscription = preconfigService.selectedPreconfig$.subscribe(setSelectedPreconfig);
-    const editStageIdSubscription = editorService.editStageId$.subscribe(setEditStageId);
     const configSubscription = configService.config$.subscribe(setConfig);
     configService.config$
       .pipe(filter((c) => c.stages.length > 1))
@@ -50,7 +49,6 @@ export function App() {
     return () => {
       preconfigsSubsription.unsubscribe();
       selectedPreconfigSubscription.unsubscribe();
-      editStageIdSubscription.unsubscribe();
       configSubscription.unsubscribe();
     };
   }, []);
@@ -61,7 +59,6 @@ export function App() {
         preconfigs={preconfigs}
         selectedPreconfig={selectedPreconfig}
         config={config}
-        editStageId={editStageId}
       />
       {process.env.APP_VERSION}
     </React.Fragment>

@@ -51,22 +51,30 @@ button,
   color: var(--errorColor);
 }
 
-*::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--textColor) var(--backgroundColor);
+
+  &::hover {
+    scrollbar-color: var(--accentColor) var(--backgroundColor) ;
   }
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
 
 *::-webkit-scrollbar-track {
-    background: var(--backgroundColor);
-    border-radius: 5px;
-  }
+  background: var(--backgroundColor);
+  border-radius: 5px;
+}
 
 *::-webkit-scrollbar-thumb {
-    background: var(--textColor);
-    border-radius: 5px;
-  }
+  background: var(--textColor);
+  border-radius: 5px;
+}
 
 *::-webkit-scrollbar-thumb:hover {
-    background: var(--accentColor);
-  }
-
+  background: var(--accentColor);
+}

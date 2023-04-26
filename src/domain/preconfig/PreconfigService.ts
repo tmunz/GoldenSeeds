@@ -46,12 +46,12 @@ export class PreconfigService {
           }
           resolve(data);
         });
-      }).catch((event) => reject(event));
+      }).catch(() => resolve());
     });
   }
 
   async list(): Promise<{ name: string, rawConfig: RawConfig, svg: string }[]> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.database().then((db) => {
         const transaction = db.transaction(PreconfigService.DB_TABLE);
         const objectStore = transaction.objectStore(PreconfigService.DB_TABLE);
@@ -60,15 +60,15 @@ export class PreconfigService {
           const list = (event.target as any).result as { name: string, rawConfig: RawConfig, svg: string, sortIndex: number }[];
           resolve(list.sort((a, b) => a.sortIndex - b.sortIndex));
         });
-        getRequest.addEventListener('error', (event) => {
-          reject(event);
-        });
+      }).catch(() => {
+        console.warn('preconfigs could not be loaded');
+        resolve([]);
       });
     });
   }
 
   private async get(name: string): Promise<{ name: string, rawConfig: RawConfig, svg: string }> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.database().then((db) => {
         const transaction = db.transaction(PreconfigService.DB_TABLE);
         const objectStore = transaction.objectStore(PreconfigService.DB_TABLE);
@@ -77,9 +77,13 @@ export class PreconfigService {
           const data = (event.target as any).result;
           resolve(data);
         });
-        getRequest.addEventListener('error', (event) => {
-          reject(event);
-        });
+      }).catch(async () => {
+        console.warn('preconfig could not be found, use fallback')
+        const rawConfig = require('./data/golden-seeds.json') as RawConfig;
+        const config = await configService.convert(rawConfig);
+        const svg = svgService.generateSvg(config.stages, 1000, 1000);
+        const data = { name, rawConfig, svg };
+        resolve(data);
       });
     });
   }
@@ -100,6 +104,9 @@ export class PreconfigService {
       dbOpenEvent.addEventListener('success', (event: Event) => {
         const db = (event.target as any).result as IDBDatabase;
         resolve(db);
+      });
+      dbOpenEvent.addEventListener('error', (event: Event) => {
+        reject(event);
       });
     });
   }
