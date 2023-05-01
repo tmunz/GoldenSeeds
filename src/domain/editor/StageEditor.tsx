@@ -1,4 +1,4 @@
-import React, { ComponentProps, Fragment } from 'react';
+import React, { ComponentProps, Fragment, useState } from 'react';
 
 import { Collapsable } from '../../ui/Collapsable';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
@@ -15,12 +15,13 @@ export interface Props extends ComponentProps<'div'> {
   stage: Stage;
   i: number;
   stagesTotal: number;
-  editMode: boolean;
   dragHandleProps: any;
-  setEditMode: (id: string | null) => void;
 }
 
-export function StageEditor({ stage, i, stagesTotal, editMode, dragHandleProps, setEditMode }: Props) {
+export function StageEditor({ stage, i, stagesTotal, dragHandleProps }: Props) {
+
+  const [editMode, setEditMode] = useState<string | null>(null);
+
   const types = svgGeneratorRegistry.types;
 
   const generateEntryModifier = (
@@ -70,7 +71,7 @@ export function StageEditor({ stage, i, stagesTotal, editMode, dragHandleProps, 
           </a>
         </div>
       </div>
-      <Collapsable key={stage.id} show={editMode}>
+      <Collapsable key={stage.id} show={editMode === stage.id}>
         <RangeInput<number>
           label="type"
           output={stage.generator.type}

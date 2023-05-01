@@ -1,11 +1,45 @@
 .preconfig-selector {
-  .preconfig-item {
-    text-align: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+
+  &>.preconfig-prev,
+  &>.preconfig-next {
+    backdrop-filter: blur(4px);
     padding: 5px;
-    .preview {
-      display: block;
-      width: 100px;
+
+    .animated-icon {
+      height: 30px;
+      width: 30px;
     }
-    margin-bottom: 20px;
+  }
+
+  .preconfig-overview {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    .preconfig-item {
+      text-align: center;
+      padding: 5px;
+
+      .preview {
+        display: block;
+        width: 100px;
+      }
+    }
   }
 }

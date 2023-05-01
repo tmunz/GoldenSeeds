@@ -5,16 +5,23 @@ import { svgService } from '../svg/SvgService';
 
 export class PreconfigService {
 
-  preconfigs$ = new BehaviorSubject<{ name: string; rawConfig: RawConfig; svg: string; }[]>([]);
+  preconfigs$ = new BehaviorSubject<{ name: string; rawConfig: RawConfig; svg: string; sortIndex: number; }[]>([]);
   selectedPreconfig$ = new BehaviorSubject<string>('golden seeds');
 
   private static DB_NAME = 'config';
   private static DB_TABLE = 'configData';
   private static DB_KEY = 'name';
 
-  async selectPreconfigByName(name = 'golden seeds') {
+  async selectByName(name = 'golden seeds') {
     const preconfig = await this.get(name);
     this.selectPreconfig(preconfig.rawConfig);
+  }
+
+  async selectNext(dir: number) {
+    const index = (await this.get(this.selectedPreconfig$.value)).sortIndex;
+    const list = await this.list();
+    const nextIndex = (index + dir + list.length) % list.length;
+    this.selectPreconfig(list[nextIndex].rawConfig);
   }
 
   selectPreconfig(rawConfig: RawConfig) {
@@ -26,7 +33,7 @@ export class PreconfigService {
     configService.setRawConfig(rawConfig);
   }
 
-  async save(rawConfig: RawConfig, i?: number): Promise<{ name: string; rawConfig: RawConfig; svg: string; }> {
+  async save(rawConfig: RawConfig, i?: number): Promise<{ name: string; rawConfig: RawConfig; svg: string; sortIndex: number; }> {
     const name = rawConfig.meta.name;
     return new Promise((resolve, reject) => {
       return this.database().then(async (db) => {
@@ -34,8 +41,8 @@ export class PreconfigService {
         const svg = svgService.generateSvg(config.stages, 1000, 1000);
         const transaction = db.transaction([PreconfigService.DB_TABLE], 'readwrite');
         const objectStore = transaction.objectStore(PreconfigService.DB_TABLE);
-        const data = { name, rawConfig, svg };
-        const putRequest = objectStore.put({ ...data, sortIndex: i });
+        const data = { name, rawConfig, svg, sortIndex: i ?? 0 };
+        const putRequest = objectStore.put({ ...data });
         putRequest.addEventListener('success', () => {
           if (i !== undefined) {
             const next = [...this.preconfigs$.value];
@@ -67,7 +74,7 @@ export class PreconfigService {
     });
   }
 
-  private async get(name: string): Promise<{ name: string, rawConfig: RawConfig, svg: string }> {
+  private async get(name: string): Promise<{ name: string, rawConfig: RawConfig, svg: string; sortIndex: number; }> {
     return new Promise((resolve) => {
       this.database().then((db) => {
         const transaction = db.transaction(PreconfigService.DB_TABLE);
@@ -82,7 +89,7 @@ export class PreconfigService {
         const rawConfig = require('./data/golden-seeds.json') as RawConfig;
         const config = await configService.convert(rawConfig);
         const svg = svgService.generateSvg(config.stages, 1000, 1000);
-        const data = { name, rawConfig, svg };
+        const data = { name, rawConfig, svg, sortIndex: 0 };
         resolve(data);
       });
     });

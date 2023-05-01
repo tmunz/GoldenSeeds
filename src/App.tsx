@@ -4,7 +4,6 @@ import { first, filter } from 'rxjs/operators';
 import { GoldenSeedsView } from './view/GoldenSeedsView';
 import { preconfigService } from './domain/preconfig/PreconfigService';
 import { Config } from './domain/config/Config';
-import { editorService } from './domain/editor/EditorService';
 import { animationService } from './domain/animation/AnimationService';
 import { configService } from './domain/config/ConfigService';
 import { preconfigs as predefinedConfigs } from './domain/preconfig/data';
@@ -31,7 +30,7 @@ export function App() {
     setPreconfigs(persisted);
     setTimeout(() => {
       const preconfig = new URLSearchParams(window.location.search).get('name');
-      preconfigService.selectPreconfigByName(preconfig ? preconfig : undefined);
+      preconfigService.selectByName(preconfig ? preconfig : undefined);
     }, Math.max(0, 500 - (Date.now() - start)));
   };
 

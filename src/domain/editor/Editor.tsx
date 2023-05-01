@@ -11,8 +11,6 @@ import './Editor.styl';
 
 interface Props {
   config: Config;
-  editStageId: string | null;
-  setEditMode: (editStageId: string | null) => void;
 }
 
 export class Editor extends React.Component<Props> {
@@ -39,8 +37,6 @@ export class Editor extends React.Component<Props> {
                             stage={stage}
                             stagesTotal={this.props.config.stages.length}
                             i={i}
-                            editMode={this.props.editStageId === stage.id}
-                            setEditMode={this.props.setEditMode}
                           ></StageEditor>
                         </div>
                       )}

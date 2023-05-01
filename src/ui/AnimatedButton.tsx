@@ -35,8 +35,6 @@ export class AnimatedButton extends React.Component<Props, State> {
       <div
         className={['animated-button', this.state.active ? 'active' : ''].join(' ')}
         onClick={() => this.handleClick()}
-        onMouseOver={() => !this.props.useAsToggle && this.setState({ active: true })}
-        onMouseOut={() => !this.props.useAsToggle && this.setState({ active: false })}
       >
         <div className="tooltip">{this.props.title}</div>
         <div className="icon-text">{this.props.iconText}</div>
@@ -50,8 +48,14 @@ export class AnimatedButton extends React.Component<Props, State> {
   }
 
   handleClick(): void {
-    this.setState(state => ({ active: !state.active }), () => {
-      this.props.onClick && this.props.onClick(!this.state.active);
+    this.setState(state => {
+      return { active: !state.active };
+    }, () => {
+      const active = this.state.active;
+      this.props.onClick && this.props.onClick(active);
+      if (!this.props.useAsToggle) {
+        setTimeout(() => this.setState({ active: !active }), 500);
+      }
     });
   }
 }

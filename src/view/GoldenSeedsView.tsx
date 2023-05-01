@@ -28,8 +28,7 @@ type Props = {
 interface State {
   width: number;
   height: number;
-  editMode: string | null;
-  sidebarOpen: boolean;
+  editMode: boolean;
 }
 
 export class GoldenSeedsView extends React.Component<Props, State> {
@@ -37,8 +36,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
     super(props);
     this.state = {
       ...this.dimension,
-      editMode: null,
-      sidebarOpen: true,
+      editMode: true,
     };
   }
 
@@ -68,7 +66,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
               <div
                 className="canvas"
                 style={{
-                  left: this.state.editMode !== null ? '52vw' : '50vw',
+                  left: this.state.editMode ? '52vw' : '50vw',
                 }}
               >
                 <SvgCanvas
@@ -81,12 +79,12 @@ export class GoldenSeedsView extends React.Component<Props, State> {
                   config={this.props.config}
                 />
               </div>
-              <div className={["sidebar", this.state.sidebarOpen ? '' : 'hidden'].join(" ")}>
+              <div className={["sidebar", this.state.editMode ? '' : 'hidden'].join(" ")}>
                 <AnimatedButton
                   points={[EditorNone, EditorClose, EditorRegular]}
                   useAsToggle
                   iconText="editor"
-                  onClick={(active) => this.setState({ sidebarOpen: active ?? true })}
+                  onClick={(active) => this.setState({ editMode: !active })}
                 />
                 <div className="sidebar-content">
                   <TextInput value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
@@ -96,16 +94,14 @@ export class GoldenSeedsView extends React.Component<Props, State> {
                     <SvgExporter getData={() => getExporterData()} />
                     <PngExporter getData={() => getExporterData()} />
                   </div>
-                  <Editor editStageId={this.state.editMode} setEditMode={(stageId) => this.setState({ editMode: stageId })} config={this.props.config} />
+                  <Editor config={this.props.config} />
                 </div>
               </div>
             </React.Fragment>
           )}
 
-          <div className="toolbar">
-            <div className="preconfigs">
-              <PreconfigSelector preconfigs={this.props.preconfigs} selectedPreconfig={this.props.selectedPreconfig} />
-            </div>
+          <div className="preconfig-bar">
+            <PreconfigSelector preconfigs={this.props.preconfigs} selectedPreconfig={this.props.selectedPreconfig} />
           </div>
           <Themer />
         </ErrorBoundary>

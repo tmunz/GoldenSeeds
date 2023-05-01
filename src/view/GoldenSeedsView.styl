@@ -9,11 +9,12 @@
     position: relative;
     transition: left 1.2s ease;
     transform: translate(-50%, 0);
-    z-index: -1;
+    z-index: 0;
   }
 
   &>.sidebar {
     position: absolute;
+    z-index: 2;
     top: 0;
     left: 0;
     bottom: 0;
@@ -63,43 +64,20 @@
     }
   }
 
-  &>.toolbar {
+  &>.preconfig-bar {
+    z-index: 1;
     position: absolute;
-    top: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
     right: 0;
-    bottom: 0;
-    padding-top: 20px;
-    padding-right: 10px;
-    padding-left: 20px;
-    padding-bottom: 100px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: flex-end;
-    align-content: flex-start;
-
-    &:before {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      backdrop-filter: blur(4px);
-      /* mask: linear-gradient(90deg, transparent, black 80%);*/
-    }
-
-    &>* {
-      overflow: auto;
-    }
   }
 
   &>.themer {
     position: absolute;
-    bottom: 20px;
-    right: 20px;
+    bottom: 0;
+    right: 0;
 
     h1 {
       text-align: right;
