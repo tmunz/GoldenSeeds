@@ -3,13 +3,14 @@
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
   align-content: center;
 
   &>.preconfig-prev,
   &>.preconfig-next {
-    backdrop-filter: blur(4px);
+    background: var(--backgroundColor);
     padding: 5px;
+    padding-top: 35px;
 
     .animated-icon {
       height: 30px;
@@ -26,7 +27,28 @@
     width: 100%;
     backdrop-filter: blur(4px);
     opacity: 0;
+    overflow: hidden;
     transition: all 0.5s ease-in-out;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 50px;
+      background: linear-gradient(to right, var(--backgroundColor), transparent);
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 50px;
+      background: linear-gradient(to left, var(--backgroundColor), transparent);
+    }
 
     &:hover {
       opacity: 1;
