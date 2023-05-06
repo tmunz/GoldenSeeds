@@ -12,9 +12,9 @@ import { ConfigSaver } from '../domain/config/ConfigSaver';
 import { ConfigResetter } from '../domain/config/ConfigResetter';
 import { ConfigImporter } from '../domain/config/ConfigImporter';
 import { ConfigExporter } from '../domain/config/ConfigExporter';
+import { ConfigSelector } from '../domain/config/ConfigSelector';
 import { configService } from '../domain/config/ConfigService';
 import { TextInput } from '../ui/input/TextInput';
-import { PreconfigSelector } from '../domain/preconfig/PreconfigSelector';
 import { AnimatedButton } from '../ui/AnimatedButton';
 import { EditorNone, EditorClose, EditorRegular } from '../ui/icon/Editor';
 
@@ -22,9 +22,9 @@ import './GoldenSeedsView.styl';
 
 
 type Props = {
-  config?: Config;
-  preconfigs?: { name: string; rawConfig: RawConfig; svg: string; }[];
-  selectedPreconfig?: string;
+  configs: { name: string; rawConfig: RawConfig; svg: string | null; }[];
+  configsManageable: boolean;
+  activeConfig?: Config;
 };
 
 interface State {
@@ -52,18 +52,18 @@ export class GoldenSeedsView extends React.Component<Props, State> {
   }
 
   render() {
-    const name = this.props.config?.meta?.name;
+    const name = this.props.activeConfig?.meta?.name;
     const getExporterData = () => {
       return {
-        name: this.props.config?.meta.name ?? 'drawing',
-        svg: svgService.generateSvg(this.props.config?.stages, 1000, 1000) ?? '',
+        name: this.props.activeConfig?.meta.name ?? 'drawing',
+        svg: svgService.generateSvg(this.props.activeConfig?.stages, 1000, 1000) ?? '',
         dimensions: { width: 1000, height: 1000 },
       };
     };
     return (
       <div className="golden-seeds-view">
         <ErrorBoundary>
-          {this.props.config && (
+          {this.props.activeConfig && (
             <React.Fragment>
               <div
                 className="canvas"
@@ -73,12 +73,12 @@ export class GoldenSeedsView extends React.Component<Props, State> {
               >
                 <SvgCanvas
                   svgContent={svgService.generateSvg(
-                    this.props.config.stages,
+                    this.props.activeConfig.stages,
                     this.state.width * 1.04, // must be slightly larger, because of movement
                     this.state.height,
                     140,
                   )}
-                  config={this.props.config}
+                  config={this.props.activeConfig}
                 />
               </div>
               <div className={["sidebar", this.state.editMode ? '' : 'hidden'].join(" ")}>
@@ -89,22 +89,30 @@ export class GoldenSeedsView extends React.Component<Props, State> {
                 />
                 <TextInput value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
                 <div className="actions">
-                  <ConfigSaver config={this.props.config} />
-                  <ConfigResetter name={this.props.config.meta.name} />
-                  |
+                  {this.props.configsManageable &&
+                    <React.Fragment>
+                      <ConfigSaver config={this.props.activeConfig} />
+                      <ConfigResetter name={this.props.activeConfig.meta.name} />
+                      |
+                    </React.Fragment>
+                  }
                   <ConfigImporter />
-                  <ConfigExporter config={this.props.config} />
-                  |
-                  <SvgExporter getData={() => getExporterData()} />
-                  <PngExporter getData={() => getExporterData()} />
+                  {this.props.activeConfig &&
+                    <React.Fragment>
+                      <ConfigExporter config={this.props.activeConfig} />
+                      |
+                      <SvgExporter getData={() => getExporterData()} />
+                      <PngExporter getData={() => getExporterData()} />
+                    </React.Fragment>
+                  }
                 </div>
-                <Editor config={this.props.config} />
+                <Editor config={this.props.activeConfig} />
               </div>
             </React.Fragment>
           )}
 
           <div className="preconfig-bar">
-            <PreconfigSelector preconfigs={this.props.preconfigs} selectedPreconfig={this.props.selectedPreconfig} />
+            <ConfigSelector configs={this.props.configs} selectedConfig={this.props.activeConfig?.meta.name} />
           </div>
           <Themer />
         </ErrorBoundary>

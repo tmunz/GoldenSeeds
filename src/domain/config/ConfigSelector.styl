@@ -1,4 +1,4 @@
-.preconfig-selector {
+.config-selector {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -7,8 +7,8 @@
   align-content: center;
   user-select: none;
 
-  &>.preconfig-prev,
-  &>.preconfig-next {
+  &>.config-prev,
+  &>.config-next {
     background: unquote('rgb(var(--backgroundColor))');
 
     padding: 5px;
@@ -23,7 +23,7 @@
     }
   }
 
-  .preconfig-overview {
+  .config-overview {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -51,7 +51,7 @@
       opacity: 1;
     }
 
-    .preconfig-item {
+    .config-item {
       position: absolute;
       backface-visibility: hidden;
       transition: all 0.3s cubic-bezier(0.75, 0, 0.75, 0);

@@ -32,7 +32,7 @@ export class Stage {
         boundingBox: prev.boundingBox,
       }),
     };
-    this.state = this.getFromRaw(rawState.type, rawState.data, this.generator.definition);
+    this.state = this.getFromRaw(this.generator.type, rawState.data, this.generator.definition);
   }
 
   async convertTextToValues(): Promise<Stage> {

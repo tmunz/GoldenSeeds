@@ -26,18 +26,7 @@ export class ConfigService {
   }
 
   async setRawConfig(rawConfig: RawConfig) {
-    this.config$.next(await this.convert(rawConfig));
-  }
-
-  async convert(rawConfig: RawConfig) {
-    return {
-      meta: rawConfig.meta,
-      stages: await Promise.all(
-        rawConfig.stages.map((stageRaw: any) =>
-          this.createStage(svgGeneratorRegistry.newInstance(stageRaw.type), stageRaw),
-        ),
-      ),
-    }
+    this.config$.next(await ConfigService.convert(rawConfig));
   }
 
   setName(name: string) {
@@ -47,7 +36,7 @@ export class ConfigService {
   async setType(stageId: string, type: string) {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
-    nextConfig.stages[this.findIndexByStageId(stageId)] = await this.createStage(
+    nextConfig.stages[this.findIndexByStageId(stageId)] = await ConfigService.createStage(
       svgGeneratorRegistry.newInstance(type),
       undefined,
       stageId,
@@ -73,7 +62,7 @@ export class ConfigService {
   async addStage(): Promise<void> {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
-    nextConfig.stages.push(await this.createStage(svgGeneratorRegistry.getDefaultGenerator()));
+    nextConfig.stages.push(await ConfigService.createStage(svgGeneratorRegistry.getDefaultGenerator()));
     this.config$.next(nextConfig);
   }
 
@@ -85,7 +74,18 @@ export class ConfigService {
     return this.config$.value.stages.findIndex((s) => s.id === stageId);
   }
 
-  private async createStage(
+  static async convert(rawConfig: RawConfig): Promise<Config> {
+    return {
+      meta: rawConfig.meta,
+      stages: await Promise.all(
+        rawConfig.stages.map((stageRaw: any) =>
+          ConfigService.createStage(svgGeneratorRegistry.newInstance(stageRaw.type), stageRaw),
+        ),
+      ),
+    }
+  }
+
+  private static async createStage(
     generator: SvgGenerator | null,
     rawState?: StageRawState,
     stageId?: string,

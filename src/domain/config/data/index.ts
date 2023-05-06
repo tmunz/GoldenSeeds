@@ -1,4 +1,6 @@
-export const preconfigs = [
+import { RawConfig } from "../RawConfig";
+
+export const preconfigs: RawConfig[] = [
   require('./golden-seeds.json'),
   require('./spiral.json'),
   require('./golden-spiral.json'),

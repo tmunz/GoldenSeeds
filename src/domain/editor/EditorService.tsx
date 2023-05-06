@@ -6,7 +6,6 @@ import { ExpressionEditor } from './editorInput/ExpressionEditor';
 import { NumberEditor } from './editorInput/NumberEditor';
 import { SelectionEditor } from './editorInput/SelectionEditor';
 import { StringEditor } from './editorInput/StringEditor';
-import { BehaviorSubject } from 'rxjs';
 import { EditorInput } from './editorInput/EditorInput';
 import { FontEditor } from './editorInput/FontEditor';
 

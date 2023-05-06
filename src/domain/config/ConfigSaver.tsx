@@ -2,8 +2,8 @@ import React from 'react';
 import { Config } from '../config/Config';
 import { AnimatedButton } from '../../ui/AnimatedButton';
 import { SaveRegular, SaveNone, SaveProgress } from '../../ui/icon/Save';
-import { preconfigService } from '../preconfig/PreconfigService';
 import { ConfigService } from './ConfigService';
+import { configManager } from './ConfigManager';
 
 interface Props {
   config?: Config;
@@ -22,6 +22,6 @@ export class ConfigSaver extends React.Component<Props> {
   }
 
   private exportConfig() {
-    this.props.config && preconfigService.save(ConfigService.convertConfigToJson(this.props.config));
+    this.props.config && configManager.save(ConfigService.convertConfigToJson(this.props.config));
   }
 }

@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 
-import { preconfigService } from '../preconfig/PreconfigService';
 import { RawConfig } from '../config/RawConfig';
 import { AnimatedButton } from '../../ui/AnimatedButton';
+import { configManager } from './ConfigManager';
 
-import './PreconfigSelector.styl';
+import './ConfigSelector.styl';
 
 
 interface Props {
-  preconfigs?: { name: string; rawConfig: RawConfig; svg: string; }[];
-  selectedPreconfig?: string;
+  configs: { name: string; rawConfig: RawConfig; svg: string | null; }[];
+  selectedConfig?: string;
 }
 
-export function PreconfigSelector(props: Props) {
+export function ConfigSelector(props: Props) {
 
   const MAX_AROUND = 3;
 
@@ -20,10 +20,10 @@ export function PreconfigSelector(props: Props) {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   useEffect(() => {
-    const arr = props.preconfigs ?? [];
-    const i = arr.findIndex(p => p.name === props.selectedPreconfig);
+    const arr = props.configs;
+    const i = arr.findIndex(p => p.name === props.selectedConfig);
     setSelectedIndex(0 <= i ? i : 0);
-  }, [props.preconfigs, props.selectedPreconfig]);
+  }, [props.configs, props.selectedConfig]);
 
   useEffect(() => {
     const mouseMove = (e: MouseEvent | TouchEvent) => {
@@ -31,7 +31,7 @@ export function PreconfigSelector(props: Props) {
       const deltaX = (e instanceof MouseEvent ? e : e.touches[0]).clientX - startX;
       const deltaIndex = convertDeltaXToConfigDelta(deltaX);
       if (deltaIndex !== 0) {
-        const count = (props.preconfigs ?? []).length;
+        const count = (props.configs ?? []).length;
         const selected = selectedIndex + deltaIndex;
         setSelectedIndex((selected + count) % count);
         setStartX(startX + deltaX);
@@ -43,13 +43,13 @@ export function PreconfigSelector(props: Props) {
       window.removeEventListener('mousemove', mouseMove);
       window.removeEventListener('touchmove', mouseMove);
     }
-  }, [startX, selectedIndex, props.preconfigs]);
+  }, [startX, selectedIndex, props.configs]);
 
   useEffect(() => {
     const mouseUp = () => {
       if (startX === null) { return; }
-      const selectedPreconfig = (props.preconfigs ?? [])[selectedIndex];
-      setTimeout(() => preconfigService.selectByName(selectedPreconfig?.name), 300);
+      const selectedPreconfig = (props.configs ?? [])[selectedIndex];
+      setTimeout(() => configManager.selectByName(selectedPreconfig?.name), 300);
       setStartX(null);
     };
     window.addEventListener('mouseup', mouseUp);
@@ -58,7 +58,7 @@ export function PreconfigSelector(props: Props) {
       window.removeEventListener('mouseup', mouseUp);
       window.removeEventListener('touchend', mouseUp);
     }
-  }, [startX, props.preconfigs]);
+  }, [startX, props.configs]);
 
   function convertDeltaXToConfigDelta(dX: number): number {
     return -1 * Math.sign(dX) * Math.floor(Math.abs(dX) / 50);
@@ -76,19 +76,19 @@ export function PreconfigSelector(props: Props) {
   }
 
   return (
-    <div className="preconfig-selector">
-      <div className="preconfig-prev">
+    <div className="config-selector">
+      <div className="config-prev">
         <AnimatedButton
           rotation={AnimatedButton.DIRECTION_LEFT}
-          onClick={() => preconfigService.selectNext(-1)}
+          onClick={() => configManager.selectByDelta(-1)}
         />
       </div>
       <div
-        className={["preconfig-overview", startX === null ? "" : "grabbing"].join(" ")}
+        className={["config-overview", startX === null ? "" : "grabbing"].join(" ")}
         onMouseDown={handleMouseDown}
         onTouchStart={handleMouseDown}
       >
-        {(props.preconfigs ?? []).map((preconfig, i, arr) => {
+        {(props.configs ?? []).map((config, i, arr) => {
           const delta = calculateMinDelta(i - selectedIndex, arr.length);
           const p = Math.max(-MAX_AROUND - 1, Math.min(MAX_AROUND + 1, delta));
           const angle = p / MAX_AROUND * Math.PI / 2 * 0.7;
@@ -96,8 +96,8 @@ export function PreconfigSelector(props: Props) {
           const offset = Math.sin(p / (MAX_AROUND + 1) * Math.PI / 2) * 300;
           const visible = Math.abs(delta) <= MAX_AROUND;
           return <div
-            key={preconfig.name}
-            className="preconfig-item"
+            key={config.name}
+            className="config-item"
             style={{
               transform: `translateX(${offset}px) scale(${scale}) rotateY(${angle}rad)`,
               opacity: visible ? 1 : 0,
@@ -107,21 +107,21 @@ export function PreconfigSelector(props: Props) {
               event.preventDefault();
               event.stopPropagation();
               setSelectedIndex(i);
-              setTimeout(() => preconfigService.selectByName(preconfig.name), 300);
+              setTimeout(() => configManager.selectByName(config.name), 300);
             }}>
-              <div>{preconfig.name}</div>
-              <img
+              <div>{config.name}</div>
+              {config.svg && <img
                 draggable="false"
                 className="preview"
-                src={`data:image/svg+xml;base64,${window.btoa(preconfig.svg)}`} />
+                src={`data:image/svg+xml;base64,${window.btoa(config.svg)}`} />}
             </a>
           </div>
         })}
       </div>
-      <div className="preconfig-next">
+      <div className="config-next">
         <AnimatedButton
           rotation={AnimatedButton.DIRECTION_RIGHT}
-          onClick={() => preconfigService.selectNext(+1)}
+          onClick={() => configManager.selectByDelta(+1)}
         />
       </div>
     </div >
