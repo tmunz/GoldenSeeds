@@ -66,7 +66,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
               <div
                 className="canvas"
                 style={{
-                  left: !this.state.editMode ? '48vw' : '52vw',
+                  left: '48vw', // !this.state.editMode ? '48vw' : '52vw',
                 }}
               >
                 <SvgCanvas
