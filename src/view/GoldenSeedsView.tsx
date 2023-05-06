@@ -86,16 +86,14 @@ export class GoldenSeedsView extends React.Component<Props, State> {
                   iconText="editor"
                   onClick={(active) => this.setState({ editMode: !active })}
                 />
-                <div className="sidebar-content">
-                  <TextInput value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
-                  <div className="actions">
-                    <ConfigImporter />
-                    <ConfigExporter config={this.props.config} />
-                    <SvgExporter getData={() => getExporterData()} />
-                    <PngExporter getData={() => getExporterData()} />
-                  </div>
-                  <Editor config={this.props.config} />
+                <TextInput value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
+                <div className="actions">
+                  <ConfigImporter />
+                  <ConfigExporter config={this.props.config} />
+                  <SvgExporter getData={() => getExporterData()} />
+                  <PngExporter getData={() => getExporterData()} />
                 </div>
+                <Editor config={this.props.config} />
               </div>
             </React.Fragment>
           )}

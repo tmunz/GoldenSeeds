@@ -10,10 +10,12 @@
   &>.preconfig-prev,
   &>.preconfig-next {
     background: unquote('rgb(var(--backgroundColor))');
+
     padding: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: .4s ease-in-out all;
 
     .animated-icon {
       height: 30px;
@@ -28,42 +30,43 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    background: unquote('rgba(var(--backgroundColor), 0.2)');
+    background: unquote('rgba(var(--backgroundColor), 0.5)');
     backdrop-filter: blur(4px);
-    opacity: 0;
     height: 200px;
     overflow: hidden;
-    transition: all 0.5s ease-in-out;
+    transition: all 1s ease-in-out;
+    opacity: 0;
+    cursor: grab;
+
+    &.grabbing {
+      background: unquote('rgba(var(--backgroundColor), 0.6)');
+      cursor: grabbing !important;
+    }
 
     &:hover {
       opacity: 1;
     }
 
-    .wrapper {
-      transform: translate(-50%, 0);
+    .preconfig-item {
+      position: absolute;
+      backface-visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.75, 0, 0.75, 0);
+      padding: 5px;
+      text-align: center;
+      white-space: nowrap;
 
-      .preconfig-item {
-        position: absolute;
-        backface-visibility: hidden;
-        top: 50%;
-        transition: all 0.3s cubic-bezier(0.75, 0, 0.75, 0);
-        padding: 5px;
-        text-align: center;
-        white-space: nowrap;
+      &>a {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+      }
 
-        &>a {
-          display: flex;
-          flex-direction: column;
-          flex-wrap: nowrap;
-          justify-content: center;
-          align-items: center;
-          align-content: center;
-        }
-
-        .preview {
-          width: 100px;
-          display: block;
-        }
+      .preview {
+        width: 100px;
+        display: block;
       }
     }
 

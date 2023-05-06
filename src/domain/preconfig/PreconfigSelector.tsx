@@ -14,7 +14,7 @@ interface Props {
 
 export function PreconfigSelector(props: Props) {
 
-  const MAX_AROUND = 2;
+  const MAX_AROUND = 3;
 
   const [startX, setStartX] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
@@ -84,42 +84,39 @@ export function PreconfigSelector(props: Props) {
         />
       </div>
       <div
-        className="preconfig-overview"
+        className={["preconfig-overview", startX === null ? "" : "grabbing"].join(" ")}
         onMouseDown={handleMouseDown}
         onTouchStart={handleMouseDown}
       >
-        <div className="wrapper">
-          {(props.preconfigs ?? []).map((preconfig, i, arr) => {
-            const delta = calculateMinDelta(i - selectedIndex, arr.length);
-            const p = Math.max(-MAX_AROUND - 1, Math.min(MAX_AROUND + 1, delta));
-            const angle = p / MAX_AROUND * Math.PI / 2 * 0.5;
-            const scale = Math.max(0, (MAX_AROUND + 1 - Math.abs(p)) / (MAX_AROUND + 1));
-            const offset = Math.sin(p / (MAX_AROUND + 1) * Math.PI / 2) * 300;
-            const visible = Math.abs(delta) <= MAX_AROUND;
-            return <div
-              key={preconfig.name}
-              className="preconfig-item"
-              style={{
-                left: `${offset}px`,
-                transform: `translate(-50%,-50%) scale(${scale}) rotateY(${angle}rad) `,
-                opacity: visible ? 1 : 0,
-              }}
-            >
-              <a onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                setSelectedIndex(i);
-                setTimeout(() => preconfigService.selectByName(preconfig.name), 300);
-              }}>
-                <div>{preconfig.name}</div>
-                <img
-                  draggable="false"
-                  className="preview"
-                  src={`data:image/svg+xml;base64,${window.btoa(preconfig.svg)}`} />
-              </a>
-            </div>
-          })}
-        </div>
+        {(props.preconfigs ?? []).map((preconfig, i, arr) => {
+          const delta = calculateMinDelta(i - selectedIndex, arr.length);
+          const p = Math.max(-MAX_AROUND - 1, Math.min(MAX_AROUND + 1, delta));
+          const angle = p / MAX_AROUND * Math.PI / 2 * 0.7;
+          const scale = 1 / (p == 0 ? 1 : Math.abs(p * 10) ** 0.3);
+          const offset = Math.sin(p / (MAX_AROUND + 1) * Math.PI / 2) * 300;
+          const visible = Math.abs(delta) <= MAX_AROUND;
+          return <div
+            key={preconfig.name}
+            className="preconfig-item"
+            style={{
+              transform: `translateX(${offset}px) scale(${scale}) rotateY(${angle}rad)`,
+              opacity: visible ? 1 : 0,
+            }}
+          >
+            <a onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              setSelectedIndex(i);
+              setTimeout(() => preconfigService.selectByName(preconfig.name), 300);
+            }}>
+              <div>{preconfig.name}</div>
+              <img
+                draggable="false"
+                className="preview"
+                src={`data:image/svg+xml;base64,${window.btoa(preconfig.svg)}`} />
+            </a>
+          </div>
+        })}
       </div>
       <div className="preconfig-next">
         <AnimatedButton
