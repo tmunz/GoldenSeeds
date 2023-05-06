@@ -1,6 +1,8 @@
 import React from 'react';
 import { Config } from '../config/Config';
 import { AnimatedButton } from '../../ui/AnimatedButton';
+import { ConfigService } from './ConfigService';
+import { SaveNone, SaveRegular, SaveProgress } from '../../ui/icon/Save';
 
 interface Props {
   config?: Config;
@@ -13,7 +15,7 @@ export class ConfigExporter extends React.Component<Props> {
     return (
       <div>
         <a target="_blank" ref={(e) => (this.exportConfigElement = e)} onClick={() => this.exportConfig()}>
-          <AnimatedButton rotation={AnimatedButton.DIRECTION_DOWN} title="save" iconText="json" />
+          <AnimatedButton  points={[SaveNone, SaveRegular, SaveProgress]} title="export" iconText="json" />
         </a>
       </div>
     );
@@ -21,7 +23,7 @@ export class ConfigExporter extends React.Component<Props> {
 
   private exportConfig() {
     if (this.props.config) {
-      const json = this.convertConfigToJson(this.props.config);
+      const json = ConfigService.convertConfigToJson(this.props.config);
       if (this.exportConfigElement) {
         this.exportConfigElement.download = json.meta.name + '.json';
         this.exportConfigElement.href = URL.createObjectURL(
@@ -31,22 +33,5 @@ export class ConfigExporter extends React.Component<Props> {
         );
       }
     }
-  }
-
-  private convertConfigToJson(config: Config): any {
-    const stages = config.stages.map((stage) => {
-      const rawState = { type: stage.state.type, data: {} as Record<string, Record<string, string>> };
-      Object.keys(stage.state.data).forEach((groupId) => {
-        rawState.data[groupId] = {};
-        Object.keys(stage.state.data[groupId]).forEach((id) => {
-          rawState.data[groupId][id] = stage.state.data[groupId][id].textValue;
-        });
-      });
-      return rawState;
-    });
-    return {
-      meta: config.meta,
-      stages,
-    };
   }
 }

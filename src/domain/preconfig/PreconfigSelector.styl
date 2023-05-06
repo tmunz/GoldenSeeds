@@ -18,8 +18,8 @@
     transition: .4s ease-in-out all;
 
     .animated-icon {
-      height: 30px;
-      width: 30px;
+      height: 40px;
+      width: 40px;
     }
   }
 
@@ -41,6 +41,10 @@
     &.grabbing {
       background: unquote('rgba(var(--backgroundColor), 0.6)');
       cursor: grabbing !important;
+
+      * {
+        cursor: grabbing !important;
+      }
     }
 
     &:hover {

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { AnimatedButton } from '../../ui/AnimatedButton';
 import { configService } from './ConfigService';
+import { LoadProgress, LoadRegular, LoadNone } from '../../ui/icon/Load';
 
 interface Props {}
 
@@ -18,7 +19,7 @@ export class ConfigImporter extends React.Component<Props> {
           onChange={(event) => this.openConfig(event)}
         />
         <a target="_blank" onClick={() => this.importConfigElement?.click()}>
-          <AnimatedButton rotation={AnimatedButton.DIRECTION_UP} title="load" iconText="json" />
+          <AnimatedButton points={[LoadNone, LoadRegular, LoadProgress]} title="import" iconText="json" />
         </a>
       </div>
     );

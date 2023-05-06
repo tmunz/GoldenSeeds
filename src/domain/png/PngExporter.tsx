@@ -1,6 +1,7 @@
 import React, { createRef, useState, useEffect } from 'react';
 import { AnimatedButton } from '../../ui/AnimatedButton';
-import { ExporterData } from '../tools/Toolbar';
+import { ExporterData } from '../tools/Toolbar'; // TODO
+import { SaveNone, SaveRegular, SaveProgress } from '../../ui/icon/Save';
 
 interface Props {
   getData: () => ExporterData;
@@ -48,8 +49,8 @@ export function PngExporter(props: Props) {
 
   return (
     <div>
-      <a target="_blank" onClick={(e) => setData(props.getData())}>
-        <AnimatedButton rotation={AnimatedButton.DIRECTION_DOWN} title="save" iconText="png" />
+      <a target="_blank" onClick={() => setData(props.getData())}>
+        <AnimatedButton points={[SaveNone, SaveRegular, SaveProgress]} title="export" iconText="png" />
       </a>
       <div style={{ display: 'none' }}>
         <a ref={exportPngElement}></a>

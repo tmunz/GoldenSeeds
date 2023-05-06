@@ -8,6 +8,8 @@ import { svgService } from '../domain/svg/SvgService';
 import { RawConfig } from '../domain/config/RawConfig';
 import { PngExporter } from '../domain/png/PngExporter';
 import { SvgExporter } from '../domain/svg/SvgExporter';
+import { ConfigSaver } from '../domain/config/ConfigSaver';
+import { ConfigResetter } from '../domain/config/ConfigResetter';
 import { ConfigImporter } from '../domain/config/ConfigImporter';
 import { ConfigExporter } from '../domain/config/ConfigExporter';
 import { configService } from '../domain/config/ConfigService';
@@ -83,13 +85,16 @@ export class GoldenSeedsView extends React.Component<Props, State> {
                 <AnimatedButton
                   points={[EditorNone, EditorClose, EditorRegular]}
                   useAsToggle
-                  iconText="editor"
                   onClick={(active) => this.setState({ editMode: !active })}
                 />
                 <TextInput value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
                 <div className="actions">
+                  <ConfigSaver config={this.props.config} />
+                  <ConfigResetter name={this.props.config.meta.name} />
+                  |
                   <ConfigImporter />
                   <ConfigExporter config={this.props.config} />
+                  |
                   <SvgExporter getData={() => getExporterData()} />
                   <PngExporter getData={() => getExporterData()} />
                 </div>

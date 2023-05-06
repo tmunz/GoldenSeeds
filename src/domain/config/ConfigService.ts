@@ -39,7 +39,7 @@ export class ConfigService {
       ),
     }
   }
-  
+
   setName(name: string) {
     this.config$.next({ ...this.config$.value, meta: { name } });
   }
@@ -91,6 +91,23 @@ export class ConfigService {
     stageId?: string,
   ): Promise<Stage> {
     return new Stage(generator, rawState, stageId).convertTextToValues();
+  }
+
+  static convertConfigToJson(config: Config): any {
+    const stages = config.stages.map((stage) => {
+      const rawState = { type: stage.state.type, data: {} as Record<string, Record<string, string>> };
+      Object.keys(stage.state.data).forEach((groupId) => {
+        rawState.data[groupId] = {};
+        Object.keys(stage.state.data[groupId]).forEach((id) => {
+          rawState.data[groupId][id] = stage.state.data[groupId][id].textValue;
+        });
+      });
+      return rawState;
+    });
+    return {
+      meta: config.meta,
+      stages,
+    };
   }
 }
 

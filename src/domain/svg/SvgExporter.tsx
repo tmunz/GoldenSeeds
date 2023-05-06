@@ -1,6 +1,7 @@
 import React, { createRef } from 'react';
 import { AnimatedButton } from '../../ui/AnimatedButton';
-import { ExporterData } from '../tools/Toolbar';
+import { ExporterData } from '../tools/Toolbar'; // TODO
+import { SaveNone, SaveRegular, SaveProgress } from '../../ui/icon/Save';
 
 interface Props {
   getData: () => ExporterData;
@@ -12,7 +13,7 @@ export function SvgExporter(props: Props) {
   return (
     <div>
       <a target="_blank" ref={exportSvgElement} onClick={() => exportSvg(props, exportSvgElement.current)}>
-        <AnimatedButton rotation={AnimatedButton.DIRECTION_DOWN} title="save" iconText="svg" />
+        <AnimatedButton points={[SaveNone, SaveRegular, SaveProgress]} title="export" iconText="svg" />
       </a>
     </div>
   );

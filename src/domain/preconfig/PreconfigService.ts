@@ -2,6 +2,7 @@ import { configService } from '../config/ConfigService';
 import { BehaviorSubject } from 'rxjs';
 import { RawConfig } from '../config/RawConfig';
 import { svgService } from '../svg/SvgService';
+import { preconfigs } from './data';
 
 export class PreconfigService {
 
@@ -15,6 +16,10 @@ export class PreconfigService {
   async selectByName(name = 'golden seeds') {
     const preconfig = await this.get(name);
     this.selectPreconfig(preconfig.rawConfig);
+  }
+
+  async reset(name: string) {
+    // TODO
   }
 
   async selectNext(delta: number) {
@@ -41,16 +46,13 @@ export class PreconfigService {
         const svg = svgService.generateSvg(config.stages, 1000, 1000);
         const transaction = db.transaction([PreconfigService.DB_TABLE], 'readwrite');
         const objectStore = transaction.objectStore(PreconfigService.DB_TABLE);
-        const data = { name, rawConfig, svg, sortIndex: i ?? 0 };
+        const sortIndex = i ?? preconfigs.findIndex(p => p.meta.name === name) ?? preconfigs.length;
+        const data = { name, rawConfig, svg, sortIndex };
         const putRequest = objectStore.put({ ...data });
         putRequest.addEventListener('success', () => {
-          if (i !== undefined) {
-            const next = [...this.preconfigs$.value];
-            next.splice(i, 0, data);
-            this.preconfigs$.next(next);
-          } else {
-            this.preconfigs$.next([...this.preconfigs$.value, data]);
-          }
+          const next = [...this.preconfigs$.value];
+          next[sortIndex] = data;
+          this.preconfigs$.next(next);
           resolve(data);
         });
       }).catch(() => resolve());
@@ -65,6 +67,7 @@ export class PreconfigService {
         const getRequest = objectStore.getAll();
         getRequest.addEventListener('success', (event) => {
           const list = (event.target as any).result as { name: string, rawConfig: RawConfig, svg: string, sortIndex: number }[];
+          this.preconfigs$.next(list);
           resolve(list.sort((a, b) => a.sortIndex - b.sortIndex));
         });
       }).catch(() => {

@@ -11,7 +11,7 @@ import { RawConfig } from './domain/config/RawConfig';
 import { fontService } from './domain/font/FontService';
 
 export function App() {
-  const [preconfigs, setPreconfigs] = useState<{ name: string; rawConfig: RawConfig; svg: string; }[]>();
+  const [preconfigs, setPreconfigs] = useState<{ name: string; rawConfig: RawConfig; svg: string; }[]>([]);
   const [selectedPreconfig, setSelectedPreconfig] = useState<string>();
   const [config, setConfig] = useState<Config>();
 
@@ -25,18 +25,14 @@ export function App() {
       await Promise.all(predefinedConfigs.map((preconfig, i) => {
         preconfigService.save(preconfig as RawConfig, i);
       }));
-      persisted = await preconfigService.list();
+      await preconfigService.list();
     }
-    setPreconfigs(persisted);
-
     window.addEventListener('popstate', (e) => handleLocation(e));
-
     setTimeout(() => handleLocation(), Math.max(0, 500 - (Date.now() - start)));
   };
 
   function handleLocation(e?: Event) {
     const location = e !== undefined ? (e.currentTarget as Window).location.search : window.location.search;
-    console.log(location);
     const preconfig = new URLSearchParams(location).get('name');
     preconfigService.selectByName(preconfig ? preconfig : undefined);
   }
