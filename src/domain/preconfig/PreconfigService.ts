@@ -17,10 +17,10 @@ export class PreconfigService {
     this.selectPreconfig(preconfig.rawConfig);
   }
 
-  async selectNext(dir: number) {
+  async selectNext(delta: number) {
     const index = (await this.get(this.selectedPreconfig$.value)).sortIndex;
     const list = await this.list();
-    const nextIndex = (index + dir + list.length) % list.length;
+    const nextIndex = (index + delta + list.length) % list.length;
     this.selectPreconfig(list[nextIndex].rawConfig);
   }
 

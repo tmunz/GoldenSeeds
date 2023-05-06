@@ -19,7 +19,7 @@ export function App() {
     // wait for preconfigs to be loaded, but at least some initial time to animate
     const start = Date.now();
     const buffer = await (await fetch(require('./domain/font/signika-bold.otf'))).arrayBuffer();
-    await fontService.saveBuffer(buffer).catch(() => {});
+    await fontService.saveBuffer(buffer).catch(() => { });
     let persisted = await preconfigService.list();
     if (persisted.length === 0) {
       await Promise.all(predefinedConfigs.map((preconfig, i) => {
@@ -28,11 +28,18 @@ export function App() {
       persisted = await preconfigService.list();
     }
     setPreconfigs(persisted);
-    setTimeout(() => {
-      const preconfig = new URLSearchParams(window.location.search).get('name');
-      preconfigService.selectByName(preconfig ? preconfig : undefined);
-    }, Math.max(0, 500 - (Date.now() - start)));
+
+    window.addEventListener('popstate', (e) => handleLocation(e));
+
+    setTimeout(() => handleLocation(), Math.max(0, 500 - (Date.now() - start)));
   };
+
+  function handleLocation(e?: Event) {
+    const location = e !== undefined ? (e.currentTarget as Window).location.search : window.location.search;
+    console.log(location);
+    const preconfig = new URLSearchParams(location).get('name');
+    preconfigService.selectByName(preconfig ? preconfig : undefined);
+  }
 
   useEffect(() => {
     const preconfigsSubsription = preconfigService.preconfigs$.subscribe(setPreconfigs);
