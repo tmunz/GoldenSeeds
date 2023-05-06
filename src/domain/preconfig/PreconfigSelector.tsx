@@ -22,16 +22,20 @@ export function PreconfigSelector(props: Props) {
   }, [props.selectedPreconfig, props.preconfigs]);
 
   useEffect(() => {
-    const mouseMove = (e: MouseEvent) => {
+    const mouseMove = (e: MouseEvent | TouchEvent) => {
       if (startX === null) { return; }
-      setDeltaX(e.clientX - startX);
+      setDeltaX((e instanceof MouseEvent ? e : e.touches[0]).clientX - startX);
     };
     window.addEventListener('mousemove', mouseMove);
-    return () => window.removeEventListener('mousemove', mouseMove);
+    window.addEventListener('touchmove', mouseMove);
+    return () => {
+      window.removeEventListener('mousemove', mouseMove);
+      window.removeEventListener('touchmove', mouseMove);
+    }
   }, [startX]);
 
   useEffect(() => {
-    const mouseUp = (e: MouseEvent) => {
+    const mouseUp = (e: MouseEvent | TouchEvent) => {
       if (startX === null) { return; }
       if (10 < Math.abs(deltaX)) {
         preconfigService.selectNext(convertDeltaXToConfigDelta(deltaX));
@@ -39,16 +43,20 @@ export function PreconfigSelector(props: Props) {
       setStartX(null);
     };
     window.addEventListener('mouseup', mouseUp);
-    return () => window.removeEventListener('mouseup', mouseUp);
+    window.addEventListener('touchend', mouseUp);
+    return () => {
+      window.removeEventListener('mouseup', mouseUp);
+      window.removeEventListener('touchend', mouseUp);
+    }
   }, [startX, deltaX]);
 
 
   const origPreconfigs = props.preconfigs ?? [];
-  const origSelectedIndex = origPreconfigs.findIndex(p => p.name === props.selectedPreconfig) + convertDeltaXToConfigDelta(deltaX);
+  const origSelectedIndex = origPreconfigs.findIndex(p => p.name === props.selectedPreconfig) ?? 0;
   const origCount = origPreconfigs.length;
 
   const wrappedPreconfigs = [...origPreconfigs, ...origPreconfigs, ...origPreconfigs];
-  const wrappedSelectedIndex = origCount + (origSelectedIndex < 0 ? 0 : origSelectedIndex);
+  const wrappedSelectedIndex = origCount + ((origSelectedIndex + convertDeltaXToConfigDelta(deltaX) + origCount) % origCount);
   const aroundCount = Math.floor((origCount - 1) / 2);
   const wrappedStart = wrappedSelectedIndex - aroundCount;
   const wrappedEnd = wrappedSelectedIndex + 1 + aroundCount;
@@ -61,9 +69,10 @@ export function PreconfigSelector(props: Props) {
     return -1 * Math.sign(dX) * Math.floor(Math.abs(dX) / 50);
   }
 
-  function handleMouseDown(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+  function handleMouseDown(e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>) {
     setDeltaX(0);
-    setStartX(e.clientX);
+    const event: { clientX: number } = e instanceof MouseEvent ? e : e instanceof TouchEvent ? e.touches[0] : { clientX: 0 };
+    setStartX(event.clientX);
   }
 
   return (
@@ -77,6 +86,7 @@ export function PreconfigSelector(props: Props) {
       <div
         className="preconfig-overview"
         onMouseDown={handleMouseDown}
+        onTouchStart={handleMouseDown}
       >
         <div className="wrapper">
           {preconfigs.map((preconfig, i) => {
