@@ -64,7 +64,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
       <div className="golden-seeds-view">
         <ErrorBoundary>
           {this.props.activeConfig && (
-            <React.Fragment>
+            <>
               <div
                 className="canvas"
                 style={{
@@ -81,7 +81,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
                   config={this.props.activeConfig}
                 />
               </div>
-              <div className={["sidebar", this.state.editMode ? '' : 'hidden'].join(" ")}>
+              <div className={['sidebar', this.state.editMode ? '' : 'hidden'].join(' ')}>
                 <AnimatedButton
                   points={[EditorNone, EditorClose, EditorRegular]}
                   useAsToggle
@@ -90,25 +90,25 @@ export class GoldenSeedsView extends React.Component<Props, State> {
                 <TextInput value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
                 <div className="actions">
                   {this.props.configsManageable &&
-                    <React.Fragment>
+                    <>
                       <ConfigSaver config={this.props.activeConfig} />
                       <ConfigResetter name={this.props.activeConfig.meta.name} />
                       |
-                    </React.Fragment>
+                    </>
                   }
                   <ConfigImporter />
                   {this.props.activeConfig &&
-                    <React.Fragment>
+                    <>
                       <ConfigExporter config={this.props.activeConfig} />
                       |
                       <SvgExporter getData={() => getExporterData()} />
                       <PngExporter getData={() => getExporterData()} />
-                    </React.Fragment>
+                    </>
                   }
                 </div>
                 <Editor config={this.props.activeConfig} />
               </div>
-            </React.Fragment>
+            </>
           )}
 
           <div className="preconfig-bar">
@@ -146,12 +146,12 @@ class ErrorBoundary extends React.Component<React.ComponentProps<any>, { error: 
   render() {
     if (this.state.error) {
       return (
-        <React.Fragment>
+        <>
           <div className="error">
             Something went wrong - this is currently the alpha version of v2.0; work in progress :-(
           </div>
           <a onClick={() => location.reload()}>continue</a>
-        </React.Fragment>
+        </>
       );
     } else {
       return this.props.children;

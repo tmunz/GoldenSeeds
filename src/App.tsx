@@ -22,7 +22,7 @@ export function App() {
     await configManager.init();
     window.addEventListener('popstate', (e) => handleLocation(e));
     setTimeout(() => handleLocation(), Math.max(0, 500 - (Date.now() - start)));
-  };
+  }
 
   function handleLocation(e?: Event) {
     const location = e !== undefined ? (e.currentTarget as Window).location.search : window.location.search;
@@ -49,13 +49,13 @@ export function App() {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <GoldenSeedsView
         configs={configs}
         configsManageable={configsManageable}
         activeConfig={activeConfig}
       />
       {process.env.APP_VERSION}
-    </React.Fragment>
+    </>
   );
 }

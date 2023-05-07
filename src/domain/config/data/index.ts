@@ -1,4 +1,4 @@
-import { RawConfig } from "../RawConfig";
+import { RawConfig } from '../RawConfig';
 
 export const preconfigs: RawConfig[] = [
   require('./golden-seeds.json'),

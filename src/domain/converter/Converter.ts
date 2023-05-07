@@ -17,5 +17,5 @@ export abstract class Converter<T> {
       converted.value = value;
     }
     return converted;
-  };
+  }
 }

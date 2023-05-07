@@ -21,7 +21,7 @@ export function ConfigSelector(props: Props) {
 
   useEffect(() => {
     const arr = props.configs;
-    const i = arr.findIndex(p => p.name === props.selectedConfig);
+    const i = arr.findIndex(p => p && p.name === props.selectedConfig);
     setSelectedIndex(0 <= i ? i : 0);
   }, [props.configs, props.selectedConfig]);
 
@@ -42,7 +42,7 @@ export function ConfigSelector(props: Props) {
     return () => {
       window.removeEventListener('mousemove', mouseMove);
       window.removeEventListener('touchmove', mouseMove);
-    }
+    };
   }, [startX, selectedIndex, props.configs]);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export function ConfigSelector(props: Props) {
     return () => {
       window.removeEventListener('mouseup', mouseUp);
       window.removeEventListener('touchend', mouseUp);
-    }
+    };
   }, [startX, props.configs]);
 
   function convertDeltaXToConfigDelta(dX: number): number {
@@ -84,7 +84,7 @@ export function ConfigSelector(props: Props) {
         />
       </div>
       <div
-        className={["config-overview", startX === null ? "" : "grabbing"].join(" ")}
+        className={['config-overview', startX === null ? '' : 'grabbing'].join(' ')}
         onMouseDown={handleMouseDown}
         onTouchStart={handleMouseDown}
       >
@@ -115,7 +115,7 @@ export function ConfigSelector(props: Props) {
                 className="preview"
                 src={`data:image/svg+xml;base64,${window.btoa(config.svg)}`} />}
             </a>
-          </div>
+          </div>;
         })}
       </div>
       <div className="config-next">

@@ -24,7 +24,7 @@ export const TextInput = (props: Props) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCursor(e.target.selectionStart);
     props.onChange(e.target.value);
-  }
+  };
 
   return (
     <div className="input text-input">
@@ -39,4 +39,4 @@ export const TextInput = (props: Props) => {
       <div className="indicator" />
     </div>
   );
-}
+};

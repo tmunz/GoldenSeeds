@@ -82,7 +82,7 @@ export class ConfigService {
           ConfigService.createStage(svgGeneratorRegistry.newInstance(stageRaw.type), stageRaw),
         ),
       ),
-    }
+    };
   }
 
   private static async createStage(

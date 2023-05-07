@@ -24,9 +24,7 @@ export class ConfigManager {
             .result as { name: string, rawConfig: RawConfig, svg: string, sortIndex: number }[])
             .sort((a, b) => a.sortIndex - b.sortIndex);
           if (list.length === 0) {
-            await Promise.all(preconfigs.map((preconfig, i) => {
-              configManager.save(preconfig, i);
-            }));
+            await Promise.all(preconfigs.map((preconfig, i) => configManager.save(preconfig, i)));
           } else {
             this.configs$.next(list);
           }
