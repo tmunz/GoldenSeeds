@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-import { RawConfig } from '../config/RawConfig';
 import { AnimatedButton } from '../../ui/AnimatedButton';
-import { configManager } from './ConfigManager';
+import { configManager, ConfigItem } from './ConfigManager';
 
 import './ConfigSelector.styl';
 
 
 interface Props {
-  configs: { name: string; rawConfig: RawConfig; svg: string | null; }[];
+  configItems: ConfigItem[];
   selectedConfig?: string;
 }
 
@@ -20,10 +19,10 @@ export function ConfigSelector(props: Props) {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   useEffect(() => {
-    const arr = props.configs;
+    const arr = props.configItems;
     const i = arr.findIndex(p => p && p.name === props.selectedConfig);
     setSelectedIndex(0 <= i ? i : 0);
-  }, [props.configs, props.selectedConfig]);
+  }, [props.configItems, props.selectedConfig]);
 
   useEffect(() => {
     const mouseMove = (e: MouseEvent | TouchEvent) => {
@@ -31,7 +30,7 @@ export function ConfigSelector(props: Props) {
       const deltaX = (e instanceof MouseEvent ? e : e.touches[0]).clientX - startX;
       const deltaIndex = convertDeltaXToConfigDelta(deltaX);
       if (deltaIndex !== 0) {
-        const count = (props.configs ?? []).length;
+        const count = (props.configItems ?? []).length;
         const selected = selectedIndex + deltaIndex;
         setSelectedIndex((selected + count) % count);
         setStartX(startX + deltaX);
@@ -43,13 +42,13 @@ export function ConfigSelector(props: Props) {
       window.removeEventListener('mousemove', mouseMove);
       window.removeEventListener('touchmove', mouseMove);
     };
-  }, [startX, selectedIndex, props.configs]);
+  }, [startX, selectedIndex, props.configItems]);
 
   useEffect(() => {
     const mouseUp = () => {
       if (startX === null) { return; }
-      const selectedPreconfig = (props.configs ?? [])[selectedIndex];
-      setTimeout(() => configManager.selectByName(selectedPreconfig?.name), 300);
+      const selectedPreconfig = (props.configItems ?? [])[selectedIndex];
+      setTimeout(() => configManager.select(selectedPreconfig?.name), 300);
       setStartX(null);
     };
     window.addEventListener('mouseup', mouseUp);
@@ -58,7 +57,7 @@ export function ConfigSelector(props: Props) {
       window.removeEventListener('mouseup', mouseUp);
       window.removeEventListener('touchend', mouseUp);
     };
-  }, [startX, props.configs]);
+  }, [startX, props.configItems]);
 
   function convertDeltaXToConfigDelta(dX: number): number {
     return -1 * Math.sign(dX) * Math.floor(Math.abs(dX) / 50);
@@ -75,12 +74,17 @@ export function ConfigSelector(props: Props) {
     return [index - count, index + count].reduce((minDelta, e) => Math.abs(e) < Math.abs(minDelta) ? e : minDelta, index);
   }
 
+  function selectByDelta(delta: number) {
+    const nextIndex = (selectedIndex + delta + props.configItems.length) % props.configItems.length;
+    configManager.select(props.configItems[nextIndex].name);
+  }
+
   return (
     <div className="config-selector">
       <div className="config-prev">
         <AnimatedButton
           rotation={AnimatedButton.DIRECTION_LEFT}
-          onClick={() => configManager.selectByDelta(-1)}
+          onClick={() => selectByDelta(-1)}
         />
       </div>
       <div
@@ -88,7 +92,7 @@ export function ConfigSelector(props: Props) {
         onMouseDown={handleMouseDown}
         onTouchStart={handleMouseDown}
       >
-        {(props.configs ?? []).map((config, i, arr) => {
+        {(props.configItems ?? []).map((config, i, arr) => {
           const delta = calculateMinDelta(i - selectedIndex, arr.length);
           const p = Math.max(-MAX_AROUND - 1, Math.min(MAX_AROUND + 1, delta));
           const angle = p / MAX_AROUND * Math.PI / 2 * 0.7;
@@ -107,7 +111,7 @@ export function ConfigSelector(props: Props) {
               event.preventDefault();
               event.stopPropagation();
               setSelectedIndex(i);
-              setTimeout(() => configManager.selectByName(config.name), 300);
+              setTimeout(() => configManager.select(config.name), 300);
             }}>
               <div>{config.name}</div>
               {config.svg && <img
@@ -121,7 +125,7 @@ export function ConfigSelector(props: Props) {
       <div className="config-next">
         <AnimatedButton
           rotation={AnimatedButton.DIRECTION_RIGHT}
-          onClick={() => configManager.selectByDelta(+1)}
+          onClick={() => selectByDelta(+1)}
         />
       </div>
     </div >

@@ -5,12 +5,12 @@ import { GoldenSeedsView } from './view/GoldenSeedsView';
 import { Config } from './domain/config/Config';
 import { animationService } from './domain/animation/AnimationService';
 import { configService } from './domain/config/ConfigService';
-import { RawConfig } from './domain/config/RawConfig';
 import { fontService } from './domain/font/FontService';
-import { configManager } from './domain/config/ConfigManager';
+import { configManager, ConfigItem } from './domain/config/ConfigManager';
+import { preconfigs } from './domain/config/data';
 
 export function App() {
-  const [configs, setConfigs] = useState<{ name: string; rawConfig: RawConfig; svg: string | null; }[]>([]);
+  const [configItems, setConfigItems] = useState<ConfigItem[]>([]);
   const [configsManageable, setConfigsManageable] = useState<boolean>(false);
   const [activeConfig, setActiveConfig] = useState<Config>();
 
@@ -21,17 +21,17 @@ export function App() {
     await fontService.saveBuffer(buffer).catch(() => { });
     await configManager.init();
     window.addEventListener('popstate', (e) => handleLocation(e));
-    setTimeout(() => handleLocation(), Math.max(0, 500 - (Date.now() - start)));
+    setTimeout(() => handleLocation(), Math.max(0, 1000 - (Date.now() - start)));
   }
 
   function handleLocation(e?: Event) {
     const location = e !== undefined ? (e.currentTarget as Window).location.search : window.location.search;
-    const preconfig = new URLSearchParams(location).get('name');
-    configManager.selectByName(preconfig ? preconfig : undefined);
+    const configName = new URLSearchParams(location).get('name');
+    configManager.select(configName ? configName : preconfigs[0]?.meta.name);
   }
 
   useEffect(() => {
-    const configsSubsription = configManager.configs$.subscribe(setConfigs);
+    const configItemsSubsription = configManager.configItems$.subscribe(setConfigItems);
     const configsManageableSubscription = configManager.configsManageable$.subscribe(setConfigsManageable);
     const activeConfigSubscription = configService.config$.subscribe(setActiveConfig);
     configService.config$
@@ -42,7 +42,7 @@ export function App() {
     setup();
 
     return () => {
-      configsSubsription.unsubscribe();
+      configItemsSubsription.unsubscribe();
       configsManageableSubscription.unsubscribe();
       activeConfigSubscription.unsubscribe();
     };
@@ -51,7 +51,7 @@ export function App() {
   return (
     <>
       <GoldenSeedsView
-        configs={configs}
+        configItems={configItems}
         configsManageable={configsManageable}
         activeConfig={activeConfig}
       />

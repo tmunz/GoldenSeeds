@@ -5,11 +5,10 @@ import { SvgCanvas } from '../domain/svg/SvgCanvas';
 import { Config } from '../domain/config/Config';
 import { Themer } from '../themer/Themer';
 import { svgService } from '../domain/svg/SvgService';
-import { RawConfig } from '../domain/config/RawConfig';
+import { ConfigItem } from '../domain/config/ConfigManager';
 import { PngExporter } from '../domain/png/PngExporter';
 import { SvgExporter } from '../domain/svg/SvgExporter';
-import { ConfigSaver } from '../domain/config/ConfigSaver';
-import { ConfigResetter } from '../domain/config/ConfigResetter';
+import { ConfigManagerUi } from '../domain/config/ConfigManagerUi';
 import { ConfigImporter } from '../domain/config/ConfigImporter';
 import { ConfigExporter } from '../domain/config/ConfigExporter';
 import { ConfigSelector } from '../domain/config/ConfigSelector';
@@ -22,7 +21,7 @@ import './GoldenSeedsView.styl';
 
 
 type Props = {
-  configs: { name: string; rawConfig: RawConfig; svg: string | null; }[];
+  configItems: ConfigItem[];
   configsManageable: boolean;
   activeConfig?: Config;
 };
@@ -87,22 +86,23 @@ export class GoldenSeedsView extends React.Component<Props, State> {
                   useAsToggle
                   onClick={(active) => this.setState({ editMode: !active })}
                 />
-                <TextInput value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
                 <div className="actions">
-                  {this.props.configsManageable &&
-                    <>
-                      <ConfigSaver config={this.props.activeConfig} />
-                      <ConfigResetter name={this.props.activeConfig.meta.name} />
-                      |
-                    </>
-                  }
                   <ConfigImporter />
                   {this.props.activeConfig &&
                     <>
                       <ConfigExporter config={this.props.activeConfig} />
-                      |
                       <SvgExporter getData={() => getExporterData()} />
                       <PngExporter getData={() => getExporterData()} />
+                    </>
+                  }
+                </div>
+                <div className="actions">
+                  {this.props.activeConfig &&
+                    <>
+                      <TextInput value={name} onChange={(name: string) => configService.setName(name)} label={'name'} />
+                      {this.props.configsManageable &&
+                        <ConfigManagerUi configItems={this.props.configItems} activeConfig={this.props.activeConfig} />
+                      }
                     </>
                   }
                 </div>
@@ -112,7 +112,7 @@ export class GoldenSeedsView extends React.Component<Props, State> {
           )}
 
           <div className="preconfig-bar">
-            <ConfigSelector configs={this.props.configs} selectedConfig={this.props.activeConfig?.meta.name} />
+            <ConfigSelector configItems={this.props.configItems} selectedConfig={this.props.activeConfig?.meta.name} />
           </div>
           <Themer />
         </ErrorBoundary>
