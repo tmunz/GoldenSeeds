@@ -5,7 +5,6 @@ Application to generate SVGs based on mathematical rules.
 ## Features
 - open / save configurations
 - export as SVG
-- export as PNG
 - animations based on number of items over time
 
 ## How To
