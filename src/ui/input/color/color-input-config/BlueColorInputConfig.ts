@@ -5,5 +5,5 @@ export const BlueColorInputConfig: ColorInputConfig = {
   min: 0,
   max: 0xFF,
   base: 0x10,
-  gradient: [{ r: 0, g: 0, b: 0 }, { r: 0, g: 0, b: 0xFF }],
+  gradient: [{ b: 0 }, { b: 0xFF }],
 };

@@ -6,5 +6,5 @@ export const LightnessColorInputConfig: ColorInputConfig = {
   min: 0,
   max: 100,
   base: 10,
-  gradient: [{ h: 0, s: 0, l: 0 }, { h: 0, s: 0, l: 100 }],
+  gradient: [{ l: 0 }, { l: 100 }],
 };

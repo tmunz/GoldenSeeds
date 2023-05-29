@@ -20,6 +20,7 @@
 
     .color-input-range {
       transform: rotate(270deg);
+      mask: linear-gradient(0deg, transparent 0%, black 70%);
 
       &>input {
         background: none;
@@ -55,6 +56,7 @@
             transition: .4s ease-in-out all;
             cursor: grab;
             border: 1px solid white;
+            outline: 1px solid black;
             appearance: none;
             background: none;
             width: 10px;
@@ -99,6 +101,10 @@
       align-content: center;
       text-align: center;
 
+      &.color-input-range-active {
+        mask: linear-gradient(90deg, transparent, black 30%);
+      }
+
       .color-input-entry {
         pointer-events: all;
 
@@ -117,6 +123,11 @@
           text-align: center;
           width: 30px;
           margin: 0;
+
+
+          &[type=button] {
+            cursor: pointer;
+          }
         }
       }
     }

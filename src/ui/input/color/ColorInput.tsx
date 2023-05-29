@@ -19,97 +19,132 @@ type InputData = ColorInputConfig & { value: string }
 export function ColorInput(props: { value: string, onChange: (acn: string) => void }) {
 
   const COLOR_MODES: ColorMode[] = ['rgb', 'hsl', 'random'];
-  const [colorMode, setColorMode] = useState<ColorMode>('rgb');
+  const RANDOM_GRADIENT: string = "linear-gradient(30deg, rgb(131,58,180) 0%, rgb(253,29,29) 50%, rgb(222, 205, 135) 100%)";
+  const ref = useRef<HTMLDivElement>(null);
+  const refs = useRef<(HTMLInputElement | null)[]>([]);
 
+  const [colorMode, setColorMode] = useState<ColorMode>('' as any);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [cursorPosition, setCursorPosition] = useState<number | null>(null);
+  const [color, setColor] = useState<Color>(new Color('#000000'));
+  const [colorValid, setColorValid] = useState<boolean>(true);
+  const [inputData, setInputData] = useState<InputData[]>(colorToInputData(color, colorMode));
 
-  const prepareField = (s: string, inputLength: number): string => {
-    const prepped = s.padStart(inputLength, '0');
-    return prepped.slice(-inputLength);
-  };
+  useEffect(() => {
+    const c = new Color(props.value);
+    //if (inputDataToColor().getAcn() !== c.getAcn()) {
+    setColorMode(c.isRandom() ? 'random' : 'rgb');
+    setInputData(colorToInputData(c, colorMode));
+    setColor(c);
+    //}
+  }, [props.value]);
 
-  const calculateInputLength = (config?: { max?: number, base?: number }): number => {
+  useEffect(() => {
+    setInputData(colorToInputData(color, colorMode));
+  }, [colorMode]);
+
+  useEffect(() => {
+    if (selectedIndex !== null) {
+      const inputIndex = selectedIndex ?? 0;
+      const input = refs.current[inputIndex];
+      if (input && cursorPosition !== null) {
+        input.setSelectionRange(cursorPosition, cursorPosition);
+        input.focus();
+      }
+    }
+  }, [refs, selectedIndex, cursorPosition, inputData]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      console.log(ref.current, ref.current && ref.current.contains(event.target as any));
+      if (ref.current && event && !ref.current.contains(event.target as any)) {
+        setSelectedIndex(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref]);
+
+  useEffect(() => {
+    setSelectedIndex(null);
+  }, [colorMode]);
+
+  useEffect(() => {
+    if (selectedIndex === null) {
+      setCursorPosition(null);
+    }
+  }, [selectedIndex]);
+
+  function calculateInputLength(config?: { max?: number, base?: number }): number {
     const max = config?.max !== undefined ? config.max : 100;
     const base = config?.base !== undefined ? config.base : 10;
     return Math.ceil(Math.log(max + 1) / Math.log(base));
   }
 
-  const colorToInputData = (c: Color): InputData[] => {
-    switch (colorMode) {
+  function prepareField(s: string, inputLength: number): string {
+    const prepped = s.padStart(inputLength, '0');
+    return prepped.slice(-inputLength);
+  }
+
+  function colorToInputData(c: Color, mode: ColorMode): InputData[] {
+    switch (mode) {
       case 'random': return ['', '', ''].map((key, i) => ({
         name: key,
         value: i === 0 ? 'ra' : i === 1 ? 'nd' : i === 2 ? 'om' : '',
-        gradient: [{ r: 0xff, g: 0, b: 0 }, { r: 0, g: 0xff, b: 0 }, { r: 0, g: 0, b: 0xff }],
+        gradient: [],
       }));
       case 'hsl': return [HueColorInputConfig, SaturationColorInputConfig, LightnessColorInputConfig, AlphaColorInputConfig].map(config => {
         const v = (c.getHsla() as any)[config.name];
+        const a = Math.round(config.name === 'a' ? v * 100 : v);
         return {
-          ...config, value: prepareField(Math.round(config.name === 'a' ? v * 100 : v).toString(config.base),
+          ...config, value: prepareField((isFinite(a) ? a : 100).toString(config.base),
             calculateInputLength(config))
         };
       });
       case 'rgb':
       default: return [RedColorInputConfig, GreenColorInputConfig, BlueColorInputConfig, AlphaColorInputConfig].map(config => {
         const v = (c.getRgba() as any)[config.name];
+        const a = Math.round(config.name === 'a' ? v * 100 : v);
         return {
-          ...config, value: prepareField(Math.round(config.name === 'a' ? v * 100 : v).toString(config.base),
+          ...config, value: prepareField((isFinite(a) ? a : 100).toString(config.base),
             calculateInputLength(config))
         };
       });
     }
   }
 
-  const refs = useRef<(HTMLInputElement | null)[]>([]);
-  const [cursor, setCursor] = useState<number[] | null>(null);
-  const [color, setColor] = useState<Color>(new Color('#000000'));
-  const [colorValid, setColorValid] = useState<boolean>(true);
-  const [inputData, setInputData] = useState<InputData[]>(colorToInputData(color));
-
-  useEffect(() => {
-    const c = new Color(props.value);
-    if (inputDataToColor().getAcn() !== c.getAcn()) {
-      setInputData(colorToInputData(c));
-      setColor(c);
-    }
-  }, [props.value, colorMode]);
-
-  useEffect(() => {
-    if (cursor !== null) {
-      const inputIndex = cursor[0] ?? 0;
-      const input = refs.current[inputIndex];
-      if (input) {
-        input.focus();
-        input.setSelectionRange(cursor[1], cursor[1] /*+1*/);
-      }
-    }
-  }, [refs, cursor, inputData]);
-
-  const inputDataToColor = () => {
+  function inputDataToColor() {
+    const a = inputData[3] !== undefined ? (Number.parseInt(inputData[3].value) / 100) : 100;
     const colorValue: ColorValue = colorMode === 'rgb' ? {
       r: Number.parseInt(inputData[0].value, 0x10),
       g: Number.parseInt(inputData[1].value, 0x10),
       b: Number.parseInt(inputData[2].value, 0x10),
+      a,
     } : colorMode === 'hsl' ? {
       h: Number.parseInt(inputData[0].value),
       s: Number.parseInt(inputData[1].value),
       l: Number.parseInt(inputData[2].value),
+      a,
     } : colorMode;
     return new Color(colorValue);
   }
 
-  const onPaste = (event: ClipboardEvent<HTMLInputElement>) => {
+  function onPaste(event: ClipboardEvent<HTMLInputElement>) {
     event.preventDefault();
     const pasted = event.clipboardData.getData("text/plain")
-    setInputData(colorToInputData(new Color(pasted)));
+    setInputData(colorToInputData(new Color(pasted), colorMode));
   };
 
-  const prepareDelete = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  function prepareDelete(event: React.KeyboardEvent<HTMLInputElement>) {
     const code = event.keyCode || event.charCode;
     if (code === 8 || code === 46) {
       event.preventDefault();
     }
   }
 
-  const handleDelete = (event: React.KeyboardEvent<HTMLInputElement> & ChangeEvent<HTMLInputElement>, key: number) => {
+  function handleDelete(event: React.KeyboardEvent<HTMLInputElement> & ChangeEvent<HTMLInputElement>, key: number) {
     const code = event.keyCode || event.charCode;
     const s = event.target.value ?? '';
     const index = event.target.selectionStart ?? 0;
@@ -123,39 +158,49 @@ export function ColorInput(props: { value: string, onChange: (acn: string) => vo
     }
   }
 
-  const handleRangeInputChange = (event: ChangeEvent<HTMLInputElement>, key: number) => {
+  function handleRangeInputChange(event: ChangeEvent<HTMLInputElement>, key: number) {
     const n = Number.parseInt(event.target.value);
     update(n.toString(inputData[key].base ?? 10), key, 0);
   }
 
-  const handleTextInputChange = (event: ChangeEvent<HTMLInputElement>, key: number) => {
+  function handleTextInputChange(event: ChangeEvent<HTMLInputElement>, key: number) {
     const s = event.target.value ?? '';
     const index = event.target.selectionStart ?? 0;
     update(`${s.slice(0, index)}${s.slice(index + 1)}`, key, index);
   }
 
-  const adjustCursorPosition = (inputLength: number, cursorPosition: number, key: number) => {
-    if (inputLength !== undefined && inputLength <= cursorPosition) {
+  function handleClick() {
+    if (colorMode === 'random') {
+      const c = color;
+      c.setRandom();
+      props.onChange(c.getAcn());
+    }
+  }
+
+  function adjustCursorPosition(inputLength: number, cursor: number, key: number) {
+    if (inputLength !== undefined && inputLength <= cursor) {
       const nextInputField = refs.current[key + 1];
       if (nextInputField !== undefined && nextInputField !== null) {
-        setCursor([key + 1, 0]);
+        setSelectedIndex(key + 1);
+        setCursorPosition(0);
       } else {
-        setCursor([key, cursorPosition]);
+        setCursorPosition(cursor);
       }
     } else {
       const nextInputField = refs.current[key];
       if (nextInputField !== undefined && nextInputField !== null) {
-        setCursor([key, cursorPosition]);
+        setSelectedIndex(key);
+        setCursorPosition(cursor);
       }
     };
   }
 
-  const update = (s: string, key: number, cursorPosition: number) => {
+  function update(s: string, key: number, cursorPosition: number) {
     const nextString = prepareField(s, calculateInputLength(inputData[key]));
     const nextInputDatas: InputData[] = [...inputData];
     nextInputDatas[key].value = nextString;
     setInputData(nextInputDatas);
-    const currentInputData = cursor ? nextInputDatas[cursor[0]] : undefined;
+    const currentInputData = selectedIndex !== null ? nextInputDatas[selectedIndex] : undefined;
     const inputLength = calculateInputLength(currentInputData);
     adjustCursorPosition(inputLength, cursorPosition, key);
     const c = inputDataToColor();
@@ -168,26 +213,26 @@ export function ColorInput(props: { value: string, onChange: (acn: string) => vo
     }
   };
 
-  const currentInputData = inputData[(cursor && cursor[0]) ?? 0];
+  const currentInputData = inputData[selectedIndex ?? 0];
 
-  return <div className="color-input">
+  return <div className="color-input" ref={ref}>
     <div className={`color-input-main${colorValid ? '' : ' color-input-invalid'}`}>
       <div className="color-input-range"
         style={{
-          opacity: cursor ? 1 : 0,
+          opacity: selectedIndex !== null ? 1 : 0,
           background: `linear-gradient(90deg, 
-            ${currentInputData.gradient.map((g, i, arr) => `${new Color(g).getRgbaString()} ${i / (arr.length - 1) * 100}% `).join(',')}`
+            ${currentInputData.gradient.map((g, i, arr) => `${new Color({ ...(colorMode === 'hsl' ? color.getHsla() : color.getRgba()), ...g }).getRgbaString()} ${i / (arr.length - 1) * 100}% `).join(',')}`
         }} >
         <input
           type="range"
           min={currentInputData.min}
           max={currentInputData.max}
           value={Number.parseInt(currentInputData.value, currentInputData.base)}
-          onChange={(event) => handleRangeInputChange(event, cursor ? cursor[0] : 0)}
+          onChange={(event) => handleRangeInputChange(event, selectedIndex ?? 0)}
         />
       </div>
-      <div className="color-input-field"
-        style={{ background: `linear-gradient(90deg, ${cursor ? 'transparent' : color.getRgbaString()}  0%, ${color.getRgbaString()} 40%` }}>
+      <div className={`color-input-field${selectedIndex !== null ? ' color-input-range-active' : ''}`}
+        style={{ background: color.isRandom() ? RANDOM_GRADIENT : color.getRgbaString(), }}>
         {inputData.map((entry: InputData, key: number) =>
           <div className="color-input-entry">
             <label>{entry.name}</label>
@@ -197,11 +242,12 @@ export function ColorInput(props: { value: string, onChange: (acn: string) => vo
               style={{ color: color.getHsla().l < 50 ? '#FFF' : '#000' }}
               value={entry.value}
               onPaste={onPaste}
-              onSelect={(event) => setCursor([key, (event.currentTarget as any).selectionStart])}
+              onSelect={(event) => { setSelectedIndex(key); setCursorPosition((event.currentTarget as any).selectionStart); }}
               onKeyDown={prepareDelete}
               onKeyUp={(event) => handleDelete(event as any, key)}
               onChange={(event) => handleTextInputChange(event, key)}
-              disabled={colorMode === 'random'}
+              onClick={() => handleClick()}
+              type={colorMode === 'random' ? 'button' : 'text'}
             />
             <label>{entry.unit}</label>
           </div>
@@ -211,9 +257,7 @@ export function ColorInput(props: { value: string, onChange: (acn: string) => vo
     <CarouselSelector
       items={COLOR_MODES.map(c => ({ name: c.toString(), svg: null }))}
       selected={colorMode}
-      select={(c) => {
-        setColorMode(c as ColorMode);
-      }}
+      select={(c) => setColorMode(c as ColorMode)}
     />
   </div>
 }

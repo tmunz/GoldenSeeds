@@ -6,5 +6,5 @@ export const AlphaColorInputConfig: ColorInputConfig = {
   min: 0,
   max: 100,
   base: 10,
-  gradient: [{ r: 0, g: 0, b: 0, a: 0 }, { r: 0, g: 0, b: 0, a: 100 }],
+  gradient: [{ a: 0 }, { a: 1 }],
 };

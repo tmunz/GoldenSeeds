@@ -1,4 +1,4 @@
-import { ColorValue } from "../../../../datatypes/Color";
+import { RgbaColor, HslaColor } from "../../../../datatypes/Color";
 
 export interface ColorInputConfig {
   name: string;
@@ -6,5 +6,5 @@ export interface ColorInputConfig {
   min?: number;
   max?: number;
   base?: number;
-  gradient: ColorValue[]
+  gradient: Partial<RgbaColor | HslaColor>[]
 }

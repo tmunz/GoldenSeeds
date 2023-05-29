@@ -62,15 +62,19 @@ export class Color {
   }
 
   getRgbaString(seed = 0): string {
-    if (this.getRgba().a === 0) {
-      return 'none';
-    } else {
-      return Color.rgbaToString(this.random ? Color.randomColor(seed) : this.getRgba());
-    }
+    return Color.rgbaToString(this.random ? Color.randomColor(seed) : this.getRgba());
   }
 
   getAcn(): string {
     return Color.rgbaToAcn(this.getRgba(), this.random);
+  }
+
+  isRandom(): boolean {
+    return this.random;
+  }
+
+  setRandom(random = true): void {
+    this.random = random;
   }
 
   // range 0..1
@@ -159,7 +163,6 @@ export class Color {
       const k = (channel * 4 + hsla.h / 30) % 12;
       return (hsla.l / 100 - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)) * 0xff;
     }
-    console.log(hsla, { r: toRgb(0), g: toRgb(2), b: toRgb(1), a: hsla.a });
     return { r: toRgb(0), g: toRgb(2), b: toRgb(1), a: hsla.a };
   }
 }
