@@ -29,10 +29,10 @@ export function plot(config: FunctionPlotterConfig, grid: Point[]): { svg: strin
         config.style.resolution,
       );
       const svg = `<path 
-        fill="${config.style.fillColor.toRgbHex(j)}"
-        fill-opacity="${config.style.fillColor.alpha}"
-        stroke="${config.style.strokeColor.toRgbHex(j)}"
-        stroke-opacity="${config.style.strokeColor.alpha}"
+        fill="${config.style.fillColor.getRgbString(j)}"
+        fill-opacity="${config.style.fillColor.getOpacity()}"
+        stroke="${config.style.strokeColor.getRgbString(j)}"
+        stroke-opacity="${config.style.strokeColor.getOpacity()}"
         stroke-width="${config.style.strokeWidth(j, config.plot.items)}"
         vector-effect="non-scaling-stroke"
         d="${coordinates.highResolution.reduce((s: string, point: Point, i: number) => {

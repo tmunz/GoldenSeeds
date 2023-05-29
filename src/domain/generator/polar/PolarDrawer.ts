@@ -25,8 +25,8 @@ export function draw(config: PolarConfig, grid: Point[]): { svg: string; points:
         y1="${p[Point.Y]}"
         x2="${coordinate[Point.X]}"
         y2="${coordinate[Point.Y]}"
-        stroke="${config.style.color.toRgbHex(j)}"
-        stroke-opacity="${config.style.color.alpha}"
+        stroke="${config.style.color.getRgbString(j)}"
+        stroke-opacity="${config.style.color.getOpacity()}"
         stroke-width="${config.style.strokeWidth(j, config.grid.items)}"
         vector-effect="non-scaling-stroke"
       />`,

@@ -71,10 +71,10 @@ function drawCell(cell: Cell, style: string) {
 
 function style(n: number, style: { fillColor: Color; strokeColor: Color; strokeWidth: number }) {
   return `
-    fill="${style.fillColor.toRgbHex(n)}" 
-    fill-opacity="${style.fillColor.alpha}"
-    stroke="${style.strokeColor.toRgbHex(n)}" 
-    stroke-opacity="${style.strokeColor.alpha}"
+    fill="${style.fillColor.getRgbString(n)}" 
+    fill-opacity="${style.fillColor.getOpacity()}"
+    stroke="${style.strokeColor.getRgbString(n)}" 
+    stroke-opacity="${style.strokeColor.getOpacity()}"
     stroke-width="${style.strokeWidth}" 
     vector-effect="non-scaling-stroke"
   `;

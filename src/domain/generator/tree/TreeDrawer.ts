@@ -20,8 +20,8 @@ export function draw(config: TreeConfig, grid: Point[]): { svg: string; points: 
             y1="${p[Point.Y] - limb.from[Point.Y]}"
             x2="${p[Point.X] + limb.to[Point.X]}"
             y2="${p[Point.Y] - limb.to[Point.Y]}"
-            stroke="${config.style.color.toRgbHex(i)}"
-            stroke-opacity="${config.style.color.alpha}"
+            stroke="${config.style.color.getRgbString(i)}"
+            stroke-opacity="${config.style.color.getOpacity()}"
             stroke-width="${Math.pow(config.length.conservation, limb.level) * 5}"
             vector-effect="non-scaling-stroke"
           />`,

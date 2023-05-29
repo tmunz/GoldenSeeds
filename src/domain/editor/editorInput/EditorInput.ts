@@ -7,6 +7,6 @@ export abstract class EditorInput<T> {
     name: string,
     definition: ParamDefinition,
     state: StageItemState<T>,
-    action: (value: string) => void,
+    action: (textValue: string) => void,
   ): ReactNode;
 }

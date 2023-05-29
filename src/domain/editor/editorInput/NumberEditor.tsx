@@ -9,7 +9,7 @@ export class NumberEditor extends EditorInput<number> {
     name: string,
     definition: ParamDefinition,
     state: StageItemState<number>,
-    action: (value: string) => void,
+    action: (textValue: string) => void,
   ): ReactNode {
     const value = Number.parseFloat(state.textValue);
     return (

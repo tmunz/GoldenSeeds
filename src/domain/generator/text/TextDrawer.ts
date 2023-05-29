@@ -38,8 +38,8 @@ function drawFont(p: Point, config: TextDrawerConfig, size: number): { svg: stri
   const translateY = (boundingBox.max[Point.Y] - boundingBox.min[Point.Y]) / 2;
   const svg = `<path 
     d="${path.toPathData(5)}"
-    fill="${config.style.color.toRgbHex()}"
-    fill-opacity="${config.style.color.alpha}"
+    fill="${config.style.color.getRgbString()}"
+    fill-opacity="${config.style.color.getOpacity()}"
     transform="translate(${translateX} ${translateY})"
    />`;
   return {

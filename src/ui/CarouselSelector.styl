@@ -1,4 +1,5 @@
-.config-selector {
+.carousel-selector {
+  width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -7,23 +8,16 @@
   align-content: center;
   user-select: none;
 
-  &>.config-prev,
-  &>.config-next {
+  &>.carousel-prev,
+  &>.carousel-next {
     background: unquote('rgb(var(--backgroundColor))');
-
-    padding: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: .4s ease-in-out all;
-
-    .animated-icon {
-      height: 40px;
-      width: 40px;
-    }
   }
 
-  .config-overview {
+  .carousel-overview {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -32,10 +26,8 @@
     width: 100%;
     background: unquote('rgba(var(--backgroundColor), 0.5)');
     backdrop-filter: blur(4px);
-    height: 200px;
     overflow: hidden;
     transition: all 1s ease-in-out;
-    opacity: 0;
     cursor: grab;
 
     &.grabbing {
@@ -47,11 +39,7 @@
       }
     }
 
-    &:hover {
-      opacity: 1;
-    }
-
-    .config-item {
+    .carousel-item {
       position: absolute;
       backface-visibility: hidden;
       transition: all 0.3s cubic-bezier(0.75, 0, 0.75, 0);

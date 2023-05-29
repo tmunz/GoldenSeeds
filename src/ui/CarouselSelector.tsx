@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { AnimatedButton } from './AnimatedButton';
 
-import { AnimatedButton } from '../../ui/AnimatedButton';
-import { configManager, ConfigItem } from './ConfigManager';
-
-import './ConfigSelector.styl';
+import './CarouselSelector.styl';
 
 
-interface Props {
-  configItems: ConfigItem[];
-  selectedConfig?: string;
+interface CarouselSelectorItem {
+  name: string;
+  svg: string | null;
 }
 
-export function ConfigSelector(props: Props) {
+interface Props {
+  items: CarouselSelectorItem[];
+  selected?: string;
+  select: (name: string) => void;
+  scale?: number;
+}
+
+export function CarouselSelector(props: Props) {
 
   const MAX_AROUND = 3;
 
@@ -19,18 +24,18 @@ export function ConfigSelector(props: Props) {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
   useEffect(() => {
-    const arr = props.configItems;
-    const i = arr.findIndex(p => p && p.name === props.selectedConfig);
+    const arr = props.items;
+    const i = arr.findIndex(p => p && p.name === props.selected);
     setSelectedIndex(0 <= i ? i : 0);
-  }, [props.configItems, props.selectedConfig]);
+  }, [props.items, props.selected]);
 
   useEffect(() => {
     const mouseMove = (e: MouseEvent | TouchEvent) => {
       if (startX === null) { return; }
       const deltaX = (e instanceof MouseEvent ? e : e.touches[0]).clientX - startX;
-      const deltaIndex = convertDeltaXToConfigDelta(deltaX);
+      const deltaIndex = convertDeltaXToItemDelta(deltaX);
       if (deltaIndex !== 0) {
-        const count = (props.configItems ?? []).length;
+        const count = (props.items ?? []).length;
         const selected = selectedIndex + deltaIndex;
         setSelectedIndex((selected + count) % count);
         setStartX(startX + deltaX);
@@ -42,13 +47,13 @@ export function ConfigSelector(props: Props) {
       window.removeEventListener('mousemove', mouseMove);
       window.removeEventListener('touchmove', mouseMove);
     };
-  }, [startX, selectedIndex, props.configItems]);
+  }, [startX, selectedIndex, props.items]);
 
   useEffect(() => {
     const mouseUp = () => {
       if (startX === null) { return; }
-      const selectedPreconfig = (props.configItems ?? [])[selectedIndex];
-      setTimeout(() => configManager.select(selectedPreconfig?.name), 300);
+      const selected = (props.items ?? [])[selectedIndex];
+      setTimeout(() => props.select(selected?.name), 300);
       setStartX(null);
     };
     window.addEventListener('mouseup', mouseUp);
@@ -57,9 +62,9 @@ export function ConfigSelector(props: Props) {
       window.removeEventListener('mouseup', mouseUp);
       window.removeEventListener('touchend', mouseUp);
     };
-  }, [startX, props.configItems]);
+  }, [startX, props.items]);
 
-  function convertDeltaXToConfigDelta(dX: number): number {
+  function convertDeltaXToItemDelta(dX: number): number {
     return -1 * Math.sign(dX) * Math.floor(Math.abs(dX) / 50);
   }
 
@@ -75,33 +80,33 @@ export function ConfigSelector(props: Props) {
   }
 
   function selectByDelta(delta: number) {
-    const nextIndex = (selectedIndex + delta + props.configItems.length) % props.configItems.length;
-    configManager.select(props.configItems[nextIndex].name);
+    const nextIndex = (selectedIndex + delta + props.items.length) % props.items.length;
+    props.select(props.items[nextIndex].name);
   }
 
   return (
-    <div className="config-selector">
-      <div className="config-prev">
+    <div className="carousel-selector">
+      <div className="carousel-prev">
         <AnimatedButton
           rotation={AnimatedButton.DIRECTION_LEFT}
           onClick={() => selectByDelta(-1)}
         />
       </div>
       <div
-        className={['config-overview', startX === null ? '' : 'grabbing'].join(' ')}
+        className={['carousel-overview', startX === null ? '' : 'grabbing'].join(' ')}
         onMouseDown={handleMouseDown}
         onTouchStart={handleMouseDown}
       >
-        {(props.configItems ?? []).map((config, i, arr) => {
+        {(props.items ?? []).map((item, i, arr) => {
           const delta = calculateMinDelta(i - selectedIndex, arr.length);
           const p = Math.max(-MAX_AROUND - 1, Math.min(MAX_AROUND + 1, delta));
           const angle = p / MAX_AROUND * Math.PI / 2 * 0.7;
           const scale = 1 / (p == 0 ? 1 : Math.abs(p * 10) ** 0.3);
-          const offset = Math.sin(p / (MAX_AROUND + 1) * Math.PI / 2) * 300;
+          const offset = Math.sin(p / (MAX_AROUND + 1) * Math.PI / 2) * 100 * (props.scale ?? 1);
           const visible = Math.abs(delta) <= MAX_AROUND;
           return <div
-            key={config.name}
-            className="config-item"
+            key={item.name}
+            className="carousel-item"
             style={{
               transform: `translateX(${offset}px) scale(${scale}) rotateY(${angle}rad)`,
               opacity: visible ? 1 : 0,
@@ -111,18 +116,18 @@ export function ConfigSelector(props: Props) {
               event.preventDefault();
               event.stopPropagation();
               setSelectedIndex(i);
-              setTimeout(() => configManager.select(config.name), 300);
+              setTimeout(() => props.select(item.name), 300);
             }}>
-              <div>{config.name}</div>
-              {config.svg && <img
+              <div>{item.name}</div>
+              {item.svg && <img
                 draggable="false"
                 className="preview"
-                src={`data:image/svg+xml;base64,${window.btoa(config.svg)}`} />}
+                src={`data:image/svg+xml;base64,${window.btoa(item.svg)}`} />}
             </a>
           </div>;
         })}
       </div>
-      <div className="config-next">
+      <div className="carousel-next">
         <AnimatedButton
           rotation={AnimatedButton.DIRECTION_RIGHT}
           onClick={() => selectByDelta(+1)}

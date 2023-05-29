@@ -15,10 +15,3 @@ export const random = (min = 0, max = 1, seed?: number): number => {
 export const randomInt = (from = 0, to = 100, seed?: number): number => {
   return Math.floor(random(Math.ceil(from), Math.floor(to) + 1, seed));
 };
-
-export const randomColor = (seed: number): number => {
-  const min = 0;
-  const max = 0xffffff;
-  const rand = Math.abs(Math.sin(seed + 5)) % 1;
-  return Math.floor(rand * (max - min) + min + 1);
-};

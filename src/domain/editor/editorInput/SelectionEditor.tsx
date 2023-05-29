@@ -9,7 +9,7 @@ export class SelectionEditor extends EditorInput<string> {
     name: string,
     definition: ParamDefinition,
     state: StageItemState<string>,
-    action: (value: string) => void,
+    action: (textValue: string) => void,
   ): ReactNode {
     const options = (definition as ParamDefinitionSelection)?.options;
     return (

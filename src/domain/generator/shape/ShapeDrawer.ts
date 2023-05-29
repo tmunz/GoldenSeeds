@@ -256,10 +256,10 @@ function pointAsSvg(p: Point) {
 
 function style(n: number, fillColor: Color, strokeColor: Color, strokeWidth: number) {
   return `
-    fill="${fillColor.toRgbHex(n)}"
-    fill-opacity="${fillColor.alpha}"  
-    stroke="${strokeColor.toRgbHex(n)}" 
-    stroke-opacity="${strokeColor.alpha}" 
+    fill="${fillColor.getRgbString(n)}"
+    fill-opacity="${fillColor.getOpacity()}"  
+    stroke="${strokeColor.getRgbString(n)}" 
+    stroke-opacity="${strokeColor.getOpacity()}" 
     stroke-width="${strokeWidth}"
     vector-effect="non-scaling-stroke"
   `;

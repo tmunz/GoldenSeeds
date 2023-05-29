@@ -71,8 +71,8 @@ function drawLine(from: Point, to: Point, config: CartesianConfig, i: number) {
       y1="${from[Point.Y]}"
       x2="${to[Point.X]}"
       y2="${to[Point.Y]}"
-      stroke="${config.style.color.toRgbHex(i)}"
-      stroke-opacity="${config.style.color.alpha}"
+      stroke="${config.style.color.getRgbString(i)}"
+      stroke-opacity="${config.style.color.getOpacity()}"
       stroke-width="${config.style.strokeWidth(i, config.grid.items)}"
       vector-effect="non-scaling-stroke"
     />`;

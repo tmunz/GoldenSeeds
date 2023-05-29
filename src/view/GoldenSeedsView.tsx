@@ -5,14 +5,14 @@ import { SvgCanvas } from '../domain/svg/SvgCanvas';
 import { Config } from '../domain/config/Config';
 import { Themer } from '../themer/Themer';
 import { svgService } from '../domain/svg/SvgService';
-import { ConfigItem } from '../domain/config/ConfigManager';
+import { ConfigItem, configManager } from '../domain/config/ConfigManager';
 import { PngExporter } from '../domain/png/PngExporter';
 import { SvgExporter } from '../domain/svg/SvgExporter';
 import { ConfigManagerUi } from '../domain/config/ConfigManagerUi';
 import { ConfigImporter } from '../domain/config/ConfigImporter';
 import { ConfigExporter } from '../domain/config/ConfigExporter';
-import { ConfigSelector } from '../domain/config/ConfigSelector';
 import { configService } from '../domain/config/ConfigService';
+import { CarouselSelector } from '../ui/CarouselSelector';
 import { TextInput } from '../ui/input/TextInput';
 import { AnimatedButton } from '../ui/AnimatedButton';
 import { EditorNone, EditorClose, EditorRegular } from '../ui/icon/Editor';
@@ -112,7 +112,12 @@ export class GoldenSeedsView extends React.Component<Props, State> {
           )}
 
           <div className="preconfig-bar">
-            <ConfigSelector configItems={this.props.configItems} selectedConfig={this.props.activeConfig?.meta.name} />
+            <CarouselSelector
+              items={this.props.configItems}
+              selected={this.props.activeConfig?.meta.name}
+              select={id => configManager.select(id)}
+              scale={3}
+            />
           </div>
           <Themer />
         </ErrorBoundary>

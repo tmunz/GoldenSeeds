@@ -1,101 +1,184 @@
-import { randomColor } from '../utils/Random';
+import { BehaviorSubject } from 'rxjs';
+
+export interface RgbaColor {
+  r: number;
+  g: number;
+  b: number;
+  a?: number | undefined;
+}
+
+export interface HslaColor {
+  h: number;
+  s: number;
+  l: number;
+  a?: number | undefined;
+}
+
+export type ColorValue = string | RgbaColor | HslaColor;
 
 export class Color {
-  red = 0;
-  green = 0;
-  blue = 0;
-  alpha = 1;
-  random = false;
 
-  constructor(value: { r: number; g: number; b: number; a?: number; random?: boolean } | string) {
-    if (typeof value === 'string') {
-      this.fromRaw(value);
-    } else {
-      this.red = value.r;
-      this.green = value.g;
-      this.blue = value.b;
-      this.alpha = value.a !== undefined ? value.a : 1;
-      this.random = value.random ?? false;
+  private random = false;
+  private textValue$ = new BehaviorSubject<string>('black');
+  private rgba: RgbaColor | null = null;
+
+  constructor(colorValue?: ColorValue) {
+    this.textValue$.subscribe(v => this.rgba = Color.textToRgba(v));
+    if (colorValue !== undefined) {
+      if (typeof colorValue === 'string') {
+        this.setTextValue(colorValue);
+      } else if ('r' in colorValue && 'g' in colorValue && 'b' in colorValue) {
+        this.setTextValue(Color.rgbaToAcn(colorValue));
+      } else if ('h' in colorValue && 's' in colorValue && 'l' in colorValue) {
+        this.setTextValue(Color.hslaToAcn(colorValue));
+      }
     }
   }
 
-  toRgbHex(seed = 0): string {
-    if (this.alpha === 0) {
-      return 'none';
-    } else if (this.random) {
-      return '#' + (0xf000000 | randomColor(seed)).toString(16).substring(1, 7);
-    } else {
-      return '#' + (0xf000000 | (this.red << 16) | (this.green << 8) | this.blue).toString(16).substring(1, 7);
-    }
-  }
-
-  toRgba(): { r: number; g: number; b: number; a?: number } {
-    return { r: this.red, g: this.green, b: this.blue, a: this.alpha };
-  }
-
-  fromRaw(raw: string): Color {
-    const value = COLORS[raw];
-    if (value !== undefined) {
-      if (value.r !== undefined) {
-        this.red = value.r;
-      }
-      if (value.g !== undefined) {
-        this.green = value.g;
-      }
-      if (value.b !== undefined) {
-        this.blue = value.b;
-      }
-      if (value.a !== undefined) {
-        this.alpha = value.a;
-      }
-      this.random = value.random ?? false;
-    } else if (typeof raw !== 'undefined' && raw.length > 0 && raw.charAt(0) === '#') {
-      const parsedValue = parseInt(raw.substring(1), 16);
-      if (isFinite(parsedValue)) {
-        if (raw.length === 7) {
-          this.red = 0xff & (parsedValue >> 16);
-          this.green = 0xff & (parsedValue >> 8);
-          this.blue = 0xff & parsedValue;
-        } else if (raw.length === 4) {
-          // enable #fff as well as #ffffff
-          this.red = 0xff & (parsedValue >> 8);
-          this.green = 0xff & (parsedValue >> 4);
-          this.blue = 0xff & parsedValue;
-        }
-      }
-    } else if (raw.slice(0, 2) === '0x' && raw.length === 11 && isFinite(Number(raw))) {
-      this.red = Number(`0x${raw.slice(5, 7)}`);
-      this.green = Number(`0x${raw.slice(7, 9)}`);
-      this.blue = Number(`0x${raw.slice(9, 11)}`);
-      this.alpha = Number(`0x${raw.slice(3, 5)}`) / 255;
-      this.random = raw.slice(2, 3) === '1';
-    }
+  setTextValue(v: string): Color {
+    this.random = v.toLowerCase() === 'random' || v.slice(0, 3) === '0x1';
+    this.textValue$.next(v);
     return this;
   }
 
-  toRaw(): string {
-    const a = 0xff & Math.round(this.alpha * 255);
-    const random = this.random ? 0x1 : 0x0;
-    return `0x${random}${a.toString(16).padStart(2, '0')}${this.toRgbHex().replace('#', '')}`;
+  getTextValue(): string {
+    return this.textValue$.value;
+  }
+
+  getRgba(): RgbaColor {
+    return this.rgba || ColorRecord.black;
+  }
+
+  getHsla(): HslaColor {
+    return Color.rgbaToHsla(this.getRgba());
+  }
+
+  getRgbString(seed = 0): string {
+    if (this.getRgba().a === 0) {
+      return 'none';
+    } else {
+      return Color.rgbToString(this.random ? Color.randomColor(seed) : this.getRgba());
+    }
+  }
+
+  getRgbaString(seed = 0): string {
+    if (this.getRgba().a === 0) {
+      return 'none';
+    } else {
+      return Color.rgbaToString(this.random ? Color.randomColor(seed) : this.getRgba());
+    }
+  }
+
+  getAcn(): string {
+    return Color.rgbaToAcn(this.getRgba(), this.random);
+  }
+
+  // range 0..1
+  getOpacity(): number {
+    return this.getRgba().a ?? 1;
+  }
+
+  isValid(): boolean {
+    return this.rgba !== null;
+  }
+
+  static randomColor(seed: number): RgbaColor {
+    const max = 0xffffff;
+    const rand = Math.abs(Math.sin(seed + 5)) % 1;
+    const c = Math.floor(rand * max + 1);
+    return { r: 0xff & (c >> (16)), g: 0xff & (c >> (8)), b: 0xff & c };
+  };
+
+  static textToRgba(s: string): RgbaColor | null {
+    return Color.namedColorToRgba(s) || Color.textValueToRgba(s) || Color.acnToRgba(s);
+  }
+
+  static textValueToRgba(s: string): RgbaColor | null {
+    if (s.charAt(0) === '#') {
+      const parsedValue = parseInt(s.substring(1), 16);
+      if (isFinite(parsedValue)) {
+        const m = s.length < 6 ? 1 : 2;
+        return { r: 0xff & (parsedValue >> (8 * m)), g: 0xff & (parsedValue >> (4 * m)), b: 0xff & parsedValue };
+      }
+    }
+    return null;
+  }
+
+  static namedColorToRgba(namedColor: string): RgbaColor | null {
+    return ColorRecord[namedColor] ?? null;
+  }
+
+  static rgbaToAcn(rgba: RgbaColor, random: boolean = false): string {
+    const a = 0xff & Math.round((rgba.a ?? 1) * 255);
+    const randomFlag = random ? 0x1 : 0x0;
+    return `0x${randomFlag}${a.toString(16).padStart(2, '0')}${Color.rgbToString(rgba).replace('#', '')}`;
+  }
+
+  static hslaToAcn(hsla: HslaColor, random?: boolean): string {
+    return Color.rgbaToAcn(Color.hslaToRgba(hsla), random);
+  }
+
+  static rgbToString(rgb: RgbaColor): string {
+    return '#' + (0xf000000 | (Math.round(rgb.r) << 16) | (Math.round(rgb.g) << 8) | Math.round(rgb.b)).toString(16).substring(1, 7);
+  }
+
+  static rgbaToString(rgba: RgbaColor): string {
+    return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`;
+  }
+
+  static acnToRgba(acn: string): RgbaColor | null {
+    if (acn.slice(0, 2) === '0x' && acn.length === 11 && isFinite(Number(acn))) {
+      return {
+        r: Number(`0x${acn.slice(5, 7)}`),
+        g: Number(`0x${acn.slice(7, 9)}`),
+        b: Number(`0x${acn.slice(9, 11)}`),
+        a: Number(`0x${acn.slice(3, 5)}`) / 255,
+      };
+    }
+    return null;
+  }
+
+  static rgbaToHsla(rgba: RgbaColor): HslaColor {
+    const r = rgba.r / 0xFF;
+    const g = rgba.g / 0xFF;
+    const b = rgba.b / 0xFF;
+    const l = Math.max(r, g, b);
+    const s = l - Math.min(r, g, b);
+    const h = s ? l === r ? (g - b) / s : l === g ? 2 + (b - r) / s : 4 + (r - g) / s : 0;
+    return {
+      h: (60 * h + 360) % 360,
+      s: 100 * (s ? (l <= 0.5 ? s / (2 * l - s) : s / (2 - (2 * l - s))) : 0),
+      l: (100 * (2 * l - s)) / 2,
+      a: rgba.a,
+    }
+  }
+
+  static hslaToRgba(hsla: HslaColor): RgbaColor {
+    const toRgb = (channel: number) => {
+      const a = hsla.s / 100 * Math.min(hsla.l / 100, 1 - hsla.l / 100);
+      const k = (channel * 4 + hsla.h / 30) % 12;
+      return (hsla.l / 100 - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)) * 0xff;
+    }
+    console.log(hsla, { r: toRgb(0), g: toRgb(2), b: toRgb(1), a: hsla.a });
+    return { r: toRgb(0), g: toRgb(2), b: toRgb(1), a: hsla.a };
   }
 }
 
-export const COLORS: Record<string, { r?: number; g?: number; b?: number; a?: number; random?: boolean }> = {
-  black: { r: 0x00, g: 0x00, b: 0x00 },
-  white: { r: 0xff, g: 0xff, b: 0xff },
+export const ColorRecord: Record<string, RgbaColor> = {
+  black: { r: 0x00, g: 0x00, b: 0x00, a: 1 },
+  white: { r: 0xff, g: 0xff, b: 0xff, a: 1 },
 
-  red: { r: 0xff, g: 0x00, b: 0x00 },
-  green: { r: 0x00, g: 0xff, b: 0x00 },
-  blue: { r: 0x00, g: 0x00, b: 0xff },
+  red: { r: 0xff, g: 0x00, b: 0x00, a: 1 },
+  green: { r: 0x00, g: 0xff, b: 0x00, a: 1 },
+  blue: { r: 0x00, g: 0x00, b: 0xff, a: 1 },
 
-  yellow: { r: 0xff, g: 0xff, b: 0x00 },
-  magenta: { r: 0xff, g: 0x00, b: 0xff },
-  cyan: { r: 0x00, g: 0xff, b: 0xff },
+  yellow: { r: 0xff, g: 0xff, b: 0x00, a: 1 },
+  magenta: { r: 0xff, g: 0x00, b: 0xff, a: 1 },
+  cyan: { r: 0x00, g: 0xff, b: 0xff, a: 1 },
 
-  gold: { r: 0xde, g: 0xcd, b: 0x87 }, // 0xffd700
-  patina: { r: 0xbc, g: 0xde, b: 0x87 },
+  gold: { r: 0xde, g: 0xcd, b: 0x87, a: 1 }, // 0xffd700
+  patina: { r: 0xbc, g: 0xde, b: 0x87, a: 1 },
 
-  random: { random: true },
-  transparent: { a: 0 },
-  none: { a: 0 },
+  transparent: { r: 0, g: 0, b: 0, a: 0 },
+  none: { r: 0, g: 0, b: 0, a: 0 },
 };

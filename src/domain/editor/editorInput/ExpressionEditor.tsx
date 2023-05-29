@@ -11,7 +11,7 @@ export class ExpressionEditor extends EditorInput<
     name: string,
     definition: ParamDefinition,
     state: StageItemState<(n: number, items: number, itemSize: (n: number) => number) => number>,
-    action: (value: string) => void,
+    action: (textValue: string) => void,
   ): ReactNode {
     // const regexResult = state.textValue.match(/^\s*(n\s\*\s*(.*\S)?)\s*$/);
     // const nMode: boolean = regexResult ? true : false;

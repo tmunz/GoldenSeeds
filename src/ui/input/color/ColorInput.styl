@@ -1,0 +1,124 @@
+.color-input {
+
+  .color-input-main {
+    border: 1px solid var(--textColor);
+    width: 120px;
+    height: 120px;
+    position: relative;
+
+    &.color-input-invalid {
+      border-color: var(--errorColor);
+    }
+
+    &>* {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+    }
+
+    .color-input-range {
+      transform: rotate(270deg);
+
+      &>input {
+        background: none;
+        appearance: none;
+        margin: 0;
+        border: none;
+        tap-decoration-color: transparent;
+        padding: 0;
+        width: 100%;
+
+        &::-ms-track,
+        &::-moz-range-track {
+          border: inherit;
+          color: transparent;
+          background: transparent;
+        }
+
+        &::-ms-fill-lower,
+        &::-ms-fill-upper {
+          background: transparent;
+        }
+
+        &::-ms-tooltip {
+          display: none;
+        }
+
+        &::-moz-range-track {
+          background: transparent;
+        }
+
+        thumb($color=var(--actionColor)) {
+          _thumb($color) {
+            transition: .4s ease-in-out all;
+            cursor: grab;
+            border: 1px solid white;
+            appearance: none;
+            background: none;
+            width: 10px;
+            height: 10px;
+            border-radius: 100%;
+          }
+
+          &::-webkit-slider-thumb {
+            _thumb($color);
+          }
+
+          &::-ms-thumb {
+            _thumb($color);
+          }
+
+          &::-moz-range-thumb {
+            _thumb($color);
+          }
+        }
+
+        thumb();
+
+        &:focus {
+          thumb(var(--accentColor));
+        }
+
+        &.range-invalid {
+          thumb(var(--textColor));
+        }
+      }
+    }
+
+    .color-input-field {
+      pointer-events: none;
+      text-transform: uppercase;
+
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+      text-align: center;
+
+      .color-input-entry {
+        pointer-events: all;
+
+        label {
+          display: inline-block;
+          width: 6px;
+        }
+
+        input {
+          display: inline-block;
+          appearance: none;
+          text-transform: uppercase;
+          outline: none;
+          border: none;
+          background: none;
+          text-align: center;
+          width: 30px;
+          margin: 0;
+        }
+      }
+    }
+  }
+}

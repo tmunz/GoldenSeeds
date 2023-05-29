@@ -11,7 +11,7 @@ export class FontEditor extends EditorInput<number> {
     name: string,
     definition: ParamDefinition,
     state: StageItemState<number>,
-    action: (value: string) => void,
+    action: (textValue: string) => void,
   ): ReactNode {
     return <FontSelector name={name} state={state} action={action}></FontSelector>;
   }
@@ -33,8 +33,8 @@ const FontSelector = (props: { name: string; state: StageItemState<number>; acti
       if (typeof file !== 'undefined') {
         const buffer = await file.arrayBuffer();
         importConfigElement.value = '';
-        const fontName = fontService.saveBuffer(buffer);
-        props.action(fontName);
+        const font = await fontService.saveBuffer(buffer);
+        props.action(font.fontName);
         setFonts(await fontService.listFonts());
       }
     }

@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { Collapsable } from '../ui/Collapsable';
-import { ColorInput } from '../ui/input/ColorInput';
 import { Color } from '../datatypes/Color';
+import { ColorSelector } from '../ui/input/ColorSelector';
 
 import './Themer.styl';
 
 export class Themer extends React.Component<{}, { show: boolean }> {
-  root: HTMLElement = document.querySelector(':root');
+  root: HTMLElement = document.querySelector(':root') as HTMLElement;
 
   constructor(props: {}) {
     super(props);
@@ -35,7 +35,7 @@ export class Themer extends React.Component<{}, { show: boolean }> {
           >
             {lightThemeActive ? 'dark' : 'light'}
           </div>
-          <ColorInput
+          <ColorSelector
             label="accent"
             value={this.getColor('accent')}
             onChange={(c) => this.setColor('accent', new Color(c))}
@@ -47,11 +47,11 @@ export class Themer extends React.Component<{}, { show: boolean }> {
   }
 
   private setColor(id: string, c: Color) {
-    (document.querySelector(':root') as HTMLElement).style.setProperty(`--${id}Color`, c.toRgbHex());
+    (document.querySelector(':root') as HTMLElement).style.setProperty(`--${id}Color`, c.getRgbString());
     this.forceUpdate();
   }
 
-  private getColor(id: string): Color {
-    return new Color(getComputedStyle(document.querySelector(':root')).getPropertyValue(`--${id}Color`).trim());
+  private getColor(id: string): string {
+    return getComputedStyle(document.querySelector(':root')).getPropertyValue(`--${id}Color`).trim();
   }
 }
