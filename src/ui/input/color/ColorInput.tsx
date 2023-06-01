@@ -16,31 +16,38 @@ import './ColorInput.styl';
 type ColorMode = 'rgb' | 'hsl' | 'random';
 type InputData = ColorInputConfig & { value: string }
 
-export function ColorInput(props: { value: string, onChange: (acn: string) => void }) {
+export function ColorInput(props: {
+  value: string,
+  onChange: (acn: string) => void,
+  label?: string;
+  alphaDisabled?: boolean
+}) {
 
   const COLOR_MODES: ColorMode[] = ['rgb', 'hsl', 'random'];
   const RANDOM_GRADIENT: string = "linear-gradient(30deg, rgb(131,58,180) 0%, rgb(253,29,29) 50%, rgb(222, 205, 135) 100%)";
   const ref = useRef<HTMLDivElement>(null);
   const refs = useRef<(HTMLInputElement | null)[]>([]);
 
-  const [colorMode, setColorMode] = useState<ColorMode>('' as any);
+  const [colorMode, setColorMode] = useState<ColorMode | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [cursorPosition, setCursorPosition] = useState<number | null>(null);
   const [color, setColor] = useState<Color>(new Color('#000000'));
   const [colorValid, setColorValid] = useState<boolean>(true);
-  const [inputData, setInputData] = useState<InputData[]>(colorToInputData(color, colorMode));
+  const [inputData, setInputData] = useState<InputData[]>(colorToInputData(color, 'rgb', []));
 
   useEffect(() => {
     const c = new Color(props.value);
-    //if (inputDataToColor().getAcn() !== c.getAcn()) {
-    setColorMode(c.isRandom() ? 'random' : 'rgb');
-    setInputData(colorToInputData(c, colorMode));
+    if (c.isRandom()) {
+      setColorMode('random');
+    } else if (colorMode === null) {
+      setColorMode('rgb');
+    }
+    setInputData(colorToInputData(c, colorMode ?? 'rgb', inputData));
     setColor(c);
-    //}
   }, [props.value]);
 
   useEffect(() => {
-    setInputData(colorToInputData(color, colorMode));
+    setInputData(colorToInputData(color, colorMode ?? 'rgb', inputData));
   }, [colorMode]);
 
   useEffect(() => {
@@ -56,7 +63,6 @@ export function ColorInput(props: { value: string, onChange: (acn: string) => vo
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      console.log(ref.current, ref.current && ref.current.contains(event.target as any));
       if (ref.current && event && !ref.current.contains(event.target as any)) {
         setSelectedIndex(null);
       }
@@ -88,30 +94,46 @@ export function ColorInput(props: { value: string, onChange: (acn: string) => vo
     return prepped.slice(-inputLength);
   }
 
-  function colorToInputData(c: Color, mode: ColorMode): InputData[] {
+  function colorToInputData(c: Color, mode: ColorMode, lastInputData: InputData[]): InputData[] {
     switch (mode) {
       case 'random': return ['', '', ''].map((key, i) => ({
         name: key,
         value: i === 0 ? 'ra' : i === 1 ? 'nd' : i === 2 ? 'om' : '',
         gradient: [],
       }));
-      case 'hsl': return [HueColorInputConfig, SaturationColorInputConfig, LightnessColorInputConfig, AlphaColorInputConfig].map(config => {
-        const v = (c.getHsla() as any)[config.name];
-        const a = Math.round(config.name === 'a' ? v * 100 : v);
-        return {
-          ...config, value: prepareField((isFinite(a) ? a : 100).toString(config.base),
-            calculateInputLength(config))
-        };
-      });
+      case 'hsl':
+        const hslChannels = [HueColorInputConfig, SaturationColorInputConfig, LightnessColorInputConfig];
+        if (props.alphaDisabled !== true) {
+          hslChannels.push(AlphaColorInputConfig);
+        }
+        return hslChannels.map((config, i) => {
+          const hsla = c.getHsla();
+          let v = (hsla as unknown as Record<string, number>)[config.name];
+          if (i === 0) {
+            if (lastInputData[1] !== undefined && lastInputData[1] === lastInputData[2] || hsla.l === 100 || hsla.l === 0 || hsla.s === 0) {
+              v = Number.parseInt(lastInputData[0].value, lastInputData[0].base);
+            }
+          }
+          const a = Math.round(config.name === 'a' ? v * 100 : v);
+          return {
+            ...config, value: prepareField((isFinite(a) ? a : 100).toString(config.base),
+              calculateInputLength(config))
+          };
+        });
       case 'rgb':
-      default: return [RedColorInputConfig, GreenColorInputConfig, BlueColorInputConfig, AlphaColorInputConfig].map(config => {
-        const v = (c.getRgba() as any)[config.name];
-        const a = Math.round(config.name === 'a' ? v * 100 : v);
-        return {
-          ...config, value: prepareField((isFinite(a) ? a : 100).toString(config.base),
-            calculateInputLength(config))
-        };
-      });
+      default:
+        const rgbChannels = [RedColorInputConfig, GreenColorInputConfig, BlueColorInputConfig];
+        if (props.alphaDisabled !== true) {
+          rgbChannels.push(AlphaColorInputConfig);
+        }
+        return rgbChannels.map(config => {
+          const v = (c.getRgba() as any)[config.name];
+          const a = Math.round(config.name === 'a' ? v * 100 : v);
+          return {
+            ...config, value: prepareField((isFinite(a) ? a : 100).toString(config.base),
+              calculateInputLength(config))
+          };
+        });
     }
   }
 
@@ -127,14 +149,14 @@ export function ColorInput(props: { value: string, onChange: (acn: string) => vo
       s: Number.parseInt(inputData[1].value),
       l: Number.parseInt(inputData[2].value),
       a,
-    } : colorMode;
+    } : 'random';
     return new Color(colorValue);
   }
 
   function onPaste(event: ClipboardEvent<HTMLInputElement>) {
     event.preventDefault();
     const pasted = event.clipboardData.getData("text/plain")
-    setInputData(colorToInputData(new Color(pasted), colorMode));
+    setInputData(colorToInputData(new Color(pasted), colorMode ?? 'rgb', inputData));
   };
 
   function prepareDelete(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -215,8 +237,9 @@ export function ColorInput(props: { value: string, onChange: (acn: string) => vo
 
   const currentInputData = inputData[selectedIndex ?? 0];
 
-  return <div className="color-input" ref={ref}>
-    <div className={`color-input-main${colorValid ? '' : ' color-input-invalid'}`}>
+  return <div className="color-input">
+    <label>{props.label}</label>
+    <div className={`color-input-main${colorValid ? '' : ' color-input-invalid'}`} ref={ref}>
       <div className="color-input-range"
         style={{
           opacity: selectedIndex !== null ? 1 : 0,
@@ -239,7 +262,7 @@ export function ColorInput(props: { value: string, onChange: (acn: string) => vo
             <input
               key={key}
               ref={e => refs.current[key] = e}
-              style={{ color: color.getHsla().l < 50 ? '#FFF' : '#000' }}
+              style={{ color: color.getHsla().l <= 50 ? '#FFF' : '#000' }}
               value={entry.value}
               onPaste={onPaste}
               onSelect={(event) => { setSelectedIndex(key); setCursorPosition((event.currentTarget as any).selectionStart); }}
@@ -256,7 +279,7 @@ export function ColorInput(props: { value: string, onChange: (acn: string) => vo
     </div>
     <CarouselSelector
       items={COLOR_MODES.map(c => ({ name: c.toString(), svg: null }))}
-      selected={colorMode}
+      selected={colorMode ?? undefined}
       select={(c) => setColorMode(c as ColorMode)}
     />
   </div>

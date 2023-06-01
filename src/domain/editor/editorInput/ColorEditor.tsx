@@ -3,7 +3,7 @@ import { ParamDefinition } from '../../generator/SvgGenerator';
 import { StageItemState } from '../../config/Stage';
 import { Color } from '../../../datatypes/Color';
 import { EditorInput } from './EditorInput';
-import { ColorSelector } from '../../../ui/input/ColorSelector';
+import { ColorInput } from '../../../ui/input/color/ColorInput';
 
 export class ColorEditor extends EditorInput<Color> {
   getEditorInput(
@@ -12,6 +12,6 @@ export class ColorEditor extends EditorInput<Color> {
     state: StageItemState<Color>,
     action: (textValue: string) => void,
   ): ReactNode {
-    return <ColorSelector label={name} value={state.textValue} onChange={action} />;
+    return <ColorInput label={name} value={state.textValue} onChange={action} />;
   }
 }

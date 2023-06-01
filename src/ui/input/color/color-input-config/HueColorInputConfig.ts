@@ -6,10 +6,5 @@ export const HueColorInputConfig: ColorInputConfig = {
   min: 0,
   max: 360,
   base: 10,
-  gradient: [
-    { h: 0, s: 100, l: 50 }, { h: 60, s: 100, l: 50 },
-    { h: 120, s: 100, l: 50 }, { h: 180, s: 100, l: 50 },
-    { h: 240, s: 100, l: 50 }, { h: 300, s: 100, l: 50 },
-    { h: 0, s: 100, l: 50 },
-  ],
+  gradient: [0, 60, 120, 180, 240, 300, 0].map(h => ({ h, /*s: 100, l: 50*/ })),
 };

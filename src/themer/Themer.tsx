@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Collapsable } from '../ui/Collapsable';
 import { Color } from '../datatypes/Color';
-import { ColorSelector } from '../ui/input/ColorSelector';
+import { ColorInput } from '../ui/input/color/ColorInput';
 
 import './Themer.styl';
 
@@ -35,11 +35,11 @@ export class Themer extends React.Component<{}, { show: boolean }> {
           >
             {lightThemeActive ? 'dark' : 'light'}
           </div>
-          <ColorSelector
+          <ColorInput
             label="accent"
             value={this.getColor('accent')}
             onChange={(c) => this.setColor('accent', new Color(c))}
-            simple
+            alphaDisabled
           />
         </Collapsable>
       </div>
