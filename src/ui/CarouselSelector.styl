@@ -1,5 +1,6 @@
 .carousel-selector {
   width: 100%;
+  position: relative;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -10,7 +11,6 @@
 
   &>.carousel-prev,
   &>.carousel-next {
-    background: unquote('rgb(var(--backgroundColor))');
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,14 +24,12 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    background: unquote('rgba(var(--backgroundColor), 0.5)');
-    backdrop-filter: blur(4px);
+    mask: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
     overflow: hidden;
     transition: all 1s ease-in-out;
     cursor: grab;
 
     &.grabbing {
-      background: unquote('rgba(var(--backgroundColor), 0.6)');
       cursor: grabbing !important;
 
       * {
@@ -60,30 +58,6 @@
         width: 100px;
         display: block;
       }
-    }
-
-    &::before {
-      content: "";
-      position: absolute;
-      pointer-events: none;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 50px;
-      background: linear-gradient(to right, unquote('rgb(var(--backgroundColor))'), transparent);
-      z-index: 2;
-    }
-
-    &::after {
-      content: "";
-      position: absolute;
-      pointer-events: none;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 50px;
-      background: linear-gradient(to left, unquote('rgb(var(--backgroundColor))'), transparent);
-      z-index: 2;
     }
   }
 }

@@ -1,4 +1,4 @@
-import React, { ComponentProps, Fragment, useState } from 'react';
+import React, { ComponentProps, useState } from 'react';
 
 import { Collapsable } from '../../ui/Collapsable';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
@@ -9,7 +9,8 @@ import { PlusNone, PlusRegular, PlusRotated } from '../../ui/icon/Plus';
 import { editorService } from './EditorService';
 import { ParamDefinition } from '../generator/SvgGenerator';
 import { AnimationController } from '../animation/AnimationController';
-import { RangeInput } from '../../ui/input/RangeInput';
+import { CarouselSelector } from '../../ui/CarouselSelector';
+
 
 export interface Props extends ComponentProps<'div'> {
   stage: Stage;
@@ -72,27 +73,28 @@ export function StageEditor({ stage, i, stagesTotal, dragHandleProps }: Props) {
         </div>
       </div>
       <Collapsable key={stage.id} show={editMode === stage.id}>
-        <RangeInput<number>
-          label="type"
-          output={stage.generator.type}
-          value={types.findIndex((s: string) => s === stage.generator.type)}
-          min={0}
-          max={types.length - 1}
-          onChange={(index: number) => configService.setType(stage.id, types[index])}
+        <CarouselSelector
+          className="stage-type-selector"
+          items={types.map(name => ({ name, svg: null }))}
+          select={(name) => configService.setType(stage.id, name)}
+          selected={stage.generator.type}
+          scale={1.5}
         />
         {Object.keys(stage.state.data).map((groupId) => (
-          <Fragment key={groupId}>
-            <div>{groupId}</div>
-            {Object.keys(stage.state.data[groupId]).map((id: string) =>
-              generateEntryModifier(
-                stage,
-                groupId,
-                id,
-                stage.generator.definition[groupId][id],
-                stage.state.data[groupId][id],
-              ),
-            )}
-          </Fragment>
+          <div className="stage-group">
+            <h2>{groupId}</h2>
+            <div className="stage-group-content">
+              {Object.keys(stage.state.data[groupId]).map((id: string) =>
+                generateEntryModifier(
+                  stage,
+                  groupId,
+                  id,
+                  stage.generator.definition[groupId][id],
+                  stage.state.data[groupId][id],
+                ),
+              )}
+            </div>
+          </div>
         ))}
       </Collapsable>
     </div>

@@ -14,6 +14,7 @@ interface Props {
   selected?: string;
   select: (name: string) => void;
   scale?: number;
+  className?: string;
 }
 
 export function CarouselSelector(props: Props) {
@@ -53,7 +54,9 @@ export function CarouselSelector(props: Props) {
     const mouseUp = () => {
       if (startX === null) { return; }
       const selected = (props.items ?? [])[selectedIndex];
-      setTimeout(() => props.select(selected?.name), 300);
+      if (selected.name !== props.selected) {
+        setTimeout(() => props.select(selected.name), 300);
+      }
       setStartX(null);
     };
     window.addEventListener('mouseup', mouseUp);
@@ -85,7 +88,7 @@ export function CarouselSelector(props: Props) {
   }
 
   return (
-    <div className="carousel-selector">
+    <div className={`carousel-selector ${props.className ? props.className : ''}`}>
       <div className="carousel-prev">
         <AnimatedButton
           rotation={AnimatedButton.DIRECTION_LEFT}

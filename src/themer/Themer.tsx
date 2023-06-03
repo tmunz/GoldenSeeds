@@ -1,57 +1,60 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { Collapsable } from '../ui/Collapsable';
 import { Color } from '../datatypes/Color';
 import { ColorInput } from '../ui/input/color/ColorInput';
+import { randomInt } from '../utils/Random';
 
 import './Themer.styl';
+import { DarkThemeToggle } from './DarkThemeToggle';
 
-export class Themer extends React.Component<{}, { show: boolean }> {
-  root: HTMLElement = document.querySelector(':root') as HTMLElement;
+export function Themer() {
+  const root: HTMLElement = document.querySelector(':root') as HTMLElement;
+  const [accentColor, setAccentColor] = useState<Color>(new Color(getColorValue('accent')));
+  const [darkTheme, setDarkTheme] = useState<boolean>(!isLightThemeActive());
+  const [display, setDisplay] = useState<boolean>(false);
 
-  constructor(props: {}) {
-    super(props);
-    this.state = { show: false };
+  useEffect(() => {
+    setColorValue('accent', accentColor);
+  }, [accentColor]);
+
+  useEffect(() => {
+    darkTheme ? root.classList.remove('light-theme') : root.classList.add('light-theme');
+  }, [darkTheme]);
+
+  function setColorValue(id: string, c: Color) {
+    root.style.setProperty(`--${id}Color`, c.getRgbString(randomInt()));
   }
 
-  render() {
-    const lightThemeActive = this.root.classList.contains('light-theme');
+  function getColorValue(id: string): string {
+    return getComputedStyle(root).getPropertyValue(`--${id}Color`).trim();
+  }
 
-    return (
-      <div className="themer">
-        <h1
-          className={`action ${this.state.show ? 'edit-mode' : ''}`}
-          onClick={() => this.setState((state) => ({ show: !state.show }))}
-        >
-          theme
+  function isLightThemeActive(): boolean {
+    return root.classList.contains('light-theme');
+  }
+
+  return (
+    <div className="themer">
+      <h1
+        className={`action ${display ? 'edit-mode' : ''}`}
+        onClick={() => setDisplay(!display)}
+      >
+        theme
         </h1>
-        <Collapsable show={this.state.show}>
-          <div
-            className="action"
-            onClick={() => {
-              lightThemeActive ? this.root.classList.remove('light-theme') : this.root.classList.add('light-theme');
-              this.forceUpdate();
-            }}
-          >
-            {lightThemeActive ? 'dark' : 'light'}
-          </div>
-          <ColorInput
-            label="accent"
-            value={this.getColor('accent')}
-            onChange={(c) => this.setColor('accent', new Color(c))}
-            alphaDisabled
-          />
-        </Collapsable>
-      </div>
-    );
-  }
-
-  private setColor(id: string, c: Color) {
-    (document.querySelector(':root') as HTMLElement).style.setProperty(`--${id}Color`, c.getRgbString());
-    this.forceUpdate();
-  }
-
-  private getColor(id: string): string {
-    return getComputedStyle(document.querySelector(':root')).getPropertyValue(`--${id}Color`).trim();
-  }
+      <Collapsable show={display}>
+        <label>dark</label>
+        <DarkThemeToggle
+          active={darkTheme}
+          onChange={(active) => setDarkTheme(active)}
+        />
+        <ColorInput
+          label="accent"
+          value={accentColor.getAcn()}
+          onChange={(c) => setAccentColor(new Color(c))}
+          alphaDisabled
+        />
+      </Collapsable>
+    </div>
+  );
 }

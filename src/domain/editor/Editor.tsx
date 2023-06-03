@@ -9,6 +9,7 @@ import { StageEditor } from './StageEditor';
 
 import './Editor.styl';
 
+
 interface Props {
   config: Config;
 }

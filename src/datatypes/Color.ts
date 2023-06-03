@@ -1,4 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
+import { random } from '../utils/Random';
 
 export interface RgbaColor {
   r: number;
@@ -22,10 +23,12 @@ export class Color {
   private textValue$ = new BehaviorSubject<string>('black');
   private rgba: RgbaColor | null = null;
 
-  constructor(colorValue?: ColorValue) {
+  constructor(colorValue?: ColorValue | Color) {
     this.textValue$.subscribe(v => this.rgba = Color.textToRgba(v));
     if (colorValue !== undefined) {
-      if (typeof colorValue === 'string') {
+      if (colorValue instanceof Color) {
+        this.setTextValue(colorValue.getAcn());
+      } else if (typeof colorValue === 'string') {
         this.setTextValue(colorValue);
       } else if ('r' in colorValue && 'g' in colorValue && 'b' in colorValue) {
         this.setTextValue(Color.rgbaToAcn(colorValue));
@@ -46,7 +49,7 @@ export class Color {
   }
 
   getRgba(): RgbaColor {
-    return this.rgba || ColorRecord.black;
+    return this.rgba || Color.hslaToRgba(ColorRecord.black);
   }
 
   getHsla(): HslaColor {
@@ -73,8 +76,9 @@ export class Color {
     return this.random;
   }
 
-  setRandom(random = true): void {
+  withRandom(random = true): this {
     this.random = random;
+    return this;
   }
 
   // range 0..1
@@ -88,7 +92,7 @@ export class Color {
 
   static randomColor(seed: number): RgbaColor {
     const max = 0xffffff;
-    const rand = Math.abs(Math.sin(seed + 5)) % 1;
+    const rand = /*random() % 1*/ Math.abs(Math.sin(seed + 5)) % 1;
     const c = Math.floor(rand * max + 1);
     return { r: 0xff & (c >> (16)), g: 0xff & (c >> (8)), b: 0xff & c };
   };
@@ -109,11 +113,12 @@ export class Color {
   }
 
   static namedColorToRgba(namedColor: string): RgbaColor | null {
-    return ColorRecord[namedColor] ?? null;
+    const colorRecord = ColorRecord[namedColor];
+    return colorRecord ? Color.hslaToRgba(colorRecord) : null;
   }
 
   static rgbaToAcn(rgba: RgbaColor, random: boolean = false): string {
-    const a = 0xff & Math.round((rgba.a ?? 1) * 255);
+    const a = 0xff & Math.round((rgba.a === undefined ? 1 : rgba.a) * 255);
     const randomFlag = random ? 0x1 : 0x0;
     return `0x${randomFlag}${a.toString(16).padStart(2, '0')}${Color.rgbToString(rgba).replace('#', '')}`;
   }
@@ -127,7 +132,7 @@ export class Color {
   }
 
   static rgbaToString(rgba: RgbaColor): string {
-    return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a})`;
+    return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a === undefined ? 1 : rgba.a})`;
   }
 
   static acnToRgba(acn: string): RgbaColor | null {
@@ -159,29 +164,44 @@ export class Color {
 
   static hslaToRgba(hsla: HslaColor): RgbaColor {
     const toRgb = (channel: number) => {
-      const a = hsla.s / 100 * Math.min(hsla.l / 100, 1 - hsla.l / 100);
       const k = (channel * 4 + hsla.h / 30) % 12;
-      return (hsla.l / 100 - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)) * 0xff;
+      const m = hsla.s / 100 * Math.min(hsla.l / 100, 1 - hsla.l / 100);
+      return (hsla.l / 100 - m * Math.max(Math.min(k - 3, 9 - k, 1), -1)) * 0xff;
     }
     return { r: toRgb(0), g: toRgb(2), b: toRgb(1), a: hsla.a };
   }
 }
 
-export const ColorRecord: Record<string, RgbaColor> = {
-  black: { r: 0x00, g: 0x00, b: 0x00, a: 1 },
-  white: { r: 0xff, g: 0xff, b: 0xff, a: 1 },
+export const ColorRecord: Record<string, HslaColor> = {
+  black: { h: 0, s: 0, l: 0, a: 1 },
+  darkgray: { h: 0, s: 0, l: 25, a: 1 },
+  gray: { h: 0, s: 0, l: 50, a: 1 },
+  lightgray: { h: 0, s: 0, l: 74, a: 1 },
+  white: { h: 0, s: 0, l: 100, a: 1 },
 
-  red: { r: 0xff, g: 0x00, b: 0x00, a: 1 },
-  green: { r: 0x00, g: 0xff, b: 0x00, a: 1 },
-  blue: { r: 0x00, g: 0x00, b: 0xff, a: 1 },
+  red: { h: 0, s: 100, l: 50, a: 1 },
+  orange: { h: 30, s: 100, l: 50, a: 1 },
+  yellow: { h: 60, s: 100, l: 50, a: 1 },
+  lime: { h: 90, s: 100, l: 50, a: 1 },
+  green: { h: 120, s: 100, l: 50, a: 1 },
+  spring: { h: 150, s: 100, l: 50, a: 1 },
+  cyan: { h: 180, s: 100, l: 50, a: 1 },
+  brescian: { h: 210, s: 100, l: 50, a: 1 },
+  blue: { h: 240, s: 100, l: 50, a: 1 },
+  purple: { h: 270, s: 100, l: 50, a: 1 },
+  magenta: { h: 300, s: 100, l: 50, a: 1 },
+  neonrose: { h: 330, s: 100, l: 50, a: 1 },
 
-  yellow: { r: 0xff, g: 0xff, b: 0x00, a: 1 },
-  magenta: { r: 0xff, g: 0x00, b: 0xff, a: 1 },
-  cyan: { r: 0x00, g: 0xff, b: 0xff, a: 1 },
+  gold: { h: 48, s: 57, l: 70, a: 1 }, // 0xdecd87 0xffd700
+  patina: { h: 83, s: 57, l: 70, a: 1 }, // 0xbcde87
+  pastelblue: { h: 200, s: 57, l: 70, a: 1 },
+  pastelviolet: { h: 288, s: 57, l: 70, a: 1 },
 
-  gold: { r: 0xde, g: 0xcd, b: 0x87, a: 1 }, // 0xffd700
-  patina: { r: 0xbc, g: 0xde, b: 0x87, a: 1 },
+  darkOrange: { h: 20, s: 100, l: 40 },
+  britishRacing: { h: 154, s: 100, l: 13},
+  marian: {h: 225, s: 55, l: 37},
+  coral: { h: 16, s: 100, l: 66 },
 
-  transparent: { r: 0, g: 0, b: 0, a: 0 },
-  none: { r: 0, g: 0, b: 0, a: 0 },
+  transparent: { h: 0, s: 0, l: 0, a: 0 },
+  none: { h: 0, s: 0, l: 0, a: 0 },
 };

@@ -1,6 +1,6 @@
 {
   "name": "golden-seeds",
-  "version": "2.0.0-beta.9",
+  "version": "2.0.0-beta.10",
   "repository": "https://github.com/tmunz/GoldenSeeds",
   "description": "Golden Seeds - SVG Generator",
   "main": "src/index.tsx",
@@ -18,7 +18,6 @@
     "opentype.js": "^1.3.4",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
-    "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
     "rxjs": "^6.5.4"
   },

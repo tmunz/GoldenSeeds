@@ -1,0 +1,72 @@
+.dark-theme-toggle {
+
+  --darkThemeToggleBackground: #bbb;
+  --darkThemeToggleColor: #fff;
+  --darkThemeToggleHeight: 30px;
+
+  input {
+
+    &:checked {
+      --darkThemeToggleBackground: #222;
+      --darkThemeToggleColor: #ddd;
+    }
+
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+    appearance: none;
+    margin: 0;
+    outline: none;
+    border-radius: 99999px;
+    width: 50px;
+    height: var(--darkThemeToggleHeight);
+    background-color: var(--darkThemeToggleBackground);
+    cursor: pointer;
+    user-select: none;
+
+    &::before {
+      content: '';
+      background-color: var(--darkThemeToggleColor);
+      position: absolute;
+      display: block;
+      transition: all 0.3s ease-in-out;
+
+      border-radius: 99999px;
+      left: 28px;
+      top: 10px;
+      width: 15px;
+      height: 15px;
+    }
+
+    &:checked::before {
+      top: 4px;
+      left: 4px;
+      width: 22px;
+      height: 22px;
+      background-color: var(--darkThemeToggleColor);
+    }
+
+
+    &::after {
+      top: 4px;
+      right: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 99999px;
+      background-color: var(--darkThemeToggleColor);
+      content: '';
+      position: absolute;
+      display: block;
+      transition: all 0.3s ease-in-out;
+      border-radius: 99999px;
+    }
+
+    &:checked::after {
+      background-color: var(--darkThemeToggleBackground);
+      top: 4px;
+      right: 22px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
