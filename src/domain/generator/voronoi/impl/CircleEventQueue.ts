@@ -8,9 +8,9 @@ export interface CircleEvent extends RbTreeNode<CircleEvent> {
   x: number;
   y: number;
   site: Site;
-  arc: BeachSectionNode;
   centerY: number;
-  circleEvent?: CircleEvent;
+  arc: BeachSectionNode;
+  circleEvent: CircleEvent;
 }
 
 export class CircleEventQueue {
@@ -21,14 +21,16 @@ export class CircleEventQueue {
     return this.current;
   }
 
-  detachCurrent(arc: CircleEvent): void {
-    const circleEvent = arc.circleEvent;
-    if (circleEvent) {
-      if (!circleEvent.prev) {
-        this.current = circleEvent.next;
+  detachCurrent(arc?: CircleEvent): void {
+    if (arc) {
+      const circleEvent = arc.circleEvent;
+      if (circleEvent) {
+        if (!circleEvent.prev) {
+          this.current = circleEvent.next;
+        }
+        this.dataTree.removeNode(circleEvent);
+        arc.circleEvent = undefined;
       }
-      this.dataTree.removeNode(circleEvent);
-      arc.circleEvent = undefined;
     }
   }
 

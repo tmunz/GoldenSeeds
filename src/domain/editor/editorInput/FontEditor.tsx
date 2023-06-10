@@ -47,7 +47,7 @@ const FontSelector = (props: { name: string; state: StageItemState<number>; acti
       <div>
         {fonts.map((fontName) => (
           <div key={fontName}>
-            <a onClick={() => props.action(fontName)}>{fontName}</a>
+            <button onClick={() => props.action(fontName)}>{fontName}</button>
           </div>
         ))}
       </div>
@@ -57,9 +57,12 @@ const FontSelector = (props: { name: string; state: StageItemState<number>; acti
         style={{ display: 'none' }}
         onChange={(event) => loadFont(event)}
       />
-      <a target="_blank" onClick={() => importConfigElement?.click()}>
-        <AnimatedButton rotation={AnimatedButton.DIRECTION_UP} title="load" iconText="font" />
-      </a>
+      <AnimatedButton
+        rotation={AnimatedButton.DIRECTION_UP}
+        title="load"
+        iconText="font"
+        onClick={() => importConfigElement?.click()}
+      />
     </div>
   );
 };

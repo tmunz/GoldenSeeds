@@ -5,7 +5,7 @@ import { converterService } from '../converter/ConverterService';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 import { Stage, StageRawState } from './Stage';
 import { SvgGenerator } from '../generator/SvgGenerator';
-import { RawConfig } from './RawConfig';
+import { RawConfig, RawConfigStage } from './RawConfig';
 
 export class ConfigService {
   config$ = new BehaviorSubject<Config>({ meta: { name: '' }, stages: [] });
@@ -78,7 +78,7 @@ export class ConfigService {
     return {
       meta: rawConfig.meta,
       stages: await Promise.all(
-        rawConfig.stages.map((stageRaw: any) =>
+        rawConfig.stages.map((stageRaw: RawConfigStage) =>
           ConfigService.createStage(svgGeneratorRegistry.newInstance(stageRaw.type), stageRaw),
         ),
       ),
@@ -93,7 +93,7 @@ export class ConfigService {
     return new Stage(generator, rawState, stageId).convertTextToValues();
   }
 
-  static convertConfigToJson(config: Config): any {
+  static convertConfigToRawConfig(config: Config): RawConfig {
     const stages = config.stages.map((stage) => {
       const rawState = { type: stage.state.type, data: {} as Record<string, Record<string, string>> };
       Object.keys(stage.state.data).forEach((groupId) => {

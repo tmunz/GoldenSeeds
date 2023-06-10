@@ -2,11 +2,10 @@ import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
 import { PointUtils } from '../../../utils/PointUtils';
 import { draw, TextDrawerConfig } from './TextDrawer';
 
-export class TextDrawer implements SvgGenerator {
+export class TextDrawer extends SvgGenerator<TextDrawerConfig> {
   static type = 'text';
-  type = TextDrawer.type;
 
-  definition = {
+  static definition = {
     style: {
       color: {
         initial: 'gold',
@@ -31,6 +30,10 @@ export class TextDrawer implements SvgGenerator {
       },
     },
   };
+
+  constructor() {
+    super(TextDrawer.type, TextDrawer.definition);
+  }
 
   generate = (config: TextDrawerConfig, prev: SvgGeneratorResult): SvgGeneratorResult => {
     const drawing = draw(config, prev.grid);

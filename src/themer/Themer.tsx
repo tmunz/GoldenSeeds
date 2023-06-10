@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { Collapsable } from '../ui/Collapsable';
 import { Color } from '../datatypes/Color';
 import { ColorInput } from '../ui/input/color/ColorInput';
 import { randomInt } from '../utils/Random';
+import { DarkThemeToggle } from './DarkThemeToggle';
 
 import './Themer.styl';
-import { DarkThemeToggle } from './DarkThemeToggle';
+
 
 export function Themer() {
   const root: HTMLElement = document.querySelector(':root') as HTMLElement;
@@ -14,17 +15,17 @@ export function Themer() {
   const [darkTheme, setDarkTheme] = useState<boolean>(!isLightThemeActive());
   const [display, setDisplay] = useState<boolean>(false);
 
+  const setColorValue = useCallback((id: string, c: Color) => {
+    root.style.setProperty(`--${id}Color`, c.getRgbString(randomInt()));
+  }, [root.style]);
+
   useEffect(() => {
     setColorValue('accent', accentColor);
-  }, [accentColor]);
+  }, [accentColor, setColorValue]);
 
   useEffect(() => {
     darkTheme ? root.classList.remove('light-theme') : root.classList.add('light-theme');
-  }, [darkTheme]);
-
-  function setColorValue(id: string, c: Color) {
-    root.style.setProperty(`--${id}Color`, c.getRgbString(randomInt()));
-  }
+  }, [darkTheme, root.classList]);
 
   function getColorValue(id: string): string {
     return getComputedStyle(root).getPropertyValue(`--${id}Color`).trim();
@@ -36,14 +37,14 @@ export function Themer() {
 
   return (
     <div className="themer">
-      <h1
+      <button
         className={`action ${display ? 'edit-mode' : ''}`}
         onClick={() => setDisplay(!display)}
       >
-        theme
-        </h1>
+        <h1>theme</h1>
+      </button>
       <Collapsable show={display}>
-        <label>dark</label>
+        <label htmlFor="dark-theme">dark mode</label>
         <DarkThemeToggle
           active={darkTheme}
           onChange={(active) => setDarkTheme(active)}

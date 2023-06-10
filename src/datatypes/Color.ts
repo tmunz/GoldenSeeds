@@ -1,5 +1,4 @@
 import { BehaviorSubject } from 'rxjs';
-import { random } from '../utils/Random';
 
 export interface RgbaColor {
   r: number;
@@ -95,19 +94,17 @@ export class Color {
     const rand = /*random() % 1*/ Math.abs(Math.sin(seed + 5)) % 1;
     const c = Math.floor(rand * max + 1);
     return { r: 0xff & (c >> (16)), g: 0xff & (c >> (8)), b: 0xff & c };
-  };
+  }
 
   static textToRgba(s: string): RgbaColor | null {
     return Color.namedColorToRgba(s) || Color.textValueToRgba(s) || Color.acnToRgba(s);
   }
 
   static textValueToRgba(s: string): RgbaColor | null {
-    if (s.charAt(0) === '#') {
-      const parsedValue = parseInt(s.substring(1), 16);
-      if (isFinite(parsedValue)) {
-        const m = s.length < 6 ? 1 : 2;
-        return { r: 0xff & (parsedValue >> (8 * m)), g: 0xff & (parsedValue >> (4 * m)), b: 0xff & parsedValue };
-      }
+    const parsedValue = parseInt(s.replace('#', ''), 16);
+    if (isFinite(parsedValue)) {
+      const m = s.length < 6 ? 1 : 2;
+      return { r: 0xff & (parsedValue >> (8 * m)), g: 0xff & (parsedValue >> (4 * m)), b: 0xff & parsedValue };
     }
     return null;
   }
@@ -117,7 +114,7 @@ export class Color {
     return colorRecord ? Color.hslaToRgba(colorRecord) : null;
   }
 
-  static rgbaToAcn(rgba: RgbaColor, random: boolean = false): string {
+  static rgbaToAcn(rgba: RgbaColor, random = false): string {
     const a = 0xff & Math.round((rgba.a === undefined ? 1 : rgba.a) * 255);
     const randomFlag = random ? 0x1 : 0x0;
     return `0x${randomFlag}${a.toString(16).padStart(2, '0')}${Color.rgbToString(rgba).replace('#', '')}`;
@@ -159,7 +156,7 @@ export class Color {
       s: 100 * (s ? (l <= 0.5 ? s / (2 * l - s) : s / (2 - (2 * l - s))) : 0),
       l: (100 * (2 * l - s)) / 2,
       a: rgba.a,
-    }
+    };
   }
 
   static hslaToRgba(hsla: HslaColor): RgbaColor {
@@ -167,7 +164,7 @@ export class Color {
       const k = (channel * 4 + hsla.h / 30) % 12;
       const m = hsla.s / 100 * Math.min(hsla.l / 100, 1 - hsla.l / 100);
       return (hsla.l / 100 - m * Math.max(Math.min(k - 3, 9 - k, 1), -1)) * 0xff;
-    }
+    };
     return { r: toRgb(0), g: toRgb(2), b: toRgb(1), a: hsla.a };
   }
 }
@@ -198,8 +195,8 @@ export const ColorRecord: Record<string, HslaColor> = {
   pastelviolet: { h: 288, s: 57, l: 70, a: 1 },
 
   darkOrange: { h: 20, s: 100, l: 40 },
-  britishRacing: { h: 154, s: 100, l: 13},
-  marian: {h: 225, s: 55, l: 37},
+  britishRacing: { h: 154, s: 100, l: 13 },
+  marian: { h: 225, s: 55, l: 37 },
   coral: { h: 16, s: 100, l: 66 },
 
   transparent: { h: 0, s: 0, l: 0, a: 0 },

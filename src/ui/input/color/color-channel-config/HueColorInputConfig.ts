@@ -1,4 +1,4 @@
-import { ColorInputConfig } from "./ColorInputConfig";
+import { ColorInputConfig } from './ColorInputConfig';
 
 export const HueColorInputConfig: ColorInputConfig = {
   name: 'h',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { Config } from '../config/Config';
 import { AnimatedButton } from '../../ui/AnimatedButton';
 import { ConfigService } from './ConfigService';
@@ -9,24 +9,28 @@ interface Props {
 }
 
 export class ConfigExporter extends React.Component<Props> {
-  private exportConfigElement: HTMLAnchorElement | null = null;
+  private exportConfigElement = createRef<HTMLAnchorElement>();
 
   render() {
     return (
-      <div>
-        <a target="_blank" ref={(e) => (this.exportConfigElement = e)} onClick={() => this.exportConfig()}>
-          <AnimatedButton  points={[SaveNone, SaveRegular, SaveProgress]} title="export" iconText="json" />
-        </a>
-      </div>
+      <>
+        <AnimatedButton
+          points={[SaveNone, SaveRegular, SaveProgress]}
+          onClick={() => this.exportConfig()}
+          title="export"
+          iconText="json"
+        />
+        <a target="_blank" href="#_" ref={this.exportConfigElement} style={{ display: 'none' }}>helper element for download</a>
+      </>
     );
   }
 
   private exportConfig() {
     if (this.props.config) {
-      const json = ConfigService.convertConfigToJson(this.props.config);
-      if (this.exportConfigElement) {
-        this.exportConfigElement.download = json.meta.name + '.json';
-        this.exportConfigElement.href = URL.createObjectURL(
+      const json = ConfigService.convertConfigToRawConfig(this.props.config);
+      if (this.exportConfigElement.current) {
+        this.exportConfigElement.current.download = json.meta.name + '.json';
+        this.exportConfigElement.current.href = URL.createObjectURL(
           new File([JSON.stringify(json, null, 2)], json.meta.name + '.json', {
             type: 'text/json',
           }),

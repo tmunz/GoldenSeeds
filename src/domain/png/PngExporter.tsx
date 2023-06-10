@@ -1,4 +1,4 @@
-import React, { createRef, useState, useEffect } from 'react';
+import React, { createRef, useState, useEffect, useCallback, useMemo } from 'react';
 import { AnimatedButton } from '../../ui/AnimatedButton';
 import { ExporterData } from '../tools/Toolbar'; // TODO
 import { SaveNone, SaveRegular, SaveProgress } from '../../ui/icon/Save';
@@ -8,56 +8,65 @@ interface Props {
 }
 
 export function PngExporter(props: Props) {
-  const initialData = {
+  const INITIAL_DATA = useMemo(() => ({
     svg: '',
     dimensions: { width: 1, height: 1 },
     name: 'unknown',
-  };
-  const exportPngElement = createRef<HTMLAnchorElement>();
+  }), []);
+  const exportElement = createRef<HTMLAnchorElement>();
   const canvas = createRef<HTMLCanvasElement>();
 
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState(INITIAL_DATA);
+
+  const drawImageOnCanvas = useCallback((onCompletion: () => void) => {
+    const context = canvas.current?.getContext('2d');
+    if (context) {
+      const image = new Image();
+      image.src = `data:image/svg+xml;base64,${window.btoa(data.svg)}`;
+      image.onload = () => {
+        context.drawImage(image, 0, 0);
+        onCompletion();
+      };
+    }
+  }, [canvas, data.svg]);
+
+  const exportPng = useCallback(() => {
+    const exportElem = exportElement.current;
+    const canvasElem = canvas.current;
+    if (exportElem && canvasElem) {
+      const dataUrl = canvasElem.toDataURL('image/png');
+      exportElem.download = data.name + '.png';
+      exportElem.href = dataUrl;
+      exportElem.click();
+    }
+  }, [canvas, exportElement, data.name]);
+
+  const resetCanvas = useCallback(() => {
+    const context = canvas.current?.getContext('2d');
+    if (context) {
+      context.clearRect(0, 0, data.dimensions.width, data.dimensions.height);
+      setData(INITIAL_DATA);
+    }
+  }, [canvas, data.dimensions, INITIAL_DATA]);
 
   useEffect(() => {
-    drawImageOnCanvas(data, () => {
+    drawImageOnCanvas(() => {
       exportPng();
       resetCanvas();
     });
-  }, [data]);
-
-  const drawImageOnCanvas = (data: ExporterData, onCompletion: () => void) => {
-    const context = canvas.current!.getContext('2d');
-    const image = new Image();
-    image.src = `data:image/svg+xml;base64,${window.btoa(data.svg)}`;
-    image.onload = () => {
-      context!.drawImage(image, 0, 0);
-      onCompletion();
-    };
-  };
-
-  const exportPng = () => {
-    const dataUrl = canvas.current!.toDataURL('image/png');
-    exportPngElement.current!.download = data.name + '.png';
-    exportPngElement.current!.href = dataUrl;
-    exportPngElement.current!.click();
-  };
-
-  const resetCanvas = () => {
-    canvas.current!.getContext('2d')!.clearRect(0, 0, data.dimensions.width, data.dimensions.height);
-    setData(initialData);
-  };
+  }, [data, drawImageOnCanvas, exportPng, resetCanvas]);
 
   return (
-    <div>
-      <a target="_blank" onClick={() => setData(props.getData())}>
-        <AnimatedButton points={[SaveNone, SaveRegular, SaveProgress]} title="export" iconText="png" />
-      </a>
-      <div style={{ display: 'none' }}>
-        <a ref={exportPngElement}></a>
-        <canvas ref={canvas} width={data.dimensions.width} height={data.dimensions.height}>
-          Your browser does not support the PNG export
-        </canvas>
-      </div>
-    </div>
+    <>
+      <AnimatedButton
+        onClick={() => setData(props.getData())}
+        points={[SaveNone, SaveRegular, SaveProgress]}
+        title="export" iconText="png"
+      />
+      <a target="_blank" href="#_" ref={exportElement} style={{ display: 'none' }}>helper element for download</a>
+      <canvas style={{ display: 'none' }} ref={canvas} width={data.dimensions.width} height={data.dimensions.height}>
+        Your browser does not support the PNG export
+      </canvas>
+    </>
   );
 }

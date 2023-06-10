@@ -76,7 +76,7 @@ export class Voronoi {
     return path;
   }
 
-  findNextInPathIndex(point: Point, edges: HalfEdge[]): { index: any; point: any } | undefined {
+  findNextInPathIndex(point: Point, edges: HalfEdge[]): { index: number; point: Point } | undefined {
     for (let i = 0, edge; (edge = edges[i]); i++) {
       if (PointUtils.isSamePoint(point, edge.getEndpoint())) {
         return { index: i, point: edge.getStartpoint() };

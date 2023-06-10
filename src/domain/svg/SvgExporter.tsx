@@ -11,11 +11,15 @@ export function SvgExporter(props: Props) {
   const exportSvgElement = createRef<HTMLAnchorElement>();
 
   return (
-    <div>
-      <a target="_blank" ref={exportSvgElement} onClick={() => exportSvg(props, exportSvgElement.current)}>
-        <AnimatedButton points={[SaveNone, SaveRegular, SaveProgress]} title="export" iconText="svg" />
-      </a>
-    </div>
+    <>
+      <AnimatedButton
+        points={[SaveNone, SaveRegular, SaveProgress]}
+        title="export"
+        iconText="svg"
+        onClick={() => exportSvg(props, exportSvgElement.current)}
+      />
+      <a target="_blank" href="#_" ref={exportSvgElement} style={{ display: 'none' }}>helper element for download</a>
+    </>
   );
 }
 

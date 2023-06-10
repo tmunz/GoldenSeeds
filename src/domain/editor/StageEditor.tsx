@@ -1,4 +1,5 @@
 import React, { ComponentProps, useState } from 'react';
+import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 
 import { Collapsable } from '../../ui/Collapsable';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
@@ -15,11 +16,11 @@ import { CarouselSelector } from '../../ui/CarouselSelector';
 export interface Props extends ComponentProps<'div'> {
   stage: Stage;
   i: number;
-  stagesTotal: number;
-  dragHandleProps: any;
+  hasNext: boolean;
+  dragHandleProps?: DraggableProvidedDragHandleProps | null;
 }
 
-export function StageEditor({ stage, i, stagesTotal, dragHandleProps }: Props) {
+export function StageEditor({ stage, i, hasNext, dragHandleProps }: Props) {
 
   const [editMode, setEditMode] = useState<string | null>(null);
 
@@ -30,7 +31,7 @@ export function StageEditor({ stage, i, stagesTotal, dragHandleProps }: Props) {
     groupId: string,
     id: string,
     definition: ParamDefinition,
-    state: StageItemState<any>,
+    state: StageItemState<any>, // eslint-disable-line
   ) => {
     const action = (textValue: string) => configService.setConfigValue(stage.id, groupId, id, textValue);
     const editorUi = editorService.getEditorInput(definition.type, id, definition, state, action);
@@ -53,23 +54,28 @@ export function StageEditor({ stage, i, stagesTotal, dragHandleProps }: Props) {
   return (
     <div key={stage.id} className="stage" id={'stage-' + stage.id}>
       <div className="stage-header" {...dragHandleProps}>
-        <h1 className="action" onClick={() => setEditMode(editMode ? null : stage.id)}>
-          {stage.generator.type}
-        </h1>
+        <button onClick={() => setEditMode(editMode ? null : stage.id)}>
+          <h1>{stage.generator.type}</h1>
+        </button>
         <div className="controls">
-          <a target="_blank" onClick={() => 0 < i && configService.moveToIndex(stage.id, i - 1)}>
-            <AnimatedButton title="upmove" rotation={AnimatedButton.DIRECTION_UP} disabled={!(0 < i)} />
-          </a>
-          <a target="_blank" onClick={() => i < stagesTotal - 1 && configService.moveToIndex(stage.id, i + 1)}>
-            <AnimatedButton
-              title="downmove"
-              rotation={AnimatedButton.DIRECTION_DOWN}
-              disabled={!(i < stagesTotal - 1)}
-            />
-          </a>
-          <a target="_blank" onClick={() => configService.deleteStage(stage.id)}>
-            <AnimatedButton title="remove" points={[PlusNone, PlusRegular, PlusRotated]} rotation={45} />
-          </a>
+          <AnimatedButton
+            title="upmove"
+            onClick={() => 0 < i && configService.moveToIndex(stage.id, i - 1)}
+            disabled={!(0 < i)}
+            rotation={AnimatedButton.DIRECTION_UP}
+          />
+          <AnimatedButton
+            title="downmove"
+            onClick={() => hasNext && configService.moveToIndex(stage.id, i + 1)}
+            rotation={AnimatedButton.DIRECTION_DOWN}
+            disabled={!hasNext}
+          />
+          <AnimatedButton
+            title="remove"
+            onClick={() => configService.deleteStage(stage.id)}
+            points={[PlusNone, PlusRegular, PlusRotated]}
+            rotation={45}
+          />
         </div>
       </div>
       <Collapsable key={stage.id} show={editMode === stage.id}>
@@ -81,7 +87,7 @@ export function StageEditor({ stage, i, stagesTotal, dragHandleProps }: Props) {
           scale={1.5}
         />
         {Object.keys(stage.state.data).map((groupId) => (
-          <div className="stage-group">
+          <div className="stage-group" key={groupId}>
             <h2>{groupId}</h2>
             <div className="stage-group-content">
               {Object.keys(stage.state.data[groupId]).map((id: string) =>

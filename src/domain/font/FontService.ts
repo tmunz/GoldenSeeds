@@ -1,5 +1,7 @@
 import { Font, parse } from 'opentype.js';
 
+const SignikaBoldFont = require('./signika-bold.otf'); // eslint-disable-line
+
 export class FontService {
   private static DB_NAME = 'font';
   private static DB_TABLE = 'fontData';
@@ -29,13 +31,13 @@ export class FontService {
   }
 
   async listFonts(): Promise<string[]> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.database().then((db) => {
         const transaction = db.transaction(FontService.DB_TABLE);
         const objectStore = transaction.objectStore(FontService.DB_TABLE);
         const getRequest = objectStore.getAllKeys();
-        getRequest.addEventListener('success', (event) => {
-          const list = (event.target as any).result;
+        getRequest.addEventListener('success', event => {
+          const list = (event.target as unknown as { result: string[] }).result;
           resolve(list);
         });
       }).catch(() => {
@@ -46,18 +48,18 @@ export class FontService {
   }
 
   async get(fontName: string): Promise<Font> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.database().then((db) => {
         const transaction = db.transaction(FontService.DB_TABLE);
         const objectStore = transaction.objectStore(FontService.DB_TABLE);
         const getRequest = objectStore.get(fontName);
         getRequest.addEventListener('success', (event) => {
-          const data = (event.target as any).result?.data;
+          const data = (event.target as unknown as { result: { data: string } }).result?.data;
           resolve(parse(data));
         });
       }).catch(async () => {
         console.warn(`font ${fontName} could not be loaded use default`);
-        const data = await (await fetch(require('./signika-bold.otf'))).arrayBuffer();
+        const data = await (await fetch(SignikaBoldFont)).arrayBuffer();
         resolve(parse(data));
       });
     });
@@ -67,7 +69,7 @@ export class FontService {
     return new Promise((resolve, reject) => {
       const dbOpenEvent = window.indexedDB.open(FontService.DB_NAME, 1);
       dbOpenEvent.addEventListener('upgradeneeded', (event: Event) => {
-        const db = (event.target as any).result as IDBDatabase;
+        const db = (event.target as unknown as { result: IDBDatabase }).result;
         if (!db.objectStoreNames.contains(FontService.DB_TABLE)) {
           db.createObjectStore(FontService.DB_TABLE, {
             autoIncrement: false,
@@ -76,7 +78,7 @@ export class FontService {
         }
       });
       dbOpenEvent.addEventListener('success', (event: Event) => {
-        const db = (event.target as any).result as IDBDatabase;
+        const db = (event.target as unknown as { result: IDBDatabase }).result;
         resolve(db);
       });
       dbOpenEvent.addEventListener('error', (event: Event) => {

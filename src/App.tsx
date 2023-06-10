@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { first, filter } from 'rxjs/operators';
 
 import { GoldenSeedsView } from './view/GoldenSeedsView';
@@ -9,20 +9,22 @@ import { fontService } from './domain/font/FontService';
 import { configManager, ConfigItem } from './domain/config/ConfigManager';
 import { preconfigs } from './domain/config/data';
 
+const SignikaBoldFont = require('./domain/font/signika-bold.otf'); // eslint-disable-line
+
 export function App() {
   const [configItems, setConfigItems] = useState<ConfigItem[]>([]);
   const [configsManageable, setConfigsManageable] = useState<boolean>(false);
   const [activeConfig, setActiveConfig] = useState<Config>();
 
-  async function setup() {
+  const setup = useCallback(async () => {
     // wait for preconfigs to be loaded, but at least some initial time to animate
     const start = Date.now();
-    const buffer = await (await fetch(require('./domain/font/signika-bold.otf'))).arrayBuffer();
-    await fontService.saveBuffer(buffer).catch(() => { });
+    const buffer = await (await fetch(SignikaBoldFont)).arrayBuffer();
+    await fontService.saveBuffer(buffer).catch(() => console.warn('font could not be loaded'));
     await configManager.init();
     window.addEventListener('popstate', (e) => handleLocation(e));
     setTimeout(() => handleLocation(), Math.max(0, 1000 - (Date.now() - start)));
-  }
+  }, []);
 
   function handleLocation(e?: Event) {
     const location = e !== undefined ? (e.currentTarget as Window).location.search : window.location.search;
@@ -46,7 +48,7 @@ export function App() {
       configsManageableSubscription.unsubscribe();
       activeConfigSubscription.unsubscribe();
     };
-  }, []);
+  }, [setup]);
 
   return (
     <>

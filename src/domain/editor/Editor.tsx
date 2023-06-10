@@ -31,12 +31,12 @@ export class Editor extends React.Component<Props> {
                 <div ref={provided.innerRef} {...provided.droppableProps}>
                   {this.props.config.stages.map((stage, i) => (
                     <Draggable key={stage.id} draggableId={stage.id} index={i}>
-                      {(provided, snapshot) => (
+                      {(provided) => (
                         <div ref={provided.innerRef} {...provided.draggableProps}>
                           <StageEditor
                             dragHandleProps={provided.dragHandleProps}
                             stage={stage}
-                            stagesTotal={this.props.config.stages.length}
+                            hasNext={i < this.props.config.stages.length - 1}
                             i={i}
                           ></StageEditor>
                         </div>
@@ -49,9 +49,11 @@ export class Editor extends React.Component<Props> {
             </Droppable>
           </DragDropContext>
           <div className="stage-header" key="add">
-            <a target="_blank" onClick={() => configService.addStage()}>
-              <AnimatedButton title="add" points={[PlusNone, PlusRegular, PlusRotated]} />
-            </a>
+            <AnimatedButton
+              onClick={() => configService.addStage()}
+              title="add"
+              points={[PlusNone, PlusRegular, PlusRotated]}
+            />
           </div>
         </div>
       </div>

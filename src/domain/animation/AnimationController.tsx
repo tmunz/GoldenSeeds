@@ -14,19 +14,15 @@ interface Props {
 export class AnimationController extends React.Component<Props> {
   render() {
     return (
-      <a
+      <AnimatedButton
+        title="play"
+        points={[PlayNone, PlayRegular, PlayFlipped]}
+        iconText={this.props.currentlyAnimating ? '' + this.props.value : undefined}
         className={this.props.currentlyAnimating ? 'active' : ''}
-        target="_blank"
         onClick={() =>
           animationService.animate(this.props.stageId, this.props.groupId, this.props.id, this.props.value)
         }
-      >
-        <AnimatedButton
-          title="play"
-          points={[PlayNone, PlayRegular, PlayFlipped]}
-          iconText={this.props.currentlyAnimating ? '' + this.props.value : undefined}
-        />
-      </a>
+      />
     );
   }
 }

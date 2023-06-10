@@ -5,6 +5,7 @@ import { ArrowFlat, ArrowRegular, ArrowNone } from './icon/Arrow';
 
 import './AnimatedButton.styl';
 
+
 interface Props {
   title?: string;
   iconText?: string;
@@ -12,6 +13,7 @@ interface Props {
   disabled?: boolean;
   onClick?: (active?: boolean) => void;
   points?: number[][][];
+  className?: string;
   useAsToggle?: boolean;
 }
 
@@ -32,8 +34,8 @@ export class AnimatedButton extends React.Component<Props, State> {
 
   render() {
     return (
-      <div
-        className={['animated-button', this.state.active ? 'active' : ''].join(' ')}
+      <button
+        className={['animated-button', this.props.className ?? '', this.state.active ? 'active' : ''].join(' ')}
         onClick={() => this.handleClick()}
       >
         <div className="tooltip">{this.props.title}</div>
@@ -43,7 +45,7 @@ export class AnimatedButton extends React.Component<Props, State> {
           index={this.props.disabled ? 0 : this.state.active ? 2 : 1}
           rotation={this.props.rotation ?? 0}
         />
-      </div>
+      </button>
     );
   }
 

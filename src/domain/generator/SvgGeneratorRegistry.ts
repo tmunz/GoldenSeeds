@@ -12,7 +12,7 @@ export class SvgGeneratorRegistry {
 
   constructor() {
     const classes = [Shape, FunctionPlotter, PolarGrid, CartesianGrid, Voronoi, Tree, TextDrawer];
-    classes.forEach((c: any) => this.register(c.type, () => new c()));
+    classes.forEach((c: SvgGenerator) => this.register(c.type, () => new c()));
   }
 
   register(type: string, svgGeneratorCreator: () => SvgGenerator) {

@@ -9,20 +9,21 @@ export function ColorInputSelection(props: {
 }) {
   return <div className="color-input-selection">
     {[
-        'black', 'darkgray', 'gray', 'lightgray', 'white', 
-        'red', 'orange', 'yellow', 'gold', 'darkOrange', 
-        'lime', 'green', 'spring', 'patina', 'britishRacing', 
-        'cyan', 'brescian', 'blue', 'pastelblue', 'marian', 
-        'purple', 'magenta', 'neonrose', 'pastelviolet', 'coral',
+      'black', 'darkgray', 'gray', 'lightgray', 'white', 
+      'red', 'orange', 'yellow', 'gold', 'darkOrange', 
+      'lime', 'green', 'spring', 'patina', 'britishRacing', 
+      'cyan', 'brescian', 'blue', 'pastelblue', 'marian', 
+      'purple', 'magenta', 'neonrose', 'pastelviolet', 'coral',
     ]
       .map(cv => new Color(cv))
-      .map((c, i) => <div
+      .map((c, i) => <input
         key={i}
+        type="button"
         style={{ background: c.getRgbaString() }}
         className="color-input-cell"
         onClick={() => props.onSelect(c)}
       />)
     }
-  </div>
+  </div>;
 
 }

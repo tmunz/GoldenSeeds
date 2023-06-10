@@ -19,17 +19,20 @@ export function ColorInput(props: {
 }) {
 
   const COLOR_MODES: ColorMode[] = ['rgb', 'hsl', 'select', 'random'];
+  const INITIAL_COLOR_MODE = COLOR_MODES[0];
 
   const [colorMode, setColorMode] = useState<ColorMode | null>(null);
 
   useEffect(() => {
-    const c = new Color(props.value);
-    if (c.isRandom()) {
-      setColorMode('random');
-    } else if (colorMode === null) {
-      setColorMode(COLOR_MODES[0]);
+    if (colorMode === null) {
+      const c = new Color(props.value);
+      if (c.isRandom()) {
+        setColorMode('random');
+      } else {
+        setColorMode(INITIAL_COLOR_MODE);
+      }
     }
-  }, [props.value]);
+  }, [props.value, colorMode, INITIAL_COLOR_MODE]);
 
   const color = new Color(props.value);
 
@@ -58,5 +61,5 @@ export function ColorInput(props: {
       selected={colorMode ?? undefined}
       select={(c) => setColorMode(c as ColorMode)}
     />
-  </div>
+  </div>;
 }

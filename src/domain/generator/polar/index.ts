@@ -3,11 +3,10 @@ import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
 import { draw, PolarConfig } from './PolarDrawer';
 import { PointUtils } from '../../../utils/PointUtils';
 
-export class PolarGrid implements SvgGenerator {
+export class PolarGrid extends SvgGenerator<PolarConfig> {
   static type = 'polar';
-  type = PolarGrid.type;
 
-  definition = {
+  static definition = {
     style: {
       color: { initial: 'gold', type: 'color' as const },
       strokeWidth: {
@@ -44,7 +43,11 @@ export class PolarGrid implements SvgGenerator {
     },
   };
 
-  generate = (config: PolarConfig, prev: SvgGeneratorResult): SvgGeneratorResult => {
+  constructor() {
+    super(PolarGrid.type, PolarGrid.definition);
+  }
+
+  generate(config: PolarConfig, prev: SvgGeneratorResult): SvgGeneratorResult {
     const drawing = draw(config, prev.grid);
 
     const drawingBoundingBox = PointUtils.boundingBox(drawing.points);
@@ -66,5 +69,5 @@ export class PolarGrid implements SvgGenerator {
       svg: drawing.svg,
       boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, drawingBoundingBox]),
     };
-  };
+  }
 }

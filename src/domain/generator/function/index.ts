@@ -1,13 +1,12 @@
 import { MathUtils } from '../../../utils/MathUtils';
-import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
 import { PointUtils } from '../../../utils/PointUtils';
+import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
 import { plot, FunctionPlotterConfig } from './FunctionPlotter';
 
-export class FunctionPlotter implements SvgGenerator {
+export class FunctionPlotter extends SvgGenerator<FunctionPlotterConfig> {
   static type = 'function';
-  type = FunctionPlotter.type;
 
-  definition = {
+  static definition = {
     style: {
       fillColor: { initial: 'transparent', type: 'color' as const },
       strokeColor: { initial: 'gold', type: 'color' as const },
@@ -65,12 +64,16 @@ export class FunctionPlotter implements SvgGenerator {
     },
   };
 
-  generate = (config: FunctionPlotterConfig, prev: SvgGeneratorResult): SvgGeneratorResult => {
+  constructor() {
+    super(FunctionPlotter.type, FunctionPlotter.definition);
+  }
+
+  generate(config: FunctionPlotterConfig, prev: SvgGeneratorResult): SvgGeneratorResult {
     const plotting = plot(config, prev.grid);
     return {
       grid: config.plot.output === 'origin' ? prev.grid : plotting.points,
       svg: plotting.svg,
       boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, PointUtils.boundingBox(plotting.points)]),
     };
-  };
+  }
 }

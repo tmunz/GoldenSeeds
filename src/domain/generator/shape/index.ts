@@ -1,13 +1,12 @@
 import { MathUtils } from '../../../utils/MathUtils';
+import { PointUtils } from '../../../utils/PointUtils';
 import { draw, ShapeConfig } from './ShapeDrawer';
 import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
-import { PointUtils } from '../../../utils/PointUtils';
 
-export class Shape implements SvgGenerator {
+export class Shape extends SvgGenerator<ShapeConfig> {
   static type = 'shape';
-  type = Shape.type;
 
-  definition = {
+  static definition = {
     style: {
       fillColor: { initial: 'transparent', type: 'color' as const },
       strokeColor: { initial: 'gold', type: 'color' as const },
@@ -134,6 +133,10 @@ export class Shape implements SvgGenerator {
       },
     },
   };
+  
+  constructor() {
+    super(Shape.type, Shape.definition);
+  }
 
   generate = (config: ShapeConfig, prev: SvgGeneratorResult) => {
     const shape = draw(config, prev.grid);

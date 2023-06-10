@@ -19,6 +19,6 @@ export function ColorInputRandom(props: {
       type="button"
       value="random"
     />
-  </div>
+  </div>;
 
 }

@@ -14,7 +14,7 @@ export type StageRawState = { type: string; data: Record<string, Record<string, 
 export class Stage {
   id: string;
   generator: SvgGenerator;
-  state: StageState<any>;
+  state: StageState<unknown>;
   animatedId?: string;
 
   constructor(
@@ -26,7 +26,7 @@ export class Stage {
     this.generator = generator ?? {
       type: 'default',
       definition: {},
-      generate: (props: any, prev: SvgGeneratorResult) => ({
+      generate: (_, prev: SvgGeneratorResult) => ({
         grid: [],
         svg: '',
         boundingBox: prev.boundingBox,
@@ -57,8 +57,8 @@ export class Stage {
     type: string,
     data: Record<string, Record<string, string>> = {},
     generatorDefinition: Record<string, Record<string, ParamDefinition>>,
-  ): StageState<any> {
-    const converted: StageState<any> = { type, data: {} };
+  ): StageState<unknown> {
+    const converted: StageState<unknown> = { type, data: {} };
     const groupIds = Object.keys(generatorDefinition);
     groupIds.forEach((groupId) => {
       converted.data[groupId] = {};

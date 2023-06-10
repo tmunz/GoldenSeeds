@@ -11,7 +11,7 @@ import { FontEditor } from './editorInput/FontEditor';
 
 export class EditorService {
 
-  private editorInputUis: Record<ParamDefinitionType, EditorInput<any>> = {
+  private editorInputUis: Record<ParamDefinitionType, EditorInput<unknown>> = {
     color: new ColorEditor(),
     expression: new ExpressionEditor(),
     number: new NumberEditor(),

@@ -1,7 +1,5 @@
 import { BoundingBox } from '../../datatypes/BoundingBox';
 
-export type SvgGeneratorConfig = any;
-
 type ParamDefinitionTypeMinMaxStep = 'expression' | 'number';
 export type ParamDefinitionType = ParamDefinitionTypeMinMaxStep | 'color' | 'selection' | 'string' | 'font';
 export type ParamDefinitionMinMaxStep = {
@@ -24,8 +22,14 @@ export interface SvgGeneratorResult {
   boundingBox: BoundingBox;
 }
 
-export interface SvgGenerator {
+export abstract class SvgGenerator<T> {
   type: string;
   definition: Record<string, Record<string, ParamDefinition>>;
-  generate: (config: SvgGeneratorConfig, prev: SvgGeneratorResult) => SvgGeneratorResult;
+
+  constructor(type: string, definition: Record<string, Record<string, ParamDefinition>>) {
+    this.type = type;
+    this.definition = definition;
+  }
+
+  abstract generate(config: T, prev: SvgGeneratorResult): SvgGeneratorResult;
 }

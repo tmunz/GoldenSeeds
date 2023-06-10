@@ -28,13 +28,10 @@
     overflow: hidden;
     transition: all 1s ease-in-out;
     cursor: grab;
+    border: none;
 
-    &.grabbing {
+    &:active {
       cursor: grabbing !important;
-
-      * {
-        cursor: grabbing !important;
-      }
     }
 
     .carousel-item {
@@ -44,19 +41,18 @@
       padding: 5px;
       text-align: center;
       white-space: nowrap;
+      cursor: pointer;
 
-      &>a {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        justify-content: center;
-        align-items: center;
-        align-content: center;
+      &>input[type="radio"] {
+        appearance: none;
+        position: absolute;
       }
 
       .preview {
         width: 100px;
         display: block;
+        margin: auto;
+        margin-top: 10px;
       }
     }
   }

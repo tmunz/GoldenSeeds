@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { AnimatedButton } from './AnimatedButton';
 
 import './CarouselSelector.styl';
@@ -9,20 +9,21 @@ interface CarouselSelectorItem {
   svg: string | null;
 }
 
-interface Props {
+export function CarouselSelector(props: {
   items: CarouselSelectorItem[];
   selected?: string;
   select: (name: string) => void;
   scale?: number;
   className?: string;
-}
+}) {
 
-export function CarouselSelector(props: Props) {
-
+  const CAROUSEL_SELECTOR_NAME = useMemo(() => `${Math.random()}`, []);
   const MAX_AROUND = 3;
 
   const [startX, setStartX] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
+  const radioElements: React.MutableRefObject<(HTMLInputElement | null)[]> = useRef([]);
 
   useEffect(() => {
     const arr = props.items;
@@ -48,7 +49,7 @@ export function CarouselSelector(props: Props) {
       window.removeEventListener('mousemove', mouseMove);
       window.removeEventListener('touchmove', mouseMove);
     };
-  }, [startX, selectedIndex, props.items]);
+  }, [startX, selectedIndex, props]);
 
   useEffect(() => {
     const mouseUp = () => {
@@ -65,26 +66,28 @@ export function CarouselSelector(props: Props) {
       window.removeEventListener('mouseup', mouseUp);
       window.removeEventListener('touchend', mouseUp);
     };
-  }, [startX, props.items]);
+  }, [startX, props, selectedIndex]);
 
   function convertDeltaXToItemDelta(dX: number): number {
     return -1 * Math.sign(dX) * Math.floor(Math.abs(dX) / 50);
   }
 
   function handleMouseDown(e: React.MouseEvent<HTMLElement, MouseEvent> | React.TouchEvent<HTMLElement>) {
-    e.preventDefault();
-    e.stopPropagation();
-    const event: { clientX: number } = e.type === 'mousedown' ? e : (e as any).touches[0];
+    // e.preventDefault();
+    // e.stopPropagation();
+    const event: { clientX: number } = e.type === 'mousedown'
+      ? (e as React.MouseEvent<HTMLElement>)
+      : (e as React.TouchEvent<HTMLElement>).touches[0];
     setStartX(event.clientX);
-  }
-
-  function calculateMinDelta(index: number, count: number): number {
-    return [index - count, index + count].reduce((minDelta, e) => Math.abs(e) < Math.abs(minDelta) ? e : minDelta, index);
   }
 
   function selectByDelta(delta: number) {
     const nextIndex = (selectedIndex + delta + props.items.length) % props.items.length;
     props.select(props.items[nextIndex].name);
+  }
+
+  function calculateMinDelta(index: number, count: number): number {
+    return [index - count, index + count].reduce((minDelta, e) => Math.abs(e) < Math.abs(minDelta) ? e : minDelta, index);
   }
 
   return (
@@ -95,10 +98,13 @@ export function CarouselSelector(props: Props) {
           onClick={() => selectByDelta(-1)}
         />
       </div>
-      <div
-        className={['carousel-overview', startX === null ? '' : 'grabbing'].join(' ')}
+      <fieldset
+        id={CAROUSEL_SELECTOR_NAME}
+        className="carousel-overview"
         onMouseDown={handleMouseDown}
         onTouchStart={handleMouseDown}
+        onMouseUp={() => radioElements.current[selectedIndex]?.focus()}
+        onTouchEnd={() => radioElements.current[selectedIndex]?.focus()}
       >
         {(props.items ?? []).map((item, i, arr) => {
           const delta = calculateMinDelta(i - selectedIndex, arr.length);
@@ -107,29 +113,37 @@ export function CarouselSelector(props: Props) {
           const scale = 1 / (p == 0 ? 1 : Math.abs(p * 10) ** 0.3);
           const offset = Math.sin(p / (MAX_AROUND + 1) * Math.PI / 2) * 100 * (props.scale ?? 1);
           const visible = Math.abs(delta) <= MAX_AROUND;
-          return <div
+          return <label
+            htmlFor={`${CAROUSEL_SELECTOR_NAME}__${item.name.replace(' ', '_')}`}
             key={item.name}
-            className="carousel-item"
+            className="carousel-item action"
             style={{
               transform: `translateX(${offset}px) scale(${scale}) rotateY(${angle}rad)`,
               opacity: visible ? 1 : 0,
             }}
           >
-            <a onClick={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              setSelectedIndex(i);
-              setTimeout(() => props.select(item.name), 300);
-            }}>
-              <div>{item.name}</div>
-              {item.svg && <img
-                draggable="false"
-                className="preview"
-                src={`data:image/svg+xml;base64,${window.btoa(item.svg)}`} />}
-            </a>
-          </div>;
+            <input
+              type="radio"
+              id={`${CAROUSEL_SELECTOR_NAME}__${item.name.replace(' ', '_')}`}
+              name={CAROUSEL_SELECTOR_NAME}
+              value={i}
+              checked={i === selectedIndex}
+              onChange={() => {
+                setSelectedIndex(i);
+                setTimeout(() => props.select(item.name), 300);
+              }}
+              ref={e => { radioElements.current[i] = e; }}
+            />
+            <div>{item.name}</div>
+            {item.svg && <img
+              alt={`last saved ${item.name}`}
+              draggable="false"
+              className="preview"
+              src={`data:image/svg+xml;base64,${window.btoa(item.svg)}`} />
+            }
+          </label>;
         })}
-      </div>
+      </fieldset>
       <div className="carousel-next">
         <AnimatedButton
           rotation={AnimatedButton.DIRECTION_RIGHT}

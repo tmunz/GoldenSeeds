@@ -30,7 +30,7 @@ export class ConfigManager {
         const objectStore = transaction.objectStore(ConfigManager.DB_TABLE);
         const getRequest = objectStore.getAll();
         getRequest.addEventListener('success', async (event) => {
-          const list = ((event.target as any).result as ConfigItem[]);
+          const list = ((event.target as unknown as { result: ConfigItem[] }).result);
           if (list.length === 0) {
             await Promise.all(preconfigs.map((preconfig, i) => configManager.save(preconfig, i)));
           } else {
@@ -54,7 +54,7 @@ export class ConfigManager {
   }
 
   async reset(name: string) {
-    let rawConfig: RawConfig = { meta: { name }, stages: [] };
+    const rawConfig: RawConfig = { meta: { name }, stages: [] };
     const preconfig = preconfigs.find(c => c.meta.name === name);
     const config = this.configItemMap$.value.get(name);
     if (config) {
@@ -111,7 +111,7 @@ export class ConfigManager {
     return new Promise((resolve, reject) => {
       const dbOpenEvent = window.indexedDB.open(ConfigManager.DB_NAME, 1);
       dbOpenEvent.addEventListener('upgradeneeded', (event: Event) => {
-        const db = (event.target as any).result as IDBDatabase;
+        const db = (event.target as unknown as { result: IDBDatabase }).result;
         if (!db.objectStoreNames.contains(ConfigManager.DB_TABLE)) {
           const objectStore = db.createObjectStore(ConfigManager.DB_TABLE, {
             autoIncrement: false,
@@ -121,7 +121,7 @@ export class ConfigManager {
         }
       });
       dbOpenEvent.addEventListener('success', (event: Event) => {
-        const db = (event.target as any).result as IDBDatabase;
+        const db = (event.target as unknown as { result: IDBDatabase }).result as IDBDatabase;
         resolve(db);
       });
       dbOpenEvent.addEventListener('error', (event: Event) => {

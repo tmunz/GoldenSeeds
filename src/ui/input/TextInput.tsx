@@ -1,22 +1,22 @@
-import React, { useState, useRef, useEffect, ChangeEvent } from 'react';
+import React, { useState, useRef, useEffect, ChangeEvent, MutableRefObject } from 'react';
 
 import './Input.styl';
 import './TextInput.styl';
 
 export interface Props {
   label?: string;
-  value?: any;
+  value?: string;
   onChange: (value: string) => void;
   className?: string;
 }
 
 export const TextInput = (props: Props) => {
   const [cursor, setCursor] = useState<number | null>(0);
-  const ref = useRef(null);
+  const ref: MutableRefObject<HTMLInputElement | null> = useRef(null);
 
   useEffect(() => {
-    const input: any = ref.current;
-    if (input) {
+    const input = ref.current;
+    if (input && cursor !== null) {
       input.setSelectionRange(cursor, cursor);
     }
   }, [ref, cursor, props.value]);

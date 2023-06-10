@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import './AnimatedIcon.styl';
 
 export interface Props {
-  points: number[][][] | string[];
+  points: (number[][] | string)[];
   index: number;
   rotation?: number;
 }
@@ -11,16 +11,17 @@ export interface Props {
 export function AnimatedIcon(props: Props) {
   const [index, setIndex] = useState(0);
 
-  const refs = (props.points as any[]).map(() => useRef(null));
+  const refs = useRef<(SVGElement | null)[]>([]);
 
   useEffect(() => {
     if (index !== props.index) {
-      if (refs[props.index]) {
+      const elem = refs.current[props.index];
+      if (elem) {
         setIndex(props.index);
-        refs[props.index].current?.beginElement();
+        (elem as unknown as { beginElement: () => void }).beginElement();
       }
     }
-  });
+  }, [setIndex, index, props.index, refs]);
 
   const toPath = (ps: number[][] | string) => {
     return typeof ps === 'string' ? ps : ps.reduce((agg, p) => agg + ` ${p[0]},${p[1]}`, '');
@@ -34,14 +35,14 @@ export function AnimatedIcon(props: Props) {
         transform={`rotate(${props.rotation ? props.rotation : 0} 50 50)`}
         vectorEffect="non-scaling-stroke"
       >
-        {(props.points as any[]).map((points: string | number[][], i: number) => (
+        {props.points.map((points: string | number[][], i: number) => (
           <animate
             key={i}
             begin="indefinite"
             fill="freeze"
             attributeName="points"
             dur="500ms"
-            ref={refs[i]}
+            ref={e => refs.current[i] = e}
             to={toPath(points)}
           />
         ))}

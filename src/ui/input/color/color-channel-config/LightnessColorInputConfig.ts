@@ -1,4 +1,4 @@
-import { ColorInputConfig } from "./ColorInputConfig";
+import { ColorInputConfig } from './ColorInputConfig';
 
 export const LightnessColorInputConfig: ColorInputConfig = {
   name: 'l',
@@ -6,5 +6,5 @@ export const LightnessColorInputConfig: ColorInputConfig = {
   min: 0,
   max: 100,
   base: 10,
-  gradient: [{ l: 0 }, { l: 100 }],
+  gradient: [{ l: 0 }, { l: 50 }, { l: 100 }],
 };

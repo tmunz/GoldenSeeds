@@ -3,7 +3,7 @@ import { ParamDefinitionType } from '../generator/SvgGenerator';
 import { StageItemState } from '../config/Stage';
 
 export class ConverterService {
-  private registry: Map<ParamDefinitionType, Converter<any>> = new Map();
+  private registry: Map<ParamDefinitionType, Converter<unknown>> = new Map();
 
   constructor() {
     this.register('color', new ColorConverter());
@@ -14,12 +14,13 @@ export class ConverterService {
     this.register('font', new FontConverter());
   }
 
-  private register(type: ParamDefinitionType, stageCreator: Converter<any>) {
+  private register(type: ParamDefinitionType, stageCreator: Converter<unknown>) {
     this.registry.set(type, stageCreator);
   }
 
-  convertTextToValue(type: ParamDefinitionType, textValue: string): Promise<Partial<StageItemState<any>>> {
-    return this.registry.get(type)!.convert(textValue);
+  convertTextToValue(type: ParamDefinitionType, textValue: string): Promise<Partial<StageItemState<unknown>>> {
+    const converter = this.registry.get(type);
+    return converter ? converter.convert(textValue) : Promise.resolve({});
   }
 }
 

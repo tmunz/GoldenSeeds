@@ -4,11 +4,10 @@ import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
 import { PointUtils } from '../../../utils/PointUtils';
 import { Point } from '../../../datatypes/Point';
 
-export class Tree implements SvgGenerator {
+export class Tree extends SvgGenerator<TreeConfig> {
   static type = 'tree';
-  type = Tree.type;
 
-  definition = {
+  static definition = {
     style: {
       color: { initial: 'gold', type: 'color' as const },
     },
@@ -71,7 +70,11 @@ export class Tree implements SvgGenerator {
     },
   };
 
-  generate = (config: TreeConfig, prev: SvgGeneratorResult) => {
+  constructor() {
+    super(Tree.type, Tree.definition);
+  }
+
+  generate(config: TreeConfig, prev: SvgGeneratorResult) {
     const drawing = draw(config, prev.grid);
 
     let drawingBoundingBox = PointUtils.boundingBox(drawing.points);
@@ -90,5 +93,5 @@ export class Tree implements SvgGenerator {
       svg: drawing.svg,
       boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, drawingBoundingBox]),
     };
-  };
+  }
 }
