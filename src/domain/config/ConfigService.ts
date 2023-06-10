@@ -86,7 +86,7 @@ export class ConfigService {
   }
 
   private static async createStage(
-    generator: SvgGenerator | null,
+    generator: SvgGenerator<unknown> | null,
     rawState?: StageRawState,
     stageId?: string,
   ): Promise<Stage> {

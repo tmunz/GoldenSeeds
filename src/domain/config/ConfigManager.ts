@@ -81,7 +81,7 @@ export class ConfigManager {
 
   async save(rawConfig: RawConfig, sortIndex: number): Promise<ConfigItem> {
     const name = rawConfig.meta.name;
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       return this.database().then(async (db) => {
         const config = await ConfigService.convert(rawConfig);
         const svg = svgService.generateSvg(config.stages, 1000, 1000);
@@ -95,7 +95,7 @@ export class ConfigManager {
           this.configItemMap$.next(next);
           resolve(data);
         });
-      }).catch(() => resolve());
+      }).catch(() => reject());
     });
   }
 

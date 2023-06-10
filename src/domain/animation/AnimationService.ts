@@ -19,9 +19,10 @@ export class AnimationService {
   animateDefault() {
     root: for (const stage of configService.config$.value.stages) {
       for (const groupId of Object.keys(stage.generator.definition)) {
-        for (const [id, value] of Object.entries(stage.generator.definition[groupId])) {
-          if (value.animateable) {
-            this.animate(stage.id, groupId, id, stage.state.data[groupId][id].value);
+        for (const [id, entry] of Object.entries(stage.generator.definition[groupId])) {
+          if (entry.animateable) {
+            const value = stage.state.data[groupId][id].value as number; // if animateable, then value must be number
+            this.animate(stage.id, groupId, id, value);
             break root;
           }
         }

@@ -6,16 +6,17 @@ import { SvgGenerator } from './SvgGenerator';
 import { Shape } from './shape';
 import { FunctionPlotter } from './function';
 import { TextDrawer } from './text';
+import { ShapeConfig } from './shape/ShapeDrawer';
 
 export class SvgGeneratorRegistry {
-  private registry: Map<string, () => SvgGenerator> = new Map();
+  private registry: Map<string, () => SvgGenerator<unknown>> = new Map();
 
   constructor() {
     const classes = [Shape, FunctionPlotter, PolarGrid, CartesianGrid, Voronoi, Tree, TextDrawer];
-    classes.forEach((c: SvgGenerator) => this.register(c.type, () => new c()));
+    classes.forEach(c => this.register(c.type, () => new c()));
   }
 
-  register(type: string, svgGeneratorCreator: () => SvgGenerator) {
+  register(type: string, svgGeneratorCreator: () => SvgGenerator<unknown>) {
     this.registry.set(type, svgGeneratorCreator);
   }
 
@@ -23,13 +24,13 @@ export class SvgGeneratorRegistry {
     return [...this.registry.keys()];
   }
 
-  newInstance(type: string): SvgGenerator | null {
+  newInstance(type: string): SvgGenerator<unknown> | null {
     const instance = this.registry.get(type);
     return instance ? instance() : null;
   }
 
-  getDefaultGenerator(): SvgGenerator {
-    return new Shape() as SvgGenerator;
+  getDefaultGenerator(): SvgGenerator<ShapeConfig> {
+    return new Shape();
   }
 }
 

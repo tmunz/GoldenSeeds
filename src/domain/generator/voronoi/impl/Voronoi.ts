@@ -47,7 +47,7 @@ export class Voronoi {
         (arr, site) => (arr.find((s) => PointUtils.isSamePoint(s.point, site.point)) ? arr : [...arr, site]),
         [] as Site[],
       );
-    return new Queue(...cleanedSites.map((site, id) => ({ id, ...site })));
+    return new Queue(...cleanedSites);
   }
 
   private convertToCell(siteArea: SiteArea): Cell {

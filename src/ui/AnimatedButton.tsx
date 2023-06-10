@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { AnimatedIcon } from './AnimatedIcon';
 import { ArrowFlat, ArrowRegular, ArrowNone } from './icon/Arrow';
@@ -6,7 +6,12 @@ import { ArrowFlat, ArrowRegular, ArrowNone } from './icon/Arrow';
 import './AnimatedButton.styl';
 
 
-interface Props {
+export const DIRECTION_UP = 180;
+export const DIRECTION_DOWN = 0;
+export const DIRECTION_LEFT = 90;
+export const DIRECTION_RIGHT = 270;
+
+export function AnimatedButton(props: {
   title?: string;
   iconText?: string;
   rotation?: number;
@@ -14,50 +19,38 @@ interface Props {
   onClick?: (active?: boolean) => void;
   points?: number[][][];
   className?: string;
-  useAsToggle?: boolean;
-}
+  active?: boolean;
+}) {
 
-interface State {
-  active: boolean;
-}
+  const [active, setActive] = useState(props.active ?? false);
 
-export class AnimatedButton extends React.Component<Props, State> {
-  static DIRECTION_UP = 180;
-  static DIRECTION_DOWN = 0;
-  static DIRECTION_LEFT = 90;
-  static DIRECTION_RIGHT = 270;
-
-  constructor(props: Props) {
-    super(props);
-    this.state = { active: false };
-  }
-
-  render() {
-    return (
-      <button
-        className={['animated-button', this.props.className ?? '', this.state.active ? 'active' : ''].join(' ')}
-        onClick={() => this.handleClick()}
-      >
-        <div className="tooltip">{this.props.title}</div>
-        <div className="icon-text">{this.props.iconText}</div>
-        <AnimatedIcon
-          points={this.props.points ?? [ArrowNone, ArrowFlat, ArrowRegular]}
-          index={this.props.disabled ? 0 : this.state.active ? 2 : 1}
-          rotation={this.props.rotation ?? 0}
-        />
-      </button>
-    );
-  }
-
-  handleClick(): void {
-    this.setState(state => {
-      return { active: !state.active };
-    }, () => {
-      const active = this.state.active;
-      this.props.onClick && this.props.onClick(active);
-      if (!this.props.useAsToggle) {
-        setTimeout(() => this.setState({ active: !active }), 500);
+  useEffect(() => {
+    if (props.active === undefined) {
+      if (active === true) {
+        setTimeout(() => setActive(false), 500);
       }
-    });
+    } else {
+      setActive(props.active);
+    }
+  }, [props.active, active]);
+
+  function handleClick(): void {
+    setActive(props.active === undefined ? !active : true);
+    props.onClick?.(active);
   }
+
+  return (
+    <button
+      className={['animated-button', props.className ?? '', active ? 'active' : ''].join(' ')}
+      onClick={() => handleClick()}
+    >
+      <div className="tooltip">{props.title}</div>
+      <div className="icon-text">{props.iconText}</div>
+      <AnimatedIcon
+        points={props.points ?? [ArrowNone, ArrowFlat, ArrowRegular]}
+        index={props.disabled ? 0 : (active ? 2 : 1)}
+        rotation={props.rotation ?? 0}
+      />
+    </button>
+  );
 }

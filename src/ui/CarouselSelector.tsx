@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { AnimatedButton } from './AnimatedButton';
+import { AnimatedButton, DIRECTION_LEFT, DIRECTION_RIGHT } from './AnimatedButton';
 
 import './CarouselSelector.styl';
 
@@ -94,7 +94,7 @@ export function CarouselSelector(props: {
     <div className={`carousel-selector ${props.className ? props.className : ''}`}>
       <div className="carousel-prev">
         <AnimatedButton
-          rotation={AnimatedButton.DIRECTION_LEFT}
+          rotation={DIRECTION_LEFT}
           onClick={() => selectByDelta(-1)}
         />
       </div>
@@ -146,7 +146,7 @@ export function CarouselSelector(props: {
       </fieldset>
       <div className="carousel-next">
         <AnimatedButton
-          rotation={AnimatedButton.DIRECTION_RIGHT}
+          rotation={DIRECTION_RIGHT}
           onClick={() => selectByDelta(+1)}
         />
       </div>

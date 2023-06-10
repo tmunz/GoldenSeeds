@@ -13,12 +13,12 @@ export type StageRawState = { type: string; data: Record<string, Record<string, 
 
 export class Stage {
   id: string;
-  generator: SvgGenerator;
+  generator: SvgGenerator<unknown>;
   state: StageState<unknown>;
   animatedId?: string;
 
   constructor(
-    generator: SvgGenerator | null,
+    generator: SvgGenerator<unknown> | null,
     rawState: StageRawState = { type: 'default', data: {} },
     stageId: string = '' + random(),
   ) {

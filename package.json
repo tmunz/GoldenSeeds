@@ -1,6 +1,6 @@
 {
   "name": "golden-seeds",
-  "version": "2.0.0-beta.11",
+  "version": "2.0.0-beta.12",
   "repository": "https://github.com/tmunz/GoldenSeeds",
   "description": "Golden Seeds - SVG Generator",
   "main": "src/index.tsx",
@@ -8,7 +8,8 @@
     "start": "webpack serve --config webpack/webpack.config.js --env env=development",
     "build": "del-cli -f ./docs/* && webpack --config webpack/webpack.config.js --env env=production",
     "test": "jest --watchAll",
-    "lint": "eslint --fix ./src/**/*{.js,.ts*}"
+    "lint": "eslint --fix ./src/**/*{.js,.ts*}",
+    "check": "tsc"
   },
   "keywords": [],
   "author": "Tobias Munzert",

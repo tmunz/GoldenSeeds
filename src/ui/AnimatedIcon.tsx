@@ -15,9 +15,9 @@ export function AnimatedIcon(props: Props) {
 
   useEffect(() => {
     if (index !== props.index) {
+      setIndex(props.index);
       const elem = refs.current[props.index];
       if (elem) {
-        setIndex(props.index);
         (elem as unknown as { beginElement: () => void }).beginElement();
       }
     }

@@ -3,7 +3,7 @@ import React from 'react';
 import './Input.styl';
 import './RangeInput.styl';
 
-export interface Props<T> {
+export function RangeInput<T>(props: {
   className?: string;
   label?: string;
   value?: number;
@@ -13,27 +13,23 @@ export interface Props<T> {
   min?: number;
   max?: number;
   step?: number;
-}
-
-export class RangeInput<T> extends React.Component<Props<T>> {
-  render() {
-    return (
-      <div className="input range-input">
-        <input
-          className={this.props.className}
-          type="range"
-          onChange={(e) => {
-            const targetValue = parseFloat(e.target.value);
-            this.props.onChange(this.props.options ? this.props.options[targetValue] : (targetValue as unknown as T));
-          }}
-          value={this.props.value}
-          min={this.props.min}
-          max={this.props.max}
-          step={this.props.step}
-        />
-        <label>{this.props.label}</label>
-        <output>{this.props.output}</output>
-      </div>
-    );
-  }
+}) {
+  return (
+    <div className="input range-input">
+      <input
+        className={props.className}
+        type="range"
+        onChange={(e) => {
+          const targetValue = parseFloat(e.target.value);
+          props.onChange(props.options ? props.options[targetValue] : (targetValue as unknown as T));
+        }}
+        value={props.value}
+        min={props.min}
+        max={props.max}
+        step={props.step}
+      />
+      <label>{props.label}</label>
+      <output>{props.output}</output>
+    </div>
+  );
 }

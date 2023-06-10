@@ -72,8 +72,8 @@ export function GoldenSeedsView(props: {
           </div>
           <div className={['sidebar', editMode ? '' : 'hidden'].join(' ')}>
             <AnimatedButton
-              points={[EditorNone, EditorClose, EditorRegular]}
-              useAsToggle
+              points={[EditorNone, EditorRegular, EditorClose]}
+              active={editMode}
               onClick={(active) => setEditMode(!active)}
             />
             <div className="actions">

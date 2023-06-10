@@ -5,7 +5,7 @@ import { Collapsable } from '../../ui/Collapsable';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 import { Stage, StageItemState } from '../config/Stage';
 import { configService } from '../config/ConfigService';
-import { AnimatedButton } from '../../ui/AnimatedButton';
+import { AnimatedButton, DIRECTION_UP, DIRECTION_DOWN } from '../../ui/AnimatedButton';
 import { PlusNone, PlusRegular, PlusRotated } from '../../ui/icon/Plus';
 import { editorService } from './EditorService';
 import { ParamDefinition } from '../generator/SvgGenerator';
@@ -62,12 +62,12 @@ export function StageEditor({ stage, i, hasNext, dragHandleProps }: Props) {
             title="upmove"
             onClick={() => 0 < i && configService.moveToIndex(stage.id, i - 1)}
             disabled={!(0 < i)}
-            rotation={AnimatedButton.DIRECTION_UP}
+            rotation={DIRECTION_UP}
           />
           <AnimatedButton
             title="downmove"
             onClick={() => hasNext && configService.moveToIndex(stage.id, i + 1)}
-            rotation={AnimatedButton.DIRECTION_DOWN}
+            rotation={DIRECTION_DOWN}
             disabled={!hasNext}
           />
           <AnimatedButton

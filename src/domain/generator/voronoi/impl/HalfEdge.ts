@@ -23,10 +23,10 @@ export class HalfEdge {
   }
 
   getStartpoint(): Point {
-    return this.site === this.edge.leftSite ? this.edge.getStartPoint() : this.edge.getEndPoint();
+    return (this.site === this.edge.leftSite ? this.edge.getStartPoint() : this.edge.getEndPoint()) as Point;
   }
 
   getEndpoint(): Point {
-    return this.site === this.edge.leftSite ? this.edge.getEndPoint() : this.edge.getStartPoint();
+    return (this.site === this.edge.leftSite ? this.edge.getEndPoint() : this.edge.getStartPoint()) as Point;
   }
 }

@@ -10,7 +10,7 @@ export interface CircleEvent extends RbTreeNode<CircleEvent> {
   site: Site;
   centerY: number;
   arc: BeachSectionNode;
-  circleEvent: CircleEvent;
+  circleEvent?: CircleEvent;
 }
 
 export class CircleEventQueue {

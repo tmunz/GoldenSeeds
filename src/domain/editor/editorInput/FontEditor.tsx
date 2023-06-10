@@ -1,6 +1,6 @@
 import React, { ReactNode, useState, useEffect } from 'react';
 
-import { AnimatedButton } from '../../../ui/AnimatedButton';
+import { AnimatedButton, DIRECTION_UP } from '../../../ui/AnimatedButton';
 import { EditorInput } from './EditorInput';
 import { ParamDefinition } from '../../generator/SvgGenerator';
 import { StageItemState } from '../../config/Stage';
@@ -42,7 +42,7 @@ const FontSelector = (props: { name: string; state: StageItemState<number>; acti
 
   return (
     <div>
-      <div>{name}</div>
+      <div>{props.name}</div>
       <div>{props.state.textValue}</div>
       <div>
         {fonts.map((fontName) => (
@@ -58,7 +58,7 @@ const FontSelector = (props: { name: string; state: StageItemState<number>; acti
         onChange={(event) => loadFont(event)}
       />
       <AnimatedButton
-        rotation={AnimatedButton.DIRECTION_UP}
+        rotation={DIRECTION_UP}
         title="load"
         iconText="font"
         onClick={() => importConfigElement?.click()}

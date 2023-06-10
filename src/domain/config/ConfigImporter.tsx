@@ -30,7 +30,7 @@ export function ConfigImporter() {
         points={[LoadNone, LoadRegular, LoadProgress]}
         title="import"
         iconText="json"
-        onClick={() => (importConfigElement as unknown as HTMLElement)?.click()}
+        onClick={() => (importConfigElement.current)?.click()}
       />
       <input
         ref={importConfigElement}

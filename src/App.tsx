@@ -51,13 +51,10 @@ export function App() {
   }, [setup]);
 
   return (
-    <>
-      <GoldenSeedsView
-        configItems={configItems}
-        configsManageable={configsManageable}
-        activeConfig={activeConfig}
-      />
-      {process.env.APP_VERSION}
-    </>
+    <GoldenSeedsView
+      configItems={configItems}
+      configsManageable={configsManageable}
+      activeConfig={activeConfig}
+    />
   );
 }

@@ -1,10 +1,13 @@
 import React, { createRef, useState, useEffect, useCallback, useMemo } from 'react';
 import { AnimatedButton } from '../../ui/AnimatedButton';
-import { ExporterData } from '../tools/Toolbar'; // TODO
 import { SaveNone, SaveRegular, SaveProgress } from '../../ui/icon/Save';
 
 interface Props {
-  getData: () => ExporterData;
+  getData: () => {
+    svg: string,
+    dimensions: { width: number, height: number },
+    name: string,
+  };
 }
 
 export function PngExporter(props: Props) {

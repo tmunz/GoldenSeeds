@@ -27,12 +27,15 @@ export class VoronoiWorker {
     let site = queue.pop();
     while (site || this.circleEvents.getCurrent()) {
       if (this.shouldAddBeachSectionFor(site)) {
-        if (!this.shouldIgnoreSite(site, queue.getPrevious())) {
+        if (site && !this.shouldIgnoreSite(site, queue.getPrevious())) {
           this.addNewBeachSectionFor(site);
         }
         site = queue.pop();
       } else {
-        this.removeSectionFromBeach(this.circleEvents.getCurrent().arc);
+        const currentEvent = this.circleEvents.getCurrent();
+        if (currentEvent) {
+          this.removeSectionFromBeach(currentEvent.arc);
+        }
       }
     }
 
@@ -46,18 +49,14 @@ export class VoronoiWorker {
     };
   }
 
-  private shouldAddBeachSectionFor(site: Site): boolean {
-    return (
-      site &&
-      (!this.circleEvents.getCurrent() ||
-        site.point[Point.Y] < this.circleEvents.getCurrent().y ||
-        (site.point[Point.Y] === this.circleEvents.getCurrent().y &&
-          site.point[Point.X] < this.circleEvents.getCurrent().x))
-    );
+  private shouldAddBeachSectionFor(site?: Site): boolean {
+    const currentCircleEvent = this.circleEvents.getCurrent();
+    return site !== undefined && (!currentCircleEvent || site.point[Point.Y] < currentCircleEvent.y ||
+      (site.point[Point.Y] === currentCircleEvent.y && site.point[Point.X] < currentCircleEvent.x));
   }
 
-  private shouldIgnoreSite(site: Site, previousSite: Site) {
-    return previousSite && PointUtils.isSamePoint(previousSite.point, site.point);
+  private shouldIgnoreSite(site?: Site, previousSite?: Site): boolean {
+    return site !== undefined && previousSite !== undefined && PointUtils.isSamePoint(previousSite.point, site.point);
   }
 
   private addNewBeachSectionFor(site: Site): void {
@@ -70,7 +69,7 @@ export class VoronoiWorker {
 
   private closeSiteAreas(boundary: Boundary): void {
     const createBorderEdgeFun = (site: Site, start: Point, end: Point): Edge =>
-      this.edgeManager.create(site, null, start, end);
+      this.edgeManager.create(site, undefined, start, end);
     this.siteAreaStore.getAll().forEach((siteArea) => siteArea.close(createBorderEdgeFun, boundary));
   }
 }
