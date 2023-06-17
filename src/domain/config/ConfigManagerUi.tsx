@@ -20,7 +20,6 @@ export function ConfigManagerUi(props: {
     const nextIndex = (selectedIndex + 1 + props.configItems.length) % props.configItems.length;
     const nextName = selectedIndex !== nextIndex ? props.configItems[nextIndex]?.name : undefined;
     configManager.select(nextName);
-    console.log(nextName);
     if (name) {
       configManager.delete(name);
     }

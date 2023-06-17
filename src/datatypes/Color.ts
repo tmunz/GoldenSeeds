@@ -21,9 +21,17 @@ export class Color {
   private random = false;
   private textValue$ = new BehaviorSubject<string>('black');
   private rgba: RgbaColor | null = null;
+  private hsla: HslaColor | null = null;
 
   constructor(colorValue?: ColorValue | Color) {
-    this.textValue$.subscribe(v => this.rgba = Color.textToRgba(v));
+    this.textValue$.subscribe(v => {
+      this.hsla = Color.textToHsla(v);
+      this.rgba = Color.textToRgba(v);
+    });
+    this.setValue(colorValue);
+  }
+
+  setValue(colorValue?: ColorValue | Color): Color {
     if (colorValue !== undefined) {
       if (colorValue instanceof Color) {
         this.setTextValue(colorValue.getAcn());
@@ -35,10 +43,11 @@ export class Color {
         this.setTextValue(Color.hslaToAcn(colorValue));
       }
     }
+    return this;
   }
 
   setTextValue(v: string): Color {
-    this.random = v.toLowerCase() === 'random' || v.slice(0, 3) === '0x1';
+    this.random = v.toLowerCase() === 'random' || v.slice(0, 2) === '_1';
     this.textValue$.next(v);
     return this;
   }
@@ -48,15 +57,15 @@ export class Color {
   }
 
   getRgba(): RgbaColor {
-    return this.rgba || Color.hslaToRgba(ColorRecord.black);
+    return this.rgba ?? Color.hslaToRgba(ColorRecord.black);
   }
 
   getHsla(): HslaColor {
-    return Color.rgbaToHsla(this.getRgba());
+    return this.hsla ?? ColorRecord.black;
   }
 
   getRgbString(seed = 0): string {
-    if (this.getRgba().a === 0) {
+    if (this.rgba?.a === 0) {
       return 'none';
     } else {
       return Color.rgbToString(this.random ? Color.randomColor(seed) : this.getRgba());
@@ -68,7 +77,7 @@ export class Color {
   }
 
   getAcn(): string {
-    return Color.rgbaToAcn(this.getRgba(), this.random);
+    return Color.hslaToAcn(this.getHsla(), this.random);
   }
 
   isRandom(): boolean {
@@ -86,7 +95,7 @@ export class Color {
   }
 
   isValid(): boolean {
-    return this.rgba !== null;
+    return this.hsla !== null && this.rgba !== null;
   }
 
   static randomColor(seed: number): RgbaColor {
@@ -96,8 +105,15 @@ export class Color {
     return { r: 0xff & (c >> (16)), g: 0xff & (c >> (8)), b: 0xff & c };
   }
 
+  static textToHsla(s: string): HslaColor | null {
+    const rgbaTextValue = Color.textValueToRgba(s);
+    return Color.namedColorToHsla(s) || (rgbaTextValue && Color.rgbaToHsla(rgbaTextValue)) || Color.acnToHsla(s);
+  }
+
   static textToRgba(s: string): RgbaColor | null {
-    return Color.namedColorToRgba(s) || Color.textValueToRgba(s) || Color.acnToRgba(s);
+    const namedColorHsla = Color.namedColorToHsla(s);
+    const acnHsla = Color.acnToHsla(s);
+    return (namedColorHsla && Color.hslaToRgba(namedColorHsla)) || Color.textValueToRgba(s) || (acnHsla && Color.hslaToRgba(acnHsla));
   }
 
   static textValueToRgba(s: string): RgbaColor | null {
@@ -109,19 +125,8 @@ export class Color {
     return null;
   }
 
-  static namedColorToRgba(namedColor: string): RgbaColor | null {
-    const colorRecord = ColorRecord[namedColor];
-    return colorRecord ? Color.hslaToRgba(colorRecord) : null;
-  }
-
-  static rgbaToAcn(rgba: RgbaColor, random = false): string {
-    const a = 0xff & Math.round((rgba.a === undefined ? 1 : rgba.a) * 255);
-    const randomFlag = random ? 0x1 : 0x0;
-    return `0x${randomFlag}${a.toString(16).padStart(2, '0')}${Color.rgbToString(rgba).replace('#', '')}`;
-  }
-
-  static hslaToAcn(hsla: HslaColor, random?: boolean): string {
-    return Color.rgbaToAcn(Color.hslaToRgba(hsla), random);
+  static namedColorToHsla(namedColor: string): HslaColor | null {
+    return ColorRecord[namedColor] ?? null;
   }
 
   static rgbToString(rgb: RgbaColor): string {
@@ -132,22 +137,35 @@ export class Color {
     return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a === undefined ? 1 : rgba.a})`;
   }
 
-  static acnToRgba(acn: string): RgbaColor | null {
-    if (acn.slice(0, 2) === '0x' && acn.length === 11 && isFinite(Number(acn))) {
-      return {
-        r: Number(`0x${acn.slice(5, 7)}`),
-        g: Number(`0x${acn.slice(7, 9)}`),
-        b: Number(`0x${acn.slice(9, 11)}`),
-        a: Number(`0x${acn.slice(3, 5)}`) / 255,
+  static rgbaToAcn(rgba: RgbaColor, random = false): string {
+    return Color.hslaToAcn(Color.rgbaToHsla(rgba), random);
+  }
+
+  static hslaToAcn(hsla: HslaColor, random?: boolean): string {
+    const h = Math.round(hsla.h * 3.597).toString(36);
+    const s = Math.round(hsla.s * 12.95).toString(36);
+    const l = Math.round(hsla.l * 12.95).toString(36);
+    const a = Math.round((hsla.a === undefined ? 1 : hsla.a) * 1295).toString(36);
+    return `_${random ? 1 : 0}${a.padStart(2, '0')}${h.padStart(2, '0')}${s.padStart(2, '0')}${l.padStart(2, '0')}`;
+  }
+
+  static acnToHsla(acn: string): HslaColor | null {
+    let hsla = null
+    if (acn.slice(0, 1) === '_' && acn.length === 10 && isFinite(Number.parseInt(acn.substring(1, 10), 36))) {
+      hsla = {
+        h: Number.parseInt(acn.slice(4, 6), 36) / 3.597,
+        s: Number.parseInt(acn.slice(6, 8), 36) / 12.95,
+        l: Number.parseInt(acn.slice(8, 10), 36) / 12.95,
+        a: Number.parseInt(acn.slice(2, 4), 36) / 1295,
       };
     }
-    return null;
+    return hsla;
   }
 
   static rgbaToHsla(rgba: RgbaColor): HslaColor {
-    const r = rgba.r / 0xFF;
-    const g = rgba.g / 0xFF;
-    const b = rgba.b / 0xFF;
+    const r = rgba.r / 0xff;
+    const g = rgba.g / 0xff;
+    const b = rgba.b / 0xff;
     const l = Math.max(r, g, b);
     const s = l - Math.min(r, g, b);
     const h = s ? l === r ? (g - b) / s : l === g ? 2 + (b - r) / s : 4 + (r - g) / s : 0;
