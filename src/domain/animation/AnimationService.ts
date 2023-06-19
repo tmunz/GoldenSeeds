@@ -21,7 +21,7 @@ export class AnimationService {
       for (const groupId of Object.keys(stage.generator.definition)) {
         for (const [id, entry] of Object.entries(stage.generator.definition[groupId])) {
           if (entry.animateable) {
-            const value = stage.state.data[groupId][id].value as number; // if animateable, then value must be number
+            const value = stage.state.data[groupId][id].getValue() as number; // if animateable, then value must be number
             this.animate(stage.id, groupId, id, value);
             break root;
           }

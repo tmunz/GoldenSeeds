@@ -9,14 +9,14 @@ import './ExtendedRangeInput.styl';
 export function ExtendedRangeInput(props: {
   className?: string;
   label?: string;
-  value?: any;
+  value?: string;
   output?: string;
   onChange: (value: string) => void;
   min?: number;
   max?: number;
   step?: number;
 }) {
-  const value = Number.parseFloat(props.value);
+  const value = Number.parseFloat(props.value ?? '');
   return (
     <div className="extended-range-input" >
       <TextInput {...props} />

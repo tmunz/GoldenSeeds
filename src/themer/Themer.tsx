@@ -51,8 +51,8 @@ export function Themer() {
         />
         <ColorInput
           label="accent"
-          value={accentColor.getAcn()}
-          onChange={(c) => setAccentColor(new Color(c))}
+          value={accentColor}
+          onChange={(c) => setAccentColor(c)}
           alphaDisabled
         />
       </Collapsable>

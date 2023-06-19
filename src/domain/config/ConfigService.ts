@@ -1,7 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
 
 import { Config } from './Config';
-import { converterService } from '../converter/ConverterService';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 import { Stage, StageRawState } from './Stage';
 import { SvgGenerator } from '../generator/SvgGenerator';
@@ -10,22 +9,17 @@ import { RawConfig, RawConfigStage } from './RawConfig';
 export class ConfigService {
   config$ = new BehaviorSubject<Config>({ meta: { name: '' }, stages: [] });
 
-  async setConfigValue(stageId: string, groupId: string, id: string, textValue: string) {
+  async setConfigValue(stageId: string, groupId: string, id: string, value: any) {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
     const index = this.findIndexByStageId(stageId);
     if (config.stages[index]?.generator) {
-      const nextStageItemState = await converterService.convertTextToValue(
-        config.stages[index].generator.definition[groupId][id].type,
-        textValue,
-      );
-      const stageItemState = nextConfig.stages[index].state.data[groupId][id];
-      nextConfig.stages[index].state.data[groupId][id] = { ...stageItemState, ...nextStageItemState };
+      nextConfig.stages[index].state.data[groupId][id].setValue(value);
       this.config$.next(nextConfig);
     }
   }
 
-  async setRawConfig(rawConfig: RawConfig) {
+  async setRawConfig(rawConfig: RawConfig): Promise<void> {
     this.config$.next(await ConfigService.convert(rawConfig));
   }
 
@@ -90,7 +84,7 @@ export class ConfigService {
     rawState?: StageRawState,
     stageId?: string,
   ): Promise<Stage> {
-    return new Stage(generator, rawState, stageId).convertTextToValues();
+    return await new Stage(stageId).with(generator, rawState);
   }
 
   static convertConfigToRawConfig(config: Config): RawConfig {
@@ -99,7 +93,7 @@ export class ConfigService {
       Object.keys(stage.state.data).forEach((groupId) => {
         rawState.data[groupId] = {};
         Object.keys(stage.state.data[groupId]).forEach((id) => {
-          rawState.data[groupId][id] = stage.state.data[groupId][id].textValue;
+          rawState.data[groupId][id] = `${stage.state.data[groupId][id].getTextValue()}`;
         });
       });
       return rawState;

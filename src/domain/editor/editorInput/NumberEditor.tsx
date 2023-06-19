@@ -1,24 +1,24 @@
 import React, { ReactNode } from 'react';
 import { ParamDefinitionMinMaxStep, ParamDefinition } from '../../generator/SvgGenerator';
-import { StageItemState } from '../../config/Stage';
+import { NumberState } from '../../config/stageItemState/NumberState';
 import { RangeInput } from '../../../ui/input/RangeInput';
 import { EditorInput } from './EditorInput';
 
-export class NumberEditor extends EditorInput<number> {
+export class NumberEditor extends EditorInput<number, number> {
   getEditorInput(
     name: string,
     definition: ParamDefinition,
-    state: StageItemState<number>,
-    action: (textValue: string) => void,
+    state: NumberState,
+    action: (value: number) => void,
   ): ReactNode {
-    const value = Number.parseFloat(state.textValue);
+    const value = state.isValid() ? state.getValue() : 0;
     return (
       <RangeInput<number>
         label={name}
-        value={isFinite(value) ? value : 0}
-        onChange={(value) => action(`${value}`)}
-        className={state.valid ? '' : 'invalid range-invalid'}
-        output={state.textValue}
+        value={value ?? 0}
+        onChange={action}
+        className={state.isValid() ? '' : 'invalid range-invalid'}
+        output={`${state.getTextValue()}`}
         min={(definition as ParamDefinitionMinMaxStep)?.min}
         max={(definition as ParamDefinitionMinMaxStep)?.max}
         step={(definition as ParamDefinitionMinMaxStep)?.step}

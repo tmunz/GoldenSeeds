@@ -1,5 +1,3 @@
-import { BehaviorSubject } from 'rxjs';
-
 export interface RgbaColor {
   r: number;
   g: number;
@@ -19,49 +17,81 @@ export type ColorValue = string | RgbaColor | HslaColor;
 export class Color {
 
   private random = false;
-  private textValue$ = new BehaviorSubject<string>('black');
+  private valid = false;
+
   private rgba: RgbaColor | null = null;
   private hsla: HslaColor | null = null;
 
-  constructor(colorValue?: ColorValue | Color) {
-    this.textValue$.subscribe(v => {
-      this.hsla = Color.textToHsla(v);
-      this.rgba = Color.textToRgba(v);
-    });
+  constructor(colorValue?: ColorValue | Color | null) {
     this.setValue(colorValue);
   }
 
-  setValue(colorValue?: ColorValue | Color): Color {
-    if (colorValue !== undefined) {
+  setValue(colorValue?: ColorValue | Color | null): Color {
+    if (colorValue !== undefined && colorValue !== null) {
       if (colorValue instanceof Color) {
-        this.setTextValue(colorValue.getAcn());
+        this.random = colorValue.isRandom();
+        this.rgba = colorValue.getRgba();
+        this.hsla = colorValue.getHsla();
+        this.valid = colorValue.isValid();
       } else if (typeof colorValue === 'string') {
-        this.setTextValue(colorValue);
+        if (colorValue.toLowerCase() === 'random') {
+          this.random = true;
+          this.valid = true;
+        } else {
+          this.random = colorValue.slice(0, 2) === '_1';
+          const hsla = Color.textToHsla(colorValue);
+          const rgba = Color.textToRgba(colorValue);
+          if (hsla && rgba) {
+            this.hsla = hsla;
+            this.rgba = rgba;
+            this.valid = true;
+          } else {
+            this.valid = false;
+          }
+        }
       } else if ('r' in colorValue && 'g' in colorValue && 'b' in colorValue) {
-        this.setTextValue(Color.rgbaToAcn(colorValue));
+        this.random = false;
+        this.setRgba(colorValue);
       } else if ('h' in colorValue && 's' in colorValue && 'l' in colorValue) {
-        this.setTextValue(Color.hslaToAcn(colorValue));
+        this.random = false;
+        this.setHsla(colorValue);
       }
     }
     return this;
-  }
-
-  setTextValue(v: string): Color {
-    this.random = v.toLowerCase() === 'random' || v.slice(0, 2) === '_1';
-    this.textValue$.next(v);
-    return this;
-  }
-
-  getTextValue(): string {
-    return this.textValue$.value;
   }
 
   getRgba(): RgbaColor {
     return this.rgba ?? Color.hslaToRgba(ColorRecord.black);
   }
 
+  setRgba(rgba: RgbaColor): void {
+    if ((0 <= rgba.r && rgba.r <= 0xff) &&
+      (0 <= rgba.g && rgba.g <= 0xff) &&
+      (0 <= rgba.b && rgba.b <= 0xff) &&
+      (rgba.a === undefined || (0 <= rgba.a && rgba.a <= 1))) {
+      this.rgba = rgba;
+      this.hsla = Color.rgbaToHsla(rgba);
+      this.valid = true;
+    } else {
+      this.valid = false;
+    }
+  }
+
   getHsla(): HslaColor {
     return this.hsla ?? ColorRecord.black;
+  }
+
+  setHsla(hsla: HslaColor): void {
+    if ((0 <= hsla.h && hsla.h <= 360) &&
+      (0 <= hsla.s && hsla.s <= 100) &&
+      (0 <= hsla.l && hsla.l <= 100) &&
+      (hsla.a === undefined || (0 <= hsla.a && hsla.a <= 1))) {
+      this.hsla = hsla;
+      this.rgba = Color.hslaToRgba(hsla);;
+      this.valid = true;
+    } else {
+      this.valid = false;
+    }
   }
 
   getRgbString(seed = 0): string {
@@ -86,6 +116,7 @@ export class Color {
 
   withRandom(random = true): this {
     this.random = random;
+    this.valid = true;
     return this;
   }
 
@@ -95,7 +126,7 @@ export class Color {
   }
 
   isValid(): boolean {
-    return this.hsla !== null && this.rgba !== null;
+    return this.valid;
   }
 
   static randomColor(seed: number): RgbaColor {
@@ -150,7 +181,7 @@ export class Color {
   }
 
   static acnToHsla(acn: string): HslaColor | null {
-    let hsla = null
+    let hsla = null;
     if (acn.slice(0, 1) === '_' && acn.length === 10 && isFinite(Number.parseInt(acn.substring(1, 10), 36))) {
       hsla = {
         h: Number.parseInt(acn.slice(4, 6), 36) / 3.597,

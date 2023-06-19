@@ -3,7 +3,8 @@ import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
 
 import { Collapsable } from '../../ui/Collapsable';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
-import { Stage, StageItemState } from '../config/Stage';
+import { Stage } from '../config/Stage';
+import { StageItemState } from '../config/stageItemState/StageItemState';
 import { configService } from '../config/ConfigService';
 import { AnimatedButton, DIRECTION_UP, DIRECTION_DOWN } from '../../ui/AnimatedButton';
 import { PlusNone, PlusRegular, PlusRotated } from '../../ui/icon/Plus';
@@ -31,9 +32,9 @@ export function StageEditor({ stage, i, hasNext, dragHandleProps }: Props) {
     groupId: string,
     id: string,
     definition: ParamDefinition,
-    state: StageItemState<any>, // eslint-disable-line
+    state: StageItemState<unknown, unknown>,
   ) => {
-    const action = (textValue: string) => configService.setConfigValue(stage.id, groupId, id, textValue);
+    const action = (value: any) => configService.setConfigValue(stage.id, groupId, id, value);
     const editorUi = editorService.getEditorInput(definition.type, id, definition, state, action);
     return (
       <div className="editor-item" key={id}>
@@ -43,7 +44,7 @@ export function StageEditor({ stage, i, hasNext, dragHandleProps }: Props) {
             stageId={stage.id}
             groupId={groupId}
             id={id}
-            value={state.value}
+            value={state.getValue() as number}
             currentlyAnimating={id === stage.animatedId}
           />
         )}

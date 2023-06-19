@@ -3,21 +3,23 @@ import React, { ReactNode, useState, useEffect } from 'react';
 import { AnimatedButton, DIRECTION_UP } from '../../../ui/AnimatedButton';
 import { EditorInput } from './EditorInput';
 import { ParamDefinition } from '../../generator/SvgGenerator';
-import { StageItemState } from '../../config/Stage';
+import { StageItemState } from '../../config/stageItemState/StageItemState';
 import { fontService } from '../../font/FontService';
+import { Font } from 'opentype.js';
+import { FontState } from '../../config/stageItemState/FontState';
 
-export class FontEditor extends EditorInput<number> {
+export class FontEditor extends EditorInput<Font, Font> {
   getEditorInput(
     name: string,
     definition: ParamDefinition,
-    state: StageItemState<number>,
-    action: (textValue: string) => void,
+    state: FontState,
+    action: (value: Font) => void,
   ): ReactNode {
     return <FontSelector name={name} state={state} action={action}></FontSelector>;
   }
 }
 
-const FontSelector = (props: { name: string; state: StageItemState<number>; action: (value: string) => void }) => {
+const FontSelector = (props: { name: string; state: StageItemState<Font, Font>; action: (value: Font) => void }) => {
   let importConfigElement: HTMLInputElement | null = null;
   const [fonts, setFonts] = useState<string[]>([]);
 
@@ -33,8 +35,7 @@ const FontSelector = (props: { name: string; state: StageItemState<number>; acti
       if (typeof file !== 'undefined') {
         const buffer = await file.arrayBuffer();
         importConfigElement.value = '';
-        const font = await fontService.saveBuffer(buffer);
-        props.action(font.fontName);
+        props.action((await fontService.saveBuffer(buffer)).font);
         setFonts(await fontService.listFonts());
       }
     }
@@ -43,11 +44,13 @@ const FontSelector = (props: { name: string; state: StageItemState<number>; acti
   return (
     <div>
       <div>{props.name}</div>
-      <div>{props.state.textValue}</div>
+      <div>{props.state.getTextValue() ?? 'unknown'}</div>
       <div>
         {fonts.map((fontName) => (
           <div key={fontName}>
-            <button onClick={() => props.action(fontName)}>{fontName}</button>
+            <button onClick={async () =>
+              props.action(await fontService.get(fontName))
+            }>{fontName}</button>
           </div>
         ))}
       </div>

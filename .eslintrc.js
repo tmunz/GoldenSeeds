@@ -34,6 +34,6 @@ module.exports = {
     'eol-last': ['error', 'always'],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
-    'no-explicit-any': 'off', // TODO
+    'no-explicit-any': 'off',
   },
 };

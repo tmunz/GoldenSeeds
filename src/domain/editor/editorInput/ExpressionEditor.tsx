@@ -1,17 +1,15 @@
 import React, { ReactNode } from 'react';
 import { ParamDefinition, ParamDefinitionMinMaxStep } from '../../generator/SvgGenerator';
-import { StageItemState } from '../../config/Stage';
 import { EditorInput } from './EditorInput';
 import { ExtendedRangeInput } from '../../../ui/input/ExtendedRangeInput';
+import { Expression, ExpressionState } from '../../config/stageItemState/ExpressionState';
 
-export class ExpressionEditor extends EditorInput<
-  (n: number, items: number, itemSize: (n: number) => number) => number
-> {
+export class ExpressionEditor extends EditorInput<Expression, string> {
   getEditorInput(
     name: string,
     definition: ParamDefinition,
-    state: StageItemState<(n: number, items: number, itemSize: (n: number) => number) => number>,
-    action: (textValue: string) => void,
+    state: ExpressionState,
+    action: (value: string) => void,
   ): ReactNode {
     // const regexResult = state.textValue.match(/^\s*(n\s\*\s*(.*\S)?)\s*$/);
     // const nMode: boolean = regexResult ? true : false;
@@ -20,9 +18,9 @@ export class ExpressionEditor extends EditorInput<
     return (
       <ExtendedRangeInput
         label={name}
-        value={state.textValue ?? ''}
+        value={state.getTextValue() ?? ''}
         onChange={action}
-        className={state.valid ? '' : 'invalid range-invalid'}
+        className={state.isValid() ? '' : 'invalid range-invalid'}
         min={(definition as ParamDefinitionMinMaxStep)?.min}
         max={(definition as ParamDefinitionMinMaxStep)?.max}
         step={(definition as ParamDefinitionMinMaxStep)?.step}

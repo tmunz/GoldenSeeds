@@ -57,7 +57,6 @@ export function ColorInputChannels(props: {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [cursorPosition, setCursorPosition] = useState<number | null>(null);
   const [inputData, setInputData] = useState<InputData[]>(colorToInputData(new Color()));
-  const [colorValid, setColorValid] = useState<boolean>(true);
 
   useEffect(() => {
     if (selectedIndex !== null) {
@@ -93,7 +92,9 @@ export function ColorInputChannels(props: {
   }, [selectedIndex]);
 
   useEffect(() => {
-    setInputData(colorToInputData(props.color));
+    if (props.color.isValid()) {
+      setInputData(colorToInputData(props.color));
+    }
   }, [props.colorMode, props.color, colorToInputData]);
 
   function calculateInputLength(config?: { max?: number, base?: number }): number {
@@ -108,16 +109,16 @@ export function ColorInputChannels(props: {
   }
 
   function inputDataToColor(): Color {
-    const a = inputData[3] !== undefined ? (Number.parseInt(inputData[3].value) / 100) : 1;
+    const a = inputData[3] !== undefined ? (Number(inputData[3].value) / 100) : 1;
     const colorValue: ColorValue = props.colorMode === 'rgb' ? {
-      r: Number.parseInt(inputData[0].value, 0x10),
-      g: Number.parseInt(inputData[1].value, 0x10),
-      b: Number.parseInt(inputData[2].value, 0x10),
+      r: Number(`0x${inputData[0].value}`),
+      g: Number(`0x${inputData[1].value}`),
+      b: Number(`0x${inputData[2].value}`),
       a,
     } : {
-      h: Number.parseInt(inputData[0].value),
-      s: Number.parseInt(inputData[1].value),
-      l: Number.parseInt(inputData[2].value),
+      h: Number(inputData[0].value),
+      s: Number(inputData[1].value),
+      l: Number(inputData[2].value),
       a,
     };
     return new Color(colorValue);
@@ -143,17 +144,17 @@ export function ColorInputChannels(props: {
     const s = (event.target as HTMLInputElement).value ?? '';
     const index = (event.target as HTMLInputElement).selectionStart ?? 0;
     switch (code) {
-    case 8:
-      index > 0 && update(`${s.slice(0, index - 1)}0${s.slice(index)}`, key, index - 1);
-      break;
-    case 46:
-      update(`${s.slice(0, index)}0${s.slice(index + 1)}`, key, index + 1);
-      break;
+      case 8:
+        index > 0 && update(`${s.slice(0, index - 1)}0${s.slice(index)}`, key, index - 1);
+        break;
+      case 46:
+        update(`${s.slice(0, index)}0${s.slice(index + 1)}`, key, index + 1);
+        break;
     }
   }
 
   function handleRangeInputChange(event: ChangeEvent<HTMLInputElement>, key: number) {
-    const n = Number.parseInt(event.target.value);
+    const n = Number(event.target.value);
     update(n.toString(inputData[key].base ?? 10), key, 0);
   }
 
@@ -190,17 +191,12 @@ export function ColorInputChannels(props: {
     const inputLength = calculateInputLength(currentInputData);
     adjustCursorPosition(inputLength, cursorPosition, key);
     const c = inputDataToColor();
-    if (c.isValid()) {
-      setColorValid(true);
-      props.onChange(c);
-    } else {
-      setColorValid(false);
-    }
+    props.onChange(c);
   }
 
   const currentInputData = inputData[selectedIndex ?? 0];
 
-  return <div className={`color-input-channels${colorValid ? '' : ' color-input-invalid'}`} ref={ref}>
+  return <div className="color-input-channels" ref={ref}>
     <div className="color-input-range"
       style={{
         opacity: selectedIndex !== null ? 1 : 0,
@@ -211,7 +207,7 @@ export function ColorInputChannels(props: {
         type="range"
         min={currentInputData.min}
         max={currentInputData.max}
-        value={Number.parseInt(currentInputData.value, currentInputData.base)}
+        value={Number(`${currentInputData.base === 0x10 ? '0x' : ''}${currentInputData.value}`)}
         onChange={(event) => handleRangeInputChange(event, selectedIndex ?? 0)}
       />
     </div>

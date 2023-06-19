@@ -8,12 +8,11 @@ import { ColorInputSelection } from './ColorInputSelection';
 
 import './ColorInput.styl';
 
-
 type ColorMode = 'rgb' | 'hsl' | 'select' | 'random';
 
 export function ColorInput(props: {
-  value: string,
-  onChange: (acn: string) => void,
+  value: Color | null,
+  onChange: (color: Color) => void,
   label?: string;
   alphaDisabled?: boolean;
 }) {
@@ -22,6 +21,7 @@ export function ColorInput(props: {
   const INITIAL_COLOR_MODE = COLOR_MODES[0];
 
   const [colorMode, setColorMode] = useState<ColorMode | null>(null);
+  const [color, setColor] = useState<Color>(new Color(props.value));
 
   useEffect(() => {
     if (colorMode === null) {
@@ -34,26 +34,37 @@ export function ColorInput(props: {
     }
   }, [props.value, colorMode, INITIAL_COLOR_MODE]);
 
-  const color = new Color(props.value);
+  function updateColor(c: Color) {
+    setColor(c);
+    if (c.isValid()) {
+      props.onChange?.(c);
+    }
+  }
 
   return <div className="color-input">
     <label>{props.label}</label>
     <div
-      className="color-input-main"
+      className={`color-input-main${color.isValid() ? '' : ' color-input-invalid'}`}
       style={{ background: color.isRandom() ? RANDOM_GRADIENT : color.getRgbaString(), }}
     >
-      {(colorMode === 'rgb' || colorMode === 'hsl') && <ColorInputChannels
+      {colorMode === 'rgb' && <ColorInputChannels
         color={color}
-        onChange={(c: Color) => props.onChange(c.getAcn())}
+        onChange={updateColor}
         alphaDisabled={props.alphaDisabled}
-        colorMode={colorMode}
+        colorMode="rgb"
+      />}
+      {colorMode === 'hsl' && <ColorInputChannels
+        color={color}
+        onChange={updateColor}
+        alphaDisabled={props.alphaDisabled}
+        colorMode="hsl"
       />}
       {colorMode === 'random' && <ColorInputRandom
         color={color}
-        onSelect={(c: Color) => props.onChange(c.getAcn())}
+        onSelect={updateColor}
       />}
       {colorMode === 'select' && <ColorInputSelection
-        onSelect={(c: Color) => props.onChange(c.getAcn())}
+        onSelect={updateColor}
       />}
     </div>
     <CarouselSelector

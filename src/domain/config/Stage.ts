@@ -1,41 +1,38 @@
-import { converterService } from '../converter/ConverterService';
 import { SvgGenerator, SvgGeneratorResult, ParamDefinition } from '../generator/SvgGenerator';
+import { StageItemState } from './stageItemState/StageItemState';
 import { random } from '../../utils/Random';
+import { stageItemStateService } from './stageItemState/StageItemStateService';
 
-export interface StageItemState<T> {
-  textValue: string;
-  value: T | null;
-  valid: boolean;
-}
-
-export type StageState<T> = { type: string; data: Record<string, Record<string, StageItemState<T>>> };
+export type StageState<T, U> = { type: string; data: Record<string, Record<string, StageItemState<T, U>>> };
 export type StageRawState = { type: string; data: Record<string, Record<string, string>> };
 
 export class Stage {
   id: string;
-  generator: SvgGenerator<unknown>;
-  state: StageState<unknown>;
+  generator: SvgGenerator<unknown> = {
+    type: 'default',
+    definition: {},
+    generate: (_, prev: SvgGeneratorResult) => ({
+      grid: [],
+      svg: '',
+      boundingBox: prev.boundingBox,
+    }),
+  };
+  state: StageState<unknown, unknown> = { type: 'default', data: {} };
   animatedId?: string;
 
-  constructor(
-    generator: SvgGenerator<unknown> | null,
-    rawState: StageRawState = { type: 'default', data: {} },
-    stageId: string = '' + random(),
-  ) {
+  constructor(stageId: string = '' + random()) {
     this.id = stageId;
-    this.generator = generator ?? {
-      type: 'default',
-      definition: {},
-      generate: (_, prev: SvgGeneratorResult) => ({
-        grid: [],
-        svg: '',
-        boundingBox: prev.boundingBox,
-      }),
-    };
-    this.state = this.getFromRaw(this.generator.type, rawState.data, this.generator.definition);
   }
 
-  async convertTextToValues(): Promise<Stage> {
+  async with(generator: SvgGenerator<unknown> | null, rawState?: StageRawState): Promise<Stage> {
+    if (generator !== null) {
+      this.generator = generator;
+      this.state = await this.getFromRaw(this.generator.type, rawState?.data, this.generator.definition);
+    }
+    return this;
+  }
+
+  /*async convertTextToValues(): Promise<Stage> {
     const groupIds = Object.keys(this.state.data);
     await Promise.all(
       groupIds.map(
@@ -51,27 +48,27 @@ export class Stage {
       ),
     );
     return this;
-  }
+  }*/
 
-  private getFromRaw(
+  private async getFromRaw(
     type: string,
     data: Record<string, Record<string, string>> = {},
     generatorDefinition: Record<string, Record<string, ParamDefinition>>,
-  ): StageState<unknown> {
-    const converted: StageState<unknown> = { type, data: {} };
+  ): Promise<StageState<unknown, unknown>> {
+    const converted: StageState<unknown, unknown> = { type, data: {} };
     const groupIds = Object.keys(generatorDefinition);
-    groupIds.forEach((groupId) => {
+    await Promise.all(groupIds.map(async (groupId) => {
       converted.data[groupId] = {};
-      Object.keys(generatorDefinition[groupId]).forEach((id) => {
+      await Promise.all(Object.keys(generatorDefinition[groupId]).map(async (id) => {
         const textValue = data[groupId] ? data[groupId][id] : undefined;
         const initialTextValue = generatorDefinition[groupId][id].initial;
-        converted.data[groupId][id] = {
-          textValue: textValue ?? initialTextValue,
-          value: null,
-          valid: false,
-        };
-      });
-    });
+        const state = await stageItemStateService.createState(
+          generatorDefinition[groupId][id].type,
+          textValue ?? initialTextValue,
+        );
+        converted.data[groupId][id] = state;
+      }));
+    }));
     return converted;
   }
 }
