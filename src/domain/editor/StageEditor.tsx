@@ -39,7 +39,7 @@ export function StageEditor({ stage, i, hasNext, dragHandleProps }: Props) {
     return (
       <div className="editor-item" key={id}>
         {editorUi}
-        {definition.animateable && (
+        {false && definition.animateable && ( // animation is currently disabled
           <AnimationController
             stageId={stage.id}
             groupId={groupId}
@@ -79,7 +79,7 @@ export function StageEditor({ stage, i, hasNext, dragHandleProps }: Props) {
           />
         </div>
       </div>
-      <Collapsable key={stage.id} show={editMode === stage.id}>
+      <Collapsable key={stage.id} show={editMode === stage.id} className="stage-content">
         <CarouselSelector
           className="stage-type-selector"
           items={types.map(name => ({ name, svg: null }))}

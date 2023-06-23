@@ -11,15 +11,15 @@ export class TextDrawer extends SvgGenerator<TextDrawerConfig> {
         initial: 'gold',
         type: 'color' as const,
       },
+      font: {
+        initial: 'Signika-Bold',
+        type: 'font' as const,
+      },
     },
     text: {
       content: {
         initial: 'text',
         type: 'string' as const,
-      },
-      font: {
-        initial: 'Signika-Bold',
-        type: 'font' as const,
       },
       size: {
         initial: '1',

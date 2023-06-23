@@ -7,7 +7,7 @@
       "type": "shape",
       "data": {
         "style": {
-          "fillColor": "0x0ffdecd87",
+          "fillColor": "gold",
           "strokeColor": "gold",
           "strokeWidth": 0,
           "smoothness": "1",
@@ -42,11 +42,11 @@
       "type": "text",
       "data": {
         "style": {
-          "color": "0x0ff000000"
+          "color": "black",
+          "font": "Signika-Bold"
         },
         "text": {
           "content": "S!",
-          "font": "Signika-Bold",
           "size": "0.75"
         }
       }

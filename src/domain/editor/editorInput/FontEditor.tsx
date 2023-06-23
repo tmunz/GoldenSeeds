@@ -1,12 +1,16 @@
-import React, { ReactNode, useState, useEffect } from 'react';
+import React, { ReactNode, useState, useEffect, useRef } from 'react';
+import { Font } from 'opentype.js';
 
-import { AnimatedButton, DIRECTION_UP } from '../../../ui/AnimatedButton';
 import { EditorInput } from './EditorInput';
 import { ParamDefinition } from '../../generator/SvgGenerator';
-import { StageItemState } from '../../config/stageItemState/StageItemState';
-import { fontService } from '../../font/FontService';
-import { Font } from 'opentype.js';
 import { FontState } from '../../config/stageItemState/FontState';
+import { fontService } from '../../font/FontService';
+import { CarouselSelector } from '../../../ui/CarouselSelector';
+import { AnimatedButton } from '../../../ui/AnimatedButton';
+import { PlusNone, PlusRegular, PlusRotated } from '../../../ui/icon/Plus';
+
+import './FontEditor.styl';
+
 
 export class FontEditor extends EditorInput<Font, Font> {
   getEditorInput(
@@ -19,9 +23,10 @@ export class FontEditor extends EditorInput<Font, Font> {
   }
 }
 
-const FontSelector = (props: { name: string; state: StageItemState<Font, Font>; action: (value: Font) => void }) => {
-  let importConfigElement: HTMLInputElement | null = null;
+const FontSelector = (props: { name: string; state: FontState; action: (value: Font) => void }) => {
+  const importElement = useRef<HTMLInputElement | null>(null);
   const [fonts, setFonts] = useState<string[]>([]);
+  const [showUpload, setShowUpload] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
@@ -31,41 +36,57 @@ const FontSelector = (props: { name: string; state: StageItemState<Font, Font>; 
 
   async function loadFont(event: React.ChangeEvent<HTMLInputElement>) {
     const file: Blob | null = (event.target.files ?? [])[0];
-    if (file && importConfigElement) {
-      if (typeof file !== 'undefined') {
+    if (file && importElement) {
+      if (typeof file !== 'undefined' && importElement.current) {
         const buffer = await file.arrayBuffer();
-        importConfigElement.value = '';
+        importElement.current.value = '';
         props.action((await fontService.saveBuffer(buffer)).font);
         setFonts(await fontService.listFonts());
       }
     }
   }
 
-  return (
-    <div>
-      <div>{props.name}</div>
-      <div>{props.state.getTextValue() ?? 'unknown'}</div>
-      <div>
-        {fonts.map((fontName) => (
-          <div key={fontName}>
-            <button onClick={async () =>
-              props.action(await fontService.get(fontName))
-            }>{fontName}</button>
-          </div>
-        ))}
-      </div>
-      <input
-        ref={(e) => (importConfigElement = e)}
-        type="file"
-        style={{ display: 'none' }}
-        onChange={(event) => loadFont(event)}
-      />
-      <AnimatedButton
-        rotation={DIRECTION_UP}
-        title="load"
-        iconText="font"
-        onClick={() => importConfigElement?.click()}
-      />
+  return <div className="font-editor polaroid">
+    <label>{props.name}</label>
+    <div className="font-display polaroid-picture">
+      {showUpload ? <>
+        <input
+          ref={importElement}
+          type="file"
+          style={{ display: 'none' }}
+          onChange={(event) => loadFont(event)}
+        />
+        <AnimatedButton
+          onClick={() => importElement.current?.click()}
+          title="add"
+          points={[PlusNone, PlusRegular, PlusRotated]}
+        />
+      </> :
+        <>
+          {<svg className="font-canvas">
+            <path
+              d={props.state.getValue().getPath(props.state.getTextValue(), 40, 65, 80, { kerning: true }).toPathData(5)}
+            />
+            <path
+              d={props.state.getValue().getPath(props.state.getTextValue(), 5, 105, 20, { kerning: true }).toPathData(5)}
+            />
+          </svg>}
+        </>
+      }
     </div>
-  );
+    <CarouselSelector
+      items={[...fonts, ''].map(f => ({ name: f, svg: null }))}
+      selected={showUpload ? '' : props.state.getTextValue()}
+      select={async (fontName) => {
+        if (fontName === '') {
+          setShowUpload(true);
+        } else {
+          const font = await fontService.get(fontName);
+          props.action(font);
+          setShowUpload(false);
+        }
+      }}
+      scale={3}
+    />
+  </div>;
 };

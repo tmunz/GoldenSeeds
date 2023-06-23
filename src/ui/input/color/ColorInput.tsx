@@ -41,10 +41,10 @@ export function ColorInput(props: {
     }
   }
 
-  return <div className="color-input">
+  return <div className="color-input polaroid">
     <label>{props.label}</label>
     <div
-      className={`color-input-main${color.isValid() ? '' : ' color-input-invalid'}`}
+      className={`color-input-main polaroid-picture${color.isValid() ? '' : ' color-input-invalid'}`}
       style={{ background: color.isRandom() ? RANDOM_GRADIENT : color.getRgbaString(), }}
     >
       {colorMode === 'rgb' && <ColorInputChannels

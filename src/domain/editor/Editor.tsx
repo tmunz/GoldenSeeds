@@ -50,7 +50,7 @@ export function Editor(props: { config: Config }) {
             title="add"
             points={[PlusNone, PlusRegular, PlusRotated]}
           />
-        </div>
+        </div> 
       </div>
     </div>
   );

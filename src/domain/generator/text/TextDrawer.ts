@@ -8,10 +8,10 @@ import { PointUtils } from '../../../utils/PointUtils';
 export interface TextDrawerConfig {
   style: {
     color: Color;
+    font: Font;
   };
   text: {
     content: string;
-    font: Font;
     size: (n: number, items: number) => number;
   };
 }
@@ -31,7 +31,7 @@ export function draw(config: TextDrawerConfig, grid: Point[]): { svg: string; bo
 }
 
 function drawFont(p: Point, config: TextDrawerConfig, size: number): { svg: string; boundingBox: BoundingBox } {
-  const path = config.text.font.getPath(config.text.content, p[Point.X], p[Point.Y], size, { kerning: true });
+  const path = config.style.font.getPath(config.text.content, p[Point.X], p[Point.Y], size, { kerning: true });
   const boundingBox_ = path.getBoundingBox();
   const boundingBox = { min: [boundingBox_.x1, boundingBox_.y1], max: [boundingBox_.x2, boundingBox_.y2] };
   const translateX = -(boundingBox.max[Point.X] - boundingBox.min[Point.X]) / 2;

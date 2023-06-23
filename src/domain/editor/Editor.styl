@@ -16,10 +16,10 @@
     &>.controls {
       display: inline-block;
       opacity: 0;
-      transition:opacity .8s;
+      transition: opacity .8s;
     }
 
-    &>h1 {
+    &>button {
       padding: 8px;
       display: inline-block;
       vertical-align: super;
@@ -28,17 +28,31 @@
   }
 
   .stage {
-    // border-bottom: 1px solid var(--accentColor);
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-  }
+    /* border-bottom: 1px solid var(--accentColor); */
 
-  .editor-item {
-    &>* {
-      display: inline-block;
+    .stage-type-selector {
+      grid-column: span 2;
+    }
 
-      &:first {
-        width: 80px;
+    .stage-content {
+      width: 260px;
+      padding-bottom: 40px;
+
+      .stage-group {
+
+        h2 {
+          margin-top: 40px;
+        }
+
+        .stage-group-content {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0 20px;
+
+          .editor-item:has(.input) {
+            grid-column: span 2;
+          }
+        }
       }
     }
   }

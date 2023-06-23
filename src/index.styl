@@ -13,9 +13,16 @@ body {
 
 h1 {
   letter-spacing: 14px;
-  text-transform: uppercase;
   font-weight: 200;
   font-size: 16px;
+  line-height: 1.4em;
+}
+
+h2 {
+  letter-spacing: 2px;
+  font-weight: 200;
+  font-size: 16px;
+  line-height: 1.4em;
 }
 
 input[type="text"] {
@@ -36,6 +43,7 @@ a,
 button,
 input[type="button"],
 .action {
+  text-transform: uppercase;
   appearance: none;
   font-weight: inherit;
   font-family: inherit;
@@ -62,6 +70,19 @@ input[type="button"],
   color: var(--errorColor);
 }
 
+.polaroid {
+  background: unquote('rgb(var(--backgroundColor), 0.3)');
+
+  &>.polaroid-picture {
+    position: relative;
+    box-sizing: border-box;
+    border: 1px solid var(--textColor);
+    width: 100%;
+    min-width: 120px;
+    aspect-ratio: 1 / 1;
+  }
+}
+
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--textColor) unquote('rgb(var(--backgroundColor))');
@@ -72,8 +93,8 @@ input[type="button"],
 }
 
 *::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 
 *::-webkit-scrollbar-track {
@@ -82,10 +103,10 @@ input[type="button"],
 }
 
 *::-webkit-scrollbar-thumb {
-  background: var(--textColor);
+  background: linear-gradient(0deg, transparent 0%, var(--textColor) 50%, transparent 100%);
   border-radius: 5px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: var(--accentColor);
+  background: linear-gradient(0deg, transparent 0%, var(--accentColor) 50%, transparent 100%);
 }
