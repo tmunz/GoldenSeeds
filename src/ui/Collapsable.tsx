@@ -13,7 +13,6 @@ export function Collapsable({ show, children, className }: {
   useEffect(() => {
     const element = ref.current;
     if (element !== null) {
-      console.log(element.scrollHeight)
       setHeight(element.scrollHeight);
     }
   }, [children]);

@@ -1,12 +1,16 @@
 # GoldenSeeds SVG Generator
 Application to generate SVGs based on mathematical rules.
-**[Try it yourself](https://tmunz.github.io/GoldenSeeds/)** but be aware that v2.0 is still in beta state.
+**[Try it yourself](https://tmunz.github.io/GoldenSeeds/)**
 
 ## Features
-- open / save configurations
-- export as SVG
-- export as PNG
-- animations based on number of items over time
+- rule based vector graphics creation
+- various graphic generators like cartesian or polar grid, regular shape, text, tree and voronoi, which can be combined with each other
+- save drawings within the app
+- open / save configurations for drawings
+- export drawings as SVG
+- export drawings as PNG
+- PWA (Progressive Web App)
+- themeable
 
 ## How To
 coming soon ;-)

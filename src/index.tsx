@@ -9,7 +9,7 @@ const appElement = document.getElementById('app');
 if (appElement) {
   createRoot(appElement).render(
     <StrictMode>
-      {process.env.APP_VERSION}
+      <script>{`var version = "${process.env.APP_VERSION}"`}</script>
       <App />
     </StrictMode>
   );
