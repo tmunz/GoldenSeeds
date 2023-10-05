@@ -39,7 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
     "@webpack-cli/serve": "^2.0.1",
-    "autoprefixer": "^9.7.4",
+    "autoprefixer": "^10.4.16",
     "babel-loader": "^8.2.5",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.7.1",
