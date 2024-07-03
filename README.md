@@ -12,9 +12,6 @@ Application to generate SVGs based on mathematical rules.
 - PWA (Progressive Web App)
 - themeable
 
-## How To
-coming soon ;-)
-
 ## Issues
 see [Open Issues](https://github.com/tmunz/GoldenSeeds/issues)
 
