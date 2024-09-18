@@ -15,7 +15,6 @@
   "author": "Tobias Munzert",
   "license": "MIT",
   "dependencies": {
-    "copy-webpack-plugin": "^11.0.0",
     "opentype.js": "^1.3.4",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
@@ -42,6 +41,7 @@
     "autoprefixer": "^10.4.16",
     "babel-loader": "^8.2.5",
     "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
     "del-cli": "^3.0.1",
     "eslint": "^8.21.0",
