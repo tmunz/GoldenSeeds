@@ -16,5 +16,6 @@ export const preconfigs: RawConfig[] = [
   require('./golden-circles.json'),
   require('./hinge-third.json'),
   require('./smartify.json'),
+  require('./room-divider.json'),
   require('./christmas-cutout.json'),
 ];

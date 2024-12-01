@@ -1,0 +1,176 @@
+{
+  "meta": {
+    "name": "room divider"
+  },
+  "stages": [
+    {
+      "type": "cartesian",
+      "data": {
+        "style": {
+          "color": "0x0ffdecd87",
+          "strokeWidth": "0"
+        },
+        "grid": {
+          "items": "4",
+          "x": "2",
+          "xDistance": "1.2",
+          "yDistance": "1.2"
+        }
+      }
+    },
+    {
+      "type": "shape",
+      "data": {
+        "style": {
+          "fillColor": "0x0ffdecd87",
+          "strokeColor": "0x0ff000000",
+          "strokeWidth": "1",
+          "smoothness": "0.1",
+          "noise": "0"
+        },
+        "projection": {
+          "type": "circular",
+          "circlularProjectionFullAngle": "360"
+        },
+        "shape": {
+          "edges": "6",
+          "offset": "i%2==0 ? 0 : -n*0.03",
+          "cutRatio0": "0",
+          "cutRatio1": "0"
+        },
+        "probabilityDistribution": {
+          "muRandomness": "0",
+          "sigma": "0",
+          "sigmaRandomness": "0",
+          "noise": "0"
+        },
+        "variation": {
+          "seed": "999"
+        },
+        "transformation": {
+          "angle": "0",
+          "size": "1"
+        }
+      }
+    },
+    {
+      "type": "shape",
+      "data": {
+        "style": {
+          "fillColor": "0x0ff000000",
+          "strokeColor": "0x0ffdecd87",
+          "strokeWidth": "0",
+          "smoothness": "0.1 + n*0.05",
+          "noise": "0"
+        },
+        "projection": {
+          "type": "circular",
+          "circlularProjectionFullAngle": "360"
+        },
+        "shape": {
+          "edges": "6",
+          "offset": "i%2==0? 1 : -0.55+n*0.15",
+          "cutRatio0": "0",
+          "cutRatio1": "0"
+        },
+        "probabilityDistribution": {
+          "muRandomness": "0",
+          "sigma": "0",
+          "sigmaRandomness": "0",
+          "noise": "0"
+        },
+        "variation": {
+          "seed": "999"
+        },
+        "transformation": {
+          "angle": "0",
+          "size": "0.28"
+        }
+      }
+    },
+    {
+      "type": "polar",
+      "data": {
+        "style": {
+          "color": "0x0ffff0000",
+          "strokeWidth": "0"
+        },
+        "grid": {
+          "items": "3",
+          "angle": "-90 + n * 120",
+          "distance": "0.52"
+        }
+      }
+    },
+    {
+      "type": "shape",
+      "data": {
+        "style": {
+          "fillColor": "0x0ffdecd87",
+          "strokeColor": "0x0ffdecd87",
+          "strokeWidth": "0",
+          "smoothness": "0.5",
+          "noise": "0"
+        },
+        "projection": {
+          "type": "circular",
+          "circlularProjectionFullAngle": "360"
+        },
+        "shape": {
+          "edges": "1",
+          "offset": "0",
+          "cutRatio0": "0",
+          "cutRatio1": "0"
+        },
+        "probabilityDistribution": {
+          "muRandomness": "0",
+          "sigma": "0",
+          "sigmaRandomness": "0",
+          "noise": "0"
+        },
+        "variation": {
+          "seed": "999"
+        },
+        "transformation": {
+          "angle": "0",
+          "size": "0.1"
+        }
+      }
+    },
+    {
+      "type": "shape",
+      "data": {
+        "style": {
+          "fillColor": "0x0ff000000",
+          "strokeColor": "0x0ffdecd87",
+          "strokeWidth": "0",
+          "smoothness": "0.5",
+          "noise": "0"
+        },
+        "projection": {
+          "type": "circular",
+          "circlularProjectionFullAngle": "360"
+        },
+        "shape": {
+          "edges": "1",
+          "offset": "0",
+          "cutRatio0": "0",
+          "cutRatio1": "0"
+        },
+        "probabilityDistribution": {
+          "muRandomness": "0",
+          "sigma": "0",
+          "sigmaRandomness": "0",
+          "noise": "0"
+        },
+        "variation": {
+          "seed": "999"
+        },
+        "transformation": {
+          "angle": "0",
+          "size": "0.05"
+        }
+      }
+    }
+  ]
+}
