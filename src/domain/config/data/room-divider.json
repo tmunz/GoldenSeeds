@@ -24,7 +24,7 @@
         "style": {
           "fillColor": "0x0ffdecd87",
           "strokeColor": "0x0ff000000",
-          "strokeWidth": "1",
+          "strokeWidth": "0",
           "smoothness": "0.1",
           "noise": "0"
         },
@@ -92,7 +92,7 @@
       "type": "polar",
       "data": {
         "style": {
-          "color": "0x0ffff0000",
+          "color": "0x000000000",
           "strokeWidth": "0"
         },
         "grid": {
