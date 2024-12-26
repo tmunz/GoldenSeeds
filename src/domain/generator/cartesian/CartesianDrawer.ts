@@ -17,13 +17,20 @@ export interface CartesianConfig {
 export function draw(config: CartesianConfig, grid: Point[]): { svg: string; points: Point[] } {
   return grid.reduce(
     (agg, p) => {
-      const coordinates = calculatePolarGrid(
-        p,
+      const coordinatesRaw = calculateCartesianGrid(
         config.grid.items,
         config.grid.x,
         config.grid.xDistance,
         config.grid.yDistance,
       );
+      const [minX, maxX, minY, maxY] = coordinatesRaw.reduce((agg, c) => [
+        Math.min(c[Point.X], agg[0]),
+        Math.max(c[Point.X], agg[1]),
+        Math.min(c[Point.Y], agg[2]),
+        Math.max(c[Point.Y], agg[3]),
+      ], [0, 0, 0, 0]);
+      const offset = [p[Point.X] - ((maxX - minX) / 2), p[Point.Y] - ((maxY - minY) / 2)];
+      const coordinates = coordinatesRaw.map((c) => [c[Point.X] + offset[Point.X], c[Point.Y] + offset[Point.Y]]);
       const svg = coordinates
         .map((coordinate: Point, j: number) => {
           const rightIndex = j + 1;
@@ -46,8 +53,7 @@ export function draw(config: CartesianConfig, grid: Point[]): { svg: string; poi
   );
 }
 
-function calculatePolarGrid(
-  origin: Point,
+function calculateCartesianGrid(
   items: number,
   x: number,
   xDistance: (n: number, items: number) => number,
@@ -58,8 +64,8 @@ function calculatePolarGrid(
     const calcX = i % x;
     const calcY = Math.floor(i / x);
     grid.push([
-      origin[Point.X] + calcX * xDistance(calcX, x),
-      origin[Point.Y] + calcY * yDistance(calcY, Math.floor(items / x)),
+      calcX * xDistance(calcX, x),
+      calcY * yDistance(calcY, Math.floor(items / x)),
     ]);
   }
   return grid;
