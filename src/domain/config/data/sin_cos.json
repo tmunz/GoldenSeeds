@@ -4,6 +4,8 @@
   },
   "stages": [{
       "type": "function",
+      "id": "1",
+      "name": "sin",
       "data": {
         "style": {
           "strokeColor": "patina",
@@ -22,6 +24,8 @@
     },
     {
       "type": "function",
+      "id": "2",
+      "name": "cos",
       "data": {
         "style": {
           "strokeColor": "gold",
@@ -39,6 +43,8 @@
     },
     {
       "type": "polar",
+      "id": "3",
+      "name": "axis",
       "data": {
         "style": {
           "color": "white",

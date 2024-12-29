@@ -1,85 +1,97 @@
 .golden-seeds-view {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
 
-  &>.canvas {
-    position: relative;
-    transition: left 1.2s ease;
-    transform: translate(-50%, 0);
-    z-index: 0;
+  display: grid;
+  width: 100vw;
+  height: 100vh;
+  grid-template-columns: 0 0px 1fr;
+  transition: grid-template-columns 0.5s ease-in-out;
+
+  --sidebarWidth: 400px;
+
+  .edit-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+  }
+  
+  &.edit-mode {
+    grid-template-columns: var(--sidebarWidth) 10px 1fr;
+
+    &>.sidebar {
+      clip-path: circle(80%);
+    }
+
+    &>.divider {
+      &::after {
+        height: 80%;
+      }
+    }
   }
 
   &>.sidebar {
-    position: absolute;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    padding-left: 20px;
-    padding-top: 20px;
-    padding-right: 20px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    align-content: flex-start;
-    transition: all 0.5s ease-in-out;
-    clip-path: circle(80%);
-    backdrop-filter: blur(4px);
+    height: 100%;
+    overflow-y: auto;
+    clip-path: circle(0px at 24px 0px);
+    transition: clip-path 0.5s ease-in-out;
+    width: var(--sidebarWidth);
+    box-sizing: border-box;
+    padding-top: 64px;
+  }
 
-    &.hidden {
-      clip-path: circle(20px at 35px 44px);
-    }
-
-    &>.actions {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      justify-content: flex-start;
-      align-items: flex-start;
-      align-content: flex-start;
-      margin-bottom: 20px;
-      column-gap: 5px;
-    }
-
-    &>.editor {
-      margin-left: -10px;
-      padding-left: 10px;
+  &>.divider {
+    position: relative;
+    &::after {
+      transition: height 0.5s ease-in-out;
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 1px;
+      height: 0%;
+      transform: translate(-50%, -50%);
+      background-color: var(--textColor);
     }
   }
 
-  &>.preconfig-bar {
-    z-index: 1;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 0;
-    right: 0;
+  &>.main-content {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
 
-    .carousel-selector {
-      padding: 5px;
+    &>.preconfig-bar {
+      z-index: 1;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 0;
+      right: 0;
 
-      .animated-icon {
-        height: 40px;
-        width: 40px;
+      .carousel-selector {
+        padding: 5px;
+
+        .animated-icon {
+          height: 40px;
+          width: 40px;
+        }
       }
-    }
 
-    .carousel-overview {
-      height: 200px;
-      opacity: 0;
-      border-color: var(--textColor);
-      border-style: solid;
-      border-width: 1px 0;
-      backdrop-filter: blur(3px);
-      background: unquote('rgba(var(--backgroundColor), 0.3)');
+      .carousel-overview {
+        height: 200px;
+        opacity: 0;
+        border-color: var(--textColor);
+        border-style: solid;
+        border-width: 1px 0;
+        backdrop-filter: blur(3px);
+        background: unquote('rgba(var(--backgroundColor), 0.3)');
 
-      &:hover {
-        opacity: 1;
+        &:hover {
+          opacity: 1;
+        }
       }
     }
   }
@@ -87,7 +99,7 @@
   &>.themer {
     position: absolute;
     bottom: 0;
-    right: 0;
+    right: 10px;
 
     h1 {
       text-align: right;

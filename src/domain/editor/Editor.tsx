@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { Draggable, Droppable, DragDropContext, DropResult } from 'react-beautiful-dnd';
 
 import { Config } from '../config/Config';
@@ -12,8 +12,10 @@ import './Editor.styl';
 
 export function Editor(props: { config: Config }) {
 
+  const droppableId = 'stages';
+
   function onDragEnd(result: DropResult) {
-    if (result.destination?.droppableId === 'stages') {
+    if (result.destination?.droppableId === droppableId) {
       configService.moveToIndex(result.draggableId, result.destination.index);
     }
   }
@@ -22,7 +24,7 @@ export function Editor(props: { config: Config }) {
     <div className="editor">
       <div className="content-wrapper">
         <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="stages">
+          <Droppable droppableId={droppableId}>
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 {props.config.stages.map((stage, i) => (
@@ -30,6 +32,7 @@ export function Editor(props: { config: Config }) {
                     {(provided) => (
                       <div ref={provided.innerRef} {...provided.draggableProps}>
                         <StageEditor
+                          style={provided.draggableProps.style}
                           dragHandleProps={provided.dragHandleProps}
                           stage={stage}
                           hasNext={i < props.config.stages.length - 1}
@@ -50,7 +53,7 @@ export function Editor(props: { config: Config }) {
             title="add"
             points={[PlusNone, PlusRegular, PlusRotated]}
           />
-        </div> 
+        </div>
       </div>
     </div>
   );

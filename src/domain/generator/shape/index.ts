@@ -127,7 +127,7 @@ export class Shape extends SvgGenerator<ShapeConfig> {
       size: {
         initial: '1',
         type: 'expression' as const,
-        min: 0.05,
+        min: 0,
         max: 100,
         step: 0.05,
       },

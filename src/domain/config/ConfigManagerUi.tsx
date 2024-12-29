@@ -27,7 +27,7 @@ export function ConfigManagerUi(props: {
 
   function save() {
     const configItem = props.configItems.find(c => c.name === props.activeConfig?.meta.name);
-    const sortIndex = configItem?.sortIndex ?? (props.configItems[props.configItems.length - 1].sortIndex + 1);
+    const sortIndex = configItem?.sortIndex ?? ((props.configItems[props.configItems.length - 1]?.sortIndex ?? 0) + 1);
     if (props.activeConfig) {
       configManager.save(ConfigService.convertConfigToRawConfig(props.activeConfig), sortIndex);
     }

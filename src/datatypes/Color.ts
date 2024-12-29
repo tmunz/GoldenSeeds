@@ -147,10 +147,12 @@ export class Color {
   }
 
   static textValueToRgba(s: string): RgbaColor | null {
-    const parsedValue = parseInt(s.replace('#', ''), 16);
-    if (isFinite(parsedValue)) {
-      const m = s.length < 6 ? 1 : 2;
-      return { r: 0xff & (parsedValue >> (8 * m)), g: 0xff & (parsedValue >> (4 * m)), b: 0xff & parsedValue };
+    if (s.slice(0, 1) === '#') {
+      const parsedValue = parseInt(s.replace('#', ''), 16);
+      if (isFinite(parsedValue)) {
+        const m = s.length < 6 ? 1 : 2;
+        return { r: 0xff & (parsedValue >> (8 * m)), g: 0xff & (parsedValue >> (4 * m)), b: 0xff & parsedValue, a: 1 };
+      }
     }
     return null;
   }

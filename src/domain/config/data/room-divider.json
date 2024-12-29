@@ -5,6 +5,8 @@
   "stages": [
     {
       "type": "cartesian",
+      "id": "1",
+      "name": "grid",
       "data": {
         "style": {
           "color": "0x0ffdecd87",
@@ -20,6 +22,8 @@
     },
     {
       "type": "shape",
+      "id": "2",
+      "name": "main shape",
       "data": {
         "style": {
           "fillColor": "0x0ffdecd87",
@@ -55,6 +59,8 @@
     },
     {
       "type": "shape",
+      "id": "3",
+      "name": "main cutout",
       "data": {
         "style": {
           "fillColor": "0x0ff000000",
@@ -90,6 +96,8 @@
     },
     {
       "type": "polar",
+      "id": "4",
+      "name": "holder positions",
       "data": {
         "style": {
           "color": "0x000000000",
@@ -104,6 +112,8 @@
     },
     {
       "type": "shape",
+      "id": "5",
+      "name": "holder",
       "data": {
         "style": {
           "fillColor": "0x0ffdecd87",
@@ -139,6 +149,8 @@
     },
     {
       "type": "shape",
+      "id": "6",
+      "name": "holder cutout",
       "data": {
         "style": {
           "fillColor": "0x0ff000000",

@@ -2,8 +2,6 @@ import React from 'react';
 
 import { Config } from '../config/Config';
 
-import './SvgCanvas.styl';
-
 interface Props {
   config: Config;
   svgContent?: string;
@@ -17,7 +15,7 @@ export function SvgCanvas(props: Props) {
       {process.env.MODE === 'production' ? (
         <img key={key} alt="generated SVG" src={`data:image/svg+xml;base64,${window.btoa(svgContent)}`} />
       ) : (
-        <div key={key} dangerouslySetInnerHTML={{ __html: svgContent }} />
+        <div key={key} className="svg-debug-container" style={{ display: 'inline-block' }} dangerouslySetInnerHTML={{ __html: svgContent }} />
       )}
     </div>
   );

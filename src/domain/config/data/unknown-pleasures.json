@@ -4,6 +4,7 @@
   },
   "stages": [{
       "type": "cartesian",
+      "id": "1",
       "data": {
         "style": {
           "color": "gold",
@@ -19,6 +20,7 @@
     },
     {
       "type": "shape",
+      "id": "2",
       "data": {
         "style": {
           "fillColor": "black",

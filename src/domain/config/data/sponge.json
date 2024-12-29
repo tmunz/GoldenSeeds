@@ -4,6 +4,7 @@
   },
   "stages": [{
     "type": "tree",
+    "id": "1",
     "data": {
       "style": {
         "color": "gold"

@@ -4,6 +4,8 @@
   },
   "stages": [{
       "type": "tree",
+      "id": "1",
+      "name": "branches",
       "data": {
         "style": {
           "color": "gold"
@@ -25,6 +27,8 @@
     },
     {
       "type": "shape",
+      "id": "2",
+      "name": "leaf",
       "data": {
         "style": {
           "fillColor": "patina",

@@ -4,6 +4,8 @@
   },
   "stages": [{
       "type": "shape",
+      "id": "1",
+      "name": "star",
       "data": {
         "style": {
           "strokeColor": "gold",
@@ -38,6 +40,8 @@
     },
     {
       "type": "function",
+      "id": "2",
+      "name": "offset",
       "data": {
         "style": {
           "fillColor": "transparent",
@@ -53,6 +57,8 @@
     },
     {
       "type": "shape",
+      "id": "3",
+      "name": "hanger hole",
       "data": {
         "style": {
           "strokeColor": "gold",
@@ -87,6 +93,8 @@
     },
     {
       "type": "function",
+      "id": "4",
+      "name": "number of layers",
       "data": {
         "style": {
           "fillColor": "transparent",
@@ -102,6 +110,8 @@
     },
     {
       "type": "shape",
+      "id": "5",
+      "name": "layer",
       "data": {
         "style": {
           "strokeColor": "patina",

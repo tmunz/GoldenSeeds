@@ -26,6 +26,20 @@ export class CartesianGrid extends SvgGenerator<CartesianConfig> {
         animateable: true,
       },
       x: { initial: '5', type: 'number' as const, min: 1, max: 25, step: 1 },
+      xOffset: {
+        initial: '0',
+        type: 'number' as const,
+        min: -10,
+        max: 10,
+        step: 0.05,
+      },
+      yOffset: {
+        initial: '0',
+        type: 'number' as const,
+        min: -10,
+        max: 10,
+        step: 0.05,
+      },
       xDistance: {
         initial: '1',
         type: 'expression' as const,

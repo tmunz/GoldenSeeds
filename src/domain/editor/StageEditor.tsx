@@ -12,6 +12,7 @@ import { editorService } from './EditorService';
 import { ParamDefinition } from '../generator/SvgGenerator';
 import { AnimationController } from '../animation/AnimationController';
 import { CarouselSelector } from '../../ui/CarouselSelector';
+import { InlineTextInput } from '../../ui/input/InlineTextInput';
 
 
 export interface Props extends ComponentProps<'div'> {
@@ -19,9 +20,10 @@ export interface Props extends ComponentProps<'div'> {
   i: number;
   hasNext: boolean;
   dragHandleProps?: DraggableProvidedDragHandleProps | null;
+  style?: React.CSSProperties;
 }
 
-export function StageEditor({ stage, i, hasNext, dragHandleProps }: Props) {
+export function StageEditor({ stage, i, hasNext, dragHandleProps, style }: Props) {
 
   const [editMode, setEditMode] = useState<string | null>(null);
 
@@ -53,11 +55,19 @@ export function StageEditor({ stage, i, hasNext, dragHandleProps }: Props) {
   };
 
   return (
-    <div key={stage.id} className="stage" id={'stage-' + stage.id}>
-      <div className="stage-header" {...dragHandleProps}>
-        <button onClick={() => setEditMode(editMode ? null : stage.id)}>
-          <h1>{stage.generator.type}</h1>
-        </button>
+    <div key={stage.id} className="stage">
+      <div className="stage-header" style={style} {...dragHandleProps} id={stage.id}>
+        <div className="stage-header-title">
+          <button onClick={() => setEditMode(editMode ? null : stage.id)}>
+            <h1>{stage.generator.type}</h1>
+          </button>
+          <InlineTextInput
+            className="name"
+            placeholder={`#${stage.id}`}
+            value={stage.name}
+            onChange={(e) => configService.setStageName(stage.id, e)}
+          />
+        </div>
         <div className="controls">
           <AnimatedButton
             title="upmove"
@@ -83,7 +93,7 @@ export function StageEditor({ stage, i, hasNext, dragHandleProps }: Props) {
         <CarouselSelector
           className="stage-type-selector"
           items={types.map(name => ({ name, svg: null }))}
-          select={(name) => configService.setType(stage.id, name)}
+          select={(type) => configService.setType(stage.id, type)}
           selected={stage.generator.type}
           scale={1.5}
         />

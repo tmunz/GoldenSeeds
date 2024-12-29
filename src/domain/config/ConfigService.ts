@@ -2,7 +2,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { Config } from './Config';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
-import { Stage, StageRawState } from './Stage';
+import { Stage } from './Stage';
 import { SvgGenerator } from '../generator/SvgGenerator';
 import { RawConfig, RawConfigStage } from './RawConfig';
 
@@ -19,6 +19,16 @@ export class ConfigService {
     }
   }
 
+  async setStageName(stageId: string, name: string) {
+    const config = this.config$.value;
+    const nextConfig = { ...config, stages: [...config.stages] };
+    const index = this.findIndexByStageId(stageId);
+    if (config.stages[index]?.generator) {
+      nextConfig.stages[index].name = name;
+      this.config$.next(nextConfig);
+    }
+  }
+
   async setRawConfig(rawConfig: RawConfig): Promise<void> {
     this.config$.next(await ConfigService.convert(rawConfig));
   }
@@ -30,10 +40,10 @@ export class ConfigService {
   async setType(stageId: string, type: string) {
     const config = this.config$.value;
     const nextConfig = { ...config, stages: [...config.stages] };
-    nextConfig.stages[this.findIndexByStageId(stageId)] = await ConfigService.createStage(
+    const currentStageName = nextConfig.stages[this.findIndexByStageId(stageId)].name;
+    nextConfig.stages[this.findIndexByStageId(stageId)] =  await ConfigService.createStage(
       svgGeneratorRegistry.newInstance(type),
-      undefined,
-      stageId,
+      {id: stageId, name: currentStageName, type, data: {}},
     );
     this.config$.next(nextConfig);
   }
@@ -81,15 +91,14 @@ export class ConfigService {
 
   private static async createStage(
     generator: SvgGenerator<unknown> | null,
-    rawState?: StageRawState,
-    stageId?: string,
+    rawState?: RawConfigStage,
   ): Promise<Stage> {
-    return await new Stage(stageId).with(generator, rawState);
+    return await new Stage(rawState?.id, rawState?.name).with(generator, rawState?.data);
   }
 
   static convertConfigToRawConfig(config: Config): RawConfig {
     const stages = config.stages.map((stage) => {
-      const rawState = { type: stage.state.type, data: {} as Record<string, Record<string, string>> };
+      const rawState = { id: stage.id, name: stage.name, type: stage.state.type, data: {} as Record<string, Record<string, string>>};
       Object.keys(stage.state.data).forEach((groupId) => {
         rawState.data[groupId] = {};
         Object.keys(stage.state.data[groupId]).forEach((id) => {

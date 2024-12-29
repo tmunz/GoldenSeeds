@@ -4,6 +4,8 @@
   },
   "stages": [{
       "type": "shape",
+      "id": "1",
+      "name": "base circle",
       "data": {
         "style": {
           "fillColor": "transparent",
@@ -39,6 +41,8 @@
     },
     {
       "type": "polar",
+      "id": "2",
+      "name": "positions",
       "data": {
         "style": {
           "color": "transparent",
@@ -53,6 +57,7 @@
     },
     {
       "type": "shape",
+      "id": "3",
       "data": {
         "style": {
           "fillColor": "transparent",

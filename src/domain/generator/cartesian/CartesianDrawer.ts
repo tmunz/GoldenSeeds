@@ -9,6 +9,8 @@ export interface CartesianConfig {
   grid: {
     items: number;
     x: number;
+    xOffset: number;
+    yOffset: number;
     xDistance: (n: number, items: number) => number;
     yDistance: (n: number, items: number) => number;
   };
@@ -29,7 +31,7 @@ export function draw(config: CartesianConfig, grid: Point[]): { svg: string; poi
         Math.min(c[Point.Y], agg[2]),
         Math.max(c[Point.Y], agg[3]),
       ], [0, 0, 0, 0]);
-      const offset = [p[Point.X] - ((maxX - minX) / 2), p[Point.Y] - ((maxY - minY) / 2)];
+      const offset = [p[Point.X] + config.grid.xOffset - ((maxX - minX) / 2), p[Point.Y] + config.grid.yOffset - ((maxY - minY) / 2)];
       const coordinates = coordinatesRaw.map((c) => [c[Point.X] + offset[Point.X], c[Point.Y] + offset[Point.Y]]);
       const svg = coordinates
         .map((coordinate: Point, j: number) => {

@@ -4,6 +4,7 @@
   },
   "stages": [{
     "type": "polar",
+    "id": "1",
     "data": {
       "style": {
         "color": "transparent",
@@ -16,6 +17,7 @@
     }
   }, {
     "type": "voronoi",
+    "id": "2",
     "data": {
       "style": {
         "fillColor": "random",

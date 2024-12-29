@@ -1,34 +1,49 @@
 .editor {
   overflow: auto;
   direction: rtl;
-  width: 100%;
 
   .content-wrapper {
     direction: ltr;
   }
 
   .stage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    position: relative;
+
+    .stage-header-title {
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+    }
 
     &:hover>.controls {
       opacity: 1;
     }
 
     &>.controls {
-      display: inline-block;
+      position: sticky;
+      right: 0;
+      display: flex;
+      gap: 10px;
+      flex-wrap: nowrap;
       opacity: 0;
       transition: opacity .8s;
     }
 
     &>button {
       padding: 8px;
-      display: inline-block;
-      vertical-align: super;
       margin: 0;
     }
   }
 
   .stage {
-    /* border-bottom: 1px solid var(--accentColor); */
+    .name {
+      color: var(--textColor);
+      max-width: 120px;
+    }
 
     .stage-type-selector {
       grid-column: span 2;

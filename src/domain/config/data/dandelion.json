@@ -4,6 +4,8 @@
   },
   "stages": [{
       "type": "polar",
+      "id": "1",
+      "name": "number of items",
       "data": {
         "style": {
           "color": "gold",
@@ -18,6 +20,8 @@
     },
     {
       "type": "shape",
+      "id": "2",
+      "name": "circle parts",
       "data": {
         "style": {
           "fillColor": "transparent",
