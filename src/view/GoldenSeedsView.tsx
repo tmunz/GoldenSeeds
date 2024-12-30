@@ -8,10 +8,10 @@ import { ConfigItem, configManager } from '../domain/config/ConfigManager';
 import { CarouselSelector } from '../ui/CarouselSelector';
 import { Sidebar } from './Sidebar';
 import { useDimension } from '../utils/useDimension';
-
-import './GoldenSeedsView.styl';
 import { AnimatedButton } from '../ui/AnimatedButton';
 import { EditorClose, EditorNone, EditorRegular } from '../ui/icon/Editor';
+
+import './GoldenSeedsView.styl';
 
 
 export function GoldenSeedsView(props: {

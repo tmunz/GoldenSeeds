@@ -13,6 +13,11 @@
     flex-wrap: nowrap;
     position: relative;
 
+    .name {
+      color: var(--textColor);
+      max-width: 120px;
+    }
+
     .stage-header-title {
       display: flex;
       align-items: center;
@@ -40,9 +45,10 @@
   }
 
   .stage {
-    .name {
-      color: var(--textColor);
-      max-width: 120px;
+    background-color: unquote('rgb(var(--backgroundColor))');
+    transition: background-color .3s ease-in-out;
+    &.dnd-over {
+      background-color: unquote('rgb(var(--backgroundColorAlt))');
     }
 
     .stage-type-selector {

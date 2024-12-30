@@ -1,6 +1,4 @@
 import React, { ComponentProps, useState } from 'react';
-import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd';
-
 import { Collapsable } from '../../ui/Collapsable';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 import { Stage } from '../config/Stage';
@@ -19,11 +17,10 @@ export interface Props extends ComponentProps<'div'> {
   stage: Stage;
   i: number;
   hasNext: boolean;
-  dragHandleProps?: DraggableProvidedDragHandleProps | null;
-  style?: React.CSSProperties;
+  drag: { onDragStart: (e: React.DragEvent) => void; onDragOver: (e: React.DragEvent) => void; onDrop: (e: React.DragEvent) => void; onDragLeave: () => void; };
 }
 
-export function StageEditor({ stage, i, hasNext, dragHandleProps, style }: Props) {
+export function StageEditor({ stage, i, hasNext, drag }: Props) {
 
   const [editMode, setEditMode] = useState<string | null>(null);
 
@@ -55,8 +52,11 @@ export function StageEditor({ stage, i, hasNext, dragHandleProps, style }: Props
   };
 
   return (
-    <div key={stage.id} className="stage">
-      <div className="stage-header" style={style} {...dragHandleProps} id={stage.id}>
+    <>
+      <div className="stage-header"
+        draggable
+        {...drag}
+      >
         <div className="stage-header-title">
           <button onClick={() => setEditMode(editMode ? null : stage.id)}>
             <h1>{stage.generator.type}</h1>
@@ -88,7 +88,7 @@ export function StageEditor({ stage, i, hasNext, dragHandleProps, style }: Props
             rotation={45}
           />
         </div>
-      </div>
+      </div >
       <Collapsable key={stage.id} show={editMode === stage.id} className="stage-content">
         <CarouselSelector
           className="stage-type-selector"
@@ -114,6 +114,6 @@ export function StageEditor({ stage, i, hasNext, dragHandleProps, style }: Props
           </div>
         ))}
       </Collapsable>
-    </div>
+    </>
   );
 }
