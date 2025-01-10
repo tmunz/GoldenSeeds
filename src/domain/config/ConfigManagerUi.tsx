@@ -29,7 +29,7 @@ export function ConfigManagerUi(props: {
     const configItem = props.configItems.find(c => c.name === props.activeConfig?.meta.name);
     const sortIndex = configItem?.sortIndex ?? ((props.configItems[props.configItems.length - 1]?.sortIndex ?? 0) + 1);
     if (props.activeConfig) {
-      configManager.save(ConfigService.convertConfigToRawConfig(props.activeConfig), sortIndex);
+      configManager.save(ConfigService.convertConfigToRawConfig(props.activeConfig), sortIndex, configItem?.preconfig ?? false);
     }
   }
 
@@ -45,17 +45,17 @@ export function ConfigManagerUi(props: {
         title="reset"
         onClick={() => configManager.reset(selected)}
       />}
-      <AnimatedButton
+      {getConfigItem(selected) && <AnimatedButton
         rotation={DIRECTION_UP}
         title="reload"
         onClick={() => configManager.select(selected)}
-      />
+      />}
       <AnimatedButton
         rotation={DIRECTION_DOWN}
         title="save"
         onClick={() => save()}
       />
-      {!getConfigItem(selected)?.preconfig && <AnimatedButton
+      {getConfigItem(selected) && !getConfigItem(selected)?.preconfig && <AnimatedButton
         points={[PlusNone, PlusRegular, PlusRotated]}
         rotation={45}
         title="remove"
