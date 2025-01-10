@@ -8,6 +8,7 @@ import { preconfigs } from './data';
 
 export interface ConfigItem {
   name: string;
+  preconfig: boolean;
   rawConfig: RawConfig;
   svg: string | null;
   sortIndex: number;
@@ -30,18 +31,31 @@ export class ConfigManager {
         const objectStore = transaction.objectStore(ConfigManager.DB_TABLE);
         const getRequest = objectStore.getAll();
         getRequest.addEventListener('success', async (event) => {
-          const list = ((event.target as unknown as { result: ConfigItem[] }).result);
-          if (list.length === 0) {
-            await Promise.all(preconfigs.map((preconfig, i) => configManager.save(preconfig, i)));
-          } else {
-            this.configItemMap$.next(new Map(list.map(item => [item.name, item])));
-          }
+          const existingItems = new Map(((event.target as unknown as { result: ConfigItem[] }).result).map(item => [item.name, item]));
+          this.configItemMap$.next(existingItems);
+
+          // add new and update all existing preconfigs
+          await Promise.all(preconfigs.map((preconfig, i) => {
+            const existingItem = existingItems.get(preconfig.meta.name);
+            if (existingItem === undefined || existingItem?.preconfig) {
+              configManager.save(preconfig, i, true);
+            }
+          }));
+
+          // remove old preconfigs
+          await Promise.all([...existingItems.values()]
+            .filter(item => item.preconfig && !preconfigs.find(preconfig => preconfig.meta.name === item.name))
+            .map(item => {
+              configManager.delete(item.name);
+            })
+          );
+
           this.configsManageable$.next(true);
           resolve();
         });
       }).catch(() => {
         console.warn('configs could not be loaded');
-        const list = preconfigs.map((rawConfig, i) => ({ name: rawConfig.meta.name, rawConfig, svg: null, sortIndex: i }));
+        const list = preconfigs.map((rawConfig, i) => ({ name: rawConfig.meta.name, preconfig: true, rawConfig, svg: null, sortIndex: i }));
         this.configItemMap$.next(new Map(list.map(item => [item.name, item])));
         resolve();
       });
@@ -58,7 +72,7 @@ export class ConfigManager {
     const preconfig = preconfigs.find(c => c.meta.name === name);
     const config = this.configItemMap$.value.get(name);
     if (config) {
-      await this.save(preconfig ?? rawConfig, config.sortIndex);
+      await this.save(preconfig ?? rawConfig, config.sortIndex, true);
       this.select(name);
     }
   }
@@ -79,7 +93,7 @@ export class ConfigManager {
     });
   }
 
-  async save(rawConfig: RawConfig, sortIndex: number): Promise<ConfigItem> {
+  async save(rawConfig: RawConfig, sortIndex: number, preconfig: boolean = false): Promise<ConfigItem> {
     const name = rawConfig.meta.name;
     return new Promise((resolve, reject) => {
       return this.database().then(async (db) => {
@@ -87,7 +101,7 @@ export class ConfigManager {
         const svg = svgService.generateSvg(config.stages, 1000, 1000);
         const transaction = db.transaction([ConfigManager.DB_TABLE], 'readwrite');
         const objectStore = transaction.objectStore(ConfigManager.DB_TABLE);
-        const data = { name, rawConfig, svg, sortIndex };
+        const data = { name, rawConfig, svg, sortIndex, preconfig };
         const putRequest = objectStore.put(data);
         putRequest.addEventListener('success', () => {
           const next = new Map(this.configItemMap$.value);

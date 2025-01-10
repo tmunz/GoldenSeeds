@@ -33,14 +33,18 @@ export function ConfigManagerUi(props: {
     }
   }
 
+  function getConfigItem(name: string) {
+    return props.configItems.find(c => c.name === name);
+  }
+
   const selected = props.activeConfig?.meta.name;
   return selected ?
     <div className="config-manager">
-      <AnimatedButton
+      {getConfigItem(selected)?.preconfig && <AnimatedButton
         points={[ResetNone, ResetRegular, ResetProgress]}
         title="reset"
         onClick={() => configManager.reset(selected)}
-      />
+      />}
       <AnimatedButton
         rotation={DIRECTION_UP}
         title="reload"
@@ -51,11 +55,11 @@ export function ConfigManagerUi(props: {
         title="save"
         onClick={() => save()}
       />
-      <AnimatedButton
+      {!getConfigItem(selected)?.preconfig && <AnimatedButton
         points={[PlusNone, PlusRegular, PlusRotated]}
         rotation={45}
         title="remove"
         onClick={() => remove()}
-      />
+      />}
     </div> : null;
 }
