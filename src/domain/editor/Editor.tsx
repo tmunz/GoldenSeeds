@@ -15,7 +15,6 @@ export function Editor(props: { config: Config }) {
 
   const handleDragStart = (stageId: string, e: React.DragEvent<any>) => {
     const dragHandle = "stage-header";
-    console.log(e.nativeEvent.composedPath());
 
     const isFromStageHeader = e.nativeEvent.composedPath().some(
       (el) => el instanceof HTMLElement && el.classList.contains(dragHandle)
