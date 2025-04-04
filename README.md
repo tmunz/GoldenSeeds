@@ -1,10 +1,12 @@
-# GoldenSeeds SVG Generator
+# GoldenSeeds Parametric SVG Generator
 
 [![license](https://img.shields.io/github/license/tmunz/GoldenSeeds.svg)](LICENSE)  
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
 GoldenSeeds SVG Generator is a web-based application for creating SVG graphics using rule-based mathematical principles (parametric modelling). The application supports various types of graphic generation techniques and allows for saving, exporting, and customizing vector graphics.  
 **[Try it yourself](https://tmunz.github.io/GoldenSeeds/)**
+
+![image](./example.png)
 
 ## Table of Contents
 
