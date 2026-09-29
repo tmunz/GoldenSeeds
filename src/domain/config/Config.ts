@@ -1,6 +1,8 @@
-import { Stage } from '../config/Stage';
+import { Graph } from '../graph/Graph';
+import { GraphLayout } from '../graph/GraphLayout';
 
 export interface Config {
   meta: { name: string };
-  stages: Stage[];
+  graph: Graph;
+  layout: GraphLayout;
 }

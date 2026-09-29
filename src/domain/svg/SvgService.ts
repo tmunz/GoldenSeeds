@@ -1,19 +1,22 @@
 import { SvgGeneratorResult } from '../generator/SvgGenerator';
-import { Stage } from '../config/Stage';
-import { svgGeneratorService } from '../generator/SvgGeneratorService';
 import { PointUtils } from '../../utils/PointUtils';
 
 export class SvgService {
-  public generateSvg(stages: Stage[] = [], width: number, height: number, offset = 0) {
-    const generatedStages: SvgGeneratorResult[] = [];
-    stages.forEach((stage, i) => generatedStages.push(svgGeneratorService.getResult(stage, generatedStages[i - 1])));
-
+  /**
+   * Wraps one or more already-generated SvgGeneratorResults into a single, standalone
+   * `<svg>` document, sized to width/height and centered/scaled to fit their combined
+   * bounding box. Used by the graph render node (see RenderNode.ts/RenderNodeView.tsx and
+   * GraphRenderer.ts), whose PortValue only carries the raw per-node svg fragment plus
+   * bounding box - not a displayable standalone document.
+   */
+  public wrapResults(results: SvgGeneratorResult[], width: number, height: number, offset = 0): string {
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-      <g transform="${this.centerAndScale(width, height, this.svgBoundingBox(generatedStages), offset)}">
-        ${generatedStages.map((stageResult) => stageResult.svg).join('')}
+      <g transform="${this.centerAndScale(width, height, this.svgBoundingBox(results), offset)}">
+        ${results.map((stageResult) => stageResult.svg ?? '').join('')}
       </g>
     </svg>`;
   }
+
 
   private svgBoundingBox(generatedStages: SvgGeneratorResult[]): {
     x: number;

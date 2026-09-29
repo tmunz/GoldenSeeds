@@ -1,0 +1,29 @@
+.value-node {
+  position: relative;
+  min-width: 160px;
+  border: 1px solid var(--textColorAlt);
+  border-radius: 4px;
+  background: unquote('rgb(var(--backgroundColorAlt))');
+  color: var(--textColor);
+  font-size: 11px;
+
+  .value-node-header {
+    padding: 4px 8px;
+    border-bottom: 1px solid var(--textColorAlt);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .value-node-body {
+    padding: 8px;
+  }
+
+  .value-node-port {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -1px;
+    display: flex;
+    align-items: center;
+  }
+}

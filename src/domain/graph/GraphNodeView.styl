@@ -1,0 +1,50 @@
+.graph-node {
+  min-width: 160px;
+  border: 1px solid var(--textColorAlt);
+  border-radius: 4px;
+  background: unquote('rgb(var(--backgroundColorAlt))');
+  color: var(--textColor);
+  font-size: 11px;
+
+  .graph-node-header {
+    padding: 4px 8px;
+    border-bottom: 1px solid var(--textColorAlt);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .graph-node-body {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    gap: 12px;
+  }
+
+  .graph-node-ports {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .graph-node-inputs {
+    align-items: flex-start;
+  }
+
+  .graph-node-outputs {
+    align-items: flex-end;
+  }
+
+  .graph-node-port {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 8px;
+    white-space: nowrap;
+  }
+
+  .graph-node-port-label {
+    color: var(--textColorAlt);
+  }
+}

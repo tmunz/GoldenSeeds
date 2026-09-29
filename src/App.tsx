@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { first, filter } from 'rxjs/operators';
 
-import { GoldenSeedsView } from './view/GoldenSeedsView';
+import { GraphView } from './view/GraphView';
 import { Config } from './domain/config/Config';
 import { animationService } from './domain/animation/AnimationService';
 import { configService } from './domain/config/ConfigService';
@@ -37,7 +37,7 @@ export function App() {
     const configsManageableSubscription = configManager.configsManageable$.subscribe(setConfigsManageable);
     const activeConfigSubscription = configService.config$.subscribe(setActiveConfig);
     configService.config$
-      .pipe(filter((c) => c.stages.length > 1))
+      .pipe(filter((c) => c.graph.nodes.length > 1))
       .pipe(first())
       .subscribe(() => animationService.animateDefault());
 
@@ -51,7 +51,7 @@ export function App() {
   }, [setup]);
 
   return (
-    <GoldenSeedsView
+    <GraphView
       configItems={configItems}
       configsManageable={configsManageable}
       activeConfig={activeConfig}

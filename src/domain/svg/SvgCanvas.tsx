@@ -1,14 +1,12 @@
 import React from 'react';
 
-import { Config } from '../config/Config';
-
 interface Props {
-  config: Config;
+  svgKey: string;
   svgContent?: string;
 }
 
 export function SvgCanvas(props: Props) {
-  const key = props.config.stages.reduce((id, stage) => id + '_' + stage.id, '');
+  const key = props.svgKey;
   const svgContent = props.svgContent ?? '';
   return (
     <div className="svg-canvas">

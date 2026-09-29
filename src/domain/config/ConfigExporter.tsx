@@ -11,7 +11,7 @@ export function ConfigExporter(props: {
 
   function exportConfig() {
     if (props.config) {
-      const json = ConfigService.convertConfigToRawConfig(props.config);
+      const json = ConfigService.toRawConfig(props.config);
       if (exportConfigElement.current) {
         exportConfigElement.current.download = json.meta.name + '.json';
         exportConfigElement.current.href = URL.createObjectURL(

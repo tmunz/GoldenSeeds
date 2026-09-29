@@ -1,49 +1,18 @@
-import { AnimationUtils } from './AnimationUtils';
-import { configService } from '../config/ConfigService';
-
 export class AnimationService {
-  private static START_VALUE = 1;
-  private static DURATION = 2000;
-
   isAnimating = false;
 
-  animate = (stageId: string, groupId: string, id: string, target: number) => {
-    if (!this.isAnimating) {
-      this.isAnimating = true;
-      configService.setAnimationValue(stageId, groupId, id, '' + AnimationService.START_VALUE);
-      const tStart = new Date().getTime();
-      this.animateHelper(stageId, groupId, id, target, tStart);
-    }
-  };
-
+  /**
+   * Intro animation hook, run once after the first "real" config loads (see App.tsx). It used
+   * to reach directly into the legacy per-stage config state to animate a single numeric
+   * parameter up from a start value. Parameters now live on separate, freely connectable
+   * value nodes (see ValueNodeRegistry) rendered by GraphCanvas's own internal React state,
+   * so there's no external hook to drive that animation from here anymore - this is currently
+   * a no-op.
+   */
   animateDefault() {
-    root: for (const stage of configService.config$.value.stages) {
-      for (const groupId of Object.keys(stage.generator.definition)) {
-        for (const [id, entry] of Object.entries(stage.generator.definition[groupId])) {
-          if (entry.animateable) {
-            const value = stage.state.data[groupId][id].getValue() as number; // if animateable, then value must be number
-            this.animate(stage.id, groupId, id, value);
-            break root;
-          }
-        }
-      }
-    }
+    // no-op - see class doc comment
   }
-
-  private animateHelper = (stageId: string, groupId: string, id: string, target: number, tStart: number) => {
-    const t = new Date().getTime() - tStart;
-    const progress = t / AnimationService.DURATION;
-    const raw = AnimationUtils.easeInOut(AnimationService.START_VALUE, target, progress);
-    const value: number = Math.max(0, Math.min(target, Math.round(raw)));
-    configService.setAnimationValue(stageId, groupId, id, '' + value);
-    const isComplete = target <= value;
-    if (isComplete) {
-      this.isAnimating = false;
-      configService.setAnimationValue(stageId, groupId, id, '' + target);
-    } else {
-      requestAnimationFrame(() => this.animateHelper(stageId, groupId, id, target, tStart));
-    }
-  };
 }
 
 export const animationService = new AnimationService();
+

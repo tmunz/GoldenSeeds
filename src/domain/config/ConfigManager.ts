@@ -2,7 +2,8 @@ import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { configService, ConfigService } from '../config/ConfigService';
 import { RawConfig } from '../config/RawConfig';
-import { svgService } from '../svg/SvgService';
+import { renderGraphToSvg } from '../graph/GraphRenderer';
+import { fromRawConfig, isLegacyRawConfig } from '../graph/GraphSerializer';
 import { preconfigs } from './data';
 
 
@@ -34,6 +35,15 @@ export class ConfigManager {
           const existingItems = new Map(((event.target as unknown as { result: ConfigItem[] }).result).map(item => [item.name, item]));
           this.configItemMap$.next(existingItems);
 
+          // migrate any legacy-format (pre-graph) stored configs to the current graph-native
+          // format, so no stale legacy-shaped entries are left behind in the database.
+          await Promise.all([...existingItems.values()]
+            .filter(item => isLegacyRawConfig(item.rawConfig))
+            .map(async item => {
+              const migratedConfig = await fromRawConfig(item.rawConfig);
+              await configManager.save(ConfigService.toRawConfig(migratedConfig), item.sortIndex, item.preconfig);
+            }));
+
           // add new and update all existing preconfigs
           await Promise.all(preconfigs.map((preconfig, i) => {
             const existingItem = existingItems.get(preconfig.meta.name);
@@ -63,12 +73,12 @@ export class ConfigManager {
   }
 
   select(name?: string) {
-    const config = this.configItemMap$.value.get(name ?? '') ?? { rawConfig: { meta: { name: '' }, stages: [] } };
+    const config = this.configItemMap$.value.get(name ?? '') ?? { rawConfig: { meta: { name: '' }, nodes: [], edges: [] } };
     this.setConfig(config.rawConfig);
   }
 
   async reset(name: string) {
-    const rawConfig: RawConfig = { meta: { name }, stages: [] };
+    const rawConfig: RawConfig = { meta: { name }, nodes: [], edges: [] };
     const preconfig = preconfigs.find(c => c.meta.name === name);
     const config = this.configItemMap$.value.get(name);
     if (config) {
@@ -97,11 +107,15 @@ export class ConfigManager {
     const name = rawConfig.meta.name;
     return new Promise((resolve, reject) => {
       return this.database().then(async (db) => {
-        const config = await ConfigService.convert(rawConfig);
-        const svg = svgService.generateSvg(config.stages, 1000, 1000);
+        const config = await fromRawConfig(rawConfig);
+        // always persist in the current graph-native format, even if a legacy-shaped
+        // rawConfig (e.g. an old preconfig JSON) was passed in - see fromRawConfig's
+        // automatic migration - so no legacy-shaped entries can end up stored again.
+        const migratedRawConfig = ConfigService.toRawConfig(config);
+        const svg = renderGraphToSvg(config.graph, 1000, 1000);
         const transaction = db.transaction([ConfigManager.DB_TABLE], 'readwrite');
         const objectStore = transaction.objectStore(ConfigManager.DB_TABLE);
-        const data = { name, rawConfig, svg, sortIndex, preconfig };
+        const data = { name, rawConfig: migratedRawConfig, svg, sortIndex, preconfig };
         const putRequest = objectStore.put(data);
         putRequest.addEventListener('success', () => {
           const next = new Map(this.configItemMap$.value);

@@ -1,0 +1,68 @@
+.graph-view {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+
+  &>.actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+    padding: 10px;
+    column-gap: 4px;
+    z-index: 1;
+  }
+
+  &>.graph-main {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  &>.preconfig-bar {
+    z-index: 1;
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+
+    .carousel-selector {
+      padding: 5px;
+
+      .animated-icon {
+        height: 40px;
+        width: 40px;
+      }
+    }
+
+    .carousel-overview {
+      height: 200px;
+      opacity: 0;
+      border-color: var(--textColor);
+      border-style: solid;
+      border-width: 1px 0;
+      backdrop-filter: blur(3px);
+      background: unquote('rgba(var(--backgroundColor), 0.3)');
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  &>.themer {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    z-index: 1;
+
+    h1 {
+      text-align: right;
+    }
+  }
+}

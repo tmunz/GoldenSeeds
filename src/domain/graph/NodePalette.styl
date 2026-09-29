@@ -1,0 +1,37 @@
+.node-palette {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--textColorAlt);
+  border-radius: 4px;
+  background: unquote('rgb(var(--backgroundColorAlt))');
+  color: var(--textColor);
+  font-size: 11px;
+
+  .node-palette-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+  }
+
+  select, button {
+    font-size: 11px;
+    font-family: inherit;
+    color: var(--textColor);
+    background: unquote('rgb(var(--backgroundColor))');
+    border: 1px solid var(--textColorAlt);
+    border-radius: 3px;
+    padding: 2px 4px;
+  }
+
+  button {
+    cursor: pointer;
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.5;
+    }
+  }
+}
