@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 import { configService, ConfigService } from '../config/ConfigService';
 import { RawConfig } from '../config/RawConfig';
 import { renderGraphToSvg } from '../graph/GraphRenderer';
-import { fromRawConfig, isLegacyRawConfig } from '../graph/GraphSerializer';
+import { fromRawConfig } from '../graph/GraphSerializer';
 import { preconfigs } from './data';
 
 
@@ -34,15 +34,6 @@ export class ConfigManager {
         getRequest.addEventListener('success', async (event) => {
           const existingItems = new Map(((event.target as unknown as { result: ConfigItem[] }).result).map(item => [item.name, item]));
           this.configItemMap$.next(existingItems);
-
-          // migrate any legacy-format (pre-graph) stored configs to the current graph-native
-          // format, so no stale legacy-shaped entries are left behind in the database.
-          await Promise.all([...existingItems.values()]
-            .filter(item => isLegacyRawConfig(item.rawConfig))
-            .map(async item => {
-              const migratedConfig = await fromRawConfig(item.rawConfig);
-              await configManager.save(ConfigService.toRawConfig(migratedConfig), item.sortIndex, item.preconfig);
-            }));
 
           // add new and update all existing preconfigs
           await Promise.all(preconfigs.map((preconfig, i) => {
@@ -108,14 +99,13 @@ export class ConfigManager {
     return new Promise((resolve, reject) => {
       return this.database().then(async (db) => {
         const config = await fromRawConfig(rawConfig);
-        // always persist in the current graph-native format, even if a legacy-shaped
-        // rawConfig (e.g. an old preconfig JSON) was passed in - see fromRawConfig's
-        // automatic migration - so no legacy-shaped entries can end up stored again.
-        const migratedRawConfig = ConfigService.toRawConfig(config);
+        // re-derive the persisted form from the live config, so it's always normalized to the
+        // current RawConfig shape regardless of what was passed in.
+        const normalizedRawConfig = ConfigService.toRawConfig(config);
         const svg = renderGraphToSvg(config.graph, 1000, 1000);
         const transaction = db.transaction([ConfigManager.DB_TABLE], 'readwrite');
         const objectStore = transaction.objectStore(ConfigManager.DB_TABLE);
-        const data = { name, rawConfig: migratedRawConfig, svg, sortIndex, preconfig };
+        const data = { name, rawConfig: normalizedRawConfig, svg, sortIndex, preconfig };
         const putRequest = objectStore.put(data);
         putRequest.addEventListener('success', () => {
           const next = new Map(this.configItemMap$.value);

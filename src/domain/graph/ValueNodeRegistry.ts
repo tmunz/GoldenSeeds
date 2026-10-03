@@ -15,8 +15,9 @@ export function valueNodeKind(type: ParamDefinitionType): string {
 
 /**
  * Sensible standalone defaults for each value node type's ParamDefinition (min/max/step,
- * selection options, ...), used whenever a value node isn't derived from an existing generator
- * parameter (e.g. when added from NodePalette) - see RawGraphNode.definition.
+ * selection options, ...), used as a fallback whenever a value node isn't currently connected to
+ * a generator parameter (see GraphCanvas, which derives the definition to show from whatever
+ * param port the node is connected to, instead of persisting it on the node itself).
  */
 export const DEFAULT_VALUE_DEFINITIONS: Record<ParamDefinitionType, ParamDefinition> = {
   number: { initial: '0', type: 'number', min: 0, max: 100, step: 1 },
@@ -29,13 +30,12 @@ export const DEFAULT_VALUE_DEFINITIONS: Record<ParamDefinitionType, ParamDefinit
 
 export interface ValueNodeConfig {
   state: StageItemState<unknown, unknown>;
-  definition: ParamDefinition;
 }
 
 /**
  * Source nodes with no inputs and a single typed `out` port, holding a literal value
  * (e.g. a number, color, expression, string or font). These are meant to feed into a
- * generator node's per-parameter input ports (see ParamPorts / LegacyStageAdapter),
+ * generator node's per-parameter input ports (see ParamPorts / StageGraphAdapter),
  * the same way "Number(42)" or "Color(gold)" nodes would in a visual node graph.
  *
  * They reuse the existing StageItemState implementations (NumberState, ColorState, ...)
@@ -45,7 +45,7 @@ export interface ValueNodeConfig {
 export class ValueNodeRegistry {
 
   /** Creates a value node of the given param type from its raw text representation, e.g. ('color', 'c-1', 'gold'). */
-  async createNode(type: ParamDefinitionType, id: string, textValue: string, definition?: ParamDefinition): Promise<GraphNode<ValueNodeConfig>> {
+  async createNode(type: ParamDefinitionType, id: string, textValue: string): Promise<GraphNode<ValueNodeConfig>> {
     const state = await stageItemStateService.createState(type, textValue);
     const portType = PARAM_TYPE_TO_PORT_TYPE[type];
 
@@ -54,7 +54,7 @@ export class ValueNodeRegistry {
       kind: valueNodeKind(type),
       inputs: [],
       outputs: [{ id: VALUE_OUT_PORT, type: portType }],
-      config: { state, definition: definition ?? DEFAULT_VALUE_DEFINITIONS[type] },
+      config: { state },
       evaluate: () => ({ [VALUE_OUT_PORT]: { type: portType, value: state.getValue() } as PortValue }),
     };
   }

@@ -2,7 +2,7 @@ import { SvgGeneratorService } from '../generator/SvgGeneratorService';
 import { Graph } from './Graph';
 import { GraphEdge } from './GraphEdge';
 import { GraphNode } from './GraphNode';
-import { LEGACY_STAGE_PORTS } from './LegacyStageAdapter';
+import { STAGE_RESULT_PORTS } from './StageGraphAdapter';
 
 export const RENDER_NODE_KIND = 'render';
 export const RENDER_NODE_ID = 'render-output';
@@ -14,7 +14,7 @@ export const RENDER_PREVIEW_PORT = 'preview';
 /**
  * The graph's terminal node: always present and never deletable (see GraphCanvas/GraphFlowAdapter).
  * It has the same three input ports as every generator node's result ports (grid/svg/boundingBox,
- * see LegacyStageAdapter) so it can be connected directly to any node's output. Whatever is
+ * see StageGraphAdapter) so it can be connected directly to any node's output. Whatever is
  * connected (or the individual field's default, for anything left unconnected) is combined into
  * a single `preview` output that GraphView/RenderNodeView display via SvgCanvas.
  */
@@ -45,9 +45,9 @@ export function createRenderNode(): GraphNode {
 
 /**
  * Appends the terminal render node to a graph, optionally auto-connecting the grid/svg/boundingBox
- * outputs of `connectFromNodeId` (e.g. the last legacy stage) into its matching input ports so
- * existing configs still show their previous output without the user having to wire it up by hand.
- * Does nothing if a render node is already present.
+ * outputs of `connectFromNodeId` into its matching input ports so the graph immediately shows a
+ * preview without the user having to wire it up by hand. Does nothing if a render node is already
+ * present.
  */
 export function appendRenderNode(graph: Graph, connectFromNodeId?: string): Graph {
   if (graph.nodes.some((node) => node.id === RENDER_NODE_ID)) {
@@ -57,11 +57,11 @@ export function appendRenderNode(graph: Graph, connectFromNodeId?: string): Grap
   const edges = [...graph.edges];
   if (connectFromNodeId) {
     const renderInputPorts: Record<string, string> = {
-      [LEGACY_STAGE_PORTS.GRID_PORT]: RENDER_IN_GRID_PORT,
-      [LEGACY_STAGE_PORTS.SVG_PORT]: RENDER_IN_SVG_PORT,
-      [LEGACY_STAGE_PORTS.BOUNDING_BOX_PORT]: RENDER_IN_BOUNDING_BOX_PORT,
+      [STAGE_RESULT_PORTS.GRID_PORT]: RENDER_IN_GRID_PORT,
+      [STAGE_RESULT_PORTS.SVG_PORT]: RENDER_IN_SVG_PORT,
+      [STAGE_RESULT_PORTS.BOUNDING_BOX_PORT]: RENDER_IN_BOUNDING_BOX_PORT,
     };
-    LEGACY_STAGE_PORTS.RESULT_PORTS.forEach((port) => {
+    STAGE_RESULT_PORTS.RESULT_PORTS.forEach((port) => {
       const edge: GraphEdge = {
         id: `${connectFromNodeId}.${port}->${RENDER_NODE_ID}.${renderInputPorts[port]}`,
         from: { nodeId: connectFromNodeId, port },

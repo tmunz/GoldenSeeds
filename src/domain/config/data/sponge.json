@@ -2,26 +2,173 @@
   "meta": {
     "name": "sponge"
   },
-  "stages": [{
-    "type": "tree",
-    "id": "1",
-    "data": {
-      "style": {
-        "color": "gold"
+  "nodes": [
+    {
+      "id": "1",
+      "kind": "tree"
+    },
+    {
+      "id": "1:style.color",
+      "kind": "value:color",
+      "value": "gold"
+    },
+    {
+      "id": "1:tree.depth",
+      "kind": "value:number",
+      "value": "13"
+    },
+    {
+      "id": "1:tree.seed",
+      "kind": "value:number",
+      "value": "48"
+    },
+    {
+      "id": "1:split.angle",
+      "kind": "value:number",
+      "value": "60"
+    },
+    {
+      "id": "1:split.variation",
+      "kind": "value:number",
+      "value": "0.6"
+    },
+    {
+      "id": "1:split.probability",
+      "kind": "value:number",
+      "value": "1"
+    },
+    {
+      "id": "1:length.conservation",
+      "kind": "value:number",
+      "value": "0.75"
+    },
+    {
+      "id": "1:length.variation",
+      "kind": "value:number",
+      "value": "0"
+    }
+  ],
+  "edges": [
+    {
+      "id": "1:style.color->1.param:style.color",
+      "from": {
+        "nodeId": "1:style.color",
+        "port": "out"
       },
-      "tree": {
-        "depth": "13",
-        "seed": "48"
+      "to": {
+        "nodeId": "1",
+        "port": "param:style.color"
+      }
+    },
+    {
+      "id": "1:tree.depth->1.param:tree.depth",
+      "from": {
+        "nodeId": "1:tree.depth",
+        "port": "out"
       },
-      "split": {
-        "angle": "60",
-        "variation": "0.6",
-        "probability": "1"
+      "to": {
+        "nodeId": "1",
+        "port": "param:tree.depth"
+      }
+    },
+    {
+      "id": "1:tree.seed->1.param:tree.seed",
+      "from": {
+        "nodeId": "1:tree.seed",
+        "port": "out"
       },
-      "length": {
-        "conservation": "0.75",
-        "variation": "0"
+      "to": {
+        "nodeId": "1",
+        "port": "param:tree.seed"
+      }
+    },
+    {
+      "id": "1:split.angle->1.param:split.angle",
+      "from": {
+        "nodeId": "1:split.angle",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:split.angle"
+      }
+    },
+    {
+      "id": "1:split.variation->1.param:split.variation",
+      "from": {
+        "nodeId": "1:split.variation",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:split.variation"
+      }
+    },
+    {
+      "id": "1:split.probability->1.param:split.probability",
+      "from": {
+        "nodeId": "1:split.probability",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:split.probability"
+      }
+    },
+    {
+      "id": "1:length.conservation->1.param:length.conservation",
+      "from": {
+        "nodeId": "1:length.conservation",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:length.conservation"
+      }
+    },
+    {
+      "id": "1:length.variation->1.param:length.variation",
+      "from": {
+        "nodeId": "1:length.variation",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:length.variation"
+      }
+    },
+    {
+      "id": "1.grid->render-output.grid",
+      "from": {
+        "nodeId": "1",
+        "port": "grid"
+      },
+      "to": {
+        "nodeId": "render-output",
+        "port": "grid"
+      }
+    },
+    {
+      "id": "1.svg->render-output.svg",
+      "from": {
+        "nodeId": "1",
+        "port": "svg"
+      },
+      "to": {
+        "nodeId": "render-output",
+        "port": "svg"
+      }
+    },
+    {
+      "id": "1.boundingBox->render-output.boundingBox",
+      "from": {
+        "nodeId": "1",
+        "port": "boundingBox"
+      },
+      "to": {
+        "nodeId": "render-output",
+        "port": "boundingBox"
       }
     }
-  }]
+  ]
 }

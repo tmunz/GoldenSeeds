@@ -22,6 +22,12 @@ export function paramPortId(groupId: string, id: string): string {
   return `param:${groupId}.${id}`;
 }
 
+/** Reverses paramPortId, e.g. 'param:style.fillColor' -> { groupId: 'style', id: 'fillColor' }. */
+export function parseParamPortId(portId: string): { groupId: string; id: string } | undefined {
+  const match = /^param:([^.]+)\.(.+)$/.exec(portId);
+  return match ? { groupId: match[1], id: match[2] } : undefined;
+}
+
 /** Flattens a generator's { groupId: { paramId: ParamDefinition } } definition into a list of graph ports. */
 export function collectParamPorts(definition: Record<string, Record<string, ParamDefinition>>): ParamPort[] {
   const ports: ParamPort[] = [];

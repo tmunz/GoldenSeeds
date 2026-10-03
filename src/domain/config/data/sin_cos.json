@@ -2,59 +2,454 @@
   "meta": {
     "name": "sin/cos"
   },
-  "stages": [{
-      "type": "function",
+  "nodes": [
+    {
       "id": "1",
-      "name": "sin",
-      "data": {
-        "style": {
-          "strokeColor": "patina",
-          "strokeWidth": "1",
-          "resolution": "10"
-        },
-        "plot": {
-          "output": "origin",
-          "start": "0",
-          "items": "13",
-          "functionX": "n",
-          "functionY": "Math.sin(n)"
-
-        }
-      }
+      "kind": "function"
     },
     {
-      "type": "function",
+      "id": "1:style.strokeColor",
+      "kind": "value:color",
+      "value": "patina"
+    },
+    {
+      "id": "1:style.strokeWidth",
+      "kind": "value:expression",
+      "value": "1"
+    },
+    {
+      "id": "1:style.resolution",
+      "kind": "value:number",
+      "value": "10"
+    },
+    {
+      "id": "1:plot.output",
+      "kind": "value:selection",
+      "value": "origin"
+    },
+    {
+      "id": "1:plot.start",
+      "kind": "value:number",
+      "value": "0"
+    },
+    {
+      "id": "1:plot.items",
+      "kind": "value:number",
+      "value": "13"
+    },
+    {
+      "id": "1:plot.functionX",
+      "kind": "value:expression",
+      "value": "n"
+    },
+    {
+      "id": "1:plot.functionY",
+      "kind": "value:expression",
+      "value": "Math.sin(n)"
+    },
+    {
       "id": "2",
-      "name": "cos",
-      "data": {
-        "style": {
-          "strokeColor": "gold",
-          "strokeWidth": "1",
-          "resolution": "10"
-        },
-        "plot": {
-          "output": "origin",
-          "start": "0",
-          "items": "12",
-          "functionX": "n",
-          "functionY": "Math.cos(n)"
-        }
+      "kind": "function"
+    },
+    {
+      "id": "2:style.strokeColor",
+      "kind": "value:color",
+      "value": "gold"
+    },
+    {
+      "id": "2:style.strokeWidth",
+      "kind": "value:expression",
+      "value": "1"
+    },
+    {
+      "id": "2:style.resolution",
+      "kind": "value:number",
+      "value": "10"
+    },
+    {
+      "id": "2:plot.output",
+      "kind": "value:selection",
+      "value": "origin"
+    },
+    {
+      "id": "2:plot.start",
+      "kind": "value:number",
+      "value": "0"
+    },
+    {
+      "id": "2:plot.items",
+      "kind": "value:number",
+      "value": "12"
+    },
+    {
+      "id": "2:plot.functionX",
+      "kind": "value:expression",
+      "value": "n"
+    },
+    {
+      "id": "2:plot.functionY",
+      "kind": "value:expression",
+      "value": "Math.cos(n)"
+    },
+    {
+      "id": "3",
+      "kind": "polar"
+    },
+    {
+      "id": "3:style.color",
+      "kind": "value:color",
+      "value": "white"
+    },
+    {
+      "id": "3:style.strokeWidth",
+      "kind": "value:expression",
+      "value": "1"
+    },
+    {
+      "id": "3:grid.items",
+      "kind": "value:number",
+      "value": "4"
+    },
+    {
+      "id": "3:grid.angle",
+      "kind": "value:expression",
+      "value": "180+90*n"
+    },
+    {
+      "id": "3:grid.distance",
+      "kind": "value:expression",
+      "value": "n==1 ? 2  : n==2 ? 12 : 0.5"
+    }
+  ],
+  "edges": [
+    {
+      "id": "1:style.strokeColor->1.param:style.strokeColor",
+      "from": {
+        "nodeId": "1:style.strokeColor",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:style.strokeColor"
       }
     },
     {
-      "type": "polar",
-      "id": "3",
-      "name": "axis",
-      "data": {
-        "style": {
-          "color": "white",
-          "strokeWidth": "1"
-        },
-        "grid": {
-          "items": "4",
-          "angle": "180+90*n",
-          "distance": "n==1 ? 2  : n==2 ? 12 : 0.5"
-        }
+      "id": "1:style.strokeWidth->1.param:style.strokeWidth",
+      "from": {
+        "nodeId": "1:style.strokeWidth",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:style.strokeWidth"
+      }
+    },
+    {
+      "id": "1:style.resolution->1.param:style.resolution",
+      "from": {
+        "nodeId": "1:style.resolution",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:style.resolution"
+      }
+    },
+    {
+      "id": "1:plot.output->1.param:plot.output",
+      "from": {
+        "nodeId": "1:plot.output",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:plot.output"
+      }
+    },
+    {
+      "id": "1:plot.start->1.param:plot.start",
+      "from": {
+        "nodeId": "1:plot.start",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:plot.start"
+      }
+    },
+    {
+      "id": "1:plot.items->1.param:plot.items",
+      "from": {
+        "nodeId": "1:plot.items",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:plot.items"
+      }
+    },
+    {
+      "id": "1:plot.functionX->1.param:plot.functionX",
+      "from": {
+        "nodeId": "1:plot.functionX",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:plot.functionX"
+      }
+    },
+    {
+      "id": "1:plot.functionY->1.param:plot.functionY",
+      "from": {
+        "nodeId": "1:plot.functionY",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:plot.functionY"
+      }
+    },
+    {
+      "id": "2:style.strokeColor->2.param:style.strokeColor",
+      "from": {
+        "nodeId": "2:style.strokeColor",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "param:style.strokeColor"
+      }
+    },
+    {
+      "id": "2:style.strokeWidth->2.param:style.strokeWidth",
+      "from": {
+        "nodeId": "2:style.strokeWidth",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "param:style.strokeWidth"
+      }
+    },
+    {
+      "id": "2:style.resolution->2.param:style.resolution",
+      "from": {
+        "nodeId": "2:style.resolution",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "param:style.resolution"
+      }
+    },
+    {
+      "id": "2:plot.output->2.param:plot.output",
+      "from": {
+        "nodeId": "2:plot.output",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "param:plot.output"
+      }
+    },
+    {
+      "id": "2:plot.start->2.param:plot.start",
+      "from": {
+        "nodeId": "2:plot.start",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "param:plot.start"
+      }
+    },
+    {
+      "id": "2:plot.items->2.param:plot.items",
+      "from": {
+        "nodeId": "2:plot.items",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "param:plot.items"
+      }
+    },
+    {
+      "id": "2:plot.functionX->2.param:plot.functionX",
+      "from": {
+        "nodeId": "2:plot.functionX",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "param:plot.functionX"
+      }
+    },
+    {
+      "id": "2:plot.functionY->2.param:plot.functionY",
+      "from": {
+        "nodeId": "2:plot.functionY",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "param:plot.functionY"
+      }
+    },
+    {
+      "id": "1.grid->2.grid",
+      "from": {
+        "nodeId": "1",
+        "port": "grid"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "grid"
+      }
+    },
+    {
+      "id": "1.svg->2.svg",
+      "from": {
+        "nodeId": "1",
+        "port": "svg"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "svg"
+      }
+    },
+    {
+      "id": "1.boundingBox->2.boundingBox",
+      "from": {
+        "nodeId": "1",
+        "port": "boundingBox"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "boundingBox"
+      }
+    },
+    {
+      "id": "3:style.color->3.param:style.color",
+      "from": {
+        "nodeId": "3:style.color",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "3",
+        "port": "param:style.color"
+      }
+    },
+    {
+      "id": "3:style.strokeWidth->3.param:style.strokeWidth",
+      "from": {
+        "nodeId": "3:style.strokeWidth",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "3",
+        "port": "param:style.strokeWidth"
+      }
+    },
+    {
+      "id": "3:grid.items->3.param:grid.items",
+      "from": {
+        "nodeId": "3:grid.items",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "3",
+        "port": "param:grid.items"
+      }
+    },
+    {
+      "id": "3:grid.angle->3.param:grid.angle",
+      "from": {
+        "nodeId": "3:grid.angle",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "3",
+        "port": "param:grid.angle"
+      }
+    },
+    {
+      "id": "3:grid.distance->3.param:grid.distance",
+      "from": {
+        "nodeId": "3:grid.distance",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "3",
+        "port": "param:grid.distance"
+      }
+    },
+    {
+      "id": "2.grid->3.grid",
+      "from": {
+        "nodeId": "2",
+        "port": "grid"
+      },
+      "to": {
+        "nodeId": "3",
+        "port": "grid"
+      }
+    },
+    {
+      "id": "2.svg->3.svg",
+      "from": {
+        "nodeId": "2",
+        "port": "svg"
+      },
+      "to": {
+        "nodeId": "3",
+        "port": "svg"
+      }
+    },
+    {
+      "id": "2.boundingBox->3.boundingBox",
+      "from": {
+        "nodeId": "2",
+        "port": "boundingBox"
+      },
+      "to": {
+        "nodeId": "3",
+        "port": "boundingBox"
+      }
+    },
+    {
+      "id": "3.grid->render-output.grid",
+      "from": {
+        "nodeId": "3",
+        "port": "grid"
+      },
+      "to": {
+        "nodeId": "render-output",
+        "port": "grid"
+      }
+    },
+    {
+      "id": "3.svg->render-output.svg",
+      "from": {
+        "nodeId": "3",
+        "port": "svg"
+      },
+      "to": {
+        "nodeId": "render-output",
+        "port": "svg"
+      }
+    },
+    {
+      "id": "3.boundingBox->render-output.boundingBox",
+      "from": {
+        "nodeId": "3",
+        "port": "boundingBox"
+      },
+      "to": {
+        "nodeId": "render-output",
+        "port": "boundingBox"
       }
     }
   ]

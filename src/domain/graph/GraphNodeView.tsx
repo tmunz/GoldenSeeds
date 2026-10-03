@@ -2,6 +2,7 @@ import React from 'react';
 import { Handle, Position, NodeProps } from '@xyflow/react';
 import { FlowNode } from './GraphFlowAdapter';
 import { portColor } from './PortColors';
+import { formatPortValue } from './PortValueFormat';
 
 import './GraphNodeView.styl';
 
@@ -22,6 +23,7 @@ export function GraphNodeView({ data }: NodeProps<FlowNode>) {
                 style={{ background: portColor(port.type) }}
               />
               <span className="graph-node-port-label">{port.id}</span>
+              <span className="graph-node-port-value">{formatPortValue(data.inputValues?.[port.id])}</span>
             </div>
           ))}
         </div>
@@ -44,3 +46,4 @@ export function GraphNodeView({ data }: NodeProps<FlowNode>) {
 }
 
 export const graphNodeTypes = { graphNode: GraphNodeView };
+

@@ -1,7 +1,7 @@
 import { Stage } from '../config/Stage';
 import { svgGeneratorRegistry } from '../generator/SvgGeneratorRegistry';
 import { GraphNode } from './GraphNode';
-import { stageToGraphNode } from './LegacyStageAdapter';
+import { stageToGraphNode } from './StageGraphAdapter';
 
 /**
  * Registry that exposes every existing SvgGenerator (shape, cartesian, polar, voronoi,

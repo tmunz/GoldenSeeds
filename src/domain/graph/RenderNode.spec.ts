@@ -2,7 +2,7 @@ import { Stage } from '../config/Stage';
 import { CartesianGrid } from '../generator/cartesian';
 import { SvgGeneratorService, svgGeneratorService } from '../generator/SvgGeneratorService';
 import { GraphEvaluator } from './GraphEvaluator';
-import { stagesToGraph, LEGACY_STAGE_PORTS } from './LegacyStageAdapter';
+import { stageToGraphNode, STAGE_RESULT_PORTS } from './StageGraphAdapter';
 import {
   appendRenderNode,
   ensureRenderNode,
@@ -68,17 +68,17 @@ describe('RenderNode', () => {
     expect(result.edges).toEqual([
       {
         id: 'shape-1.grid->render-output.grid',
-        from: { nodeId: 'shape-1', port: LEGACY_STAGE_PORTS.GRID_PORT },
+        from: { nodeId: 'shape-1', port: STAGE_RESULT_PORTS.GRID_PORT },
         to: { nodeId: RENDER_NODE_ID, port: RENDER_IN_GRID_PORT },
       },
       {
         id: 'shape-1.svg->render-output.svg',
-        from: { nodeId: 'shape-1', port: LEGACY_STAGE_PORTS.SVG_PORT },
+        from: { nodeId: 'shape-1', port: STAGE_RESULT_PORTS.SVG_PORT },
         to: { nodeId: RENDER_NODE_ID, port: RENDER_IN_SVG_PORT },
       },
       {
         id: 'shape-1.boundingBox->render-output.boundingBox',
-        from: { nodeId: 'shape-1', port: LEGACY_STAGE_PORTS.BOUNDING_BOX_PORT },
+        from: { nodeId: 'shape-1', port: STAGE_RESULT_PORTS.BOUNDING_BOX_PORT },
         to: { nodeId: RENDER_NODE_ID, port: RENDER_IN_BOUNDING_BOX_PORT },
       },
     ]);
@@ -91,11 +91,11 @@ describe('RenderNode', () => {
     expect(appendRenderNode(graph, 'shape-1')).toBe(graph);
   });
 
-  test('evaluating a legacy stage graph with an appended render node exposes the final SVG on the render node', async () => {
+  test('evaluating a stage graph with an appended render node exposes the final SVG on the render node', async () => {
     const cartesianStage = await new Stage('cartesian-1').with(new CartesianGrid());
     const expected = svgGeneratorService.getResult(cartesianStage, SvgGeneratorService.DEFAULT_RESULT);
 
-    const graph = appendRenderNode(stagesToGraph([cartesianStage]), 'cartesian-1');
+    const graph = appendRenderNode({ nodes: [stageToGraphNode(cartesianStage)], edges: [] }, 'cartesian-1');
     const { outputsByNode } = new GraphEvaluator().evaluate(graph);
 
     expect(outputsByNode[RENDER_NODE_ID][RENDER_PREVIEW_PORT]).toEqual({ type: 'svgResult', value: expected });

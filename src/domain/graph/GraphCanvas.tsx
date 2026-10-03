@@ -17,6 +17,7 @@ import { Graph } from './Graph';
 import { GraphEdge } from './GraphEdge';
 import { GraphNode } from './GraphNode';
 import { GraphLayout, GraphPosition } from './GraphLayout';
+import { PortValue } from './PortValue';
 import { graphNodeTypes } from './GraphNodeView';
 import { RenderNodeView } from './RenderNodeView';
 import { ValueNodeView } from './valueNode/ValueNodeView';
@@ -27,16 +28,30 @@ import {
   graphNodeToFlowNode,
   graphToFlowNodes,
   graphToFlowEdges,
+  graphEdgeToFlowEdge,
   flowEdgeToGraphEdge,
   flowNodesToLayout,
 } from './GraphFlowAdapter';
 import { isValidConnection as isValidGraphConnection } from './ConnectionValidator';
 import { graphEvaluator } from './GraphEvaluator';
-import { ensureRenderNode, RENDER_NODE_ID } from './RenderNode';
+import { ensureRenderNode, RENDER_NODE_ID, RENDER_NODE_KIND } from './RenderNode';
+import { connectResultPorts } from './StageGraphAdapter';
+import { VALUE_KIND_PREFIX, DEFAULT_VALUE_DEFINITIONS } from './ValueNodeRegistry';
+import { parseParamPortId } from './ParamPorts';
+import { ParamDefinitionType } from '../generator/SvgGenerator';
+import { Stage } from '../config/Stage';
 
 import './GraphCanvas.styl';
 
 const nodeTypes = { ...graphNodeTypes, [RENDER_FLOW_NODE_TYPE]: RenderNodeView, [VALUE_FLOW_NODE_TYPE]: ValueNodeView };
+
+/** The ParamDefinition for a generator node's param (groupId/paramId), if that node is a generator node. */
+function paramDefinitionFor(node: GraphNode | undefined, groupId: string, paramId: string) {
+  if (!node || node.kind.startsWith(VALUE_KIND_PREFIX) || node.kind === RENDER_NODE_KIND) {
+    return undefined;
+  }
+  return (node.config as Stage).generator.definition[groupId]?.[paramId];
+}
 
 export interface GraphCanvasProps {
   graph: Graph;
@@ -72,24 +87,33 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
   const handleNodesChange = useCallback(
     (changes: NodeChange<FlowNode>[]) => {
       const protectedChanges = changes.filter((change) => !(change.type === 'remove' && change.id === RENDER_NODE_ID));
-      setNodes((current) => {
-        const next = applyNodeChanges(protectedChanges, current);
+      // 'dimensions'/'select' changes fire on every re-measure (e.g. a node's content growing/
+      // shrinking as its live value preview updates) and aren't meaningful graph changes - only
+      // propagate changes that actually affect the persisted graph/layout, to avoid a feedback
+      // loop (persist -> re-evaluate -> re-render -> re-measure -> persist -> ...).
+      const persistable = protectedChanges.some((change) => change.type !== 'dimensions' && change.type !== 'select');
+      const next = applyNodeChanges(protectedChanges, nodes);
+      setNodes(next);
+      // Side effects (here: notifying the parent) must happen outside the state updater itself -
+      // React may invoke updater functions more than once, which would otherwise emit duplicate/
+      // nested updates and can trip React's "Maximum update depth exceeded" safeguard.
+      if (persistable) {
         emitChange(next, edges.map(flowEdgeToGraphEdge));
-        return next;
-      });
+      }
     },
-    [emitChange, edges],
+    [emitChange, nodes, edges],
   );
 
   const handleEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
-      setEdges((current) => {
-        const next = applyEdgeChanges(changes, current);
+      const persistable = changes.some((change) => change.type !== 'select');
+      const next = applyEdgeChanges(changes, edges);
+      setEdges(next);
+      if (persistable) {
         emitChange(nodes, next.map(flowEdgeToGraphEdge));
-        return next;
-      });
+      }
     },
-    [emitChange, nodes],
+    [emitChange, nodes, edges],
   );
 
   const handleConnect = useCallback(
@@ -102,14 +126,12 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
         from: { nodeId: connection.source, port: connection.sourceHandle },
         to: { nodeId: connection.target, port: connection.targetHandle },
       };
-      setEdges((current) => {
-        const next = [...current.filter((e) => !(e.target === edge.to.nodeId && e.targetHandle === edge.to.port)),
-          { id: edge.id, source: edge.from.nodeId, sourceHandle: edge.from.port, target: edge.to.nodeId, targetHandle: edge.to.port }];
-        emitChange(nodes, next.map(flowEdgeToGraphEdge));
-        return next;
-      });
+      const next = [...edges.filter((e) => !(e.target === edge.to.nodeId && e.targetHandle === edge.to.port)),
+        { id: edge.id, source: edge.from.nodeId, sourceHandle: edge.from.port, target: edge.to.nodeId, targetHandle: edge.to.port }];
+      setEdges(next);
+      emitChange(nodes, next.map(flowEdgeToGraphEdge));
     },
-    [emitChange, nodes],
+    [emitChange, nodes, edges],
   );
 
   const isValidConnection = useCallback(
@@ -129,13 +151,22 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
 
   const handleAddNode = useCallback(
     (node: GraphNode, position: GraphPosition) => {
-      setNodes((current) => {
-        const next = [...current, graphNodeToFlowNode(node, position)];
-        emitChange(next, edges.map(flowEdgeToGraphEdge));
-        return next;
-      });
+      const nextNodes = [...nodes, graphNodeToFlowNode(node, position)];
+      setNodes(nextNodes);
+
+      // a newly added generator node becomes the new "last stage": auto-connect its result to the
+      // render node's output, replacing whatever was connected there before, so the preview always
+      // reflects the node that was just added without the user having to wire it up by hand.
+      const isGeneratorNode = node.kind !== RENDER_NODE_KIND && !node.kind.startsWith(VALUE_KIND_PREFIX);
+      const nextEdges = isGeneratorNode
+        ? [...edges.filter((e) => e.target !== RENDER_NODE_ID), ...connectResultPorts(node.id, RENDER_NODE_ID).map(graphEdgeToFlowEdge)]
+        : edges;
+      if (isGeneratorNode) {
+        setEdges(nextEdges);
+      }
+      emitChange(nextNodes, nextEdges.map(flowEdgeToGraphEdge));
     },
-    [emitChange, edges],
+    [emitChange, nodes, edges],
   );
 
   const handleValueChange = useCallback(
@@ -143,13 +174,11 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
       // A value node's own state (see ValueNodeRegistry/ValueNodeView) is mutated in place by its
       // editor, so there's no new GraphNode object to apply via applyNodeChanges - just replace the
       // node's data wrapper to force React Flow (and the outputs/persisted config below) to refresh.
-      setNodes((current) => {
-        const next = current.map((n) => (n.id === nodeId ? { ...n, data: { ...n.data } } : n));
-        emitChange(next, edges.map(flowEdgeToGraphEdge));
-        return next;
-      });
+      const next = nodes.map((n) => (n.id === nodeId ? { ...n, data: { ...n.data } } : n));
+      setNodes(next);
+      emitChange(next, edges.map(flowEdgeToGraphEdge));
     },
-    [emitChange, edges],
+    [emitChange, nodes, edges],
   );
 
   const evaluation = useMemo(() => {
@@ -161,9 +190,48 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
     }
   }, [nodes, edges]);
 
+  const inputValuesByNode = useMemo(() => {
+    const map: Record<string, Record<string, PortValue>> = {};
+    if (!evaluation) {
+      return map;
+    }
+    edges.map(flowEdgeToGraphEdge).forEach((edge) => {
+      const value = evaluation.outputsByNode[edge.from.nodeId]?.[edge.from.port];
+      if (value) {
+        (map[edge.to.nodeId] ??= {})[edge.to.port] = value;
+      }
+    });
+    return map;
+  }, [edges, evaluation]);
+
+  const valueNodeDefinitions = useMemo(() => {
+    const map: Record<string, ReturnType<typeof paramDefinitionFor>> = {};
+    edges.map(flowEdgeToGraphEdge).forEach((edge) => {
+      const param = parseParamPortId(edge.to.port);
+      if (!param) {
+        return;
+      }
+      const targetNode = nodes.find((n) => n.id === edge.to.nodeId);
+      const definition = paramDefinitionFor(targetNode?.data.graphNode, param.groupId, param.id);
+      if (definition) {
+        map[edge.from.nodeId] = definition;
+      }
+    });
+    return map;
+  }, [nodes, edges]);
+
   const liveNodes = useMemo(
-    () => nodes.map((n) => ({ ...n, data: { ...n.data, output: evaluation?.outputsByNode[n.id], onValueChange: handleValueChange } })),
-    [nodes, evaluation, handleValueChange],
+    () => nodes.map((n) => ({
+      ...n,
+      data: {
+        ...n.data,
+        output: evaluation?.outputsByNode[n.id],
+        inputValues: inputValuesByNode[n.id],
+        definition: valueNodeDefinitions[n.id] ?? DEFAULT_VALUE_DEFINITIONS[n.data.graphNode.kind.slice(VALUE_KIND_PREFIX.length) as ParamDefinitionType],
+        onValueChange: handleValueChange,
+      },
+    })),
+    [nodes, evaluation, inputValuesByNode, handleValueChange],
   );
 
   return (
@@ -177,6 +245,7 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
           onEdgesChange={handleEdgesChange}
           onConnect={handleConnect}
           isValidConnection={isValidConnection}
+          proOptions={{ hideAttribution: true }}
           fitView
         >
           <Background />

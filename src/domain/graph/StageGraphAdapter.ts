@@ -1,6 +1,5 @@
 import { Stage } from '../config/Stage';
 import { SvgGeneratorService } from '../generator/SvgGeneratorService';
-import { Graph } from './Graph';
 import { GraphEdge } from './GraphEdge';
 import { GraphNode } from './GraphNode';
 import { collectParamPorts, paramPortId } from './ParamPorts';
@@ -19,8 +18,7 @@ const RESULT_PORTS = [GRID_PORT, SVG_PORT, BOUNDING_BOX_PORT] as const;
  * In addition, every generator parameter (e.g. style.fillColor, shape.edges, ...) is exposed
  * as its own named input port (see paramPortId). When such a port is connected, the incoming
  * value overrides the Stage's own stored parameter value for that evaluation; when
- * unconnected, the Stage's existing value (as configured in the editor / raw config) is used,
- * so this stays fully backwards compatible with the previous linear pipeline.
+ * unconnected, the Stage's own default value (see Stage.ts) is used.
  */
 export function stageToGraphNode(stage: Stage): GraphNode {
   const paramPorts = collectParamPorts(stage.generator.definition);
@@ -69,13 +67,6 @@ export function stageToGraphNode(stage: Stage): GraphNode {
   };
 }
 
-/** Builds a graph that mirrors the existing linear stage pipeline: stage[i] -> stage[i + 1]. */
-export function stagesToGraph(stages: Stage[]): Graph {
-  const nodes = stages.map(stageToGraphNode);
-  const edges: GraphEdge[] = stages.slice(1).flatMap((stage, i) => connectResultPorts(stages[i].id, stage.id));
-  return { nodes, edges };
-}
-
 /** Connects all three result ports (grid, svg, boundingBox) of one node to the same-named ports of another. */
 export function connectResultPorts(fromNodeId: string, toNodeId: string): GraphEdge[] {
   return RESULT_PORTS.map((port) => ({
@@ -85,6 +76,7 @@ export function connectResultPorts(fromNodeId: string, toNodeId: string): GraphE
   }));
 }
 
-export const LEGACY_STAGE_PORTS = { GRID_PORT, SVG_PORT, BOUNDING_BOX_PORT, RESULT_PORTS };
+export const STAGE_RESULT_PORTS = { GRID_PORT, SVG_PORT, BOUNDING_BOX_PORT, RESULT_PORTS };
+
 
 

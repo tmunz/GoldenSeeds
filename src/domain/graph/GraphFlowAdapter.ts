@@ -4,6 +4,7 @@ import { GraphNode } from './GraphNode';
 import { GraphEdge } from './GraphEdge';
 import { GraphLayout, GraphPosition, DEFAULT_POSITION } from './GraphLayout';
 import { PortValue } from './PortValue';
+import { ParamDefinition } from '../generator/SvgGenerator';
 import { RENDER_NODE_KIND } from './RenderNode';
 import { VALUE_KIND_PREFIX } from './ValueNodeRegistry';
 
@@ -15,10 +16,17 @@ export interface GraphNodeData extends Record<string, unknown> {
   graphNode: GraphNode;
   /** The node's live evaluated outputs (see GraphEvaluator), refreshed by GraphCanvas on every change. */
   output?: Record<string, PortValue>;
+  /** The current value flowing into each of the node's connected input ports, keyed by port id. */
+  inputValues?: Record<string, PortValue>;
+  /** Value nodes only: the ParamDefinition of whatever generator parameter the node is currently
+   * connected to (falling back to a generic default - see ValueNodeRegistry - when unconnected),
+   * derived by GraphCanvas instead of being persisted on the node itself. */
+  definition?: ParamDefinition;
   /** Value nodes only: notifies GraphCanvas that the node's own state was mutated in place (e.g. via
    * its editor - see ValueNodeView), so it can re-evaluate the graph and persist the change. */
   onValueChange?: (nodeId: string) => void;
 }
+
 
 export type FlowNode = Node<GraphNodeData>;
 

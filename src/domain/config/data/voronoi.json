@@ -2,31 +2,194 @@
   "meta": {
     "name": "voronoi"
   },
-  "stages": [{
-    "type": "polar",
-    "id": "1",
-    "data": {
-      "style": {
-        "color": "transparent",
-        "items": "34"
+  "nodes": [
+    {
+      "id": "1",
+      "kind": "polar"
+    },
+    {
+      "id": "1:style.color",
+      "kind": "value:color",
+      "value": "transparent"
+    },
+    {
+      "id": "1:grid.angle",
+      "kind": "value:expression",
+      "value": "n * 360 / goldenRatio"
+    },
+    {
+      "id": "1:grid.distance",
+      "kind": "value:expression",
+      "value": "Math.pow(n, 1 / goldenRatio)"
+    },
+    {
+      "id": "2",
+      "kind": "voronoi"
+    },
+    {
+      "id": "2:style.fillColor",
+      "kind": "value:color",
+      "value": "random"
+    },
+    {
+      "id": "2:style.strokeColor",
+      "kind": "value:color",
+      "value": "gold"
+    },
+    {
+      "id": "2:style.strokeWidth",
+      "kind": "value:number",
+      "value": "1"
+    },
+    {
+      "id": "2:cells.gap",
+      "kind": "value:number",
+      "value": "0.1"
+    }
+  ],
+  "edges": [
+    {
+      "id": "1:style.color->1.param:style.color",
+      "from": {
+        "nodeId": "1:style.color",
+        "port": "out"
       },
-      "grid": {
-        "angle": "n * 360 / goldenRatio",
-        "distance": "Math.pow(n, 1 / goldenRatio)"
+      "to": {
+        "nodeId": "1",
+        "port": "param:style.color"
+      }
+    },
+    {
+      "id": "1:grid.angle->1.param:grid.angle",
+      "from": {
+        "nodeId": "1:grid.angle",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:grid.angle"
+      }
+    },
+    {
+      "id": "1:grid.distance->1.param:grid.distance",
+      "from": {
+        "nodeId": "1:grid.distance",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:grid.distance"
+      }
+    },
+    {
+      "id": "2:style.fillColor->2.param:style.fillColor",
+      "from": {
+        "nodeId": "2:style.fillColor",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "param:style.fillColor"
+      }
+    },
+    {
+      "id": "2:style.strokeColor->2.param:style.strokeColor",
+      "from": {
+        "nodeId": "2:style.strokeColor",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "param:style.strokeColor"
+      }
+    },
+    {
+      "id": "2:style.strokeWidth->2.param:style.strokeWidth",
+      "from": {
+        "nodeId": "2:style.strokeWidth",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "param:style.strokeWidth"
+      }
+    },
+    {
+      "id": "2:cells.gap->2.param:cells.gap",
+      "from": {
+        "nodeId": "2:cells.gap",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "param:cells.gap"
+      }
+    },
+    {
+      "id": "1.grid->2.grid",
+      "from": {
+        "nodeId": "1",
+        "port": "grid"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "grid"
+      }
+    },
+    {
+      "id": "1.svg->2.svg",
+      "from": {
+        "nodeId": "1",
+        "port": "svg"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "svg"
+      }
+    },
+    {
+      "id": "1.boundingBox->2.boundingBox",
+      "from": {
+        "nodeId": "1",
+        "port": "boundingBox"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "boundingBox"
+      }
+    },
+    {
+      "id": "2.grid->render-output.grid",
+      "from": {
+        "nodeId": "2",
+        "port": "grid"
+      },
+      "to": {
+        "nodeId": "render-output",
+        "port": "grid"
+      }
+    },
+    {
+      "id": "2.svg->render-output.svg",
+      "from": {
+        "nodeId": "2",
+        "port": "svg"
+      },
+      "to": {
+        "nodeId": "render-output",
+        "port": "svg"
+      }
+    },
+    {
+      "id": "2.boundingBox->render-output.boundingBox",
+      "from": {
+        "nodeId": "2",
+        "port": "boundingBox"
+      },
+      "to": {
+        "nodeId": "render-output",
+        "port": "boundingBox"
       }
     }
-  }, {
-    "type": "voronoi",
-    "id": "2",
-    "data": {
-      "style": {
-        "fillColor": "random",
-        "strokeColor": "gold",
-        "strokeWidth": "1"
-      },
-      "cells": {
-        "gap": "0.1"
-      }
-    }
-  }]
+  ]
 }

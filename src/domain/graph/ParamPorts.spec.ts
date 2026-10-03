@@ -2,10 +2,9 @@ import { CartesianGrid } from '../generator/cartesian';
 import { Shape } from '../generator/shape';
 import { GraphEvaluator } from './GraphEvaluator';
 import { paramPortId } from './ParamPorts';
-import { stageToGraphNode } from './LegacyStageAdapter';
+import { stageToGraphNode, STAGE_RESULT_PORTS } from './StageGraphAdapter';
 import { generatorNodeRegistry } from './GeneratorNodeRegistry';
 import { valueNodeRegistry } from './ValueNodeRegistry';
-import { LEGACY_STAGE_PORTS } from './LegacyStageAdapter';
 import { Stage } from '../config/Stage';
 
 describe('ParamPorts / generator node parameter inputs', () => {
@@ -14,9 +13,9 @@ describe('ParamPorts / generator node parameter inputs', () => {
 
     // 'grid'/'svg'/'boundingBox' result ports plus one port per param across all groups
     // (style.color, style.strokeWidth, grid.items, ...)
-    expect(node.inputs).toContainEqual({ id: LEGACY_STAGE_PORTS.GRID_PORT, type: 'grid' });
-    expect(node.inputs).toContainEqual({ id: LEGACY_STAGE_PORTS.SVG_PORT, type: 'svg' });
-    expect(node.inputs).toContainEqual({ id: LEGACY_STAGE_PORTS.BOUNDING_BOX_PORT, type: 'boundingBox' });
+    expect(node.inputs).toContainEqual({ id: STAGE_RESULT_PORTS.GRID_PORT, type: 'grid' });
+    expect(node.inputs).toContainEqual({ id: STAGE_RESULT_PORTS.SVG_PORT, type: 'svg' });
+    expect(node.inputs).toContainEqual({ id: STAGE_RESULT_PORTS.BOUNDING_BOX_PORT, type: 'boundingBox' });
     expect(node.inputs).toContainEqual({ id: paramPortId('style', 'color'), type: 'color' });
     expect(node.inputs).toContainEqual({ id: paramPortId('style', 'strokeWidth'), type: 'expression' });
     expect(node.inputs).toContainEqual({ id: paramPortId('grid', 'items'), type: 'number' });
@@ -28,7 +27,7 @@ describe('ParamPorts / generator node parameter inputs', () => {
     const node = stageToGraphNode(stage);
 
     const { outputsByNode } = new GraphEvaluator().evaluate({ nodes: [node], edges: [] });
-    const gridOut = outputsByNode['cartesian-1'][LEGACY_STAGE_PORTS.GRID_PORT];
+    const gridOut = outputsByNode['cartesian-1'][STAGE_RESULT_PORTS.GRID_PORT];
 
     expect(gridOut.type).toBe('grid');
     // default 'grid.items' is 20 -> non-empty grid/svg is produced
@@ -52,10 +51,10 @@ describe('ParamPorts / generator node parameter inputs', () => {
     };
 
     const { outputsByNode } = new GraphEvaluator().evaluate(graphWithOverride);
-    const overriddenOut = outputsByNode['cartesian-1'][LEGACY_STAGE_PORTS.GRID_PORT];
+    const overriddenOut = outputsByNode['cartesian-1'][STAGE_RESULT_PORTS.GRID_PORT];
 
     const { outputsByNode: baselineOutputs } = new GraphEvaluator().evaluate({ nodes: [generatorNode], edges: [] });
-    const baselineOut = baselineOutputs['cartesian-1'][LEGACY_STAGE_PORTS.GRID_PORT];
+    const baselineOut = baselineOutputs['cartesian-1'][STAGE_RESULT_PORTS.GRID_PORT];
 
     expect(overriddenOut).not.toEqual(baselineOut);
     expect(overriddenOut.type === 'grid' && overriddenOut.value.length).toBe(4);
@@ -77,7 +76,7 @@ describe('ParamPorts / generator node parameter inputs', () => {
       ],
     });
 
-    const out = outputsByNode['shape-1'][LEGACY_STAGE_PORTS.SVG_PORT];
+    const out = outputsByNode['shape-1'][STAGE_RESULT_PORTS.SVG_PORT];
     expect(out.type).toBe('svg');
     expect(out.type === 'svg' && out.value).toEqual(expect.stringContaining('fill="#ff0000"'));
   });

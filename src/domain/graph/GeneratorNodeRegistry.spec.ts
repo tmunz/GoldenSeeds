@@ -1,6 +1,6 @@
 import { GraphEvaluator } from './GraphEvaluator';
 import { generatorNodeRegistry } from './GeneratorNodeRegistry';
-import { LEGACY_STAGE_PORTS } from './LegacyStageAdapter';
+import { STAGE_RESULT_PORTS } from './StageGraphAdapter';
 
 describe('GeneratorNodeRegistry', () => {
   test('exposes all registered generator kinds', () => {
@@ -17,17 +17,17 @@ describe('GeneratorNodeRegistry', () => {
       const node = await generatorNodeRegistry.createNode(kind, `${kind}-1`);
 
       expect(node.kind).toBe(kind);
-      expect(node.inputs).toContainEqual({ id: LEGACY_STAGE_PORTS.GRID_PORT, type: 'grid' });
-      expect(node.inputs).toContainEqual({ id: LEGACY_STAGE_PORTS.SVG_PORT, type: 'svg' });
-      expect(node.inputs).toContainEqual({ id: LEGACY_STAGE_PORTS.BOUNDING_BOX_PORT, type: 'boundingBox' });
+      expect(node.inputs).toContainEqual({ id: STAGE_RESULT_PORTS.GRID_PORT, type: 'grid' });
+      expect(node.inputs).toContainEqual({ id: STAGE_RESULT_PORTS.SVG_PORT, type: 'svg' });
+      expect(node.inputs).toContainEqual({ id: STAGE_RESULT_PORTS.BOUNDING_BOX_PORT, type: 'boundingBox' });
       expect(node.outputs).toEqual([
-        { id: LEGACY_STAGE_PORTS.GRID_PORT, type: 'grid' },
-        { id: LEGACY_STAGE_PORTS.SVG_PORT, type: 'svg' },
-        { id: LEGACY_STAGE_PORTS.BOUNDING_BOX_PORT, type: 'boundingBox' },
+        { id: STAGE_RESULT_PORTS.GRID_PORT, type: 'grid' },
+        { id: STAGE_RESULT_PORTS.SVG_PORT, type: 'svg' },
+        { id: STAGE_RESULT_PORTS.BOUNDING_BOX_PORT, type: 'boundingBox' },
       ]);
 
       const { outputsByNode } = new GraphEvaluator().evaluate({ nodes: [node], edges: [] });
-      const svgOut = outputsByNode[node.id][LEGACY_STAGE_PORTS.SVG_PORT];
+      const svgOut = outputsByNode[node.id][STAGE_RESULT_PORTS.SVG_PORT];
 
       expect(svgOut.type).toBe('svg');
       expect(svgOut.type === 'svg' && typeof svgOut.value).toBe('string');
@@ -48,14 +48,14 @@ describe('GeneratorNodeRegistry', () => {
       edges: [
         {
           id: 'cartesian-1->shape-1',
-          from: { nodeId: 'cartesian-1', port: LEGACY_STAGE_PORTS.SVG_PORT },
-          to: { nodeId: 'shape-1', port: LEGACY_STAGE_PORTS.SVG_PORT },
+          from: { nodeId: 'cartesian-1', port: STAGE_RESULT_PORTS.SVG_PORT },
+          to: { nodeId: 'shape-1', port: STAGE_RESULT_PORTS.SVG_PORT },
         },
       ],
     });
 
     expect(order).toEqual(['cartesian-1', 'shape-1']);
-    const shapeOut = outputsByNode['shape-1'][LEGACY_STAGE_PORTS.SVG_PORT];
+    const shapeOut = outputsByNode['shape-1'][STAGE_RESULT_PORTS.SVG_PORT];
     expect(shapeOut.type === 'svg' && shapeOut.value?.length).toBeGreaterThan(0);
   });
 

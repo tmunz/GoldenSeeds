@@ -7,7 +7,7 @@ import type { Font } from 'opentype.js';
 
 export type PortValue =
   // The three fields of SvgGeneratorResult, exposed as their own connectable ports on
-  // generator nodes (see LegacyStageAdapter) instead of one opaque combined port. This lets
+  // generator nodes (see StageGraphAdapter) instead of one opaque combined port. This lets
   // e.g. only the boundingBox (or only the svg fragment) of one node feed another.
   | { type: 'grid'; value: number[][] }
   | { type: 'svg'; value: string | null }

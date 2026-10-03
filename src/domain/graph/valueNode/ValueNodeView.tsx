@@ -8,7 +8,7 @@ import { NumberState } from '../../config/stageItemState/NumberState';
 import { ExpressionState } from '../../config/stageItemState/ExpressionState';
 import { StringState } from '../../config/stageItemState/StringState';
 import { FontState } from '../../config/stageItemState/FontState';
-import { ParamDefinitionMinMaxStep, ParamDefinitionSelection } from '../../generator/SvgGenerator';
+import { ParamDefinition, ParamDefinitionMinMaxStep, ParamDefinitionSelection } from '../../generator/SvgGenerator';
 import {
   ColorValueEditor,
   NumberValueEditor,
@@ -20,20 +20,20 @@ import {
 
 import './ValueNodeView.styl';
 
-function renderEditor(kind: string, config: ValueNodeConfig, onCommit: () => void) {
+function renderEditor(kind: string, state: ValueNodeConfig['state'], definition: ParamDefinition | undefined, onCommit: () => void) {
   switch (kind) {
   case 'value:color':
-    return <ColorValueEditor state={config.state as ColorState} onCommit={onCommit} />;
+    return <ColorValueEditor state={state as ColorState} onCommit={onCommit} />;
   case 'value:number':
-    return <NumberValueEditor state={config.state as NumberState} definition={config.definition as ParamDefinitionMinMaxStep} onCommit={onCommit} />;
+    return <NumberValueEditor state={state as NumberState} definition={definition as ParamDefinitionMinMaxStep} onCommit={onCommit} />;
   case 'value:expression':
-    return <ExpressionValueEditor state={config.state as ExpressionState} definition={config.definition as ParamDefinitionMinMaxStep} onCommit={onCommit} />;
+    return <ExpressionValueEditor state={state as ExpressionState} definition={definition as ParamDefinitionMinMaxStep} onCommit={onCommit} />;
   case 'value:string':
-    return <StringValueEditor state={config.state as StringState} onCommit={onCommit} />;
+    return <StringValueEditor state={state as StringState} onCommit={onCommit} />;
   case 'value:selection':
-    return <SelectionValueEditor state={config.state as StringState} definition={config.definition as ParamDefinitionSelection} onCommit={onCommit} />;
+    return <SelectionValueEditor state={state as StringState} definition={definition as ParamDefinitionSelection} onCommit={onCommit} />;
   case 'value:font':
-    return <FontValueEditor state={config.state as FontState} onCommit={onCommit} />;
+    return <FontValueEditor state={state as FontState} onCommit={onCommit} />;
   default:
     return null;
   }
@@ -48,7 +48,7 @@ function renderEditor(kind: string, config: ValueNodeConfig, onCommit: () => voi
  */
 export function ValueNodeView({ id, data }: NodeProps<FlowNode>) {
   const { graphNode } = data;
-  const config = graphNode.config as ValueNodeConfig;
+  const { state } = graphNode.config as ValueNodeConfig;
   const outputPort = graphNode.outputs[0];
 
   function commit() {
@@ -59,7 +59,7 @@ export function ValueNodeView({ id, data }: NodeProps<FlowNode>) {
     <div className="value-node">
       <div className="value-node-header">{graphNode.kind.slice('value:'.length)}</div>
       <div className="value-node-body">
-        {renderEditor(graphNode.kind, config, commit)}
+        {renderEditor(graphNode.kind, state, data.definition, commit)}
       </div>
       {outputPort && (
         <div className="value-node-port">
