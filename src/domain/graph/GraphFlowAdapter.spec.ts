@@ -32,6 +32,7 @@ describe('GraphFlowAdapter', () => {
       position: { x: 0, y: 0 },
       data: { graphNode: node },
       deletable: true,
+      dragHandle: '.graph-node-header',
     });
   });
 

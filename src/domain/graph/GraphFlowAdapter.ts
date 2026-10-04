@@ -16,8 +16,12 @@ export interface GraphNodeData extends Record<string, unknown> {
   graphNode: GraphNode;
   /** The node's live evaluated outputs (see GraphEvaluator), refreshed by GraphCanvas on every change. */
   output?: Record<string, PortValue>;
-  /** The current value flowing into each of the node's connected input ports, keyed by port id. */
+  /** The value at each of the node's input ports: either the value flowing in through a connected
+   * edge, or (for generator node param ports - see ParamPorts) its own default value (see Stage.ts)
+   * when nothing is connected - see `connectedInputPorts` to tell the two cases apart. */
   inputValues?: Record<string, PortValue>;
+  /** Which of the node's input ports actually have an incoming edge, vs. falling back to a default. */
+  connectedInputPorts?: Set<string>;
   /** Value nodes only: the ParamDefinition of whatever generator parameter the node is currently
    * connected to (falling back to a generic default - see ValueNodeRegistry - when unconnected),
    * derived by GraphCanvas instead of being persisted on the node itself. */
@@ -40,14 +44,23 @@ function flowNodeType(kind: string): string {
   return GRAPH_NODE_TYPE;
 }
 
+/** CSS selector of the header element that alone should drag each node type (see GraphNodeView/RenderNodeView/ValueNodeView) - anywhere else, including draggable inputs like sliders, is left to interact normally instead of moving the node. */
+const DRAG_HANDLE_BY_FLOW_TYPE: Record<string, string> = {
+  [GRAPH_NODE_TYPE]: '.graph-node-header',
+  [RENDER_FLOW_NODE_TYPE]: '.render-node-header',
+  [VALUE_FLOW_NODE_TYPE]: '.value-node-header',
+};
+
 /** Converts a single GraphNode into a React Flow node, using the given (or default) layout position. */
 export function graphNodeToFlowNode(node: GraphNode, position: GraphPosition = DEFAULT_POSITION): FlowNode {
+  const type = flowNodeType(node.kind);
   return {
     id: node.id,
-    type: flowNodeType(node.kind),
+    type,
     position,
     data: { graphNode: node },
     deletable: node.kind !== RENDER_NODE_KIND,
+    dragHandle: DRAG_HANDLE_BY_FLOW_TYPE[type],
   };
 }
 

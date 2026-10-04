@@ -14,18 +14,23 @@ export function GraphNodeView({ data }: NodeProps<FlowNode>) {
       <div className="graph-node-header">{graphNode.kind}</div>
       <div className="graph-node-body">
         <div className="graph-node-ports graph-node-inputs">
-          {graphNode.inputs.map((port) => (
-            <div className="graph-node-port" key={port.id}>
-              <Handle
-                type="target"
-                position={Position.Left}
-                id={port.id}
-                style={{ background: portColor(port.type) }}
-              />
-              <span className="graph-node-port-label">{port.id}</span>
-              <span className="graph-node-port-value">{formatPortValue(data.inputValues?.[port.id])}</span>
-            </div>
-          ))}
+          {graphNode.inputs.map((port) => {
+            const isConnected = data.connectedInputPorts?.has(port.id) ?? false;
+            return (
+              <div className="graph-node-port" key={port.id}>
+                <Handle
+                  type="target"
+                  position={Position.Left}
+                  id={port.id}
+                  style={{ background: portColor(port.type) }}
+                />
+                <span className="graph-node-port-label">{port.id}</span>
+                <span className={`graph-node-port-value${isConnected ? '' : ' graph-node-port-value-default'}`}>
+                  {formatPortValue(data.inputValues?.[port.id])}
+                </span>
+              </div>
+            );
+          })}
         </div>
         <div className="graph-node-ports graph-node-outputs">
           {graphNode.outputs.map((port) => (

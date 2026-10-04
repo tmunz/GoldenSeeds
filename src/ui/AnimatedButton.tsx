@@ -27,7 +27,7 @@ export function AnimatedButton(props: {
   useEffect(() => {
     if (props.active === undefined) {
       if (active === true) {
-        setTimeout(() => setActive(false), 500);
+        setTimeout(() => setActive(false), 200);
       }
     } else {
       setActive(props.active);

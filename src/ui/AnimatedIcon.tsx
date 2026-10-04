@@ -41,7 +41,7 @@ export function AnimatedIcon(props: Props) {
             begin="indefinite"
             fill="freeze"
             attributeName="points"
-            dur="500ms"
+            dur="200ms"
             ref={e => refs.current[i] = e}
             to={toPath(points)}
           />

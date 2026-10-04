@@ -1,10 +1,11 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import {
   ReactFlow,
   Background,
   Controls,
   MiniMap,
   Connection,
+  Edge,
   applyNodeChanges,
   applyEdgeChanges,
   NodeChange,
@@ -37,7 +38,7 @@ import { graphEvaluator } from './GraphEvaluator';
 import { ensureRenderNode, RENDER_NODE_ID, RENDER_NODE_KIND } from './RenderNode';
 import { connectResultPorts } from './StageGraphAdapter';
 import { VALUE_KIND_PREFIX, DEFAULT_VALUE_DEFINITIONS } from './ValueNodeRegistry';
-import { parseParamPortId } from './ParamPorts';
+import { parseParamPortId, collectParamPorts } from './ParamPorts';
 import { ParamDefinitionType } from '../generator/SvgGenerator';
 import { Stage } from '../config/Stage';
 
@@ -53,10 +54,38 @@ function paramDefinitionFor(node: GraphNode | undefined, groupId: string, paramI
   return (node.config as Stage).generator.definition[groupId]?.[paramId];
 }
 
+/** A generator node's own default value (see Stage.ts) for each of its parameter ports. */
+function defaultParamValues(node: GraphNode): Record<string, PortValue> | undefined {
+  if (node.kind.startsWith(VALUE_KIND_PREFIX) || node.kind === RENDER_NODE_KIND) {
+    return undefined;
+  }
+  const stage = node.config as Stage;
+  const values: Record<string, PortValue> = {};
+  collectParamPorts(stage.generator.definition).forEach((p) => {
+    const state = stage.state.data[p.groupId]?.[p.id];
+    if (state) {
+      values[p.portId] = { type: p.portType, value: state.getValue() } as PortValue;
+    }
+  });
+  return values;
+}
+
 export interface GraphCanvasProps {
   graph: Graph;
   layout?: GraphLayout;
   onGraphChange: (graph: Graph, layout: GraphLayout) => void;
+  /** Called whenever the undo/redo history changes, so the caller can reflect it on its own buttons. */
+  onHistoryChange?: (state: { canUndo: boolean; canRedo: boolean }) => void;
+}
+
+export interface GraphCanvasHandle {
+  undo: () => void;
+  redo: () => void;
+}
+
+interface GraphSnapshot {
+  nodes: FlowNode[];
+  edges: Edge[];
 }
 
 /**
@@ -72,9 +101,21 @@ export interface GraphCanvasProps {
  * - The full graph is re-evaluated (see GraphEvaluator) on every change so every node's live output
  *   (including the render node's preview) stays up to date.
  */
-export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasProps) {
+export const GraphCanvas = forwardRef<GraphCanvasHandle, GraphCanvasProps>(function GraphCanvas({ graph, layout = {}, onGraphChange, onHistoryChange }, ref) {
   const [nodes, setNodes] = useState<FlowNode[]>(() => graphToFlowNodes(ensureRenderNode(graph), layout));
   const [edges, setEdges] = useState(() => graphToFlowEdges(ensureRenderNode(graph)));
+
+  // undo/redo history: a stack of snapshots taken right before each user-visible change (a drag's
+  // start, a connect/add/remove, or the first edit of a run of value-node edits - see
+  // handleValueChange). dragSnapshotRef/lastEditedValueNodeRef track the in-progress gesture so a
+  // whole drag or a burst of keystrokes in the same value node collapses into a single undo step.
+  const [history, setHistory] = useState<{ past: GraphSnapshot[]; future: GraphSnapshot[] }>({ past: [], future: [] });
+  const dragSnapshotRef = useRef<GraphSnapshot | null>(null);
+  const lastEditedValueNodeRef = useRef<string | null>(null);
+
+  const pushHistory = useCallback((snapshot: GraphSnapshot) => {
+    setHistory((h) => ({ past: [...h.past, snapshot], future: [] }));
+  }, []);
 
   const emitChange = useCallback(
     (nextNodes: FlowNode[], nextEdgeList: GraphEdge[]) => {
@@ -84,6 +125,36 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
     [onGraphChange],
   );
 
+  const undo = useCallback(() => {
+    if (history.past.length === 0) {
+      return;
+    }
+    const previous = history.past[history.past.length - 1];
+    setHistory({ past: history.past.slice(0, -1), future: [{ nodes, edges }, ...history.future] });
+    setNodes(previous.nodes);
+    setEdges(previous.edges);
+    emitChange(previous.nodes, previous.edges.map(flowEdgeToGraphEdge));
+    lastEditedValueNodeRef.current = null;
+  }, [history, nodes, edges, emitChange]);
+
+  const redo = useCallback(() => {
+    if (history.future.length === 0) {
+      return;
+    }
+    const next = history.future[0];
+    setHistory({ past: [...history.past, { nodes, edges }], future: history.future.slice(1) });
+    setNodes(next.nodes);
+    setEdges(next.edges);
+    emitChange(next.nodes, next.edges.map(flowEdgeToGraphEdge));
+    lastEditedValueNodeRef.current = null;
+  }, [history, nodes, edges, emitChange]);
+
+  useImperativeHandle(ref, () => ({ undo, redo }), [undo, redo]);
+
+  useEffect(() => {
+    onHistoryChange?.({ canUndo: history.past.length > 0, canRedo: history.future.length > 0 });
+  }, [history, onHistoryChange]);
+
   const handleNodesChange = useCallback(
     (changes: NodeChange<FlowNode>[]) => {
       const protectedChanges = changes.filter((change) => !(change.type === 'remove' && change.id === RENDER_NODE_ID));
@@ -92,6 +163,15 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
       // propagate changes that actually affect the persisted graph/layout, to avoid a feedback
       // loop (persist -> re-evaluate -> re-render -> re-measure -> persist -> ...).
       const persistable = protectedChanges.some((change) => change.type !== 'dimensions' && change.type !== 'select');
+      const isPositionChange = (change: NodeChange<FlowNode>): change is Extract<NodeChange<FlowNode>, { type: 'position' }> => change.type === 'position';
+
+      // a drag is one continuous gesture made of many intermediate position changes - remember
+      // the state from right before it started, and only record it as a single undo step once
+      // the drag ends (dragging: false), instead of one step per mouse-move frame.
+      if (!dragSnapshotRef.current && protectedChanges.some((c) => isPositionChange(c) && c.dragging)) {
+        dragSnapshotRef.current = { nodes, edges };
+      }
+
       const next = applyNodeChanges(protectedChanges, nodes);
       setNodes(next);
       // Side effects (here: notifying the parent) must happen outside the state updater itself -
@@ -100,20 +180,35 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
       if (persistable) {
         emitChange(next, edges.map(flowEdgeToGraphEdge));
       }
+
+      if (protectedChanges.some((c) => isPositionChange(c) && c.dragging === false)) {
+        if (dragSnapshotRef.current) {
+          pushHistory(dragSnapshotRef.current);
+          dragSnapshotRef.current = null;
+          lastEditedValueNodeRef.current = null;
+        }
+      } else if (persistable && !protectedChanges.some(isPositionChange)) {
+        pushHistory({ nodes, edges });
+        lastEditedValueNodeRef.current = null;
+      }
     },
-    [emitChange, nodes, edges],
+    [emitChange, nodes, edges, pushHistory],
   );
 
   const handleEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
       const persistable = changes.some((change) => change.type !== 'select');
+      if (persistable) {
+        pushHistory({ nodes, edges });
+        lastEditedValueNodeRef.current = null;
+      }
       const next = applyEdgeChanges(changes, edges);
       setEdges(next);
       if (persistable) {
         emitChange(nodes, next.map(flowEdgeToGraphEdge));
       }
     },
-    [emitChange, nodes, edges],
+    [emitChange, nodes, edges, pushHistory],
   );
 
   const handleConnect = useCallback(
@@ -128,10 +223,12 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
       };
       const next = [...edges.filter((e) => !(e.target === edge.to.nodeId && e.targetHandle === edge.to.port)),
         { id: edge.id, source: edge.from.nodeId, sourceHandle: edge.from.port, target: edge.to.nodeId, targetHandle: edge.to.port }];
+      pushHistory({ nodes, edges });
+      lastEditedValueNodeRef.current = null;
       setEdges(next);
       emitChange(nodes, next.map(flowEdgeToGraphEdge));
     },
-    [emitChange, nodes, edges],
+    [emitChange, nodes, edges, pushHistory],
   );
 
   const isValidConnection = useCallback(
@@ -151,6 +248,8 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
 
   const handleAddNode = useCallback(
     (node: GraphNode, position: GraphPosition) => {
+      pushHistory({ nodes, edges });
+      lastEditedValueNodeRef.current = null;
       const nextNodes = [...nodes, graphNodeToFlowNode(node, position)];
       setNodes(nextNodes);
 
@@ -166,7 +265,7 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
       }
       emitChange(nextNodes, nextEdges.map(flowEdgeToGraphEdge));
     },
-    [emitChange, nodes, edges],
+    [emitChange, nodes, edges, pushHistory],
   );
 
   const handleValueChange = useCallback(
@@ -174,11 +273,17 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
       // A value node's own state (see ValueNodeRegistry/ValueNodeView) is mutated in place by its
       // editor, so there's no new GraphNode object to apply via applyNodeChanges - just replace the
       // node's data wrapper to force React Flow (and the outputs/persisted config below) to refresh.
+      // A burst of edits to the same value node (e.g. every keystroke) collapses into a single undo
+      // step; switching to a different node (or any other change) starts a new one.
+      if (lastEditedValueNodeRef.current !== nodeId) {
+        pushHistory({ nodes, edges });
+        lastEditedValueNodeRef.current = nodeId;
+      }
       const next = nodes.map((n) => (n.id === nodeId ? { ...n, data: { ...n.data } } : n));
       setNodes(next);
       emitChange(next, edges.map(flowEdgeToGraphEdge));
     },
-    [emitChange, nodes, edges],
+    [emitChange, nodes, edges, pushHistory],
   );
 
   const evaluation = useMemo(() => {
@@ -192,6 +297,14 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
 
   const inputValuesByNode = useMemo(() => {
     const map: Record<string, Record<string, PortValue>> = {};
+    // start every generator node's param ports from its own default value (see Stage.ts), so
+    // unconnected params still show what value is actually being used for evaluation.
+    nodes.forEach((n) => {
+      const defaults = defaultParamValues(n.data.graphNode);
+      if (defaults) {
+        map[n.id] = defaults;
+      }
+    });
     if (!evaluation) {
       return map;
     }
@@ -202,7 +315,15 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
       }
     });
     return map;
-  }, [edges, evaluation]);
+  }, [nodes, edges, evaluation]);
+
+  const connectedInputPortsByNode = useMemo(() => {
+    const map: Record<string, Set<string>> = {};
+    edges.map(flowEdgeToGraphEdge).forEach((edge) => {
+      (map[edge.to.nodeId] ??= new Set()).add(edge.to.port);
+    });
+    return map;
+  }, [edges]);
 
   const valueNodeDefinitions = useMemo(() => {
     const map: Record<string, ReturnType<typeof paramDefinitionFor>> = {};
@@ -227,11 +348,12 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
         ...n.data,
         output: evaluation?.outputsByNode[n.id],
         inputValues: inputValuesByNode[n.id],
+        connectedInputPorts: connectedInputPortsByNode[n.id],
         definition: valueNodeDefinitions[n.id] ?? DEFAULT_VALUE_DEFINITIONS[n.data.graphNode.kind.slice(VALUE_KIND_PREFIX.length) as ParamDefinitionType],
         onValueChange: handleValueChange,
       },
     })),
-    [nodes, evaluation, inputValuesByNode, handleValueChange],
+    [nodes, evaluation, inputValuesByNode, connectedInputPortsByNode, valueNodeDefinitions, handleValueChange],
   );
 
   return (
@@ -256,5 +378,5 @@ export function GraphCanvas({ graph, layout = {}, onGraphChange }: GraphCanvasPr
       </ReactFlowProvider>
     </div>
   );
-}
+});
 
