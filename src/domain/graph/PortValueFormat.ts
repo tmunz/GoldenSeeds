@@ -14,7 +14,7 @@ export function formatPortValue(value: PortValue | undefined): string {
   case 'point': return value.value.toString();
   case 'expression': return formatExpressionPreview(value.value);
   case 'font': return value.value?.names.fullName.en ?? '';
-  case 'grid': return `${value.value.length} rows`;
+  case 'grid': return `${value.value.length} points`;
   case 'svg': return value.value ? 'svg' : 'empty';
   case 'boundingBox': return `${value.value.max[0] - value.value.min[0]}×${value.value.max[1] - value.value.min[1]}`;
   default: return '';

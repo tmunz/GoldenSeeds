@@ -1,58 +1,153 @@
 .graph-view {
   position: relative;
-  display: flex;
-  flex-direction: column;
+
+  display: grid;
   width: 100vw;
   height: 100vh;
-  box-sizing: border-box;
+  grid-template-columns: 0 0px minmax(0, 1fr);
+  transition: grid-template-columns 0.5s ease-in-out;
 
-  &>.actions {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    align-content: flex-start;
-    padding: 10px;
-    column-gap: 4px;
+  --sidebarWidth: min(60vw, 1000px);
+
+  .edit-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
     z-index: 1;
   }
 
-  &>.graph-main {
-    position: relative;
-    flex: 1;
-    overflow: hidden;
-  }
+  &.edit-mode {
+    grid-template-columns: var(--sidebarWidth) 10px minmax(0, 1fr);
 
-  &>.preconfig-bar {
-
-    .carousel-selector {
-      padding: 5px;
-
-      .animated-icon {
-        height: 40px;
-        width: 40px;
-      }
+    &>.sidebar {
+      clip-path: inset(0);
+      visibility: visible;
+      transition-delay: 0s;
     }
 
-    .carousel-overview {
-      height: 200px;
-      border-color: var(--textColor);
-      border-style: solid;
-      border-width: 1px 0;
-      backdrop-filter: blur(3px);
-      background: unquote('rgba(var(--backgroundColor), 0.3)');
+    &>.sidebar {
+      &::after {
+        height: 100%;
+      }
+    }
+  }
+
+  &>.sidebar {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.5s ease-in-out, visibility 0s 0.5s;
+    width: var(--sidebarWidth);
+    box-sizing: border-box;
+    padding-top: 64px;
+
+    &::after {
+      transition: height 0.5s ease-in-out;
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 1px;
+      width: 1px;
+      height: 0%;
+      transform: translate(50%, -50%);
+      pointer-events: none;
+      background: linear-gradient(45deg, transparent 10%, var(--textColor) 20%, var(--textColor) 80%, transparent 90%);
+      z-index: 2;
+    }
+
+    &>.actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px 16px;
+    }
+
+    &>.graph-main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+
+      .graph-canvas {
+        min-height: 0;
+      }
+    }
+  }
+
+  &>.main-content {
+    grid-column: 3;
+    min-width: 0;
+    min-height: 0;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+
+    &>.preconfig-bar {
+      z-index: 1;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 0;
+      right: 0;
+
+      .carousel-selector {
+        padding: 5px;
+
+        .animated-icon {
+          height: 40px;
+          width: 40px;
+        }
+      }
+
+      .carousel-overview {
+        height: 200px;
+        opacity: 0;
+        border-color: var(--textColor);
+        border-style: solid;
+        border-width: 1px 0;
+        backdrop-filter: blur(3px);
+        background: unquote('rgba(var(--backgroundColor), 0.3)');
+
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
   }
 
   &>.themer {
     position: absolute;
-    top: 0;
+    bottom: 0;
     right: 10px;
-    z-index: 1;
 
-    h1 {
+    &>button {
+      width: 100%;
       text-align: right;
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .graph-view {
+    --sidebarWidth: 100vw;
+
+    &.edit-mode {
+      grid-template-columns: var(--sidebarWidth) 0px minmax(0, 1fr);
+
+      &>.main-content {
+        visibility: hidden;
+      }
     }
   }
 }

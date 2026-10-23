@@ -5,6 +5,28 @@
 
   .react-flow {
     --xy-edge-stroke-selected: var(--accentColor);
+    --xy-controls-button-background-color: unquote('rgb(var(--backgroundColorAlt))');
+    --xy-controls-button-background-color-hover: unquote('rgb(var(--backgroundColor))');
+    --xy-controls-button-color: var(--textColor);
+    --xy-controls-button-color-hover: var(--actionColor);
+    --xy-controls-button-border-color: var(--textColorAlt);
+    --xy-controls-box-shadow: 0 0 2px 1px var(--textColorAlt);
+    --xy-minimap-background-color: unquote('rgb(var(--backgroundColorAlt))');
+    --xy-minimap-mask-background-color: unquote('rgba(var(--backgroundColor), 0.65)');
+    --xy-minimap-mask-stroke-color: var(--textColor);
+    --xy-minimap-node-background-color: var(--textColorAlt);
+    --xy-minimap-node-stroke-color: var(--textColor);
+
+    .react-flow__controls-button:focus-visible {
+      outline: 2px solid var(--actionColor);
+      outline-offset: 2px;
+    }
+
+    .react-flow__minimap {
+      border: 1px solid var(--textColorAlt);
+      border-radius: 4px;
+      overflow: hidden;
+    }
 
     .light-theme & {
       --xy-edge-stroke-selected: #555;

@@ -11,13 +11,14 @@ import {
   NodeChange,
   EdgeChange,
   ReactFlowProvider,
+  useStore,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
 import { Graph } from './Graph';
 import { GraphEdge } from './GraphEdge';
 import { GraphNode } from './GraphNode';
-import { GraphLayout, GraphPosition } from './GraphLayout';
+import { GraphLayout, GraphPosition, DEFAULT_VIEWPORT } from './GraphLayout';
 import { PortValue } from './PortValue';
 import { graphNodeTypes } from './GraphNodeView';
 import { RenderNodeView } from './RenderNodeView';
@@ -96,14 +97,20 @@ interface GraphSnapshot {
  * - Connections are only accepted between ports with matching PortValueType (see ConnectionValidator).
  * - Any change (move, connect, disconnect) calls back with the updated Graph + GraphLayout so the
  *   caller can persist it.
- * - The graph always has a terminal, non-deletable render node (see RenderNode.ts) that shows the
- *   final SVG output; it is added automatically if the incoming `graph` doesn't already have one.
- * - The full graph is re-evaluated (see GraphEvaluator) on every change so every node's live output
- *   (including the render node's preview) stays up to date.
+ * - The terminal render node's connectors stay pinned to the right viewport edge.
+ * - The full graph is re-evaluated on every change; the final preview lives in GraphView.
  */
-export const GraphCanvas = forwardRef<GraphCanvasHandle, GraphCanvasProps>(function GraphCanvas({ graph, layout = {}, onGraphChange, onHistoryChange }, ref) {
+const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(function GraphCanvasContent({ graph, layout = {}, onGraphChange, onHistoryChange }, ref) {
+  const [viewportX, viewportY, zoom] = useStore((state) => state.transform);
+  const width = useStore((state) => state.width);
+  const height = useStore((state) => state.height);
+
   const [nodes, setNodes] = useState<FlowNode[]>(() => graphToFlowNodes(ensureRenderNode(graph), layout));
   const [edges, setEdges] = useState(() => graphToFlowEdges(ensureRenderNode(graph)));
+
+  const fitViewOptions = useMemo(() => ({
+    nodes: nodes.filter((node) => node.id !== RENDER_NODE_ID).map(({ id }) => ({ id })),
+  }), [nodes]);
 
   // undo/redo history: a stack of snapshots taken right before each user-visible change (a drag's
   // start, a connect/add/remove, or the first edit of a run of value-node edits - see
@@ -344,6 +351,14 @@ export const GraphCanvas = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
   const liveNodes = useMemo(
     () => nodes.map((n) => ({
       ...n,
+      ...(n.id === RENDER_NODE_ID ? {
+        position: { x: (width - 2 - viewportX) / zoom, y: (height / 2 - 33 - viewportY) / zoom },
+        style: { width: 2 / zoom, height: 66 / zoom },
+        draggable: false,
+        selectable: false,
+        focusable: false,
+        zIndex: 1000,
+      } : {}),
       data: {
         ...n.data,
         output: evaluation?.outputsByNode[n.id],
@@ -353,30 +368,32 @@ export const GraphCanvas = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
         onValueChange: handleValueChange,
       },
     })),
-    [nodes, evaluation, inputValuesByNode, connectedInputPortsByNode, valueNodeDefinitions, handleValueChange],
+    [nodes, evaluation, inputValuesByNode, connectedInputPortsByNode, valueNodeDefinitions, handleValueChange, width, height, viewportX, viewportY, zoom],
   );
 
   return (
     <div className="graph-canvas">
-      <ReactFlowProvider>
-        <ReactFlow
-          nodes={liveNodes}
-          edges={edges}
-          nodeTypes={nodeTypes}
-          onNodesChange={handleNodesChange}
-          onEdgesChange={handleEdgesChange}
-          onConnect={handleConnect}
-          isValidConnection={isValidConnection}
-          proOptions={{ hideAttribution: true }}
-          fitView
-        >
-          <Background />
-          <Controls />
-          <MiniMap />
-          <NodePalette onAdd={handleAddNode} />
-        </ReactFlow>
-      </ReactFlowProvider>
+      <ReactFlow
+        nodes={liveNodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        onNodesChange={handleNodesChange}
+        onEdgesChange={handleEdgesChange}
+        onConnect={handleConnect}
+        isValidConnection={isValidConnection}
+        proOptions={{ hideAttribution: true }}
+        defaultViewport={DEFAULT_VIEWPORT}
+      >
+        <Background />
+        <Controls fitViewOptions={fitViewOptions} />
+        <MiniMap />
+        <NodePalette onAdd={handleAddNode} />
+      </ReactFlow>
     </div>
   );
 });
 
+
+export const GraphCanvas = forwardRef<GraphCanvasHandle, GraphCanvasProps>(function GraphCanvas(props, ref) {
+  return <ReactFlowProvider><GraphCanvasContent {...props} ref={ref} /></ReactFlowProvider>;
+});
