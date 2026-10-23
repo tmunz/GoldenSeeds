@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { useGraphAnimation } from '../domain/animation/useGraphAnimation';
 import { Config } from '../domain/config/Config';
 import { Themer } from '../themer/Themer';
 import { ConfigItem, configManager } from '../domain/config/ConfigManager';
@@ -30,6 +31,7 @@ export function GraphView(props: {
   activeConfig?: Config;
 }) {
   const [editMode, setEditMode] = useState(false);
+  const animation = useGraphAnimation(props.activeConfig?.graph);
   const mainContentRef = useRef<HTMLDivElement>(null);
   const dimensions = useDimension(mainContentRef);
   const graphCanvasRef = useRef<GraphCanvasHandle>(null);
@@ -60,13 +62,13 @@ export function GraphView(props: {
 
   const getExporterData = () => ({
     name: props.activeConfig?.meta.name ?? 'drawing',
-    svg: props.activeConfig ? renderGraphToSvg(props.activeConfig.graph, 1000, 1000) : '',
+    svg: props.activeConfig ? renderGraphToSvg(animation.graph, 1000, 1000) : '',
     dimensions: { width: 1000, height: 1000 },
   });
 
   const preview = useMemo(() => props.activeConfig
-    ? renderGraphToSvg(props.activeConfig.graph, (dimensions?.width ?? 100) * 0.8, (dimensions?.height ?? 100) * 0.8)
-    : '', [props.activeConfig, dimensions?.width, dimensions?.height]);
+    ? renderGraphToSvg(animation.graph, (dimensions?.width ?? 100) * 0.8, (dimensions?.height ?? 100) * 0.8)
+    : '', [props.activeConfig, animation.graph, dimensions?.width, dimensions?.height]);
 
   const name = props.activeConfig?.meta?.name;
 
@@ -110,6 +112,7 @@ export function GraphView(props: {
                 ref={graphCanvasRef}
                 key={props.activeConfig.meta.name}
                 graph={props.activeConfig.graph}
+                animation={animation}
                 layout={props.activeConfig.layout}
                 onGraphChange={(graph, layout) => configService.setGraph(graph, layout)}
                 onHistoryChange={setHistoryState}

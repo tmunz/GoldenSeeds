@@ -18,7 +18,6 @@ export class Stage {
     }),
   };
   state: StageState<unknown, unknown> = { type: 'default', data: {} };
-  animatedId?: string;
 
   constructor(stageId: string = ('' + random()).substring(2), stageName?: string) {	
     this.id = stageId;

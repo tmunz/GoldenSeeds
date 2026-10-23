@@ -59,6 +59,16 @@ describe('GeneratorNodeRegistry', () => {
     expect(shapeOut.type === 'svg' && shapeOut.value?.length).toBeGreaterThan(0);
   });
 
+  test('function nodes expose generated points without an output selector', async () => {
+    const node = await generatorNodeRegistry.createNode('function', 'plot', {
+      plot: { items: '3', start: '1', functionX: 'n * 2', functionY: 'n + 1' },
+      style: { resolution: '2' },
+    });
+    expect(node.inputs.some((port) => port.id === 'param:plot.output')).toBe(false);
+    const output = node.evaluate({ grid: { type: 'grid', value: [[10, 20]] } });
+    expect(output.grid).toEqual({ type: 'grid', value: [[12, 18], [14, 17], [16, 16]] });
+  });
+
   test('rejects unknown generator kinds', async () => {
     await expect(generatorNodeRegistry.createNode('does-not-exist', 'x-1')).rejects.toThrow(
       'Unknown generator kind: does-not-exist',

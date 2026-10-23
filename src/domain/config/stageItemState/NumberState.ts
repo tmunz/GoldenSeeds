@@ -17,7 +17,7 @@ export class NumberState implements StageItemState<number, number> {
   }
 
   async setTextValue(s: string): Promise<void> {
-    this.n = Number.parseFloat(s);
+    this.n = s.trim() === '' ? NaN : Number(s);
   }
 
   isValid(): boolean {

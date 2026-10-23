@@ -1,3 +1,4 @@
+import type { NodeEdit } from './NodeEditing';
 import type { Edge, Node } from '@xyflow/react';
 import { Graph } from './Graph';
 import { GraphNode } from './GraphNode';
@@ -26,11 +27,8 @@ export interface GraphNodeData extends Record<string, unknown> {
    * connected to (falling back to a generic default - see ValueNodeRegistry - when unconnected),
    * derived by GraphCanvas instead of being persisted on the node itself. */
   definition?: ParamDefinition;
-  /** Value nodes only: notifies GraphCanvas that the node's own state was mutated in place (e.g. via
-   * its editor - see ValueNodeView), so it can re-evaluate the graph and persist the change. */
-  onValueChange?: (nodeId: string) => void;
-  /** Edits an unconnected local parameter; false indicates invalid input. */
-  onParameterChange?: (nodeId: string, portId: string, text: string) => boolean;
+  /** Validates and commits an immutable node edit; false leaves the graph unchanged. */
+  onEdit?: (nodeId: string, edit: NodeEdit) => boolean;
 }
 
 
@@ -49,7 +47,6 @@ function flowNodeType(kind: string): string {
 /** CSS selector of the header element that alone should drag each node type (see GraphNodeView/RenderNodeView/ValueNodeView) - anywhere else, including draggable inputs like sliders, is left to interact normally instead of moving the node. */
 const DRAG_HANDLE_BY_FLOW_TYPE: Record<string, string> = {
   [GRAPH_NODE_TYPE]: '.graph-node-header',
-  [RENDER_FLOW_NODE_TYPE]: '.render-node-header',
   [VALUE_FLOW_NODE_TYPE]: '.value-node-header',
 };
 

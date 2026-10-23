@@ -13,7 +13,6 @@ export interface FunctionPlotterConfig {
     start: number;
     functionX: (n: number, items: number) => number | number[];
     functionY: (n: number, items: number) => number | number[];
-    output: string;
   };
 }
 
@@ -59,6 +58,7 @@ function calculateFunctionPlot(
   funY: (n: number, items: number) => number | number[],
   resolution: number,
 ): { mainPoints: Point[]; highResolution: Point[] } {
+  if (resolution <= 0) { return { mainPoints: [], highResolution: [] }; }
   const mainPoints: Point[] = [];
   const highResolution: Point[] = [];
   for (let n = 0; n <= (items - 1) * resolution; n++) {

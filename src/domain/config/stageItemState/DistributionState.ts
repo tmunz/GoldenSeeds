@@ -1,4 +1,4 @@
-import { DEFAULT_DISTRIBUTION, DISTRIBUTION_FIELDS, ProbabilityDistribution } from '../../../datatypes/ProbabilityDistribution';
+import { DEFAULT_DISTRIBUTION, DISTRIBUTION_FIELDS, isDistributionFieldValue, ProbabilityDistribution } from '../../../datatypes/ProbabilityDistribution';
 import { StageItemState } from './StageItemState';
 
 export class DistributionState implements StageItemState<ProbabilityDistribution, ProbabilityDistribution> {
@@ -12,13 +12,13 @@ export class DistributionState implements StageItemState<ProbabilityDistribution
 
   setValue(value: ProbabilityDistribution): void {
     this.text = JSON.stringify(value);
-    this.valid = DISTRIBUTION_FIELDS.every((field) => Number.isFinite(value[field]) && value[field] >= 0 && (field === 'seed' || value[field] <= 1));
+    this.valid = DISTRIBUTION_FIELDS.every((field) => isDistributionFieldValue(field, value[field]));
     if (this.valid) {
       this.value = { ...value };
     }
   }
 
-  async setTextValue(text: string): Promise<void> {
+  setText(text: string): void {
     try {
       const value = JSON.parse(text);
       if (!value || typeof value !== 'object' || Array.isArray(value)) {
@@ -30,4 +30,6 @@ export class DistributionState implements StageItemState<ProbabilityDistribution
     }
     this.text = text;
   }
+
+  async setTextValue(text: string): Promise<void> { this.setText(text); }
 }

@@ -54,6 +54,7 @@ function getItemProps(config: ShapeConfig, n: number, items: number, size: numbe
 }
 
 export function draw(config: ShapeConfig, grid: Point[]): { svg: string; boundingBox: BoundingBox } {
+  if (config.shape.edges <= 0) { return { svg: '', boundingBox: PointUtils.DEFAULT_BOUNDING_BOX }; }
   const items: number = grid.length;
   return grid.reduce(
     (agg, position: Point, m: number) => {

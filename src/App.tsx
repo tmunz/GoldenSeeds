@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { first, filter } from 'rxjs/operators';
 
 import { GraphView } from './view/GraphView';
 import { Config } from './domain/config/Config';
-import { animationService } from './domain/animation/AnimationService';
 import { configService } from './domain/config/ConfigService';
 import { fontService } from './domain/font/FontService';
 import { configManager, ConfigItem } from './domain/config/ConfigManager';
@@ -36,10 +34,6 @@ export function App() {
     const configItemsSubsription = configManager.configItems$.subscribe(setConfigItems);
     const configsManageableSubscription = configManager.configsManageable$.subscribe(setConfigsManageable);
     const activeConfigSubscription = configService.config$.subscribe(setActiveConfig);
-    configService.config$
-      .pipe(filter((c) => c.graph.nodes.length > 1))
-      .pipe(first())
-      .subscribe(() => animationService.animateDefault());
 
     setup();
 

@@ -6,7 +6,7 @@ import { isValidConnection } from './ConnectionValidator';
 import { withParameter } from './GeneratorParameters';
 import { fromRawConfig, toRawConfig } from './GraphSerializer';
 import { stageToGraphNode } from './StageGraphAdapter';
-import { collectParamPorts, selectionOptions } from './ParamPorts';
+import { collectParamPorts } from './ParamPorts';
 
 // Capture the resolved config without tying these tests to individual drawing algorithms.
 async function selectionNode() {
@@ -20,8 +20,8 @@ async function selectionNode() {
 }
 
 describe('option inputs', () => {
-  test.each(['shape', 'function'])('%s option inputs accept number indexes and reject strings', async (kind) => {
-    const node = await generatorNodeRegistry.createNode(kind, 'generator');
+  test('option inputs accept number indexes and reject strings', async () => {
+    const node = await generatorNodeRegistry.createNode('shape', 'generator');
     const stage = node.config as Stage;
     const options = collectParamPorts(stage.generator.definition).filter((port) =>
       stage.generator.definition[port.groupId][port.id].type === 'selection');
@@ -33,7 +33,9 @@ describe('option inputs', () => {
       expect(port.portType).toBe('number');
       expect(isValidConnection(graph, { nodeId: 'index', port: 'out' }, { nodeId: node.id, port: port.portId })).toBe(true);
       expect(isValidConnection(graph, { nodeId: 'name', port: 'out' }, { nodeId: node.id, port: port.portId })).toBe(false);
-      const values = selectionOptions(stage.generator.definition[port.groupId][port.id]);
+      const definition = stage.generator.definition[port.groupId][port.id];
+      if (definition.type !== 'selection') { throw new Error('Expected selection definition'); }
+      const values = definition.options;
       const edited = withParameter(node, port.portId, '0');
       expect((edited.config as Stage).state.data[port.groupId][port.id].getValue()).toBe(values[0]);
     });

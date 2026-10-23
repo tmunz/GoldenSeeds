@@ -1,8 +1,9 @@
+import { resolveParameter } from './ParameterValues';
 import { Stage } from '../config/Stage';
 import { SvgGeneratorService } from '../generator/SvgGeneratorService';
 import { GraphEdge } from './GraphEdge';
 import { GraphNode } from './GraphNode';
-import { collectParamPorts, paramPortId, selectionOptions } from './ParamPorts';
+import { collectParamPorts, paramPortId } from './ParamPorts';
 
 const GRID_PORT = 'grid';
 const SVG_PORT = 'svg';
@@ -55,13 +56,7 @@ export function stageToGraphNode(stage: Stage): GraphNode {
           const connected = inputs[paramPortId(groupId, id)];
           const fallback = stage.state.data[groupId][id].getValue();
           const definition = stage.generator.definition[groupId][id];
-          if (definition.type === 'selection') {
-            const options = selectionOptions(definition);
-            const index = connected?.type === 'number' ? connected.value : -1;
-            config[groupId][id] = Number.isInteger(index) && index >= 0 && index < options.length ? options[index] : fallback;
-          } else {
-            config[groupId][id] = connected !== undefined ? connected.value : fallback;
-          }
+          config[groupId][id] = resolveParameter(definition, fallback, connected);
         });
       });
 

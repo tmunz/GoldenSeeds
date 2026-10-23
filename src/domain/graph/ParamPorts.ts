@@ -45,7 +45,3 @@ export function paramPortDefinitions(definition: Record<string, Record<string, P
   return collectParamPorts(definition).map((p) => ({ id: p.portId, type: p.portType }));
 }
 
-export function selectionOptions(definition: ParamDefinition | undefined): string[] {
-  return definition?.type === 'selection' && 'options' in definition ? definition.options : [];
-}
-

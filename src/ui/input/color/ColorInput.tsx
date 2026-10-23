@@ -23,6 +23,9 @@ export function ColorInput(props: {
   const [colorMode, setColorMode] = useState<ColorMode | null>(null);
   const [color, setColor] = useState<Color>(new Color(props.value));
 
+  const externalColor = props.value?.getAcn() ?? '';
+  useEffect(() => { setColor(new Color(externalColor)); }, [externalColor]);
+
   useEffect(() => {
     if (colorMode === null) {
       const c = new Color(props.value);
@@ -42,7 +45,7 @@ export function ColorInput(props: {
   }
 
   return <div className="color-input polaroid">
-    <label>{props.label}</label>
+    <div className="color-input-label">{props.label}</div>
     <div
       className={`color-input-main polaroid-picture${color.isValid() ? '' : ' color-input-invalid'}`}
       style={{ background: color.isRandom() ? RANDOM_GRADIENT : color.getRgbaString(), }}

@@ -56,11 +56,6 @@ export class FunctionPlotter extends SvgGenerator<FunctionPlotterConfig> {
         max: 10,
         step: 0.1,
       },
-      output: {
-        initial: 'generated',
-        type: 'selection' as const,
-        options: ['origin', 'generated'],
-      },
     },
   };
 
@@ -71,7 +66,7 @@ export class FunctionPlotter extends SvgGenerator<FunctionPlotterConfig> {
   generate(config: FunctionPlotterConfig, prev: SvgGeneratorResult): SvgGeneratorResult {
     const plotting = plot(config, prev.grid);
     return {
-      grid: config.plot.output === 'origin' ? prev.grid : plotting.points,
+      grid: plotting.points,
       svg: plotting.svg,
       boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, PointUtils.boundingBox(plotting.points)]),
     };

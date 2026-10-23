@@ -1,26 +1,15 @@
 import React, { useState } from 'react';
 import { Panel, useReactFlow } from '@xyflow/react';
 
-import { DEFAULT_DISTRIBUTION_TEXT } from '../../datatypes/ProbabilityDistribution';
 import { GraphNode } from './GraphNode';
 import { GraphPosition } from './GraphLayout';
 import { ParamDefinitionType } from '../generator/SvgGenerator';
 import { generatorNodeRegistry } from './GeneratorNodeRegistry';
-import { valueNodeRegistry } from './ValueNodeRegistry';
+import { valueNodeRegistry, DEFAULT_VALUE_DEFINITIONS } from './ValueNodeRegistry';
 
 import './NodePalette.styl';
 
 const VALUE_KINDS: ParamDefinitionType[] = ['number', 'expression', 'distribution', 'color', 'string', 'font'];
-
-const VALUE_DEFAULT_TEXT: Record<ParamDefinitionType, string> = {
-  number: '0',
-  expression: '() => 1',
-  distribution: DEFAULT_DISTRIBUTION_TEXT,
-  color: 'gold',
-  selection: '0',
-  string: '',
-  font: '',
-};
 
 export interface NodePaletteProps {
   onAdd: (node: GraphNode, position: GraphPosition) => void;
@@ -61,7 +50,7 @@ export function NodePalette({ onAdd }: NodePaletteProps) {
   async function addValue() {
     setBusy(true);
     try {
-      const node = await valueNodeRegistry.createNode(valueKind, nodeId(`value-${valueKind}`), VALUE_DEFAULT_TEXT[valueKind]);
+      const node = await valueNodeRegistry.createNode(valueKind, nodeId(`value-${valueKind}`), DEFAULT_VALUE_DEFINITIONS[valueKind].initial);
       onAdd(node, centerPosition());
     } finally {
       setBusy(false);

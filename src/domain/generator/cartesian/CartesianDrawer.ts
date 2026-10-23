@@ -17,6 +17,7 @@ export interface CartesianConfig {
 }
 
 export function draw(config: CartesianConfig, grid: Point[]): { svg: string; points: Point[] } {
+  if (config.grid.x <= 0) { return { svg: '', points: [] }; }
   return grid.reduce(
     (agg, p) => {
       const coordinatesRaw = calculateCartesianGrid(

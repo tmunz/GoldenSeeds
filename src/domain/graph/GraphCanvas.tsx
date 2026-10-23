@@ -15,7 +15,11 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
-import { withParameter } from './GeneratorParameters';
+import { GraphAnimationContext, GraphAnimationControls } from '../animation/useGraphAnimation';
+import { applyNumberAnimations } from '../animation/GraphAnimation';
+import { editGraphNode, NodeEdit } from './NodeEditing';
+import { parameterPortValue, valueEditorDefinition } from './ParameterValues';
+import { DISTRIBUTION_DEFINITION, ProbabilityDistribution } from '../../datatypes/ProbabilityDistribution';
 import { Graph } from './Graph';
 import { GraphEdge } from './GraphEdge';
 import { GraphNode } from './GraphNode';
@@ -40,7 +44,7 @@ import { graphEvaluator } from './GraphEvaluator';
 import { ensureRenderNode, RENDER_NODE_ID, RENDER_NODE_KIND } from './RenderNode';
 import { connectResultPorts } from './StageGraphAdapter';
 import { VALUE_KIND_PREFIX, DEFAULT_VALUE_DEFINITIONS } from './ValueNodeRegistry';
-import { parseParamPortId, collectParamPorts, selectionOptions } from './ParamPorts';
+import { parseParamPortId, collectParamPorts } from './ParamPorts';
 import { ParamDefinitionType } from '../generator/SvgGenerator';
 import { Stage } from '../config/Stage';
 
@@ -48,12 +52,15 @@ import './GraphCanvas.styl';
 
 const nodeTypes = { ...graphNodeTypes, [RENDER_FLOW_NODE_TYPE]: RenderNodeView, [VALUE_FLOW_NODE_TYPE]: ValueNodeView };
 
-/** The ParamDefinition for a generator node's param (groupId/paramId), if that node is a generator node. */
-function paramDefinitionFor(node: GraphNode | undefined, groupId: string, paramId: string) {
-  if (!node || node.kind.startsWith(VALUE_KIND_PREFIX) || node.kind === RENDER_NODE_KIND) {
-    return undefined;
+/** Editor metadata for a generator parameter or a structured value's numeric field. */
+function paramDefinitionFor(node: GraphNode | undefined, portId: string) {
+  if (!node || node.kind === RENDER_NODE_KIND) { return undefined; }
+  if (node.kind === `${VALUE_KIND_PREFIX}distribution`) {
+    return DISTRIBUTION_DEFINITION[portId as keyof ProbabilityDistribution];
   }
-  return (node.config as Stage).generator.definition[groupId]?.[paramId];
+  if (node.kind.startsWith(VALUE_KIND_PREFIX)) { return undefined; }
+  const param = parseParamPortId(portId);
+  return param ? (node.config as Stage).generator.definition[param.groupId]?.[param.id] : undefined;
 }
 
 /** A generator node's own default value (see Stage.ts) for each of its parameter ports. */
@@ -67,8 +74,7 @@ function defaultParamValues(node: GraphNode): Record<string, PortValue> | undefi
     const state = stage.state.data[p.groupId]?.[p.id];
     if (state) {
       const definition = stage.generator.definition[p.groupId][p.id];
-      const value = definition.type === 'selection' ? selectionOptions(definition).indexOf(state.getTextValue()) : state.getValue();
-      values[p.portId] = { type: p.portType, value } as PortValue;
+      values[p.portId] = parameterPortValue(definition, state);
     }
   });
   return values;
@@ -76,6 +82,7 @@ function defaultParamValues(node: GraphNode): Record<string, PortValue> | undefi
 
 export interface GraphCanvasProps {
   graph: Graph;
+  animation?: GraphAnimationControls;
   layout?: GraphLayout;
   onGraphChange: (graph: Graph, layout: GraphLayout) => void;
   /** Called whenever the undo/redo history changes, so the caller can reflect it on its own buttons. */
@@ -103,7 +110,7 @@ interface GraphSnapshot {
  * - The terminal render node's connectors stay pinned to the right viewport edge.
  * - The full graph is re-evaluated on every change; the final preview lives in GraphView.
  */
-const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(function GraphCanvasContent({ graph, layout = {}, onGraphChange, onHistoryChange }, ref) {
+const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(function GraphCanvasContent({ graph, animation, layout = {}, onGraphChange, onHistoryChange }, ref) {
   const [viewportX, viewportY, zoom] = useStore((state) => state.transform);
   const width = useStore((state) => state.width);
   const height = useStore((state) => state.height);
@@ -117,7 +124,7 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
 
   // undo/redo history: a stack of snapshots taken right before each user-visible change (a drag's
   // start, a connect/add/remove, or the first edit of a run of value-node edits - see
-  // handleValueChange). dragSnapshotRef/lastEditedValueNodeRef track the in-progress gesture so a
+  // handleNodeEdit). dragSnapshotRef/lastEditedValueNodeRef track the in-progress gesture so a
   // whole drag or a burst of keystrokes in the same value node collapses into a single undo step.
   const [history, setHistory] = useState<{ past: GraphSnapshot[]; future: GraphSnapshot[] }>({ past: [], future: [] });
   const dragSnapshotRef = useRef<GraphSnapshot | null>(null);
@@ -173,6 +180,13 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
       // propagate changes that actually affect the persisted graph/layout, to avoid a feedback
       // loop (persist -> re-evaluate -> re-render -> re-measure -> persist -> ...).
       const persistable = protectedChanges.some((change) => change.type !== 'dimensions' && change.type !== 'select');
+      if (!persistable) {
+        // Initial measurements arrive in separate callbacks before React renders again.
+        // Merge each batch into the latest state, or the last batch hides earlier nodes
+        // by replacing their measured dimensions with the stale, unmeasured snapshot.
+        setNodes((current) => applyNodeChanges(protectedChanges, current));
+        return;
+      }
       const isPositionChange = (change: NodeChange<FlowNode>): change is Extract<NodeChange<FlowNode>, { type: 'position' }> => change.type === 'position';
 
       // a drag is one continuous gesture made of many intermediate position changes - remember
@@ -285,34 +299,14 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
     [emitChange, nodes, edges, pushHistory],
   );
 
-  const handleValueChange = useCallback(
-    (nodeId: string) => {
-      // A value node's own state (see ValueNodeRegistry/ValueNodeView) is mutated in place by its
-      // editor, so there's no new GraphNode object to apply via applyNodeChanges - just replace the
-      // node's data wrapper to force React Flow (and the outputs/persisted config below) to refresh.
-      // A burst of edits to the same value node (e.g. every keystroke) collapses into a single undo
-      // step; switching to a different node (or any other change) starts a new one.
-      if (lastEditedValueNodeRef.current !== nodeId) {
-        pushHistory({ nodes, edges });
-        lastEditedValueNodeRef.current = nodeId;
-      }
-      const next = nodes.map((n) => (n.id === nodeId ? { ...n, data: { ...n.data } } : n));
-      setNodes(next);
-      emitChange(next, edges.map(flowEdgeToGraphEdge));
-    },
-    [emitChange, nodes, edges, pushHistory],
-  );
-
-  const handleParameterChange = useCallback((nodeId: string, portId: string, text: string) => {
+  const handleNodeEdit = useCallback((nodeId: string, edit: NodeEdit) => {
     const node = nodes.find((entry) => entry.id === nodeId);
-    if (!node || edges.some((edge) => edge.target === nodeId && edge.targetHandle === portId)) {
+    if (!node || (edit.kind === 'parameter' && edges.some((edge) => edge.target === nodeId && edge.targetHandle === edit.portId))) {
       return false;
     }
-    const graphNode = withParameter(node.data.graphNode, portId, text);
-    if (graphNode === node.data.graphNode) {
-      return false;
-    }
-    const editId = `${nodeId}.${portId}`;
+    const graphNode = editGraphNode(node.data.graphNode, edit);
+    if (graphNode === node.data.graphNode) { return false; }
+    const editId = `${nodeId}.${edit.kind === 'parameter' ? edit.portId : 'value'}`;
     if (lastEditedValueNodeRef.current !== editId) {
       pushHistory({ nodes, edges });
       lastEditedValueNodeRef.current = editId;
@@ -325,12 +319,13 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
 
   const evaluation = useMemo(() => {
     try {
-      return graphEvaluator.evaluate({ nodes: nodes.map((n) => n.data.graphNode), edges: edges.map(flowEdgeToGraphEdge) });
+      const graph = { nodes: nodes.map((n) => n.data.graphNode), edges: edges.map(flowEdgeToGraphEdge) };
+      return graphEvaluator.evaluate(applyNumberAnimations(graph, animation?.frames ?? []));
     } catch {
       // e.g. a cycle created mid-edit - keep showing the last valid outputs by simply not updating them
       return null;
     }
-  }, [nodes, edges]);
+  }, [nodes, edges, animation?.frames]);
 
   const inputValuesByNode = useMemo(() => {
     const map: Record<string, Record<string, PortValue>> = {};
@@ -365,18 +360,9 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
   const valueNodeDefinitions = useMemo(() => {
     const map: Record<string, ReturnType<typeof paramDefinitionFor>> = {};
     edges.map(flowEdgeToGraphEdge).forEach((edge) => {
-      const param = parseParamPortId(edge.to.port);
-      if (!param) {
-        return;
-      }
       const targetNode = nodes.find((n) => n.id === edge.to.nodeId);
-      const definition = paramDefinitionFor(targetNode?.data.graphNode, param.groupId, param.id);
-      if (definition) {
-        map[edge.from.nodeId] = definition.type === 'selection' ? {
-          type: 'number', initial: String(selectionOptions(definition).indexOf(definition.initial)),
-          min: 0, max: Math.max(0, selectionOptions(definition).length - 1), step: 1,
-        } : definition;
-      }
+      const definition = paramDefinitionFor(targetNode?.data.graphNode, edge.to.port);
+      if (definition) { map[edge.from.nodeId] = valueEditorDefinition(definition); }
     });
     return map;
   }, [nodes, edges]);
@@ -398,31 +384,32 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
         inputValues: inputValuesByNode[n.id],
         connectedInputPorts: connectedInputPortsByNode[n.id],
         definition: valueNodeDefinitions[n.id] ?? DEFAULT_VALUE_DEFINITIONS[n.data.graphNode.kind.slice(VALUE_KIND_PREFIX.length) as ParamDefinitionType],
-        onValueChange: handleValueChange,
-        onParameterChange: handleParameterChange,
+        onEdit: handleNodeEdit,
       },
     })),
-    [nodes, evaluation, inputValuesByNode, connectedInputPortsByNode, valueNodeDefinitions, handleValueChange, handleParameterChange, width, height, viewportX, viewportY, zoom],
+    [nodes, evaluation, inputValuesByNode, connectedInputPortsByNode, valueNodeDefinitions, handleNodeEdit, width, height, viewportX, viewportY, zoom],
   );
 
   return (
     <div className="graph-canvas">
-      <ReactFlow
-        nodes={liveNodes}
-        edges={edges}
-        nodeTypes={nodeTypes}
-        onNodesChange={handleNodesChange}
-        onEdgesChange={handleEdgesChange}
-        onConnect={handleConnect}
-        isValidConnection={isValidConnection}
-        proOptions={{ hideAttribution: true }}
-        defaultViewport={DEFAULT_VIEWPORT}
-      >
-        <Background />
-        <Controls fitViewOptions={fitViewOptions} />
-        <MiniMap />
-        <NodePalette onAdd={handleAddNode} />
-      </ReactFlow>
+      <GraphAnimationContext.Provider value={animation}>
+        <ReactFlow
+          nodes={liveNodes}
+          edges={edges}
+          nodeTypes={nodeTypes}
+          onNodesChange={handleNodesChange}
+          onEdgesChange={handleEdgesChange}
+          onConnect={handleConnect}
+          isValidConnection={isValidConnection}
+          proOptions={{ hideAttribution: true }}
+          defaultViewport={DEFAULT_VIEWPORT}
+        >
+          <Background />
+          <Controls fitViewOptions={fitViewOptions} />
+          <MiniMap />
+          <NodePalette onAdd={handleAddNode} />
+        </ReactFlow>
+      </GraphAnimationContext.Provider>
     </div>
   );
 });

@@ -1,20 +1,17 @@
 import { BoundingBox } from '../../datatypes/BoundingBox';
 
-type ParamDefinitionTypeMinMaxStep = 'expression' | 'number';
-export type ParamDefinitionType = ParamDefinitionTypeMinMaxStep | 'color' | 'selection' | 'string' | 'font' | 'distribution';
-export type ParamDefinitionMinMaxStep = {
-  type: ParamDefinitionTypeMinMaxStep;
-  min: number;
-  max: number;
-  step: number;
-};
-export type ParamDefinitionSelection = { type: 'selection'; options: string[] };
-
-export type ParamDefinition = { initial: string; animateable?: boolean } & (
-  | { type: ParamDefinitionType }
+type ParamBase = { initial: string; animateable?: boolean };
+type RangeDefinition = { min?: number; max?: number; step?: number };
+export type ParamDefinitionMinMaxStep = ParamBase & RangeDefinition & (
+  | { type: 'number'; validate?: (value: number) => boolean }
+  | { type: 'expression' }
+);
+export type ParamDefinitionSelection = ParamBase & { type: 'selection'; options: string[] };
+export type ParamDefinition =
   | ParamDefinitionMinMaxStep
   | ParamDefinitionSelection
-);
+  | (ParamBase & { type: 'color' | 'string' | 'font' | 'distribution' });
+export type ParamDefinitionType = ParamDefinition['type'];
 
 export interface SvgGeneratorResult {
   grid: number[][];

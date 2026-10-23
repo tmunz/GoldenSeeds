@@ -1,79 +1,41 @@
-import React from 'react';
-import { Handle, Position, NodeProps } from '@xyflow/react';
+import React, { useEffect } from 'react';
+import { Handle, Position, NodeProps, useUpdateNodeInternals } from '@xyflow/react';
+import type { Font } from 'opentype.js';
+import { ProbabilityDistribution } from '../../../datatypes/ProbabilityDistribution';
 import { FlowNode } from '../GraphFlowAdapter';
 import { portColor } from '../PortColors';
-import { ValueNodeConfig } from '../ValueNodeRegistry';
-import { DistributionState } from '../../config/stageItemState/DistributionState';
+import { DEFAULT_VALUE_DEFINITIONS, ValueNodeConfig, VALUE_KIND_PREFIX } from '../ValueNodeRegistry';
+import { ParamDefinitionType } from '../../generator/SvgGenerator';
+import { ParameterEditor } from '../ParameterEditor';
 import { DistributionValueEditor } from './DistributionValueEditor';
-import { ColorState } from '../../config/stageItemState/ColorState';
-import { NumberState } from '../../config/stageItemState/NumberState';
-import { ExpressionState } from '../../config/stageItemState/ExpressionState';
-import { StringState } from '../../config/stageItemState/StringState';
-import { FontState } from '../../config/stageItemState/FontState';
-import { ParamDefinition, ParamDefinitionMinMaxStep } from '../../generator/SvgGenerator';
-import {
-  ColorValueEditor,
-  NumberValueEditor,
-  ExpressionValueEditor,
-  StringValueEditor,
-  FontValueEditor,
-} from './ValueEditors';
+import { FontValueEditor } from './FontValueEditor';
 
 import './ValueNodeView.styl';
 
-function renderEditor(kind: string, state: ValueNodeConfig['state'], definition: ParamDefinition | undefined, onCommit: () => void) {
-  switch (kind) {
-  case 'value:color':
-    return <ColorValueEditor state={state as ColorState} onCommit={onCommit} />;
-  case 'value:number':
-    return <NumberValueEditor state={state as NumberState} definition={definition as ParamDefinitionMinMaxStep} onCommit={onCommit} />;
-  case 'value:expression':
-    return <ExpressionValueEditor state={state as ExpressionState} definition={definition as ParamDefinitionMinMaxStep} onCommit={onCommit} />;
-  case 'value:string':
-    return <StringValueEditor state={state as StringState} onCommit={onCommit} />;
-  case 'value:selection':
-    return <NumberValueEditor state={state as NumberState} definition={definition as ParamDefinitionMinMaxStep} onCommit={onCommit} />;
-  case 'value:font':
-    return <FontValueEditor state={state as FontState} onCommit={onCommit} />;
-  default:
-    return null;
-  }
-}
-
-/**
- * Visual representation of a literal value node (see ValueNodeRegistry): instead of the generic
- * ports-only body every other node has, it shows the actual editor for its held value - reusing
- * the same input components the old per-stage parameter editors (ColorEditor, NumberEditor, ...)
- * used, directly on the node, since generator parameters are now fed exclusively by these
- * connectable value nodes instead of by an inline literal stored on the generator itself.
- */
+/** Standalone value nodes share scalar editors with generator input ports. */
 export function ValueNodeView({ id, data }: NodeProps<FlowNode>) {
   const { graphNode } = data;
   const { state } = graphNode.config as ValueNodeConfig;
+  const type = graphNode.kind.slice(VALUE_KIND_PREFIX.length) as ParamDefinitionType;
+  const definition = data.definition ?? DEFAULT_VALUE_DEFINITIONS[type];
   const outputPort = graphNode.outputs[0];
-
-  function commit() {
-    data.onValueChange?.(id);
-  }
-
+  const updateNodeInternals = useUpdateNodeInternals();
+  useEffect(() => { updateNodeInternals(id); }, [id, data.connectedInputPorts, updateNodeInternals]);
   return (
     <div className="value-node">
-      <div className="value-node-header">{graphNode.kind.slice('value:'.length)}</div>
+      <div className="value-node-header">{type}</div>
       <div className="value-node-body">
-        {graphNode.kind === 'value:distribution'
-          ? <DistributionValueEditor state={state as DistributionState} inputValues={data.inputValues} onCommit={commit} />
-          : renderEditor(graphNode.kind, state, data.definition, commit)}
+        {type === 'distribution' ? <DistributionValueEditor value={state.getValue() as ProbabilityDistribution}
+          inputValues={data.inputValues} connectedInputPorts={data.connectedInputPorts}
+          onChange={(portId, text) => data.onEdit?.(id, { kind: 'parameter', portId, text }) ?? false} />
+          : type === 'font' ? <FontValueEditor value={state.getValue() as Font}
+            onChange={(value) => data.onEdit?.(id, { kind: 'font', value })} />
+            : <ParameterEditor showAnimation={type === 'number'} label={type} value={state.getTextValue()} definition={definition}
+              onChange={(text) => data.onEdit?.(id, { kind: 'value', text, definition }) ?? false} />}
       </div>
-      {outputPort && (
-        <div className="value-node-port">
-          <Handle
-            type="source"
-            position={Position.Right}
-            id={outputPort.id}
-            style={{ background: portColor(outputPort.type) }}
-          />
-        </div>
-      )}
+      {outputPort && <div className="value-node-port">
+        <Handle type="source" position={Position.Right} id={outputPort.id} style={{ background: portColor(outputPort.type) }} />
+      </div>}
     </div>
   );
 }
