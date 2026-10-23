@@ -6,7 +6,7 @@ import { GraphEvaluator } from './GraphEvaluator';
 import { stageToGraphNode, connectResultPorts, STAGE_RESULT_PORTS } from './StageGraphAdapter';
 
 describe('StageGraphAdapter', () => {
-  test('graph evaluation matches the existing linear stage pipeline result', async () => {
+  test('graph evaluation preserves incoming SVG before the generated SVG', async () => {
     const cartesianStage = await new Stage('cartesian-1').with(new CartesianGrid());
     const shapeStage = await new Stage('shape-1').with(new Shape());
 
@@ -27,7 +27,9 @@ describe('StageGraphAdapter', () => {
     expect(outputsByNode['cartesian-1'][STAGE_RESULT_PORTS.BOUNDING_BOX_PORT]).toEqual({ type: 'boundingBox', value: expectedCartesianResult.boundingBox });
 
     expect(outputsByNode['shape-1'][STAGE_RESULT_PORTS.GRID_PORT]).toEqual({ type: 'grid', value: expectedShapeResult.grid });
-    expect(outputsByNode['shape-1'][STAGE_RESULT_PORTS.SVG_PORT]).toEqual({ type: 'svg', value: expectedShapeResult.svg });
+    expect(outputsByNode['shape-1'][STAGE_RESULT_PORTS.SVG_PORT]).toEqual({
+      type: 'svg', value: (expectedCartesianResult.svg ?? '') + (expectedShapeResult.svg ?? ''),
+    });
     expect(outputsByNode['shape-1'][STAGE_RESULT_PORTS.BOUNDING_BOX_PORT]).toEqual({ type: 'boundingBox', value: expectedShapeResult.boundingBox });
   });
 

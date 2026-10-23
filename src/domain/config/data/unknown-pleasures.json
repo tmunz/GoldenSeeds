@@ -8,23 +8,8 @@
       "kind": "cartesian"
     },
     {
-      "id": "1:style.color",
-      "kind": "value:color",
-      "value": "gold"
-    },
-    {
-      "id": "1:style.strokeWidth",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
       "id": "1:grid.x",
       "kind": "value:number",
-      "value": "1"
-    },
-    {
-      "id": "1:grid.xDistance",
-      "kind": "value:expression",
       "value": "1"
     },
     {
@@ -44,17 +29,12 @@
     {
       "id": "2:style.fillColor",
       "kind": "value:color",
-      "value": "black"
+      "value": "0x0ff000000"
     },
     {
       "id": "2:style.strokeColor",
       "kind": "value:color",
-      "value": "white"
-    },
-    {
-      "id": "2:style.strokeWidth",
-      "kind": "value:number",
-      "value": "1"
+      "value": "0x0ffffffff"
     },
     {
       "id": "2:style.smoothness",
@@ -72,29 +52,9 @@
       "value": "linear"
     },
     {
-      "id": "2:projection.circlularProjectionFullAngle",
-      "kind": "value:number",
-      "value": "360"
-    },
-    {
       "id": "2:shape.edges",
       "kind": "value:number",
       "value": "100"
-    },
-    {
-      "id": "2:shape.offset",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
-      "id": "2:shape.cutRatio0",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
-      "id": "2:shape.cutRatio1",
-      "kind": "value:expression",
-      "value": "0"
     },
     {
       "id": "2:probabilityDistribution.muRandomness",
@@ -122,39 +82,11 @@
       "value": "495"
     },
     {
-      "id": "2:transformation.angle",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
-      "id": "2:transformation.size",
-      "kind": "value:expression",
-      "value": "1"
+      "id": "render-output",
+      "kind": "render"
     }
   ],
   "edges": [
-    {
-      "id": "1:style.color->1.param:style.color",
-      "from": {
-        "nodeId": "1:style.color",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:style.color"
-      }
-    },
-    {
-      "id": "1:style.strokeWidth->1.param:style.strokeWidth",
-      "from": {
-        "nodeId": "1:style.strokeWidth",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:style.strokeWidth"
-      }
-    },
     {
       "id": "1:grid.x->1.param:grid.x",
       "from": {
@@ -164,17 +96,6 @@
       "to": {
         "nodeId": "1",
         "port": "param:grid.x"
-      }
-    },
-    {
-      "id": "1:grid.xDistance->1.param:grid.xDistance",
-      "from": {
-        "nodeId": "1:grid.xDistance",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:grid.xDistance"
       }
     },
     {
@@ -222,17 +143,6 @@
       }
     },
     {
-      "id": "2:style.strokeWidth->2.param:style.strokeWidth",
-      "from": {
-        "nodeId": "2:style.strokeWidth",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:style.strokeWidth"
-      }
-    },
-    {
       "id": "2:style.smoothness->2.param:style.smoothness",
       "from": {
         "nodeId": "2:style.smoothness",
@@ -266,17 +176,6 @@
       }
     },
     {
-      "id": "2:projection.circlularProjectionFullAngle->2.param:projection.circlularProjectionFullAngle",
-      "from": {
-        "nodeId": "2:projection.circlularProjectionFullAngle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:projection.circlularProjectionFullAngle"
-      }
-    },
-    {
       "id": "2:shape.edges->2.param:shape.edges",
       "from": {
         "nodeId": "2:shape.edges",
@@ -285,39 +184,6 @@
       "to": {
         "nodeId": "2",
         "port": "param:shape.edges"
-      }
-    },
-    {
-      "id": "2:shape.offset->2.param:shape.offset",
-      "from": {
-        "nodeId": "2:shape.offset",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:shape.offset"
-      }
-    },
-    {
-      "id": "2:shape.cutRatio0->2.param:shape.cutRatio0",
-      "from": {
-        "nodeId": "2:shape.cutRatio0",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:shape.cutRatio0"
-      }
-    },
-    {
-      "id": "2:shape.cutRatio1->2.param:shape.cutRatio1",
-      "from": {
-        "nodeId": "2:shape.cutRatio1",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:shape.cutRatio1"
       }
     },
     {
@@ -376,28 +242,6 @@
       }
     },
     {
-      "id": "2:transformation.angle->2.param:transformation.angle",
-      "from": {
-        "nodeId": "2:transformation.angle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:transformation.angle"
-      }
-    },
-    {
-      "id": "2:transformation.size->2.param:transformation.size",
-      "from": {
-        "nodeId": "2:transformation.size",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:transformation.size"
-      }
-    },
-    {
       "id": "1.grid->2.grid",
       "from": {
         "nodeId": "1",
@@ -406,28 +250,6 @@
       "to": {
         "nodeId": "2",
         "port": "grid"
-      }
-    },
-    {
-      "id": "1.svg->2.svg",
-      "from": {
-        "nodeId": "1",
-        "port": "svg"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "svg"
-      }
-    },
-    {
-      "id": "1.boundingBox->2.boundingBox",
-      "from": {
-        "nodeId": "1",
-        "port": "boundingBox"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "boundingBox"
       }
     },
     {
@@ -463,5 +285,75 @@
         "port": "boundingBox"
       }
     }
-  ]
+  ],
+  "layout": {
+    "1": {
+      "x": 28.0489358011516,
+      "y": -623.4234478051633
+    },
+    "2": {
+      "x": 548.5239814078919,
+      "y": -124.29409494930685
+    },
+    "1:grid.x": {
+      "x": -253.6299774658916,
+      "y": -524.9868347915947
+    },
+    "1:grid.yDistance": {
+      "x": -254.09548246651752,
+      "y": -408.9686998372813
+    },
+    "1:grid.items": {
+      "x": -255.32823496683042,
+      "y": -639.4727416158233
+    },
+    "2:style.fillColor": {
+      "x": 218.144819544099,
+      "y": -314.3201996847199
+    },
+    "2:style.strokeColor": {
+      "x": 33.67959907570534,
+      "y": -314.41104922847427
+    },
+    "2:style.smoothness": {
+      "x": 178.77964383224995,
+      "y": -58.87101122170661
+    },
+    "2:style.noise": {
+      "x": -33.84795438928619,
+      "y": 0.07487057100452432
+    },
+    "2:projection.type": {
+      "x": 179.8373892663617,
+      "y": 58.4325704728567
+    },
+    "2:shape.edges": {
+      "x": -32.13719231739187,
+      "y": 110.63360639373965
+    },
+    "2:probabilityDistribution.muRandomness": {
+      "x": 174.25223885785496,
+      "y": 165.11046354243803
+    },
+    "2:probabilityDistribution.sigma": {
+      "x": -35.65192645498466,
+      "y": 220.45090138298647
+    },
+    "2:probabilityDistribution.sigmaRandomness": {
+      "x": 176.32487557992738,
+      "y": 273.04991508903674
+    },
+    "2:probabilityDistribution.noise": {
+      "x": -38.0171062349946,
+      "y": 328.8266338728049
+    },
+    "2:variation.seed": {
+      "x": 172.79133369017288,
+      "y": 383.5370950449112
+    },
+    "render-output": {
+      "x": 1029.2608641385582,
+      "y": -221.85079276886262
+    }
+  }
 }

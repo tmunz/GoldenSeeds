@@ -60,7 +60,7 @@ export function stageToGraphNode(stage: Stage): GraphNode {
       const result = stage.generator.generate(config, prev);
       return {
         [GRID_PORT]: { type: 'grid', value: result.grid },
-        [SVG_PORT]: { type: 'svg', value: result.svg },
+        [SVG_PORT]: { type: 'svg', value: (prev.svg ?? '') + (result.svg ?? '') },
         [BOUNDING_BOX_PORT]: { type: 'boundingBox', value: result.boundingBox },
       };
     },

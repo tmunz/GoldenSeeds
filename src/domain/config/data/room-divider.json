@@ -8,16 +8,6 @@
       "kind": "cartesian"
     },
     {
-      "id": "1:style.color",
-      "kind": "value:color",
-      "value": "0x0ffdecd87"
-    },
-    {
-      "id": "1:style.strokeWidth",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
       "id": "1:grid.items",
       "kind": "value:number",
       "value": "4"
@@ -47,34 +37,9 @@
       "value": "0x0ffdecd87"
     },
     {
-      "id": "2:style.strokeColor",
-      "kind": "value:color",
-      "value": "0x0ff000000"
-    },
-    {
-      "id": "2:style.strokeWidth",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
       "id": "2:style.smoothness",
       "kind": "value:expression",
       "value": "0.1"
-    },
-    {
-      "id": "2:style.noise",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "2:projection.type",
-      "kind": "value:selection",
-      "value": "circular"
-    },
-    {
-      "id": "2:projection.circlularProjectionFullAngle",
-      "kind": "value:number",
-      "value": "360"
     },
     {
       "id": "2:shape.edges",
@@ -87,51 +52,6 @@
       "value": "i%2==0 ? 0 : -n*0.03"
     },
     {
-      "id": "2:shape.cutRatio0",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
-      "id": "2:shape.cutRatio1",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
-      "id": "2:probabilityDistribution.muRandomness",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "2:probabilityDistribution.sigma",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "2:probabilityDistribution.sigmaRandomness",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "2:probabilityDistribution.noise",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "2:variation.seed",
-      "kind": "value:number",
-      "value": "999"
-    },
-    {
-      "id": "2:transformation.angle",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
-      "id": "2:transformation.size",
-      "kind": "value:expression",
-      "value": "1"
-    },
-    {
       "id": "3",
       "kind": "shape"
     },
@@ -141,34 +61,9 @@
       "value": "0x0ff000000"
     },
     {
-      "id": "3:style.strokeColor",
-      "kind": "value:color",
-      "value": "0x0ffdecd87"
-    },
-    {
-      "id": "3:style.strokeWidth",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
       "id": "3:style.smoothness",
       "kind": "value:expression",
       "value": "0.1 + n*0.05"
-    },
-    {
-      "id": "3:style.noise",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "3:projection.type",
-      "kind": "value:selection",
-      "value": "circular"
-    },
-    {
-      "id": "3:projection.circlularProjectionFullAngle",
-      "kind": "value:number",
-      "value": "360"
     },
     {
       "id": "3:shape.edges",
@@ -181,46 +76,6 @@
       "value": "i%2==0? 1 : -0.55+n*0.15"
     },
     {
-      "id": "3:shape.cutRatio0",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
-      "id": "3:shape.cutRatio1",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
-      "id": "3:probabilityDistribution.muRandomness",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "3:probabilityDistribution.sigma",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "3:probabilityDistribution.sigmaRandomness",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "3:probabilityDistribution.noise",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "3:variation.seed",
-      "kind": "value:number",
-      "value": "999"
-    },
-    {
-      "id": "3:transformation.angle",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
       "id": "3:transformation.size",
       "kind": "value:expression",
       "value": "0.28"
@@ -228,16 +83,6 @@
     {
       "id": "4",
       "kind": "polar"
-    },
-    {
-      "id": "4:style.color",
-      "kind": "value:color",
-      "value": "0x000000000"
-    },
-    {
-      "id": "4:style.strokeWidth",
-      "kind": "value:expression",
-      "value": "0"
     },
     {
       "id": "4:grid.items",
@@ -264,86 +109,6 @@
       "value": "0x0ffdecd87"
     },
     {
-      "id": "5:style.strokeColor",
-      "kind": "value:color",
-      "value": "0x0ffdecd87"
-    },
-    {
-      "id": "5:style.strokeWidth",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "5:style.smoothness",
-      "kind": "value:expression",
-      "value": "0.5"
-    },
-    {
-      "id": "5:style.noise",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "5:projection.type",
-      "kind": "value:selection",
-      "value": "circular"
-    },
-    {
-      "id": "5:projection.circlularProjectionFullAngle",
-      "kind": "value:number",
-      "value": "360"
-    },
-    {
-      "id": "5:shape.edges",
-      "kind": "value:number",
-      "value": "1"
-    },
-    {
-      "id": "5:shape.offset",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
-      "id": "5:shape.cutRatio0",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
-      "id": "5:shape.cutRatio1",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
-      "id": "5:probabilityDistribution.muRandomness",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "5:probabilityDistribution.sigma",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "5:probabilityDistribution.sigmaRandomness",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "5:probabilityDistribution.noise",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "5:variation.seed",
-      "kind": "value:number",
-      "value": "999"
-    },
-    {
-      "id": "5:transformation.angle",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
       "id": "5:transformation.size",
       "kind": "value:expression",
       "value": "0.1"
@@ -358,114 +123,16 @@
       "value": "0x0ff000000"
     },
     {
-      "id": "6:style.strokeColor",
-      "kind": "value:color",
-      "value": "0x0ffdecd87"
-    },
-    {
-      "id": "6:style.strokeWidth",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "6:style.smoothness",
-      "kind": "value:expression",
-      "value": "0.5"
-    },
-    {
-      "id": "6:style.noise",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "6:projection.type",
-      "kind": "value:selection",
-      "value": "circular"
-    },
-    {
-      "id": "6:projection.circlularProjectionFullAngle",
-      "kind": "value:number",
-      "value": "360"
-    },
-    {
-      "id": "6:shape.edges",
-      "kind": "value:number",
-      "value": "1"
-    },
-    {
-      "id": "6:shape.offset",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
-      "id": "6:shape.cutRatio0",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
-      "id": "6:shape.cutRatio1",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
-      "id": "6:probabilityDistribution.muRandomness",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "6:probabilityDistribution.sigma",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "6:probabilityDistribution.sigmaRandomness",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "6:probabilityDistribution.noise",
-      "kind": "value:number",
-      "value": "0"
-    },
-    {
-      "id": "6:variation.seed",
-      "kind": "value:number",
-      "value": "999"
-    },
-    {
-      "id": "6:transformation.angle",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
       "id": "6:transformation.size",
       "kind": "value:expression",
       "value": "0.05"
+    },
+    {
+      "id": "render-output",
+      "kind": "render"
     }
   ],
   "edges": [
-    {
-      "id": "1:style.color->1.param:style.color",
-      "from": {
-        "nodeId": "1:style.color",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:style.color"
-      }
-    },
-    {
-      "id": "1:style.strokeWidth->1.param:style.strokeWidth",
-      "from": {
-        "nodeId": "1:style.strokeWidth",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:style.strokeWidth"
-      }
-    },
     {
       "id": "1:grid.items->1.param:grid.items",
       "from": {
@@ -522,28 +189,6 @@
       }
     },
     {
-      "id": "2:style.strokeColor->2.param:style.strokeColor",
-      "from": {
-        "nodeId": "2:style.strokeColor",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:style.strokeColor"
-      }
-    },
-    {
-      "id": "2:style.strokeWidth->2.param:style.strokeWidth",
-      "from": {
-        "nodeId": "2:style.strokeWidth",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:style.strokeWidth"
-      }
-    },
-    {
       "id": "2:style.smoothness->2.param:style.smoothness",
       "from": {
         "nodeId": "2:style.smoothness",
@@ -552,39 +197,6 @@
       "to": {
         "nodeId": "2",
         "port": "param:style.smoothness"
-      }
-    },
-    {
-      "id": "2:style.noise->2.param:style.noise",
-      "from": {
-        "nodeId": "2:style.noise",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:style.noise"
-      }
-    },
-    {
-      "id": "2:projection.type->2.param:projection.type",
-      "from": {
-        "nodeId": "2:projection.type",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:projection.type"
-      }
-    },
-    {
-      "id": "2:projection.circlularProjectionFullAngle->2.param:projection.circlularProjectionFullAngle",
-      "from": {
-        "nodeId": "2:projection.circlularProjectionFullAngle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:projection.circlularProjectionFullAngle"
       }
     },
     {
@@ -610,105 +222,6 @@
       }
     },
     {
-      "id": "2:shape.cutRatio0->2.param:shape.cutRatio0",
-      "from": {
-        "nodeId": "2:shape.cutRatio0",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:shape.cutRatio0"
-      }
-    },
-    {
-      "id": "2:shape.cutRatio1->2.param:shape.cutRatio1",
-      "from": {
-        "nodeId": "2:shape.cutRatio1",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:shape.cutRatio1"
-      }
-    },
-    {
-      "id": "2:probabilityDistribution.muRandomness->2.param:probabilityDistribution.muRandomness",
-      "from": {
-        "nodeId": "2:probabilityDistribution.muRandomness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:probabilityDistribution.muRandomness"
-      }
-    },
-    {
-      "id": "2:probabilityDistribution.sigma->2.param:probabilityDistribution.sigma",
-      "from": {
-        "nodeId": "2:probabilityDistribution.sigma",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:probabilityDistribution.sigma"
-      }
-    },
-    {
-      "id": "2:probabilityDistribution.sigmaRandomness->2.param:probabilityDistribution.sigmaRandomness",
-      "from": {
-        "nodeId": "2:probabilityDistribution.sigmaRandomness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:probabilityDistribution.sigmaRandomness"
-      }
-    },
-    {
-      "id": "2:probabilityDistribution.noise->2.param:probabilityDistribution.noise",
-      "from": {
-        "nodeId": "2:probabilityDistribution.noise",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:probabilityDistribution.noise"
-      }
-    },
-    {
-      "id": "2:variation.seed->2.param:variation.seed",
-      "from": {
-        "nodeId": "2:variation.seed",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:variation.seed"
-      }
-    },
-    {
-      "id": "2:transformation.angle->2.param:transformation.angle",
-      "from": {
-        "nodeId": "2:transformation.angle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:transformation.angle"
-      }
-    },
-    {
-      "id": "2:transformation.size->2.param:transformation.size",
-      "from": {
-        "nodeId": "2:transformation.size",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:transformation.size"
-      }
-    },
-    {
       "id": "1.grid->2.grid",
       "from": {
         "nodeId": "1",
@@ -717,28 +230,6 @@
       "to": {
         "nodeId": "2",
         "port": "grid"
-      }
-    },
-    {
-      "id": "1.svg->2.svg",
-      "from": {
-        "nodeId": "1",
-        "port": "svg"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "svg"
-      }
-    },
-    {
-      "id": "1.boundingBox->2.boundingBox",
-      "from": {
-        "nodeId": "1",
-        "port": "boundingBox"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "boundingBox"
       }
     },
     {
@@ -753,28 +244,6 @@
       }
     },
     {
-      "id": "3:style.strokeColor->3.param:style.strokeColor",
-      "from": {
-        "nodeId": "3:style.strokeColor",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:style.strokeColor"
-      }
-    },
-    {
-      "id": "3:style.strokeWidth->3.param:style.strokeWidth",
-      "from": {
-        "nodeId": "3:style.strokeWidth",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:style.strokeWidth"
-      }
-    },
-    {
       "id": "3:style.smoothness->3.param:style.smoothness",
       "from": {
         "nodeId": "3:style.smoothness",
@@ -783,39 +252,6 @@
       "to": {
         "nodeId": "3",
         "port": "param:style.smoothness"
-      }
-    },
-    {
-      "id": "3:style.noise->3.param:style.noise",
-      "from": {
-        "nodeId": "3:style.noise",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:style.noise"
-      }
-    },
-    {
-      "id": "3:projection.type->3.param:projection.type",
-      "from": {
-        "nodeId": "3:projection.type",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:projection.type"
-      }
-    },
-    {
-      "id": "3:projection.circlularProjectionFullAngle->3.param:projection.circlularProjectionFullAngle",
-      "from": {
-        "nodeId": "3:projection.circlularProjectionFullAngle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:projection.circlularProjectionFullAngle"
       }
     },
     {
@@ -838,94 +274,6 @@
       "to": {
         "nodeId": "3",
         "port": "param:shape.offset"
-      }
-    },
-    {
-      "id": "3:shape.cutRatio0->3.param:shape.cutRatio0",
-      "from": {
-        "nodeId": "3:shape.cutRatio0",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:shape.cutRatio0"
-      }
-    },
-    {
-      "id": "3:shape.cutRatio1->3.param:shape.cutRatio1",
-      "from": {
-        "nodeId": "3:shape.cutRatio1",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:shape.cutRatio1"
-      }
-    },
-    {
-      "id": "3:probabilityDistribution.muRandomness->3.param:probabilityDistribution.muRandomness",
-      "from": {
-        "nodeId": "3:probabilityDistribution.muRandomness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:probabilityDistribution.muRandomness"
-      }
-    },
-    {
-      "id": "3:probabilityDistribution.sigma->3.param:probabilityDistribution.sigma",
-      "from": {
-        "nodeId": "3:probabilityDistribution.sigma",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:probabilityDistribution.sigma"
-      }
-    },
-    {
-      "id": "3:probabilityDistribution.sigmaRandomness->3.param:probabilityDistribution.sigmaRandomness",
-      "from": {
-        "nodeId": "3:probabilityDistribution.sigmaRandomness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:probabilityDistribution.sigmaRandomness"
-      }
-    },
-    {
-      "id": "3:probabilityDistribution.noise->3.param:probabilityDistribution.noise",
-      "from": {
-        "nodeId": "3:probabilityDistribution.noise",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:probabilityDistribution.noise"
-      }
-    },
-    {
-      "id": "3:variation.seed->3.param:variation.seed",
-      "from": {
-        "nodeId": "3:variation.seed",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:variation.seed"
-      }
-    },
-    {
-      "id": "3:transformation.angle->3.param:transformation.angle",
-      "from": {
-        "nodeId": "3:transformation.angle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:transformation.angle"
       }
     },
     {
@@ -973,28 +321,6 @@
       }
     },
     {
-      "id": "4:style.color->4.param:style.color",
-      "from": {
-        "nodeId": "4:style.color",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "4",
-        "port": "param:style.color"
-      }
-    },
-    {
-      "id": "4:style.strokeWidth->4.param:style.strokeWidth",
-      "from": {
-        "nodeId": "4:style.strokeWidth",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "4",
-        "port": "param:style.strokeWidth"
-      }
-    },
-    {
       "id": "4:grid.items->4.param:grid.items",
       "from": {
         "nodeId": "4:grid.items",
@@ -1039,28 +365,6 @@
       }
     },
     {
-      "id": "3.svg->4.svg",
-      "from": {
-        "nodeId": "3",
-        "port": "svg"
-      },
-      "to": {
-        "nodeId": "4",
-        "port": "svg"
-      }
-    },
-    {
-      "id": "3.boundingBox->4.boundingBox",
-      "from": {
-        "nodeId": "3",
-        "port": "boundingBox"
-      },
-      "to": {
-        "nodeId": "4",
-        "port": "boundingBox"
-      }
-    },
-    {
       "id": "5:style.fillColor->5.param:style.fillColor",
       "from": {
         "nodeId": "5:style.fillColor",
@@ -1069,182 +373,6 @@
       "to": {
         "nodeId": "5",
         "port": "param:style.fillColor"
-      }
-    },
-    {
-      "id": "5:style.strokeColor->5.param:style.strokeColor",
-      "from": {
-        "nodeId": "5:style.strokeColor",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:style.strokeColor"
-      }
-    },
-    {
-      "id": "5:style.strokeWidth->5.param:style.strokeWidth",
-      "from": {
-        "nodeId": "5:style.strokeWidth",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:style.strokeWidth"
-      }
-    },
-    {
-      "id": "5:style.smoothness->5.param:style.smoothness",
-      "from": {
-        "nodeId": "5:style.smoothness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:style.smoothness"
-      }
-    },
-    {
-      "id": "5:style.noise->5.param:style.noise",
-      "from": {
-        "nodeId": "5:style.noise",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:style.noise"
-      }
-    },
-    {
-      "id": "5:projection.type->5.param:projection.type",
-      "from": {
-        "nodeId": "5:projection.type",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:projection.type"
-      }
-    },
-    {
-      "id": "5:projection.circlularProjectionFullAngle->5.param:projection.circlularProjectionFullAngle",
-      "from": {
-        "nodeId": "5:projection.circlularProjectionFullAngle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:projection.circlularProjectionFullAngle"
-      }
-    },
-    {
-      "id": "5:shape.edges->5.param:shape.edges",
-      "from": {
-        "nodeId": "5:shape.edges",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:shape.edges"
-      }
-    },
-    {
-      "id": "5:shape.offset->5.param:shape.offset",
-      "from": {
-        "nodeId": "5:shape.offset",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:shape.offset"
-      }
-    },
-    {
-      "id": "5:shape.cutRatio0->5.param:shape.cutRatio0",
-      "from": {
-        "nodeId": "5:shape.cutRatio0",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:shape.cutRatio0"
-      }
-    },
-    {
-      "id": "5:shape.cutRatio1->5.param:shape.cutRatio1",
-      "from": {
-        "nodeId": "5:shape.cutRatio1",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:shape.cutRatio1"
-      }
-    },
-    {
-      "id": "5:probabilityDistribution.muRandomness->5.param:probabilityDistribution.muRandomness",
-      "from": {
-        "nodeId": "5:probabilityDistribution.muRandomness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:probabilityDistribution.muRandomness"
-      }
-    },
-    {
-      "id": "5:probabilityDistribution.sigma->5.param:probabilityDistribution.sigma",
-      "from": {
-        "nodeId": "5:probabilityDistribution.sigma",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:probabilityDistribution.sigma"
-      }
-    },
-    {
-      "id": "5:probabilityDistribution.sigmaRandomness->5.param:probabilityDistribution.sigmaRandomness",
-      "from": {
-        "nodeId": "5:probabilityDistribution.sigmaRandomness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:probabilityDistribution.sigmaRandomness"
-      }
-    },
-    {
-      "id": "5:probabilityDistribution.noise->5.param:probabilityDistribution.noise",
-      "from": {
-        "nodeId": "5:probabilityDistribution.noise",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:probabilityDistribution.noise"
-      }
-    },
-    {
-      "id": "5:variation.seed->5.param:variation.seed",
-      "from": {
-        "nodeId": "5:variation.seed",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:variation.seed"
-      }
-    },
-    {
-      "id": "5:transformation.angle->5.param:transformation.angle",
-      "from": {
-        "nodeId": "5:transformation.angle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:transformation.angle"
       }
     },
     {
@@ -1270,28 +398,6 @@
       }
     },
     {
-      "id": "4.svg->5.svg",
-      "from": {
-        "nodeId": "4",
-        "port": "svg"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "svg"
-      }
-    },
-    {
-      "id": "4.boundingBox->5.boundingBox",
-      "from": {
-        "nodeId": "4",
-        "port": "boundingBox"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "boundingBox"
-      }
-    },
-    {
       "id": "6:style.fillColor->6.param:style.fillColor",
       "from": {
         "nodeId": "6:style.fillColor",
@@ -1300,182 +406,6 @@
       "to": {
         "nodeId": "6",
         "port": "param:style.fillColor"
-      }
-    },
-    {
-      "id": "6:style.strokeColor->6.param:style.strokeColor",
-      "from": {
-        "nodeId": "6:style.strokeColor",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:style.strokeColor"
-      }
-    },
-    {
-      "id": "6:style.strokeWidth->6.param:style.strokeWidth",
-      "from": {
-        "nodeId": "6:style.strokeWidth",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:style.strokeWidth"
-      }
-    },
-    {
-      "id": "6:style.smoothness->6.param:style.smoothness",
-      "from": {
-        "nodeId": "6:style.smoothness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:style.smoothness"
-      }
-    },
-    {
-      "id": "6:style.noise->6.param:style.noise",
-      "from": {
-        "nodeId": "6:style.noise",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:style.noise"
-      }
-    },
-    {
-      "id": "6:projection.type->6.param:projection.type",
-      "from": {
-        "nodeId": "6:projection.type",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:projection.type"
-      }
-    },
-    {
-      "id": "6:projection.circlularProjectionFullAngle->6.param:projection.circlularProjectionFullAngle",
-      "from": {
-        "nodeId": "6:projection.circlularProjectionFullAngle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:projection.circlularProjectionFullAngle"
-      }
-    },
-    {
-      "id": "6:shape.edges->6.param:shape.edges",
-      "from": {
-        "nodeId": "6:shape.edges",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:shape.edges"
-      }
-    },
-    {
-      "id": "6:shape.offset->6.param:shape.offset",
-      "from": {
-        "nodeId": "6:shape.offset",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:shape.offset"
-      }
-    },
-    {
-      "id": "6:shape.cutRatio0->6.param:shape.cutRatio0",
-      "from": {
-        "nodeId": "6:shape.cutRatio0",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:shape.cutRatio0"
-      }
-    },
-    {
-      "id": "6:shape.cutRatio1->6.param:shape.cutRatio1",
-      "from": {
-        "nodeId": "6:shape.cutRatio1",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:shape.cutRatio1"
-      }
-    },
-    {
-      "id": "6:probabilityDistribution.muRandomness->6.param:probabilityDistribution.muRandomness",
-      "from": {
-        "nodeId": "6:probabilityDistribution.muRandomness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:probabilityDistribution.muRandomness"
-      }
-    },
-    {
-      "id": "6:probabilityDistribution.sigma->6.param:probabilityDistribution.sigma",
-      "from": {
-        "nodeId": "6:probabilityDistribution.sigma",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:probabilityDistribution.sigma"
-      }
-    },
-    {
-      "id": "6:probabilityDistribution.sigmaRandomness->6.param:probabilityDistribution.sigmaRandomness",
-      "from": {
-        "nodeId": "6:probabilityDistribution.sigmaRandomness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:probabilityDistribution.sigmaRandomness"
-      }
-    },
-    {
-      "id": "6:probabilityDistribution.noise->6.param:probabilityDistribution.noise",
-      "from": {
-        "nodeId": "6:probabilityDistribution.noise",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:probabilityDistribution.noise"
-      }
-    },
-    {
-      "id": "6:variation.seed->6.param:variation.seed",
-      "from": {
-        "nodeId": "6:variation.seed",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:variation.seed"
-      }
-    },
-    {
-      "id": "6:transformation.angle->6.param:transformation.angle",
-      "from": {
-        "nodeId": "6:transformation.angle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:transformation.angle"
       }
     },
     {
@@ -1554,6 +484,127 @@
         "nodeId": "render-output",
         "port": "boundingBox"
       }
+    },
+    {
+      "id": "3.svg->5.svg",
+      "from": {
+        "nodeId": "3",
+        "port": "svg"
+      },
+      "to": {
+        "nodeId": "5",
+        "port": "svg"
+      }
     }
-  ]
+  ],
+  "layout": {
+    "1": {
+      "x": -844.2091419575481,
+      "y": -668.2458422770854
+    },
+    "2": {
+      "x": 20.891265597148163,
+      "y": -670.9378620766486
+    },
+    "3": {
+      "x": 1100.3872319481632,
+      "y": -667.1144300151691
+    },
+    "4": {
+      "x": 1659.7903752822594,
+      "y": -304.82456486055
+    },
+    "5": {
+      "x": 2350.2146381679986,
+      "y": -302.95768320036956
+    },
+    "6": {
+      "x": 3202.2907714412368,
+      "y": -302.2434894751091
+    },
+    "1:grid.items": {
+      "x": -1210.9358335449087,
+      "y": -728.2155461972078
+    },
+    "1:grid.x": {
+      "x": -1211.1099886007225,
+      "y": -618.9417415505582
+    },
+    "1:grid.xDistance": {
+      "x": -1208.498336910834,
+      "y": -508.1650449303349
+    },
+    "1:grid.yDistance": {
+      "x": -1207.627786347538,
+      "y": -397.4822022531845
+    },
+    "2:style.fillColor": {
+      "x": -246,
+      "y": -920.0000000000001
+    },
+    "2:style.smoothness": {
+      "x": -254.4147626768127,
+      "y": -589.6267135908677
+    },
+    "2:shape.edges": {
+      "x": -253.76955886011478,
+      "y": -477.9014190556278
+    },
+    "2:shape.offset": {
+      "x": -252.6075197924261,
+      "y": -362.7696190310006
+    },
+    "3:style.fillColor": {
+      "x": 754,
+      "y": -908.75
+    },
+    "3:style.smoothness": {
+      "x": 732,
+      "y": -568
+    },
+    "3:shape.edges": {
+      "x": 734,
+      "y": -452
+    },
+    "3:shape.offset": {
+      "x": 738,
+      "y": -336
+    },
+    "3:transformation.size": {
+      "x": 741.0876919701118,
+      "y": -224.2135729617861
+    },
+    "4:grid.items": {
+      "x": 1292.9072553005535,
+      "y": -229.34630448355236
+    },
+    "4:grid.angle": {
+      "x": 1294,
+      "y": -123
+    },
+    "4:grid.distance": {
+      "x": 1292,
+      "y": -12.999999999999996
+    },
+    "5:style.fillColor": {
+      "x": 2092.4665638295446,
+      "y": -218
+    },
+    "5:transformation.size": {
+      "x": 2060.466563829544,
+      "y": 44.776696620223255
+    },
+    "6:style.fillColor": {
+      "x": 2930.256252062577,
+      "y": -217.64421291949557
+    },
+    "6:transformation.size": {
+      "x": 2899.867968735978,
+      "y": 43.605123391727176
+    },
+    "render-output": {
+      "x": 3694.4122991669497,
+      "y": -398.1438335141168
+    }
+  }
 }

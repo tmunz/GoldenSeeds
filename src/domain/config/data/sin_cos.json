@@ -10,37 +10,12 @@
     {
       "id": "1:style.strokeColor",
       "kind": "value:color",
-      "value": "patina"
-    },
-    {
-      "id": "1:style.strokeWidth",
-      "kind": "value:expression",
-      "value": "1"
-    },
-    {
-      "id": "1:style.resolution",
-      "kind": "value:number",
-      "value": "10"
-    },
-    {
-      "id": "1:plot.output",
-      "kind": "value:selection",
-      "value": "origin"
-    },
-    {
-      "id": "1:plot.start",
-      "kind": "value:number",
-      "value": "0"
+      "value": "0x0ffbdde87"
     },
     {
       "id": "1:plot.items",
       "kind": "value:number",
       "value": "13"
-    },
-    {
-      "id": "1:plot.functionX",
-      "kind": "value:expression",
-      "value": "n"
     },
     {
       "id": "1:plot.functionY",
@@ -54,37 +29,12 @@
     {
       "id": "2:style.strokeColor",
       "kind": "value:color",
-      "value": "gold"
-    },
-    {
-      "id": "2:style.strokeWidth",
-      "kind": "value:expression",
-      "value": "1"
-    },
-    {
-      "id": "2:style.resolution",
-      "kind": "value:number",
-      "value": "10"
-    },
-    {
-      "id": "2:plot.output",
-      "kind": "value:selection",
-      "value": "origin"
-    },
-    {
-      "id": "2:plot.start",
-      "kind": "value:number",
-      "value": "0"
+      "value": "0x0ffdecd87"
     },
     {
       "id": "2:plot.items",
       "kind": "value:number",
       "value": "12"
-    },
-    {
-      "id": "2:plot.functionX",
-      "kind": "value:expression",
-      "value": "n"
     },
     {
       "id": "2:plot.functionY",
@@ -98,12 +48,7 @@
     {
       "id": "3:style.color",
       "kind": "value:color",
-      "value": "white"
-    },
-    {
-      "id": "3:style.strokeWidth",
-      "kind": "value:expression",
-      "value": "1"
+      "value": "0x0ffffffff"
     },
     {
       "id": "3:grid.items",
@@ -119,6 +64,10 @@
       "id": "3:grid.distance",
       "kind": "value:expression",
       "value": "n==1 ? 2  : n==2 ? 12 : 0.5"
+    },
+    {
+      "id": "render-output",
+      "kind": "render"
     }
   ],
   "edges": [
@@ -134,50 +83,6 @@
       }
     },
     {
-      "id": "1:style.strokeWidth->1.param:style.strokeWidth",
-      "from": {
-        "nodeId": "1:style.strokeWidth",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:style.strokeWidth"
-      }
-    },
-    {
-      "id": "1:style.resolution->1.param:style.resolution",
-      "from": {
-        "nodeId": "1:style.resolution",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:style.resolution"
-      }
-    },
-    {
-      "id": "1:plot.output->1.param:plot.output",
-      "from": {
-        "nodeId": "1:plot.output",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:plot.output"
-      }
-    },
-    {
-      "id": "1:plot.start->1.param:plot.start",
-      "from": {
-        "nodeId": "1:plot.start",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:plot.start"
-      }
-    },
-    {
       "id": "1:plot.items->1.param:plot.items",
       "from": {
         "nodeId": "1:plot.items",
@@ -186,17 +91,6 @@
       "to": {
         "nodeId": "1",
         "port": "param:plot.items"
-      }
-    },
-    {
-      "id": "1:plot.functionX->1.param:plot.functionX",
-      "from": {
-        "nodeId": "1:plot.functionX",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:plot.functionX"
       }
     },
     {
@@ -222,50 +116,6 @@
       }
     },
     {
-      "id": "2:style.strokeWidth->2.param:style.strokeWidth",
-      "from": {
-        "nodeId": "2:style.strokeWidth",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:style.strokeWidth"
-      }
-    },
-    {
-      "id": "2:style.resolution->2.param:style.resolution",
-      "from": {
-        "nodeId": "2:style.resolution",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:style.resolution"
-      }
-    },
-    {
-      "id": "2:plot.output->2.param:plot.output",
-      "from": {
-        "nodeId": "2:plot.output",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:plot.output"
-      }
-    },
-    {
-      "id": "2:plot.start->2.param:plot.start",
-      "from": {
-        "nodeId": "2:plot.start",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:plot.start"
-      }
-    },
-    {
       "id": "2:plot.items->2.param:plot.items",
       "from": {
         "nodeId": "2:plot.items",
@@ -277,17 +127,6 @@
       }
     },
     {
-      "id": "2:plot.functionX->2.param:plot.functionX",
-      "from": {
-        "nodeId": "2:plot.functionX",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:plot.functionX"
-      }
-    },
-    {
       "id": "2:plot.functionY->2.param:plot.functionY",
       "from": {
         "nodeId": "2:plot.functionY",
@@ -296,17 +135,6 @@
       "to": {
         "nodeId": "2",
         "port": "param:plot.functionY"
-      }
-    },
-    {
-      "id": "1.grid->2.grid",
-      "from": {
-        "nodeId": "1",
-        "port": "grid"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "grid"
       }
     },
     {
@@ -343,17 +171,6 @@
       }
     },
     {
-      "id": "3:style.strokeWidth->3.param:style.strokeWidth",
-      "from": {
-        "nodeId": "3:style.strokeWidth",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:style.strokeWidth"
-      }
-    },
-    {
       "id": "3:grid.items->3.param:grid.items",
       "from": {
         "nodeId": "3:grid.items",
@@ -384,17 +201,6 @@
       "to": {
         "nodeId": "3",
         "port": "param:grid.distance"
-      }
-    },
-    {
-      "id": "2.grid->3.grid",
-      "from": {
-        "nodeId": "2",
-        "port": "grid"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "grid"
       }
     },
     {
@@ -452,5 +258,63 @@
         "port": "boundingBox"
       }
     }
-  ]
+  ],
+  "layout": {
+    "1": {
+      "x": -75.91245864166736,
+      "y": -159.7070321120609
+    },
+    "2": {
+      "x": 743.4501810548902,
+      "y": -158.44020251989465
+    },
+    "3": {
+      "x": 1587.8842274521307,
+      "y": -160.29012246689888
+    },
+    "1:style.strokeColor": {
+      "x": -355.1177404257241,
+      "y": -395.3063392238489
+    },
+    "1:plot.items": {
+      "x": -372.8662753615577,
+      "y": -54.565796394374324
+    },
+    "1:plot.functionY": {
+      "x": -371.54002336586115,
+      "y": 63.6600957934367
+    },
+    "2:style.strokeColor": {
+      "x": 386.9476279979086,
+      "y": -398.44797962197543
+    },
+    "2:plot.items": {
+      "x": 381.18523121383566,
+      "y": -55.463737031127074
+    },
+    "2:plot.functionY": {
+      "x": 380.38368259414585,
+      "y": 62.45365518636622
+    },
+    "3:style.color": {
+      "x": 1224.9584965007198,
+      "y": -393.36143751266326
+    },
+    "3:grid.items": {
+      "x": 1230.158392112349,
+      "y": -62.71352384077253
+    },
+    "3:grid.angle": {
+      "x": 1228.1919064256751,
+      "y": 44.45715847574454
+    },
+    "3:grid.distance": {
+      "x": 1229.933007552267,
+      "y": 154.14427601428957
+    },
+    "render-output": {
+      "x": 1986.5963854417555,
+      "y": -257.6829667356527
+    }
+  }
 }
