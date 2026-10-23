@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Panel, useReactFlow } from '@xyflow/react';
 
+import { DEFAULT_DISTRIBUTION_TEXT } from '../../datatypes/ProbabilityDistribution';
 import { GraphNode } from './GraphNode';
 import { GraphPosition } from './GraphLayout';
 import { ParamDefinitionType } from '../generator/SvgGenerator';
@@ -9,13 +10,14 @@ import { valueNodeRegistry } from './ValueNodeRegistry';
 
 import './NodePalette.styl';
 
-const VALUE_KINDS: ParamDefinitionType[] = ['number', 'expression', 'color', 'string', 'font'];
+const VALUE_KINDS: ParamDefinitionType[] = ['number', 'expression', 'distribution', 'color', 'string', 'font'];
 
 const VALUE_DEFAULT_TEXT: Record<ParamDefinitionType, string> = {
   number: '0',
   expression: '() => 1',
+  distribution: DEFAULT_DISTRIBUTION_TEXT,
   color: 'gold',
-  selection: '',
+  selection: '0',
   string: '',
   font: '',
 };

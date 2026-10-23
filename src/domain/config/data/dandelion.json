@@ -5,7 +5,12 @@
   "nodes": [
     {
       "id": "1",
-      "kind": "polar"
+      "kind": "polar",
+      "parameters": {
+        "grid": {
+          "distance": "0"
+        }
+      }
     },
     {
       "id": "1:grid.items",
@@ -13,38 +18,22 @@
       "value": "89"
     },
     {
-      "id": "1:grid.distance",
-      "kind": "value:expression",
-      "value": "0"
-    },
-    {
       "id": "2",
-      "kind": "shape"
+      "kind": "shape",
+      "parameters": {
+        "shape": {
+          "cutRatio0": "-4 / 3"
+        },
+        "transformation": {
+          "angle": "n * 360 / goldenRatio",
+          "size": "n"
+        }
+      }
     },
     {
       "id": "2:style.strokeColor",
       "kind": "value:color",
       "value": "0x1ff000000"
-    },
-    {
-      "id": "2:shape.cutRatio0",
-      "kind": "value:expression",
-      "value": "-4 / 3"
-    },
-    {
-      "id": "2:variation.seed",
-      "kind": "value:number",
-      "value": "999"
-    },
-    {
-      "id": "2:transformation.angle",
-      "kind": "value:expression",
-      "value": "n * 360 / goldenRatio"
-    },
-    {
-      "id": "2:transformation.size",
-      "kind": "value:expression",
-      "value": "n"
     },
     {
       "id": "render-output",
@@ -64,17 +53,6 @@
       }
     },
     {
-      "id": "1:grid.distance->1.param:grid.distance",
-      "from": {
-        "nodeId": "1:grid.distance",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:grid.distance"
-      }
-    },
-    {
       "id": "2:style.strokeColor->2.param:style.strokeColor",
       "from": {
         "nodeId": "2:style.strokeColor",
@@ -83,50 +61,6 @@
       "to": {
         "nodeId": "2",
         "port": "param:style.strokeColor"
-      }
-    },
-    {
-      "id": "2:shape.cutRatio0->2.param:shape.cutRatio0",
-      "from": {
-        "nodeId": "2:shape.cutRatio0",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:shape.cutRatio0"
-      }
-    },
-    {
-      "id": "2:variation.seed->2.param:variation.seed",
-      "from": {
-        "nodeId": "2:variation.seed",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:variation.seed"
-      }
-    },
-    {
-      "id": "2:transformation.angle->2.param:transformation.angle",
-      "from": {
-        "nodeId": "2:transformation.angle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:transformation.angle"
-      }
-    },
-    {
-      "id": "2:transformation.size->2.param:transformation.size",
-      "from": {
-        "nodeId": "2:transformation.size",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:transformation.size"
       }
     },
     {
@@ -176,40 +110,24 @@
   ],
   "layout": {
     "1": {
-      "x": 270.92,
-      "y": 1.99
+      "x": 349.67,
+      "y": -4.260000000000002
     },
     "2": {
-      "x": 709.73,
-      "y": 29.39
+      "x": 754.73,
+      "y": -5.609999999999999
     },
     "1:grid.items": {
-      "x": 1.22,
-      "y": 0.0
-    },
-    "1:grid.distance": {
-      "x": 0.0,
-      "y": 107.83
+      "x": 54.97,
+      "y": 108.75
     },
     "2:style.strokeColor": {
-      "x": 126.36,
-      "y": 237.36
+      "x": 480.11,
+      "y": 317.36
     },
-    "2:shape.cutRatio0": {
-      "x": 353.51,
-      "y": 369.13
-    },
-    "2:variation.seed": {
-      "x": 352.42,
-      "y": 476.68
-    },
-    "2:transformation.angle": {
-      "x": 352.89,
-      "y": 585.11
-    },
-    "2:transformation.size": {
-      "x": 353.85,
-      "y": 694.0
+    "render-output": {
+      "x": 0,
+      "y": 0
     }
   }
 }

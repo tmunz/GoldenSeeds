@@ -1,3 +1,4 @@
+import { ProbabilityDistribution } from '../../../datatypes/ProbabilityDistribution';
 import { Color } from '../../../datatypes/Color';
 import { BoundingBox } from '../../../datatypes/BoundingBox';
 import { PointUtils } from '../../../utils/PointUtils';
@@ -21,19 +22,11 @@ export interface ShapeConfig {
     circlularProjectionFullAngle: number;
   };
   shape: {
+    distribution: ProbabilityDistribution;
     edges: number;
     offset: (n: number, items: number, size: number, i: number) => number;
     cutRatio0: (n: number, items: number, size: number, i: number) => number;
     cutRatio1: (n: number, items: number, size: number, i: number) => number;
-  };
-  probabilityDistribution: {
-    muRandomness: number;
-    sigma: number;
-    sigmaRandomness: number;
-    noise: number;
-  };
-  variation: {
-    seed: number;
   };
   transformation: {
     angle: (n: number, items: number, size: number) => number;
@@ -83,19 +76,19 @@ export function draw(config: ShapeConfig, grid: Point[]): { svg: string; boundin
         const points = [
           () => generateShape(config.shape.edges, (i: number) => config.shape.offset(n, items, size, i)),
           (pnts: Point[]) =>
-            0 < config.probabilityDistribution.sigma
+            0 < config.shape.distribution.sigma
               ? probabilityDistribution(
                 pnts,
                 n,
-                config.probabilityDistribution.muRandomness,
-                config.probabilityDistribution.sigma,
-                config.probabilityDistribution.sigmaRandomness,
-                config.probabilityDistribution.noise,
-                config.variation.seed,
+                config.shape.distribution.muRandomness,
+                config.shape.distribution.sigma,
+                config.shape.distribution.sigmaRandomness,
+                config.shape.distribution.noise,
+                config.shape.distribution.seed,
               )
               : pnts,
           (pnts: Point[]) =>
-            0 < config.style.noise ? noise(pnts, n, config.style.noise, config.variation.seed) : pnts,
+            0 < config.style.noise ? noise(pnts, n, config.style.noise, config.shape.distribution.seed) : pnts,
           (pnts: Point[]) =>
             config.projection.type === 'circular'
               ? toCircularProjection(pnts, config.projection.circlularProjectionFullAngle)

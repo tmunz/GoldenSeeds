@@ -5,7 +5,16 @@
   "nodes": [
     {
       "id": "1",
-      "kind": "shape"
+      "kind": "shape",
+      "parameters": {
+        "shape": {
+          "edges": "86"
+        },
+        "transformation": {
+          "angle": "-135",
+          "size": "1.2"
+        }
+      }
     },
     {
       "id": "1:style.fillColor",
@@ -13,28 +22,14 @@
       "value": "0x0ffdecd87"
     },
     {
-      "id": "1:shape.edges",
-      "kind": "value:number",
-      "value": "86"
-    },
-    {
-      "id": "1:probabilityDistribution.sigma",
-      "kind": "value:number",
-      "value": "0.3"
-    },
-    {
-      "id": "1:transformation.angle",
-      "kind": "value:expression",
-      "value": "-135"
-    },
-    {
-      "id": "1:transformation.size",
-      "kind": "value:expression",
-      "value": "1.2"
-    },
-    {
       "id": "2",
-      "kind": "text"
+      "kind": "text",
+      "parameters": {
+        "text": {
+          "content": "S!",
+          "size": "0.75"
+        }
+      }
     },
     {
       "id": "2:style.color",
@@ -47,18 +42,13 @@
       "value": "Signika-Bold"
     },
     {
-      "id": "2:text.content",
-      "kind": "value:string",
-      "value": "S!"
-    },
-    {
-      "id": "2:text.size",
-      "kind": "value:expression",
-      "value": "0.75"
-    },
-    {
       "id": "render-output",
       "kind": "render"
+    },
+    {
+      "id": "1:distribution",
+      "kind": "value:distribution",
+      "value": "{\"muRandomness\":0,\"sigma\":0.3,\"sigmaRandomness\":0,\"noise\":0,\"seed\":999}"
     }
   ],
   "edges": [
@@ -71,50 +61,6 @@
       "to": {
         "nodeId": "1",
         "port": "param:style.fillColor"
-      }
-    },
-    {
-      "id": "1:shape.edges->1.param:shape.edges",
-      "from": {
-        "nodeId": "1:shape.edges",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:shape.edges"
-      }
-    },
-    {
-      "id": "1:probabilityDistribution.sigma->1.param:probabilityDistribution.sigma",
-      "from": {
-        "nodeId": "1:probabilityDistribution.sigma",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:probabilityDistribution.sigma"
-      }
-    },
-    {
-      "id": "1:transformation.angle->1.param:transformation.angle",
-      "from": {
-        "nodeId": "1:transformation.angle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:transformation.angle"
-      }
-    },
-    {
-      "id": "1:transformation.size->1.param:transformation.size",
-      "from": {
-        "nodeId": "1:transformation.size",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:transformation.size"
       }
     },
     {
@@ -137,28 +83,6 @@
       "to": {
         "nodeId": "2",
         "port": "param:style.font"
-      }
-    },
-    {
-      "id": "2:text.content->2.param:text.content",
-      "from": {
-        "nodeId": "2:text.content",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:text.content"
-      }
-    },
-    {
-      "id": "2:text.size->2.param:text.size",
-      "from": {
-        "nodeId": "2:text.size",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:text.size"
       }
     },
     {
@@ -226,52 +150,47 @@
         "nodeId": "render-output",
         "port": "boundingBox"
       }
+    },
+    {
+      "id": "1:distribution.out->1.param:shape.distribution",
+      "from": {
+        "nodeId": "1:distribution",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "1",
+        "port": "param:shape.distribution"
+      }
     }
   ],
   "layout": {
     "1": {
-      "x": 427.69,
+      "x": 346.44,
       "y": 46.35
     },
     "2": {
-      "x": 1323.28,
-      "y": 389.45
+      "x": 928.74875,
+      "y": 46.94999999999999
     },
     "1:style.fillColor": {
-      "x": 42.16,
-      "y": 0.0
-    },
-    "1:shape.edges": {
-      "x": 5.11,
-      "y": 263.86
-    },
-    "1:probabilityDistribution.sigma": {
-      "x": 1.92,
-      "y": 373.77
-    },
-    "1:transformation.angle": {
-      "x": 1.13,
-      "y": 482.9
-    },
-    "1:transformation.size": {
-      "x": 0.0,
-      "y": 592.63
+      "x": 108.41,
+      "y": 15.3125
     },
     "2:style.color": {
-      "x": 859.77,
-      "y": 282.18
+      "x": 722.27,
+      "y": 149.9925
     },
     "2:style.font": {
-      "x": 593.61,
-      "y": 504.56
+      "x": 726.11,
+      "y": 427.06
     },
-    "2:text.content": {
-      "x": 781.67,
-      "y": 649.38
+    "render-output": {
+      "x": 0,
+      "y": 0
     },
-    "2:text.size": {
-      "x": 1010.01,
-      "y": 715.77
+    "1:distribution": {
+      "x": 93.16999999999999,
+      "y": 293.77
     }
   }
 }

@@ -9,7 +9,7 @@ export class FunctionPlotter extends SvgGenerator<FunctionPlotterConfig> {
   static definition = {
     style: {
       fillColor: { initial: 'transparent', type: 'color' as const },
-      strokeColor: { initial: 'gold', type: 'color' as const },
+      strokeColor: { initial: 'transparent', type: 'color' as const },
       strokeWidth: {
         initial: '1',
         type: 'expression' as const,

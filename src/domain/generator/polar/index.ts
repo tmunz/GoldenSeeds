@@ -8,7 +8,7 @@ export class PolarGrid extends SvgGenerator<PolarConfig> {
 
   static definition = {
     style: {
-      color: { initial: 'gold', type: 'color' as const },
+      color: { initial: 'transparent', type: 'color' as const },
       strokeWidth: {
         initial: '1',
         type: 'expression' as const,

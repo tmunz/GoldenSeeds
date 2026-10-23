@@ -8,14 +8,14 @@ import { GraphLayout } from '../graph/GraphLayout';
  * ACN string, a number's text, an expression). The ParamDefinition (min/max/step, selection
  * options, ...) driving the editor shown on a value node (see ValueNodeView) is implementation
  * detail, not persisted data - it's derived at runtime (see GraphCanvas) from whatever generator
- * parameter the node is currently connected to. Generator nodes carry no inline data of their own -
- * every one of their parameters is meant to be fed by a value node connected via an edge (see
- * GraphSerializer/ParamPorts), instead of being stored as a literal on the node itself.
+ * parameter the node is currently connected to. Generator nodes can store numbers, expressions, strings, and option selections
+ * in parameters; connected value nodes override those literals during evaluation.
  */
 export interface RawGraphNode {
   id: string;
   kind: string;
   value?: string;
+  parameters?: Record<string, Record<string, string>>;
 }
 
 export interface RawConfig {

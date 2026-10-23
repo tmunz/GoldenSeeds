@@ -5,26 +5,30 @@
   "nodes": [
     {
       "id": "1",
-      "kind": "cartesian"
-    },
-    {
-      "id": "1:grid.x",
-      "kind": "value:number",
-      "value": "1"
-    },
-    {
-      "id": "1:grid.yDistance",
-      "kind": "value:expression",
-      "value": "0.015"
-    },
-    {
-      "id": "1:grid.items",
-      "kind": "value:number",
-      "value": "80"
+      "kind": "cartesian",
+      "parameters": {
+        "grid": {
+          "items": "80",
+          "x": "1",
+          "yDistance": "0.015"
+        }
+      }
     },
     {
       "id": "2",
-      "kind": "shape"
+      "kind": "shape",
+      "parameters": {
+        "style": {
+          "smoothness": "0.1",
+          "noise": "0.02"
+        },
+        "projection": {
+          "type": "linear"
+        },
+        "shape": {
+          "edges": "100"
+        }
+      }
     },
     {
       "id": "2:style.fillColor",
@@ -37,89 +41,16 @@
       "value": "0x0ffffffff"
     },
     {
-      "id": "2:style.smoothness",
-      "kind": "value:expression",
-      "value": "0.1"
-    },
-    {
-      "id": "2:style.noise",
-      "kind": "value:number",
-      "value": "0.02"
-    },
-    {
-      "id": "2:projection.type",
-      "kind": "value:selection",
-      "value": "linear"
-    },
-    {
-      "id": "2:shape.edges",
-      "kind": "value:number",
-      "value": "100"
-    },
-    {
-      "id": "2:probabilityDistribution.muRandomness",
-      "kind": "value:number",
-      "value": "0.15"
-    },
-    {
-      "id": "2:probabilityDistribution.sigma",
-      "kind": "value:number",
-      "value": "0.3"
-    },
-    {
-      "id": "2:probabilityDistribution.sigmaRandomness",
-      "kind": "value:number",
-      "value": "0.15"
-    },
-    {
-      "id": "2:probabilityDistribution.noise",
-      "kind": "value:number",
-      "value": "0.3"
-    },
-    {
-      "id": "2:variation.seed",
-      "kind": "value:number",
-      "value": "495"
-    },
-    {
       "id": "render-output",
       "kind": "render"
+    },
+    {
+      "id": "2:distribution",
+      "kind": "value:distribution",
+      "value": "{\"muRandomness\":0.15,\"sigma\":0.3,\"sigmaRandomness\":0.15,\"noise\":0.3,\"seed\":495.0}"
     }
   ],
   "edges": [
-    {
-      "id": "1:grid.x->1.param:grid.x",
-      "from": {
-        "nodeId": "1:grid.x",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:grid.x"
-      }
-    },
-    {
-      "id": "1:grid.yDistance->1.param:grid.yDistance",
-      "from": {
-        "nodeId": "1:grid.yDistance",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:grid.yDistance"
-      }
-    },
-    {
-      "id": "1:grid.items->1.param:grid.items",
-      "from": {
-        "nodeId": "1:grid.items",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:grid.items"
-      }
-    },
     {
       "id": "2:style.fillColor->2.param:style.fillColor",
       "from": {
@@ -140,105 +71,6 @@
       "to": {
         "nodeId": "2",
         "port": "param:style.strokeColor"
-      }
-    },
-    {
-      "id": "2:style.smoothness->2.param:style.smoothness",
-      "from": {
-        "nodeId": "2:style.smoothness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:style.smoothness"
-      }
-    },
-    {
-      "id": "2:style.noise->2.param:style.noise",
-      "from": {
-        "nodeId": "2:style.noise",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:style.noise"
-      }
-    },
-    {
-      "id": "2:projection.type->2.param:projection.type",
-      "from": {
-        "nodeId": "2:projection.type",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:projection.type"
-      }
-    },
-    {
-      "id": "2:shape.edges->2.param:shape.edges",
-      "from": {
-        "nodeId": "2:shape.edges",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:shape.edges"
-      }
-    },
-    {
-      "id": "2:probabilityDistribution.muRandomness->2.param:probabilityDistribution.muRandomness",
-      "from": {
-        "nodeId": "2:probabilityDistribution.muRandomness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:probabilityDistribution.muRandomness"
-      }
-    },
-    {
-      "id": "2:probabilityDistribution.sigma->2.param:probabilityDistribution.sigma",
-      "from": {
-        "nodeId": "2:probabilityDistribution.sigma",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:probabilityDistribution.sigma"
-      }
-    },
-    {
-      "id": "2:probabilityDistribution.sigmaRandomness->2.param:probabilityDistribution.sigmaRandomness",
-      "from": {
-        "nodeId": "2:probabilityDistribution.sigmaRandomness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:probabilityDistribution.sigmaRandomness"
-      }
-    },
-    {
-      "id": "2:probabilityDistribution.noise->2.param:probabilityDistribution.noise",
-      "from": {
-        "nodeId": "2:probabilityDistribution.noise",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:probabilityDistribution.noise"
-      }
-    },
-    {
-      "id": "2:variation.seed->2.param:variation.seed",
-      "from": {
-        "nodeId": "2:variation.seed",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:variation.seed"
       }
     },
     {
@@ -284,72 +116,43 @@
         "nodeId": "render-output",
         "port": "boundingBox"
       }
+    },
+    {
+      "id": "2:distribution.out->2.param:shape.distribution",
+      "from": {
+        "nodeId": "2:distribution",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "2",
+        "port": "param:shape.distribution"
+      }
     }
   ],
   "layout": {
     "1": {
-      "x": 283.38,
-      "y": 16.05
+      "x": 149.8636977401947,
+      "y": -41.72224014089406
     },
     "2": {
-      "x": 803.85,
-      "y": 515.18
-    },
-    "1:grid.x": {
-      "x": 1.7,
-      "y": 114.49
-    },
-    "1:grid.yDistance": {
-      "x": 1.23,
-      "y": 230.5
-    },
-    "1:grid.items": {
-      "x": 0.0,
-      "y": 0.0
+      "x": 923.8632594858245,
+      "y": -96.8482583667234
     },
     "2:style.fillColor": {
-      "x": 473.47,
-      "y": 325.15
+      "x": 593.8931970350812,
+      "y": 19.56904459783366
     },
     "2:style.strokeColor": {
-      "x": 289.01,
-      "y": 325.06
+      "x": 595.3987872534802,
+      "y": 291.5792829649413
     },
-    "2:style.smoothness": {
-      "x": 434.11,
-      "y": 580.6
+    "render-output": {
+      "x": 0,
+      "y": 0
     },
-    "2:style.noise": {
-      "x": 221.48,
-      "y": 639.55
-    },
-    "2:projection.type": {
-      "x": 435.17,
-      "y": 697.91
-    },
-    "2:shape.edges": {
-      "x": 223.19,
-      "y": 750.11
-    },
-    "2:probabilityDistribution.muRandomness": {
-      "x": 429.58,
-      "y": 804.58
-    },
-    "2:probabilityDistribution.sigma": {
-      "x": 219.68,
-      "y": 859.92
-    },
-    "2:probabilityDistribution.sigmaRandomness": {
-      "x": 431.65,
-      "y": 912.52
-    },
-    "2:probabilityDistribution.noise": {
-      "x": 217.31,
-      "y": 968.3
-    },
-    "2:variation.seed": {
-      "x": 428.12,
-      "y": 1023.01
+    "2:distribution": {
+      "x": 561.4839681819291,
+      "y": 559.5684869770655
     }
   }
 }

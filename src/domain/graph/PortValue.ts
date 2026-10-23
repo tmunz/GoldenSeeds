@@ -1,8 +1,9 @@
-import { SvgGeneratorResult } from '../generator/SvgGenerator';
+
 import { BoundingBox } from '../../datatypes/BoundingBox';
 import { Color } from '../../datatypes/Color';
 import { Point } from '../../datatypes/Point';
 import { Expression } from '../config/stageItemState/ExpressionState';
+import { ProbabilityDistribution } from '../../datatypes/ProbabilityDistribution';
 import type { Font } from 'opentype.js';
 
 export type PortValue =
@@ -21,6 +22,7 @@ export type PortValue =
   | { type: 'color'; value: Color }
   | { type: 'point'; value: Point }
   | { type: 'expression'; value: Expression }
+  | { type: 'distribution'; value: ProbabilityDistribution }
   | { type: 'font'; value: Font };
 
 export type PortValueType = PortValue['type'];

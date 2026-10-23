@@ -9,7 +9,7 @@ export class Tree extends SvgGenerator<TreeConfig> {
 
   static definition = {
     style: {
-      color: { initial: 'gold', type: 'color' as const },
+      color: { initial: 'transparent', type: 'color' as const },
     },
     tree: {
       depth: {

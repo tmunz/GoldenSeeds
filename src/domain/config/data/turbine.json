@@ -19,32 +19,22 @@
     },
     {
       "id": "2",
-      "kind": "shape"
+      "kind": "shape",
+      "parameters": {
+        "shape": {
+          "edges": "18",
+          "offset": "2 * (i%2) / Math.pow(goldenRatio, 2)"
+        },
+        "transformation": {
+          "angle": "180 + n",
+          "size": "Math.pow(n, 1 / goldenRatio)"
+        }
+      }
     },
     {
       "id": "2:style.strokeColor",
       "kind": "value:color",
       "value": "0x0ffdecd87"
-    },
-    {
-      "id": "2:shape.edges",
-      "kind": "value:number",
-      "value": "18"
-    },
-    {
-      "id": "2:shape.offset",
-      "kind": "value:expression",
-      "value": "2 * (i%2) / Math.pow(goldenRatio, 2)"
-    },
-    {
-      "id": "2:transformation.angle",
-      "kind": "value:expression",
-      "value": "180 + n"
-    },
-    {
-      "id": "2:transformation.size",
-      "kind": "value:expression",
-      "value": "Math.pow(n, 1 / goldenRatio)"
     },
     {
       "id": "render-output",
@@ -83,50 +73,6 @@
       "to": {
         "nodeId": "2",
         "port": "param:style.strokeColor"
-      }
-    },
-    {
-      "id": "2:shape.edges->2.param:shape.edges",
-      "from": {
-        "nodeId": "2:shape.edges",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:shape.edges"
-      }
-    },
-    {
-      "id": "2:shape.offset->2.param:shape.offset",
-      "from": {
-        "nodeId": "2:shape.offset",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:shape.offset"
-      }
-    },
-    {
-      "id": "2:transformation.angle->2.param:transformation.angle",
-      "from": {
-        "nodeId": "2:transformation.angle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:transformation.angle"
-      }
-    },
-    {
-      "id": "2:transformation.size->2.param:transformation.size",
-      "from": {
-        "nodeId": "2:transformation.size",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:transformation.size"
       }
     },
     {
@@ -188,39 +134,27 @@
   "layout": {
     "1": {
       "x": 306.26,
-      "y": 0.0
+      "y": 0
     },
     "2": {
-      "x": 946.32,
-      "y": 154.76
+      "x": 893.82,
+      "y": -0.2400000000000091
     },
     "1:plot.items": {
-      "x": 2.57,
-      "y": 28.58
+      "x": 5.069999999999993,
+      "y": 146.07999999999998
     },
     "1:plot.functionY": {
-      "x": 0.0,
-      "y": 149.19
+      "x": 3.75,
+      "y": 265.44
     },
     "2:style.strokeColor": {
-      "x": 667.22,
-      "y": 94.29
+      "x": 682.22,
+      "y": 75.54
     },
-    "2:shape.edges": {
-      "x": 445.1,
-      "y": 316.41
-    },
-    "2:shape.offset": {
-      "x": 670.71,
-      "y": 380.37
-    },
-    "2:transformation.angle": {
-      "x": 442.77,
-      "y": 468.75
-    },
-    "2:transformation.size": {
-      "x": 668.38,
-      "y": 540.85
+    "render-output": {
+      "x": 0,
+      "y": 0
     }
   }
 }

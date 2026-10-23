@@ -5,6 +5,7 @@ import { FontState } from './FontState';
 import { NumberState } from './NumberState';
 import { StageItemState } from './StageItemState';
 import { StringState } from './StringState';
+import { DistributionState } from './DistributionState';
 
 // TODO
 export class StageItemStateService {
@@ -13,6 +14,7 @@ export class StageItemStateService {
     let state: StageItemState<unknown, unknown> | null = null;
     switch (type) {
     case 'color': state = new ColorState(); break;
+    case 'distribution': state = new DistributionState(); break;
     case 'expression': state = new ExpressionState(); break;
     case 'number': state = new NumberState(); break;
     case 'font': state = new FontState(); break;

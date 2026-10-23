@@ -5,7 +5,13 @@
   "nodes": [
     {
       "id": "1",
-      "kind": "function"
+      "kind": "function",
+      "parameters": {
+        "plot": {
+          "functionX": "(k => (-1) ** (k + 1) * fib(k) ** 2)(Math.floor(n / 2))",
+          "functionY": "(k => (-1) ** k * fib(k) * fib(k + 1))(Math.max(0, Math.floor((n - 1) / 2)))"
+        }
+      }
     },
     {
       "id": "1:style.strokeColor",
@@ -18,38 +24,22 @@
       "value": "16"
     },
     {
-      "id": "1:plot.functionX",
-      "kind": "value:expression",
-      "value": "(k => (-1) ** (k + 1) * fib(k) ** 2)(Math.floor(n / 2))"
-    },
-    {
-      "id": "1:plot.functionY",
-      "kind": "value:expression",
-      "value": "(k => (-1) ** k * fib(k) * fib(k + 1))(Math.max(0, Math.floor((n - 1) / 2)))"
-    },
-    {
       "id": "2",
-      "kind": "shape"
+      "kind": "shape",
+      "parameters": {
+        "shape": {
+          "cutRatio1": "0.75"
+        },
+        "transformation": {
+          "angle": "n*90",
+          "size": "2*fib(n)"
+        }
+      }
     },
     {
       "id": "2:style.strokeColor",
       "kind": "value:color",
       "value": "0x0ffdecd87"
-    },
-    {
-      "id": "2:shape.cutRatio1",
-      "kind": "value:expression",
-      "value": "0.75"
-    },
-    {
-      "id": "2:transformation.angle",
-      "kind": "value:expression",
-      "value": "n*90"
-    },
-    {
-      "id": "2:transformation.size",
-      "kind": "value:expression",
-      "value": "2*fib(n)"
     },
     {
       "id": "render-output",
@@ -80,28 +70,6 @@
       }
     },
     {
-      "id": "1:plot.functionX->1.param:plot.functionX",
-      "from": {
-        "nodeId": "1:plot.functionX",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:plot.functionX"
-      }
-    },
-    {
-      "id": "1:plot.functionY->1.param:plot.functionY",
-      "from": {
-        "nodeId": "1:plot.functionY",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:plot.functionY"
-      }
-    },
-    {
       "id": "2:style.strokeColor->2.param:style.strokeColor",
       "from": {
         "nodeId": "2:style.strokeColor",
@@ -110,39 +78,6 @@
       "to": {
         "nodeId": "2",
         "port": "param:style.strokeColor"
-      }
-    },
-    {
-      "id": "2:shape.cutRatio1->2.param:shape.cutRatio1",
-      "from": {
-        "nodeId": "2:shape.cutRatio1",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:shape.cutRatio1"
-      }
-    },
-    {
-      "id": "2:transformation.angle->2.param:transformation.angle",
-      "from": {
-        "nodeId": "2:transformation.angle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:transformation.angle"
-      }
-    },
-    {
-      "id": "2:transformation.size->2.param:transformation.size",
-      "from": {
-        "nodeId": "2:transformation.size",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:transformation.size"
       }
     },
     {
@@ -214,44 +149,28 @@
   ],
   "layout": {
     "1": {
-      "x": 467.18,
-      "y": 162.31
+      "x": 347.18000000000006,
+      "y": -5.971249999999998
     },
     "2": {
-      "x": 981.01,
-      "y": 273.7
+      "x": 802.26,
+      "y": -6.300000000000011
     },
     "1:style.strokeColor": {
-      "x": 237.34,
-      "y": 0.0
+      "x": 121.09000000000003,
+      "y": -7.5
     },
     "1:plot.items": {
-      "x": 0.0,
-      "y": 216.87
-    },
-    "1:plot.functionX": {
-      "x": 93.98,
-      "y": 333.14
-    },
-    "1:plot.functionY": {
-      "x": 172.32,
-      "y": 453.98
+      "x": 87.5,
+      "y": 256.87
     },
     "2:style.strokeColor": {
-      "x": 583.49,
-      "y": 433.31
+      "x": 498.49,
+      "y": 493.30999999999995
     },
-    "2:shape.cutRatio1": {
-      "x": 482.38,
-      "y": 699.47
-    },
-    "2:transformation.angle": {
-      "x": 434.6,
-      "y": 837.83
-    },
-    "2:transformation.size": {
-      "x": 427.67,
-      "y": 959.76
+    "render-output": {
+      "x": 0,
+      "y": 0
     }
   }
 }

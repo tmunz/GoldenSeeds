@@ -5,15 +5,15 @@ export type Expression = (n: number, items: number, itemSize: (n: number) => num
 
 export class ExpressionState implements StageItemState<Expression, string> {
 
-  private text: string = '() => 1';
+  private text = '() => 1';
   private expression: Expression = (() => 1);
-  private valid: boolean = true;
+  private valid = true;
 
   getValue(): Expression {
     return this.expression;
   }
 
-  setValue(text: string): void {
+  setValue(text: string, warnOnInvalid = true): void {
     this.text = text;
     try {
       const expression = ExpressionState.convertToExpression(text);
@@ -22,7 +22,9 @@ export class ExpressionState implements StageItemState<Expression, string> {
       this.expression = expression;
       this.valid = true;
     } catch (e) {
-      console.warn(e);
+      if (warnOnInvalid) {
+        console.warn(e);
+      }
       this.valid = false;
     }
   }

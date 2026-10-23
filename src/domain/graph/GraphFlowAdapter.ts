@@ -29,6 +29,8 @@ export interface GraphNodeData extends Record<string, unknown> {
   /** Value nodes only: notifies GraphCanvas that the node's own state was mutated in place (e.g. via
    * its editor - see ValueNodeView), so it can re-evaluate the graph and persist the change. */
   onValueChange?: (nodeId: string) => void;
+  /** Edits an unconnected local parameter; false indicates invalid input. */
+  onParameterChange?: (nodeId: string, portId: string, text: string) => boolean;
 }
 
 

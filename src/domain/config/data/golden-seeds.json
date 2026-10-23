@@ -5,7 +5,12 @@
   "nodes": [
     {
       "id": "1",
-      "kind": "polar"
+      "kind": "polar",
+      "parameters": {
+        "grid": {
+          "distance": "n ** (1 / goldenRatio)"
+        }
+      }
     },
     {
       "id": "1:grid.items",
@@ -13,13 +18,21 @@
       "value": "987"
     },
     {
-      "id": "1:grid.distance",
-      "kind": "value:expression",
-      "value": "n ** (1 / goldenRatio)"
-    },
-    {
       "id": "2",
-      "kind": "shape"
+      "kind": "shape",
+      "parameters": {
+        "style": {
+          "smoothness": "0.4"
+        },
+        "shape": {
+          "edges": "4",
+          "offset": "i%2"
+        },
+        "transformation": {
+          "angle": "n * 111",
+          "size": "0.4 * (n / 5) ** (1 / 5)"
+        }
+      }
     },
     {
       "id": "2:style.fillColor",
@@ -27,38 +40,8 @@
       "value": "0x0ffdecd87"
     },
     {
-      "id": "2:shape.edges",
-      "kind": "value:number",
-      "value": "4"
-    },
-    {
-      "id": "2:shape.offset",
-      "kind": "value:expression",
-      "value": "i%2"
-    },
-    {
-      "id": "2:transformation.angle",
-      "kind": "value:expression",
-      "value": "n * 111"
-    },
-    {
-      "id": "2:transformation.size",
-      "kind": "value:expression",
-      "value": "0.4 * (n / 5) ** (1 / 5)"
-    },
-    {
       "id": "render-output",
       "kind": "render"
-    },
-    {
-      "id": "value-expression-t50nc",
-      "kind": "value:expression",
-      "value": "0.4"
-    },
-    {
-      "id": "value-number-ctxww",
-      "kind": "value:number",
-      "value": "0"
     }
   ],
   "edges": [
@@ -74,17 +57,6 @@
       }
     },
     {
-      "id": "1:grid.distance->1.param:grid.distance",
-      "from": {
-        "nodeId": "1:grid.distance",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:grid.distance"
-      }
-    },
-    {
       "id": "2:style.fillColor->2.param:style.fillColor",
       "from": {
         "nodeId": "2:style.fillColor",
@@ -93,50 +65,6 @@
       "to": {
         "nodeId": "2",
         "port": "param:style.fillColor"
-      }
-    },
-    {
-      "id": "2:shape.edges->2.param:shape.edges",
-      "from": {
-        "nodeId": "2:shape.edges",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:shape.edges"
-      }
-    },
-    {
-      "id": "2:shape.offset->2.param:shape.offset",
-      "from": {
-        "nodeId": "2:shape.offset",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:shape.offset"
-      }
-    },
-    {
-      "id": "2:transformation.angle->2.param:transformation.angle",
-      "from": {
-        "nodeId": "2:transformation.angle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:transformation.angle"
-      }
-    },
-    {
-      "id": "2:transformation.size->2.param:transformation.size",
-      "from": {
-        "nodeId": "2:transformation.size",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:transformation.size"
       }
     },
     {
@@ -173,28 +101,6 @@
       }
     },
     {
-      "id": "value-expression-t50nc.out->2.param:style.smoothness",
-      "from": {
-        "nodeId": "value-expression-t50nc",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:style.smoothness"
-      }
-    },
-    {
-      "id": "value-number-ctxww.out->2.param:style.strokeWidth",
-      "from": {
-        "nodeId": "value-number-ctxww",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:style.strokeWidth"
-      }
-    },
-    {
       "id": "1.grid->2.grid",
       "from": {
         "nodeId": "1",
@@ -209,47 +115,23 @@
   "layout": {
     "1": {
       "x": 305.82,
-      "y": 0.0
+      "y": 0
     },
     "2": {
-      "x": 960.92,
-      "y": 267.78
+      "x": 715.92,
+      "y": 0.2799999999999727
     },
     "1:grid.items": {
-      "x": 0.0,
-      "y": 2.14
-    },
-    "1:grid.distance": {
-      "x": 0.57,
-      "y": 110.16
+      "x": 53.75,
+      "y": 113.39
     },
     "2:style.fillColor": {
-      "x": 375.57,
-      "y": 233.74
+      "x": 445.57,
+      "y": 309.99
     },
-    "2:shape.edges": {
-      "x": 514.82,
-      "y": 626.53
-    },
-    "2:shape.offset": {
-      "x": 539.1,
-      "y": 737.81
-    },
-    "2:transformation.angle": {
-      "x": 563.2,
-      "y": 851.14
-    },
-    "2:transformation.size": {
-      "x": 596.56,
-      "y": 970.78
-    },
-    "value-expression-t50nc": {
-      "x": 496.96,
-      "y": 512.11
-    },
-    "value-number-ctxww": {
-      "x": 570.85,
-      "y": 397.9
+    "render-output": {
+      "x": 0,
+      "y": 0
     }
   }
 }

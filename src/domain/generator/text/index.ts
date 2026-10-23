@@ -8,7 +8,7 @@ export class TextDrawer extends SvgGenerator<TextDrawerConfig> {
   static definition = {
     style: {
       color: {
-        initial: 'gold',
+        initial: 'transparent',
         type: 'color' as const,
       },
       font: {

@@ -1,3 +1,4 @@
+import { DEFAULT_DISTRIBUTION_TEXT } from '../../../datatypes/ProbabilityDistribution';
 import { MathUtils } from '../../../utils/MathUtils';
 import { PointUtils } from '../../../utils/PointUtils';
 import { draw, ShapeConfig } from './ShapeDrawer';
@@ -9,7 +10,7 @@ export class Shape extends SvgGenerator<ShapeConfig> {
   static definition = {
     style: {
       fillColor: { initial: 'transparent', type: 'color' as const },
-      strokeColor: { initial: 'gold', type: 'color' as const },
+      strokeColor: { initial: 'transparent', type: 'color' as const },
       strokeWidth: {
         initial: '1',
         type: 'number' as const,
@@ -47,6 +48,7 @@ export class Shape extends SvgGenerator<ShapeConfig> {
       },
     },
     shape: {
+      distribution: { initial: DEFAULT_DISTRIBUTION_TEXT, type: 'distribution' as const },
       edges: {
         initial: '1',
         type: 'number' as const,
@@ -74,46 +76,6 @@ export class Shape extends SvgGenerator<ShapeConfig> {
         min: 0,
         max: 1,
         step: 0.05,
-      },
-    },
-    probabilityDistribution: {
-      muRandomness: {
-        initial: '0',
-        type: 'number' as const,
-        min: 0,
-        max: 1,
-        step: 0.05,
-      },
-      sigma: {
-        initial: '0',
-        type: 'number' as const,
-        min: 0,
-        max: 1,
-        step: 0.05,
-      },
-      sigmaRandomness: {
-        initial: '0',
-        type: 'number' as const,
-        min: 0,
-        max: 1,
-        step: 0.05,
-      },
-      noise: {
-        initial: '0',
-        type: 'number' as const,
-        min: 0,
-        max: 1,
-        step: 0.05,
-      },
-    },
-    variation: {
-      seed: {
-        initial: '999',
-        type: 'number' as const,
-        min: 0,
-        max: 999,
-        step: 1,
-        animateable: true,
       },
     },
     transformation: {

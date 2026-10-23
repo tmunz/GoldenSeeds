@@ -15,6 +15,7 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
+import { withParameter } from './GeneratorParameters';
 import { Graph } from './Graph';
 import { GraphEdge } from './GraphEdge';
 import { GraphNode } from './GraphNode';
@@ -39,7 +40,7 @@ import { graphEvaluator } from './GraphEvaluator';
 import { ensureRenderNode, RENDER_NODE_ID, RENDER_NODE_KIND } from './RenderNode';
 import { connectResultPorts } from './StageGraphAdapter';
 import { VALUE_KIND_PREFIX, DEFAULT_VALUE_DEFINITIONS } from './ValueNodeRegistry';
-import { parseParamPortId, collectParamPorts } from './ParamPorts';
+import { parseParamPortId, collectParamPorts, selectionOptions } from './ParamPorts';
 import { ParamDefinitionType } from '../generator/SvgGenerator';
 import { Stage } from '../config/Stage';
 
@@ -65,7 +66,9 @@ function defaultParamValues(node: GraphNode): Record<string, PortValue> | undefi
   collectParamPorts(stage.generator.definition).forEach((p) => {
     const state = stage.state.data[p.groupId]?.[p.id];
     if (state) {
-      values[p.portId] = { type: p.portType, value: state.getValue() } as PortValue;
+      const definition = stage.generator.definition[p.groupId][p.id];
+      const value = definition.type === 'selection' ? selectionOptions(definition).indexOf(state.getTextValue()) : state.getValue();
+      values[p.portId] = { type: p.portType, value } as PortValue;
     }
   });
   return values;
@@ -180,12 +183,19 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
       }
 
       const next = applyNodeChanges(protectedChanges, nodes);
+      const nodeIds = new Set(next.map((node) => node.id));
+      // React Flow sends edge and node removals separately in the same event. The captured
+      // edges may still include the removed node, so remove its connections before persisting.
+      const nextEdges = edges.filter((edge) => nodeIds.has(edge.source) && nodeIds.has(edge.target));
       setNodes(next);
+      if (nextEdges.length !== edges.length) {
+        setEdges(nextEdges);
+      }
       // Side effects (here: notifying the parent) must happen outside the state updater itself -
       // React may invoke updater functions more than once, which would otherwise emit duplicate/
       // nested updates and can trip React's "Maximum update depth exceeded" safeguard.
       if (persistable) {
-        emitChange(next, edges.map(flowEdgeToGraphEdge));
+        emitChange(next, nextEdges.map(flowEdgeToGraphEdge));
       }
 
       if (protectedChanges.some((c) => isPositionChange(c) && c.dragging === false)) {
@@ -293,6 +303,26 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
     [emitChange, nodes, edges, pushHistory],
   );
 
+  const handleParameterChange = useCallback((nodeId: string, portId: string, text: string) => {
+    const node = nodes.find((entry) => entry.id === nodeId);
+    if (!node || edges.some((edge) => edge.target === nodeId && edge.targetHandle === portId)) {
+      return false;
+    }
+    const graphNode = withParameter(node.data.graphNode, portId, text);
+    if (graphNode === node.data.graphNode) {
+      return false;
+    }
+    const editId = `${nodeId}.${portId}`;
+    if (lastEditedValueNodeRef.current !== editId) {
+      pushHistory({ nodes, edges });
+      lastEditedValueNodeRef.current = editId;
+    }
+    const next = nodes.map((entry) => entry.id === nodeId ? { ...entry, data: { ...entry.data, graphNode } } : entry);
+    setNodes(next);
+    emitChange(next, edges.map(flowEdgeToGraphEdge));
+    return true;
+  }, [nodes, edges, pushHistory, emitChange]);
+
   const evaluation = useMemo(() => {
     try {
       return graphEvaluator.evaluate({ nodes: nodes.map((n) => n.data.graphNode), edges: edges.map(flowEdgeToGraphEdge) });
@@ -342,7 +372,10 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
       const targetNode = nodes.find((n) => n.id === edge.to.nodeId);
       const definition = paramDefinitionFor(targetNode?.data.graphNode, param.groupId, param.id);
       if (definition) {
-        map[edge.from.nodeId] = definition;
+        map[edge.from.nodeId] = definition.type === 'selection' ? {
+          type: 'number', initial: String(selectionOptions(definition).indexOf(definition.initial)),
+          min: 0, max: Math.max(0, selectionOptions(definition).length - 1), step: 1,
+        } : definition;
       }
     });
     return map;
@@ -366,9 +399,10 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
         connectedInputPorts: connectedInputPortsByNode[n.id],
         definition: valueNodeDefinitions[n.id] ?? DEFAULT_VALUE_DEFINITIONS[n.data.graphNode.kind.slice(VALUE_KIND_PREFIX.length) as ParamDefinitionType],
         onValueChange: handleValueChange,
+        onParameterChange: handleParameterChange,
       },
     })),
-    [nodes, evaluation, inputValuesByNode, connectedInputPortsByNode, valueNodeDefinitions, handleValueChange, width, height, viewportX, viewportY, zoom],
+    [nodes, evaluation, inputValuesByNode, connectedInputPortsByNode, valueNodeDefinitions, handleValueChange, handleParameterChange, width, height, viewportX, viewportY, zoom],
   );
 
   return (

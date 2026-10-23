@@ -3,18 +3,19 @@ import { Handle, Position, NodeProps } from '@xyflow/react';
 import { FlowNode } from '../GraphFlowAdapter';
 import { portColor } from '../PortColors';
 import { ValueNodeConfig } from '../ValueNodeRegistry';
+import { DistributionState } from '../../config/stageItemState/DistributionState';
+import { DistributionValueEditor } from './DistributionValueEditor';
 import { ColorState } from '../../config/stageItemState/ColorState';
 import { NumberState } from '../../config/stageItemState/NumberState';
 import { ExpressionState } from '../../config/stageItemState/ExpressionState';
 import { StringState } from '../../config/stageItemState/StringState';
 import { FontState } from '../../config/stageItemState/FontState';
-import { ParamDefinition, ParamDefinitionMinMaxStep, ParamDefinitionSelection } from '../../generator/SvgGenerator';
+import { ParamDefinition, ParamDefinitionMinMaxStep } from '../../generator/SvgGenerator';
 import {
   ColorValueEditor,
   NumberValueEditor,
   ExpressionValueEditor,
   StringValueEditor,
-  SelectionValueEditor,
   FontValueEditor,
 } from './ValueEditors';
 
@@ -31,7 +32,7 @@ function renderEditor(kind: string, state: ValueNodeConfig['state'], definition:
   case 'value:string':
     return <StringValueEditor state={state as StringState} onCommit={onCommit} />;
   case 'value:selection':
-    return <SelectionValueEditor state={state as StringState} definition={definition as ParamDefinitionSelection} onCommit={onCommit} />;
+    return <NumberValueEditor state={state as NumberState} definition={definition as ParamDefinitionMinMaxStep} onCommit={onCommit} />;
   case 'value:font':
     return <FontValueEditor state={state as FontState} onCommit={onCommit} />;
   default:
@@ -59,7 +60,9 @@ export function ValueNodeView({ id, data }: NodeProps<FlowNode>) {
     <div className="value-node">
       <div className="value-node-header">{graphNode.kind.slice('value:'.length)}</div>
       <div className="value-node-body">
-        {renderEditor(graphNode.kind, state, data.definition, commit)}
+        {graphNode.kind === 'value:distribution'
+          ? <DistributionValueEditor state={state as DistributionState} inputValues={data.inputValues} onCommit={commit} />
+          : renderEditor(graphNode.kind, state, data.definition, commit)}
       </div>
       {outputPort && (
         <div className="value-node-port">

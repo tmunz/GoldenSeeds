@@ -12,6 +12,7 @@ export const PORT_COLORS: Record<PortValueType, string> = {
   color: '#c17ce3',
   point: '#e3b97c',
   expression: '#7ce3d8',
+  distribution: '#e39dba',
   font: '#e3e07c',
 };
 

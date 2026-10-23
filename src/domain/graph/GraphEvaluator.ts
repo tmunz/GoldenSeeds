@@ -19,8 +19,15 @@ export interface GraphEvaluationResult {
 
 export class GraphEvaluator {
   evaluate(graph: Graph): GraphEvaluationResult {
-    const order = this.topologicalSort(graph);
-    const incomingByTargetPort = this.buildIncomingIndex(graph);
+    // During deletion, an edge can briefly outlive one of its nodes. It is disconnected,
+    // not a dependency: counting it would incorrectly report a cycle in downstream nodes.
+    const nodeIds = new Set(graph.nodes.map((node) => node.id));
+    const connectedGraph = {
+      ...graph,
+      edges: graph.edges.filter((edge) => nodeIds.has(edge.from.nodeId) && nodeIds.has(edge.to.nodeId)),
+    };
+    const order = this.topologicalSort(connectedGraph);
+    const incomingByTargetPort = this.buildIncomingIndex(connectedGraph);
     const outputsByNode: Record<string, Record<string, PortValue>> = {};
 
     order.forEach((nodeId) => {

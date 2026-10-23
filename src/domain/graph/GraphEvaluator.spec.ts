@@ -82,6 +82,21 @@ describe('GraphEvaluator', () => {
     expect(numberOut(outputsByNode, 'lonely')).toBe(0);
   });
 
+  test('ignores connections to deleted nodes without reporting a cycle', () => {
+    const graph: Graph = {
+      nodes: [numberNode('source', 3), addNode('shape', ['in']), addNode('output', ['in'])],
+      edges: [
+        { id: 'deleted->shape', from: { nodeId: 'deleted', port: 'out' }, to: { nodeId: 'shape', port: 'in' } },
+        { id: 'shape->output', from: { nodeId: 'shape', port: 'out' }, to: { nodeId: 'output', port: 'in' } },
+        { id: 'source->deleted', from: { nodeId: 'source', port: 'out' }, to: { nodeId: 'deleted', port: 'in' } },
+      ],
+    };
+    const { order, outputsByNode } = new GraphEvaluator().evaluate(graph);
+    expect(order).toEqual(['source', 'shape', 'output']);
+    expect(numberOut(outputsByNode, 'output')).toBe(0);
+    expect(graph.edges).toHaveLength(3);
+  });
+
   test('throws GraphCycleError for cyclic graphs', () => {
     const graph: Graph = {
       nodes: [addNode('a', ['in']), addNode('b', ['in'])],

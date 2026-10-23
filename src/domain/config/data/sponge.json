@@ -5,47 +5,27 @@
   "nodes": [
     {
       "id": "1",
-      "kind": "tree"
+      "kind": "tree",
+      "parameters": {
+        "tree": {
+          "depth": "13",
+          "seed": "48"
+        },
+        "split": {
+          "angle": "60",
+          "variation": "0.6",
+          "probability": "1"
+        },
+        "length": {
+          "conservation": "0.75",
+          "variation": "0"
+        }
+      }
     },
     {
       "id": "1:style.color",
       "kind": "value:color",
       "value": "0x0ffdecd87"
-    },
-    {
-      "id": "1:tree.depth",
-      "kind": "value:number",
-      "value": "13"
-    },
-    {
-      "id": "1:tree.seed",
-      "kind": "value:number",
-      "value": "48"
-    },
-    {
-      "id": "1:split.angle",
-      "kind": "value:number",
-      "value": "60"
-    },
-    {
-      "id": "1:split.variation",
-      "kind": "value:number",
-      "value": "0.6"
-    },
-    {
-      "id": "1:split.probability",
-      "kind": "value:number",
-      "value": "1"
-    },
-    {
-      "id": "1:length.conservation",
-      "kind": "value:number",
-      "value": "0.75"
-    },
-    {
-      "id": "1:length.variation",
-      "kind": "value:number",
-      "value": "0"
     },
     {
       "id": "render-output",
@@ -62,83 +42,6 @@
       "to": {
         "nodeId": "1",
         "port": "param:style.color"
-      }
-    },
-    {
-      "id": "1:tree.depth->1.param:tree.depth",
-      "from": {
-        "nodeId": "1:tree.depth",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:tree.depth"
-      }
-    },
-    {
-      "id": "1:tree.seed->1.param:tree.seed",
-      "from": {
-        "nodeId": "1:tree.seed",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:tree.seed"
-      }
-    },
-    {
-      "id": "1:split.angle->1.param:split.angle",
-      "from": {
-        "nodeId": "1:split.angle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:split.angle"
-      }
-    },
-    {
-      "id": "1:split.variation->1.param:split.variation",
-      "from": {
-        "nodeId": "1:split.variation",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:split.variation"
-      }
-    },
-    {
-      "id": "1:split.probability->1.param:split.probability",
-      "from": {
-        "nodeId": "1:split.probability",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:split.probability"
-      }
-    },
-    {
-      "id": "1:length.conservation->1.param:length.conservation",
-      "from": {
-        "nodeId": "1:length.conservation",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:length.conservation"
-      }
-    },
-    {
-      "id": "1:length.variation->1.param:length.variation",
-      "from": {
-        "nodeId": "1:length.variation",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:length.variation"
       }
     },
     {
@@ -177,40 +80,16 @@
   ],
   "layout": {
     "1": {
-      "x": 967.03,
-      "y": 342.55
+      "x": 555.78,
+      "y": 53.80000000000001
     },
     "1:style.color": {
-      "x": 504.73,
-      "y": 0.0
+      "x": 315.98,
+      "y": 52.5
     },
-    "1:tree.depth": {
-      "x": 234.94,
-      "y": 218.26
-    },
-    "1:tree.seed": {
-      "x": 0.0,
-      "y": 297.08
-    },
-    "1:split.angle": {
-      "x": 237.97,
-      "y": 395.6
-    },
-    "1:split.variation": {
-      "x": 6.06,
-      "y": 489.58
-    },
-    "1:split.probability": {
-      "x": 239.48,
-      "y": 566.88
-    },
-    "1:length.conservation": {
-      "x": 465.32,
-      "y": 647.21
-    },
-    "1:length.variation": {
-      "x": 467.51,
-      "y": 759.89
+    "render-output": {
+      "x": 0,
+      "y": 0
     }
   }
 }

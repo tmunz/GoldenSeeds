@@ -4,8 +4,9 @@ import { PortDefinition, PortValueType } from './PortValue';
 export const PARAM_TYPE_TO_PORT_TYPE: Record<ParamDefinitionType, PortValueType> = {
   number: 'number',
   expression: 'expression',
+  distribution: 'distribution',
   color: 'color',
-  selection: 'string',
+  selection: 'number',
   string: 'string',
   font: 'font',
 };
@@ -43,3 +44,8 @@ export function collectParamPorts(definition: Record<string, Record<string, Para
 export function paramPortDefinitions(definition: Record<string, Record<string, ParamDefinition>>): PortDefinition[] {
   return collectParamPorts(definition).map((p) => ({ id: p.portId, type: p.portType }));
 }
+
+export function selectionOptions(definition: ParamDefinition | undefined): string[] {
+  return definition?.type === 'selection' && 'options' in definition ? definition.options : [];
+}
+

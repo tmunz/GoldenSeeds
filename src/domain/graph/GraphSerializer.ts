@@ -1,3 +1,5 @@
+import { Stage } from '../config/Stage';
+import { parameterOverrides } from './GeneratorParameters';
 import { Config } from '../config/Config';
 import { RawConfig, RawGraphNode } from '../config/RawConfig';
 import { GraphNode } from './GraphNode';
@@ -21,6 +23,12 @@ export function toRawConfig(config: Config): RawConfig {
       const { state } = node.config as ValueNodeConfig;
       return { id: node.id, kind: node.kind, value: state.getTextValue() };
     }
+    if (node.kind !== RENDER_NODE_KIND) {
+      const parameters = parameterOverrides(node.config as Stage);
+      if (Object.keys(parameters).length > 0) {
+        return { id: node.id, kind: node.kind, parameters };
+      }
+    }
     return { id: node.id, kind: node.kind };
   });
   return { meta: config.meta, nodes, edges: config.graph.edges, layout: config.layout };
@@ -34,6 +42,6 @@ async function nodeFromRaw(raw: RawGraphNode): Promise<GraphNode> {
     const paramType = raw.kind.slice(VALUE_KIND_PREFIX.length) as ParamDefinitionType;
     return valueNodeRegistry.createNode(paramType, raw.id, raw.value ?? '');
   }
-  return generatorNodeRegistry.createNode(raw.kind, raw.id);
+  return generatorNodeRegistry.createNode(raw.kind, raw.id, raw.parameters);
 }
 

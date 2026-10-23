@@ -5,31 +5,28 @@
   "nodes": [
     {
       "id": "1",
-      "kind": "cartesian"
-    },
-    {
-      "id": "1:grid.items",
-      "kind": "value:number",
-      "value": "4"
-    },
-    {
-      "id": "1:grid.x",
-      "kind": "value:number",
-      "value": "2"
-    },
-    {
-      "id": "1:grid.xDistance",
-      "kind": "value:expression",
-      "value": "1.2"
-    },
-    {
-      "id": "1:grid.yDistance",
-      "kind": "value:expression",
-      "value": "1.2"
+      "kind": "cartesian",
+      "parameters": {
+        "grid": {
+          "items": "4",
+          "x": "2",
+          "xDistance": "1.2",
+          "yDistance": "1.2"
+        }
+      }
     },
     {
       "id": "2",
-      "kind": "shape"
+      "kind": "shape",
+      "parameters": {
+        "style": {
+          "smoothness": "0.1"
+        },
+        "shape": {
+          "edges": "6",
+          "offset": "i%2==0 ? 0 : -n*0.03"
+        }
+      }
     },
     {
       "id": "2:style.fillColor",
@@ -37,23 +34,20 @@
       "value": "0x0ffdecd87"
     },
     {
-      "id": "2:style.smoothness",
-      "kind": "value:expression",
-      "value": "0.1"
-    },
-    {
-      "id": "2:shape.edges",
-      "kind": "value:number",
-      "value": "6"
-    },
-    {
-      "id": "2:shape.offset",
-      "kind": "value:expression",
-      "value": "i%2==0 ? 0 : -n*0.03"
-    },
-    {
       "id": "3",
-      "kind": "shape"
+      "kind": "shape",
+      "parameters": {
+        "style": {
+          "smoothness": "0.1 + n*0.05"
+        },
+        "shape": {
+          "edges": "6",
+          "offset": "i%2==0? 1 : -0.55+n*0.15"
+        },
+        "transformation": {
+          "size": "0.28"
+        }
+      }
     },
     {
       "id": "3:style.fillColor",
@@ -61,71 +55,33 @@
       "value": "0x0ff000000"
     },
     {
-      "id": "3:style.smoothness",
-      "kind": "value:expression",
-      "value": "0.1 + n*0.05"
-    },
-    {
-      "id": "3:shape.edges",
-      "kind": "value:number",
-      "value": "6"
-    },
-    {
-      "id": "3:shape.offset",
-      "kind": "value:expression",
-      "value": "i%2==0? 1 : -0.55+n*0.15"
-    },
-    {
-      "id": "3:transformation.size",
-      "kind": "value:expression",
-      "value": "0.28"
-    },
-    {
       "id": "4",
-      "kind": "polar"
-    },
-    {
-      "id": "4:grid.items",
-      "kind": "value:number",
-      "value": "3"
-    },
-    {
-      "id": "4:grid.angle",
-      "kind": "value:expression",
-      "value": "-90 + n * 120"
-    },
-    {
-      "id": "4:grid.distance",
-      "kind": "value:expression",
-      "value": "0.52"
+      "kind": "polar",
+      "parameters": {
+        "grid": {
+          "items": "3",
+          "angle": "-90 + n * 120",
+          "distance": "0.52"
+        }
+      }
     },
     {
       "id": "5",
-      "kind": "shape"
-    },
-    {
-      "id": "5:style.fillColor",
-      "kind": "value:color",
-      "value": "0x0ffdecd87"
-    },
-    {
-      "id": "5:transformation.size",
-      "kind": "value:expression",
-      "value": "0.1"
+      "kind": "shape",
+      "parameters": {
+        "transformation": {
+          "size": "0.1"
+        }
+      }
     },
     {
       "id": "6",
-      "kind": "shape"
-    },
-    {
-      "id": "6:style.fillColor",
-      "kind": "value:color",
-      "value": "0x0ff000000"
-    },
-    {
-      "id": "6:transformation.size",
-      "kind": "value:expression",
-      "value": "0.05"
+      "kind": "shape",
+      "parameters": {
+        "transformation": {
+          "size": "0.05"
+        }
+      }
     },
     {
       "id": "render-output",
@@ -133,50 +89,6 @@
     }
   ],
   "edges": [
-    {
-      "id": "1:grid.items->1.param:grid.items",
-      "from": {
-        "nodeId": "1:grid.items",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:grid.items"
-      }
-    },
-    {
-      "id": "1:grid.x->1.param:grid.x",
-      "from": {
-        "nodeId": "1:grid.x",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:grid.x"
-      }
-    },
-    {
-      "id": "1:grid.xDistance->1.param:grid.xDistance",
-      "from": {
-        "nodeId": "1:grid.xDistance",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:grid.xDistance"
-      }
-    },
-    {
-      "id": "1:grid.yDistance->1.param:grid.yDistance",
-      "from": {
-        "nodeId": "1:grid.yDistance",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "1",
-        "port": "param:grid.yDistance"
-      }
-    },
     {
       "id": "2:style.fillColor->2.param:style.fillColor",
       "from": {
@@ -186,39 +98,6 @@
       "to": {
         "nodeId": "2",
         "port": "param:style.fillColor"
-      }
-    },
-    {
-      "id": "2:style.smoothness->2.param:style.smoothness",
-      "from": {
-        "nodeId": "2:style.smoothness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:style.smoothness"
-      }
-    },
-    {
-      "id": "2:shape.edges->2.param:shape.edges",
-      "from": {
-        "nodeId": "2:shape.edges",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:shape.edges"
-      }
-    },
-    {
-      "id": "2:shape.offset->2.param:shape.offset",
-      "from": {
-        "nodeId": "2:shape.offset",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "2",
-        "port": "param:shape.offset"
       }
     },
     {
@@ -241,50 +120,6 @@
       "to": {
         "nodeId": "3",
         "port": "param:style.fillColor"
-      }
-    },
-    {
-      "id": "3:style.smoothness->3.param:style.smoothness",
-      "from": {
-        "nodeId": "3:style.smoothness",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:style.smoothness"
-      }
-    },
-    {
-      "id": "3:shape.edges->3.param:shape.edges",
-      "from": {
-        "nodeId": "3:shape.edges",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:shape.edges"
-      }
-    },
-    {
-      "id": "3:shape.offset->3.param:shape.offset",
-      "from": {
-        "nodeId": "3:shape.offset",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:shape.offset"
-      }
-    },
-    {
-      "id": "3:transformation.size->3.param:transformation.size",
-      "from": {
-        "nodeId": "3:transformation.size",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "3",
-        "port": "param:transformation.size"
       }
     },
     {
@@ -321,39 +156,6 @@
       }
     },
     {
-      "id": "4:grid.items->4.param:grid.items",
-      "from": {
-        "nodeId": "4:grid.items",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "4",
-        "port": "param:grid.items"
-      }
-    },
-    {
-      "id": "4:grid.angle->4.param:grid.angle",
-      "from": {
-        "nodeId": "4:grid.angle",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "4",
-        "port": "param:grid.angle"
-      }
-    },
-    {
-      "id": "4:grid.distance->4.param:grid.distance",
-      "from": {
-        "nodeId": "4:grid.distance",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "4",
-        "port": "param:grid.distance"
-      }
-    },
-    {
       "id": "3.grid->4.grid",
       "from": {
         "nodeId": "3",
@@ -365,28 +167,6 @@
       }
     },
     {
-      "id": "5:style.fillColor->5.param:style.fillColor",
-      "from": {
-        "nodeId": "5:style.fillColor",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:style.fillColor"
-      }
-    },
-    {
-      "id": "5:transformation.size->5.param:transformation.size",
-      "from": {
-        "nodeId": "5:transformation.size",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "5",
-        "port": "param:transformation.size"
-      }
-    },
-    {
       "id": "4.grid->5.grid",
       "from": {
         "nodeId": "4",
@@ -395,28 +175,6 @@
       "to": {
         "nodeId": "5",
         "port": "grid"
-      }
-    },
-    {
-      "id": "6:style.fillColor->6.param:style.fillColor",
-      "from": {
-        "nodeId": "6:style.fillColor",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:style.fillColor"
-      }
-    },
-    {
-      "id": "6:transformation.size->6.param:transformation.size",
-      "from": {
-        "nodeId": "6:transformation.size",
-        "port": "out"
-      },
-      "to": {
-        "nodeId": "6",
-        "port": "param:transformation.size"
       }
     },
     {
@@ -495,112 +253,66 @@
         "nodeId": "5",
         "port": "svg"
       }
+    },
+    {
+      "id": "2:style.fillColor.out->5.param:style.fillColor",
+      "from": {
+        "nodeId": "2:style.fillColor",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "5",
+        "port": "param:style.fillColor"
+      }
+    },
+    {
+      "id": "3:style.fillColor.out->6.param:style.fillColor",
+      "from": {
+        "nodeId": "3:style.fillColor",
+        "port": "out"
+      },
+      "to": {
+        "nodeId": "6",
+        "port": "param:style.fillColor"
+      }
     }
   ],
   "layout": {
     "1": {
-      "x": 366.9,
-      "y": 251.75
+      "x": 21.582552698491355,
+      "y": 45.26686182537715
     },
     "2": {
-      "x": 1232.0,
-      "y": 249.06
+      "x": 383.25,
+      "y": 45.31
     },
     "3": {
-      "x": 2311.5,
-      "y": 252.89
+      "x": 793.7544935716056,
+      "y": 45.15686182537714
     },
     "4": {
-      "x": 2870.9,
-      "y": 615.18
+      "x": 1183.644934094683,
+      "y": 44.17180277020371
     },
     "5": {
-      "x": 3561.32,
-      "y": 617.04
+      "x": 1558.1565029000174,
+      "y": 44.177880051925165
     },
     "6": {
-      "x": 4413.4,
-      "y": 617.76
-    },
-    "1:grid.items": {
-      "x": 0.17,
-      "y": 191.78
-    },
-    "1:grid.x": {
-      "x": 0.0,
-      "y": 301.06
-    },
-    "1:grid.xDistance": {
-      "x": 2.61,
-      "y": 411.83
-    },
-    "1:grid.yDistance": {
-      "x": 3.48,
-      "y": 522.52
+      "x": 1956.0254369217696,
+      "y": 44.52709550826948
     },
     "2:style.fillColor": {
-      "x": 965.11,
-      "y": 0.0
-    },
-    "2:style.smoothness": {
-      "x": 956.7,
-      "y": 330.37
-    },
-    "2:shape.edges": {
-      "x": 957.34,
-      "y": 442.1
-    },
-    "2:shape.offset": {
-      "x": 958.5,
-      "y": 557.23
+      "x": 145.11,
+      "y": 560
     },
     "3:style.fillColor": {
-      "x": 1965.11,
-      "y": 11.25
+      "x": 554.1724999999999,
+      "y": 818.4375
     },
-    "3:style.smoothness": {
-      "x": 1943.11,
-      "y": 352.0
-    },
-    "3:shape.edges": {
-      "x": 1945.11,
-      "y": 468.0
-    },
-    "3:shape.offset": {
-      "x": 1949.11,
-      "y": 584.0
-    },
-    "3:transformation.size": {
-      "x": 1952.2,
-      "y": 695.79
-    },
-    "4:grid.items": {
-      "x": 2504.02,
-      "y": 690.65
-    },
-    "4:grid.angle": {
-      "x": 2505.11,
-      "y": 797.0
-    },
-    "4:grid.distance": {
-      "x": 2503.11,
-      "y": 907.0
-    },
-    "5:style.fillColor": {
-      "x": 3303.58,
-      "y": 702.0
-    },
-    "5:transformation.size": {
-      "x": 3271.58,
-      "y": 964.78
-    },
-    "6:style.fillColor": {
-      "x": 4141.37,
-      "y": 702.36
-    },
-    "6:transformation.size": {
-      "x": 4110.98,
-      "y": 963.61
+    "render-output": {
+      "x": 0,
+      "y": 0
     }
   }
 }

@@ -13,6 +13,7 @@ export function formatPortValue(value: PortValue | undefined): string {
   case 'color': return value.value.getAcn();
   case 'point': return value.value.toString();
   case 'expression': return formatExpressionPreview(value.value);
+  case 'distribution': return `σ ${value.value.sigma}, seed ${value.value.seed}`;
   case 'font': return value.value?.names.fullName.en ?? '';
   case 'grid': return `${value.value.length} points`;
   case 'svg': return value.value ? 'svg' : 'empty';

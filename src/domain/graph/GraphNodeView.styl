@@ -45,6 +45,33 @@
     white-space: nowrap;
   }
 
+  .graph-node-port-editable {
+    align-self: stretch;
+    min-width: 180px;
+
+    >.number-parameter-editor, >.expression-parameter-editor, >.string-parameter-editor {
+      width: 100%;
+    }
+  }
+
+  .graph-node-option-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    padding: 6px 0;
+    color: var(--textColor);
+
+    select {
+      font: inherit;
+      padding: 4px;
+      color: var(--actionColor);
+      background: unquote('rgb(var(--backgroundColorAlt))');
+      border: 1px solid var(--textColorAlt);
+      border-radius: 3px;
+    }
+  }
+
   .graph-node-port-label {
     color: var(--textColorAlt);
   }

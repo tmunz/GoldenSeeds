@@ -7,7 +7,7 @@ export class CartesianGrid extends SvgGenerator<CartesianConfig> {
 
   static definition: Record<string, Record<string, ParamDefinition>> = {
     style: {
-      color: { initial: 'gold', type: 'color' as const },
+      color: { initial: 'transparent', type: 'color' as const },
       strokeWidth: {
         initial: '1',
         type: 'expression' as const,
