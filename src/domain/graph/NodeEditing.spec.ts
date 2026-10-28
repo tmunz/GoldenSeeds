@@ -1,8 +1,8 @@
 import { Font } from 'opentype.js';
 import { DEFAULT_DISTRIBUTION_TEXT, DISTRIBUTION_DEFINITION } from '../../datatypes/ProbabilityDistribution';
-import { Stage } from '../config/Stage';
-import { NumberState } from '../config/stageItemState/NumberState';
-import { FontState } from '../config/stageItemState/FontState';
+import { GeneratorNodeConfig } from './GeneratorNode';
+import { NumberState } from '../parameter/NumberState';
+import { FontState } from '../parameter/FontState';
 import { fontService } from '../font/FontService';
 import { generatorNodeRegistry } from './GeneratorNodeRegistry';
 import { valueNodeRegistry, ValueNodeConfig } from './ValueNodeRegistry';
@@ -11,7 +11,7 @@ import { GraphNode } from './GraphNode';
 import { GraphEvaluator } from './GraphEvaluator';
 import { fromRawConfig, toRawConfig } from './GraphSerializer';
 import { parameterPortValue, parameterEditorText, resolveParameter, valueEditorDefinition } from './ParameterValues';
-import { parseParameter } from '../config/stageItemState/ParseParameter';
+import { parseParameter } from '../parameter/ParseParameter';
 
 const font = (name: string) => new Font({ familyName: name, styleName: 'Regular', unitsPerEm: 1000, ascender: 800, descender: -200, glyphs: [] });
 
@@ -83,9 +83,9 @@ describe('shared immutable node editing', () => {
 
   test('selection conversion and serialization preserve the generator option name', async () => {
     const shape = await generatorNodeRegistry.createNode('shape', 'shape');
-    const stage = shape.config as Stage;
-    const definition = stage.generator.definition.projection.type;
-    const state = stage.state.data.projection.type;
+    const config = shape.config as GeneratorNodeConfig;
+    const definition = config.generator.definition.projection.type;
+    const state = config.parameters.projection.type;
     expect(parameterEditorText(definition, state)).toBe('1');
     expect(parameterPortValue(definition, state)).toEqual({ type: 'number', value: 1 });
     expect(resolveParameter(definition, 'circular', { type: 'number', value: 0 })).toBe('linear');

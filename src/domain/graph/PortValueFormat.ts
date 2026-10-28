@@ -1,5 +1,5 @@
 import { PortValue } from './PortValue';
-import { Expression } from '../config/stageItemState/ExpressionState';
+import { Expression } from '../parameter/ExpressionState';
 
 /** A short, human-readable preview of a port's current value, shown next to a node's input handles. */
 export function formatPortValue(value: PortValue | undefined): string {
@@ -9,9 +9,7 @@ export function formatPortValue(value: PortValue | undefined): string {
   switch (value.type) {
   case 'number': return value.value.toString();
   case 'string': return value.value;
-  case 'boolean': return value.value ? 'true' : 'false';
   case 'color': return value.value.getAcn();
-  case 'point': return value.value.toString();
   case 'expression': return formatExpressionPreview(value.value);
   case 'distribution': return `σ ${value.value.sigma}, seed ${value.value.seed}`;
   case 'font': return value.value?.names.fullName.en ?? '';

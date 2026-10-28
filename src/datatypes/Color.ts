@@ -87,7 +87,7 @@ export class Color {
       (0 <= hsla.l && hsla.l <= 100) &&
       (hsla.a === undefined || (0 <= hsla.a && hsla.a <= 1))) {
       this.hsla = hsla;
-      this.rgba = Color.hslaToRgba(hsla);;
+      this.rgba = Color.hslaToRgba(hsla);
       this.valid = true;
     } else {
       this.valid = false;
@@ -221,7 +221,7 @@ export class Color {
   }
 }
 
-export const ColorRecord: Record<string, HslaColor> = {
+const ColorRecord: Record<string, HslaColor> = {
   black: { h: 0, s: 0, l: 0, a: 1 },
   darkgray: { h: 0, s: 0, l: 25, a: 1 },
   gray: { h: 0, s: 0, l: 50, a: 1 },

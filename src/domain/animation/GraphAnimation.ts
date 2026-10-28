@@ -1,7 +1,7 @@
 import { Graph } from '../graph/Graph';
 import { NodeEdit, editGraphNode } from '../graph/NodeEditing';
 import { ParamDefinition } from '../generator/SvgGenerator';
-import { Stage } from '../config/Stage';
+import { GeneratorNodeConfig } from '../graph/GeneratorNode';
 import { collectParamPorts } from '../graph/ParamPorts';
 import { VALUE_KIND_PREFIX, ValueNodeConfig } from '../graph/ValueNodeRegistry';
 
@@ -44,9 +44,9 @@ export function applyNumberAnimations(graph: Graph, frames: readonly NumberAnima
 export function startupAnimationTarget(graph: Graph): NumberAnimationTarget | undefined {
   for (const node of graph.nodes) {
     if (node.kind.startsWith(VALUE_KIND_PREFIX) || node.kind === 'render') { continue; }
-    const stage = node.config as Stage;
-    for (const port of collectParamPorts(stage.generator.definition)) {
-      const definition = stage.generator.definition[port.groupId][port.id];
+    const config = node.config as GeneratorNodeConfig;
+    for (const port of collectParamPorts(config.generator.definition)) {
+      const definition = config.generator.definition[port.groupId][port.id];
       if (definition.type !== 'number' || !definition.animateable) { continue; }
       const edge = graph.edges.find((edge) => edge.to.nodeId === node.id && edge.to.port === port.portId);
       if (edge) {
@@ -55,7 +55,7 @@ export function startupAnimationTarget(graph: Graph): NumberAnimationTarget | un
         const target = Number((source.config as ValueNodeConfig).state.getValue());
         if (Number.isFinite(target)) { return { nodeId: source.id, target, definition }; }
       } else {
-        const target = Number(stage.state.data[port.groupId][port.id].getValue());
+        const target = Number(config.parameters[port.groupId][port.id].getValue());
         if (Number.isFinite(target)) { return { nodeId: node.id, portId: port.portId, target, definition }; }
       }
     }

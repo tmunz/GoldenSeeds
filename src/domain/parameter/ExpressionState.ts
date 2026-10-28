@@ -1,0 +1,51 @@
+import { MathUtils } from '../../utils/MathUtils';
+import { ParameterState } from './ParameterState';
+
+export type Expression = (n: number, items: number, itemSize: (n: number) => number, i: number) => number;
+
+export class ExpressionState implements ParameterState<Expression, string> {
+
+  private text = '() => 1';
+  private expression: Expression = (() => 1);
+  private valid = true;
+
+  getValue(): Expression {
+    return this.expression;
+  }
+
+  setValue(text: string, warnOnInvalid = true): void {
+    this.text = text;
+    try {
+      const expression = ExpressionState.convertToExpression(text);
+      // don't check everything because of performance reasons
+      [0, 1].map((d: number) => expression(d, 2, (n: number) => n, 1)); //test Expression
+      this.expression = expression;
+      this.valid = true;
+    } catch (e) {
+      if (warnOnInvalid) {
+        console.warn(e);
+      }
+      this.valid = false;
+    }
+  }
+
+  getTextValue(): string {
+    return this.text;
+  }
+
+  async setTextValue(s: string): Promise<void> {
+    this.setValue(s);
+  }
+
+  isValid(): boolean {
+    return this.valid;
+  }
+
+  private static convertToExpression = (expressionText: string): Expression => {
+    return eval(
+      `(n, items, itemSize, i) => ((fib, goldenRatio) => 
+      isFinite(Number(${expressionText})) ? Number(${expressionText}) : ${expressionText})
+      (${(v: number) => MathUtils.fib(v)}, ${MathUtils.goldenRatio})`,
+    );
+  };
+}

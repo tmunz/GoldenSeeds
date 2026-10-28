@@ -45,7 +45,9 @@ export class BeachLine {
 
   addSectionFor(site: Site): void {
     this.siteAreaStore.put(site.id, new SiteArea(site));
-    let { leftSection, rightSection } = this.getSectionsFor(site);
+    const sections = this.getSectionsFor(site);
+    const leftSection = sections.leftSection;
+    let rightSection = sections.rightSection;
     const newArc: BeachSection = this.addNewSectionToExisting({ site }, leftSection);
 
     // the new section ...

@@ -1,5 +1,5 @@
 import { ParamDefinition, ParamDefinitionType } from '../generator/SvgGenerator';
-import { PortDefinition, PortValueType } from './PortValue';
+import { PortValueType } from './PortValue';
 
 export const PARAM_TYPE_TO_PORT_TYPE: Record<ParamDefinitionType, PortValueType> = {
   number: 'number',
@@ -11,7 +11,7 @@ export const PARAM_TYPE_TO_PORT_TYPE: Record<ParamDefinitionType, PortValueType>
   font: 'font',
 };
 
-export interface ParamPort {
+interface ParamPort {
   groupId: string;
   id: string;
   portId: string;
@@ -39,9 +39,5 @@ export function collectParamPorts(definition: Record<string, Record<string, Para
     });
   });
   return ports;
-}
-
-export function paramPortDefinitions(definition: Record<string, Record<string, ParamDefinition>>): PortDefinition[] {
-  return collectParamPorts(definition).map((p) => ({ id: p.portId, type: p.portType }));
 }
 

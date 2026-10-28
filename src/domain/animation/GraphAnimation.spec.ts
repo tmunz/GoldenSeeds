@@ -1,4 +1,4 @@
-import { Stage } from '../config/Stage';
+import { GeneratorNodeConfig } from '../graph/GeneratorNode';
 import { generatorNodeRegistry } from '../graph/GeneratorNodeRegistry';
 import { valueNodeRegistry, ValueNodeConfig } from '../graph/ValueNodeRegistry';
 import { GraphEvaluator } from '../graph/GraphEvaluator';
@@ -37,10 +37,10 @@ describe('graph number animation', () => {
       { nodeId: 'distribution', portId: 'sigma', target: 0.8, definition: { type: 'number', initial: '0', step: 0.05 } },
     ];
     const animated = applyNumberAnimations(graph, [{ input: inputs[0], value: 5 }, { input: inputs[1], value: 0.4 }]);
-    expect((animated.nodes[0].config as Stage).state.data.grid.items.getValue()).toBe(5);
+    expect((animated.nodes[0].config as GeneratorNodeConfig).parameters.grid.items.getValue()).toBe(5);
     const value = animated.nodes[1].evaluate({}).out;
     expect(value.type === 'distribution' && value.value.sigma).toBe(0.4);
-    expect((generator.config as Stage).state.data.grid.items.getValue()).toBe(21);
+    expect((generator.config as GeneratorNodeConfig).parameters.grid.items.getValue()).toBe(21);
   });
 
   test('startup chooses the connected number, or the inline marked parameter', async () => {

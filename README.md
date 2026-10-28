@@ -68,7 +68,7 @@ The project is developed with the following technologies:
 - **React**: For building the user interface.
 - **Opentype.js**: For handling font-related functionality.
 - **RxJS**: For reactive programming and managing data flow.
-- **React Beautiful DnD**: For drag-and-drop interactions.
+- **React Flow**: For the graph editor and node connections.
 - **Webpack**: For bundling the project.
 
 It uses various development dependencies for code linting, testing, and building, including Babel, TypeScript, and ESLint.

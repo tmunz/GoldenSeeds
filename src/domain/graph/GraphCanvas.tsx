@@ -25,11 +25,11 @@ import { GraphEdge } from './GraphEdge';
 import { GraphNode } from './GraphNode';
 import { GraphLayout, GraphPosition, DEFAULT_VIEWPORT } from './GraphLayout';
 import { PortValue } from './PortValue';
-import { graphNodeTypes } from './GraphNodeView';
+import { GraphNodeView } from './GraphNodeView';
 import { RenderNodeView } from './RenderNodeView';
 import { ValueNodeView } from './valueNode/ValueNodeView';
 import { NodePalette } from './NodePalette';
-import { RENDER_FLOW_NODE_TYPE, VALUE_FLOW_NODE_TYPE } from './GraphFlowAdapter';
+import { GRAPH_NODE_TYPE, RENDER_FLOW_NODE_TYPE, VALUE_FLOW_NODE_TYPE } from './GraphFlowAdapter';
 import {
   FlowNode,
   graphNodeToFlowNode,
@@ -42,15 +42,15 @@ import {
 import { isValidConnection as isValidGraphConnection } from './ConnectionValidator';
 import { graphEvaluator } from './GraphEvaluator';
 import { ensureRenderNode, RENDER_NODE_ID, RENDER_NODE_KIND } from './RenderNode';
-import { connectResultPorts } from './StageGraphAdapter';
+import { connectResultPorts } from './GraphResult';
 import { VALUE_KIND_PREFIX, DEFAULT_VALUE_DEFINITIONS } from './ValueNodeRegistry';
 import { parseParamPortId, collectParamPorts } from './ParamPorts';
 import { ParamDefinitionType } from '../generator/SvgGenerator';
-import { Stage } from '../config/Stage';
+import { GeneratorNodeConfig } from './GeneratorNode';
 
-import './GraphCanvas.styl';
+import './GraphCanvas.css';
 
-const nodeTypes = { ...graphNodeTypes, [RENDER_FLOW_NODE_TYPE]: RenderNodeView, [VALUE_FLOW_NODE_TYPE]: ValueNodeView };
+const nodeTypes = { [GRAPH_NODE_TYPE]: GraphNodeView, [RENDER_FLOW_NODE_TYPE]: RenderNodeView, [VALUE_FLOW_NODE_TYPE]: ValueNodeView };
 
 /** Editor metadata for a generator parameter or a structured value's numeric field. */
 function paramDefinitionFor(node: GraphNode | undefined, portId: string) {
@@ -60,20 +60,20 @@ function paramDefinitionFor(node: GraphNode | undefined, portId: string) {
   }
   if (node.kind.startsWith(VALUE_KIND_PREFIX)) { return undefined; }
   const param = parseParamPortId(portId);
-  return param ? (node.config as Stage).generator.definition[param.groupId]?.[param.id] : undefined;
+  return param ? (node.config as GeneratorNodeConfig).generator.definition[param.groupId]?.[param.id] : undefined;
 }
 
-/** A generator node's own default value (see Stage.ts) for each of its parameter ports. */
+/** A generator node's own default value (see GeneratorNode.ts) for each of its parameter ports. */
 function defaultParamValues(node: GraphNode): Record<string, PortValue> | undefined {
   if (node.kind.startsWith(VALUE_KIND_PREFIX) || node.kind === RENDER_NODE_KIND) {
     return undefined;
   }
-  const stage = node.config as Stage;
+  const config = node.config as GeneratorNodeConfig;
   const values: Record<string, PortValue> = {};
-  collectParamPorts(stage.generator.definition).forEach((p) => {
-    const state = stage.state.data[p.groupId]?.[p.id];
+  collectParamPorts(config.generator.definition).forEach((p) => {
+    const state = config.parameters[p.groupId]?.[p.id];
     if (state) {
-      const definition = stage.generator.definition[p.groupId][p.id];
+      const definition = config.generator.definition[p.groupId][p.id];
       values[p.portId] = parameterPortValue(definition, state);
     }
   });
@@ -108,7 +108,7 @@ interface GraphSnapshot {
  * - Any change (move, connect, disconnect) calls back with the updated Graph + GraphLayout so the
  *   caller can persist it.
  * - The terminal render node's connectors stay pinned to the right viewport edge.
- * - The full graph is re-evaluated on every change; the final preview lives in GraphView.
+ * - The full graph is re-evaluated on every change; the final preview lives in MainView.
  */
 const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(function GraphCanvasContent({ graph, animation, layout = {}, onGraphChange, onHistoryChange }, ref) {
   const [viewportX, viewportY, zoom] = useStore((state) => state.transform);
@@ -129,6 +129,20 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
   const [history, setHistory] = useState<{ past: GraphSnapshot[]; future: GraphSnapshot[] }>({ past: [], future: [] });
   const dragSnapshotRef = useRef<GraphSnapshot | null>(null);
   const lastEditedValueNodeRef = useRef<string | null>(null);
+  const sourceGraphRef = useRef(graph);
+
+  useEffect(() => {
+    // Local edits return through the parent unchanged. A different graph means a
+    // reset, reload, import, or drawing switch, even when its name stays the same.
+    if (graph === sourceGraphRef.current) { return; }
+    sourceGraphRef.current = graph;
+    const nextGraph = ensureRenderNode(graph);
+    setNodes(graphToFlowNodes(nextGraph, layout));
+    setEdges(graphToFlowEdges(nextGraph));
+    setHistory({ past: [], future: [] });
+    dragSnapshotRef.current = null;
+    lastEditedValueNodeRef.current = null;
+  }, [graph, layout]);
 
   const pushHistory = useCallback((snapshot: GraphSnapshot) => {
     setHistory((h) => ({ past: [...h.past, snapshot], future: [] }));
@@ -137,6 +151,7 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
   const emitChange = useCallback(
     (nextNodes: FlowNode[], nextEdgeList: GraphEdge[]) => {
       const nextGraph: Graph = { nodes: nextNodes.map((n) => n.data.graphNode), edges: nextEdgeList };
+      sourceGraphRef.current = nextGraph;
       onGraphChange(nextGraph, flowNodesToLayout(nextNodes));
     },
     [onGraphChange],
@@ -208,9 +223,7 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
       // Side effects (here: notifying the parent) must happen outside the state updater itself -
       // React may invoke updater functions more than once, which would otherwise emit duplicate/
       // nested updates and can trip React's "Maximum update depth exceeded" safeguard.
-      if (persistable) {
-        emitChange(next, nextEdges.map(flowEdgeToGraphEdge));
-      }
+      emitChange(next, nextEdges.map(flowEdgeToGraphEdge));
 
       if (protectedChanges.some((c) => isPositionChange(c) && c.dragging === false)) {
         if (dragSnapshotRef.current) {
@@ -218,7 +231,7 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
           dragSnapshotRef.current = null;
           lastEditedValueNodeRef.current = null;
         }
-      } else if (persistable && !protectedChanges.some(isPositionChange)) {
+      } else if (!protectedChanges.some(isPositionChange)) {
         pushHistory({ nodes, edges });
         lastEditedValueNodeRef.current = null;
       }
@@ -263,7 +276,7 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
   );
 
   const isValidConnection = useCallback(
-    (connection: Connection | { source: string | null; sourceHandle: string | null; target: string | null; targetHandle: string | null }) => {
+    (connection: Connection | Edge) => {
       if (!connection.source || !connection.sourceHandle || !connection.target || !connection.targetHandle) {
         return false;
       }
@@ -284,9 +297,7 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
       const nextNodes = [...nodes, graphNodeToFlowNode(node, position)];
       setNodes(nextNodes);
 
-      // a newly added generator node becomes the new "last stage": auto-connect its result to the
-      // render node's output, replacing whatever was connected there before, so the preview always
-      // reflects the node that was just added without the user having to wire it up by hand.
+      // New generators feed the render node immediately, replacing its previous input connections.
       const isGeneratorNode = node.kind !== RENDER_NODE_KIND && !node.kind.startsWith(VALUE_KIND_PREFIX);
       const nextEdges = isGeneratorNode
         ? [...edges.filter((e) => e.target !== RENDER_NODE_ID), ...connectResultPorts(node.id, RENDER_NODE_ID).map(graphEdgeToFlowEdge)]
@@ -329,7 +340,7 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
 
   const inputValuesByNode = useMemo(() => {
     const map: Record<string, Record<string, PortValue>> = {};
-    // start every generator node's param ports from its own default value (see Stage.ts), so
+    // start every generator node's param ports from its own default value (see GeneratorNode.ts), so
     // unconnected params still show what value is actually being used for evaluation.
     nodes.forEach((n) => {
       const defaults = defaultParamValues(n.data.graphNode);

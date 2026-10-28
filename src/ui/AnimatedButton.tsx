@@ -3,11 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { AnimatedIcon } from './AnimatedIcon';
 import { ArrowFlat, ArrowRegular, ArrowNone } from './icon/Arrow';
 
-import './AnimatedButton.styl';
+import './AnimatedButton.css';
 
 
-export const DIRECTION_UP = 180;
-export const DIRECTION_DOWN = 0;
 export const DIRECTION_LEFT = 90;
 export const DIRECTION_RIGHT = 270;
 
@@ -20,6 +18,8 @@ export function AnimatedButton(props: {
   points?: number[][][];
   className?: string;
   active?: boolean;
+  expanded?: boolean;
+  controls?: string;
 }) {
 
   const [active, setActive] = useState(props.active ?? false);
@@ -27,7 +27,8 @@ export function AnimatedButton(props: {
   useEffect(() => {
     if (props.active === undefined) {
       if (active === true) {
-        setTimeout(() => setActive(false), 200);
+        const timeout = setTimeout(() => setActive(false), 200);
+        return () => clearTimeout(timeout);
       }
     } else {
       setActive(props.active);
@@ -35,6 +36,7 @@ export function AnimatedButton(props: {
   }, [props.active, active]);
 
   function handleClick(): void {
+    if (props.disabled) { return; }
     setActive(props.active === undefined ? !active : true);
     props.onClick?.(active);
   }
@@ -43,6 +45,9 @@ export function AnimatedButton(props: {
     <button
       className={['animated-button', props.className ?? '', active ? 'active' : ''].join(' ')}
       onClick={() => handleClick()}
+      disabled={props.disabled}
+      aria-expanded={props.expanded}
+      aria-controls={props.controls}
     >
       <div className="tooltip">{props.title}</div>
       <div className="icon-text">{props.iconText}</div>

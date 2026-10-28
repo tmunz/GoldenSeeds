@@ -1,4 +1,4 @@
-import { Stage } from '../config/Stage';
+import { GeneratorNodeConfig } from './GeneratorNode';
 import { parameterOverrides } from './GeneratorParameters';
 import { Config } from '../config/Config';
 import { RawConfig, RawGraphNode } from '../config/RawConfig';
@@ -24,7 +24,7 @@ export function toRawConfig(config: Config): RawConfig {
       return { id: node.id, kind: node.kind, value: state.getTextValue() };
     }
     if (node.kind !== RENDER_NODE_KIND) {
-      const parameters = parameterOverrides(node.config as Stage);
+      const parameters = parameterOverrides(node.config as GeneratorNodeConfig);
       if (Object.keys(parameters).length > 0) {
         return { id: node.id, kind: node.kind, parameters };
       }

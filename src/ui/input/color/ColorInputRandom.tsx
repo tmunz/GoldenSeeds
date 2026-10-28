@@ -2,7 +2,7 @@ import React from 'react';
 import { Color } from '../../../datatypes/Color';
 import { RANDOM_GRADIENT } from './color-channel-config/RandomConfig';
 
-import './ColorInputRandom.styl';
+import './ColorInputRandom.css';
 
 
 export function ColorInputRandom(props: {

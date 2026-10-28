@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 
-import './AnimatedIcon.styl';
+import './AnimatedIcon.css';
 
 export interface Props {
   points: (number[][] | string)[];

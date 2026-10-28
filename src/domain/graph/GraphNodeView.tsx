@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { Handle, Position, NodeProps, useUpdateNodeInternals } from '@xyflow/react';
-import { Stage } from '../config/Stage';
+import { GeneratorNodeConfig } from './GeneratorNode';
 import { parseParamPortId } from './ParamPorts';
 import { parameterEditorText } from './ParameterValues';
 import { InputPort } from './InputPort';
 import { FlowNode } from './GraphFlowAdapter';
 import { portColor } from './PortColors';
 
-import './GraphNodeView.styl';
+import './GraphNodeView.css';
 
 export function GraphNodeView({ id, data }: NodeProps<FlowNode>) {
   const { graphNode } = data;
-  const stage = graphNode.config as Stage;
+  const config = graphNode.config as GeneratorNodeConfig;
   const updateNodeInternals = useUpdateNodeInternals();
   useEffect(() => { updateNodeInternals(id); }, [id, data.connectedInputPorts, updateNodeInternals]);
   return (
@@ -21,8 +21,8 @@ export function GraphNodeView({ id, data }: NodeProps<FlowNode>) {
         <div className="graph-node-ports graph-node-inputs">
           {graphNode.inputs.map((port) => {
             const param = parseParamPortId(port.id);
-            const definition = param ? stage.generator.definition[param.groupId]?.[param.id] : undefined;
-            const state = param ? stage.state.data[param.groupId]?.[param.id] : undefined;
+            const definition = param ? config.generator.definition[param.groupId]?.[param.id] : undefined;
+            const state = param ? config.parameters[param.groupId]?.[param.id] : undefined;
             return <InputPort key={port.id} id={port.id} type={port.type} definition={definition}
               localText={definition && state ? parameterEditorText(definition, state) : ''}
               connected={data.connectedInputPorts?.has(port.id) ?? false} value={data.inputValues?.[port.id]}
@@ -41,5 +41,3 @@ export function GraphNodeView({ id, data }: NodeProps<FlowNode>) {
     </div>
   );
 }
-
-export const graphNodeTypes = { graphNode: GraphNodeView };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Color } from '../../../datatypes/Color';
 
-import './ColorInputSelection.styl';
+import './ColorInputSelection.css';
 
 
 export function ColorInputSelection(props: {

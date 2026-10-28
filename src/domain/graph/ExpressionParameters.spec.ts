@@ -1,5 +1,5 @@
-import { Stage } from '../config/Stage';
-import { ExpressionState } from '../config/stageItemState/ExpressionState';
+import { GeneratorNodeConfig } from './GeneratorNode';
+import { ExpressionState } from '../parameter/ExpressionState';
 import { generatorNodeRegistry } from './GeneratorNodeRegistry';
 import { valueNodeRegistry } from './ValueNodeRegistry';
 import { collectParamPorts } from './ParamPorts';
@@ -11,17 +11,17 @@ describe('inline generator expressions', () => {
   test.each(['shape', 'cartesian', 'polar', 'function'])(
     'edits and saves expression inputs of %s without mutating earlier snapshots', async (kind) => {
       const original = await generatorNodeRegistry.createNode(kind, 'generator');
-      const stage = original.config as Stage;
-      const ports = collectParamPorts(stage.generator.definition).filter((port) => port.portType === 'expression');
+      const config = original.config as GeneratorNodeConfig;
+      const ports = collectParamPorts(config.generator.definition).filter((port) => port.portType === 'expression');
       expect(ports.length).toBeGreaterThan(0);
       for (const port of ports) {
-        const before = stage.state.data[port.groupId][port.id].getTextValue();
+        const before = config.parameters[port.groupId][port.id].getTextValue();
         const edited = withParameter(original, port.portId, 'n + items + i');
-        expect(stage.state.data[port.groupId][port.id].getTextValue()).toBe(before);
+        expect(config.parameters[port.groupId][port.id].getTextValue()).toBe(before);
         const raw = toRawConfig({ meta: { name: kind }, graph: { nodes: [edited], edges: [] }, layout: {} });
         expect(raw.nodes[0].parameters?.[port.groupId]?.[port.id]).toBe('n + items + i');
         const restored = await fromRawConfig(raw);
-        const state = (restored.graph.nodes[0].config as Stage).state.data[port.groupId][port.id] as ExpressionState;
+        const state = (restored.graph.nodes[0].config as GeneratorNodeConfig).parameters[port.groupId][port.id] as ExpressionState;
         expect(state.getValue()(2, 3, () => 1, 1)).toBe(6);
       }
     },
@@ -46,6 +46,6 @@ describe('inline generator expressions', () => {
     for (const text of ['', 'n *', 'Math.sin(', 'unknownVariable']) {
       expect(withParameter(node, 'param:transformation.size', text)).toBe(node);
     }
-    expect(((node.config as Stage).state.data.transformation.size as ExpressionState).getValue()(3, 4, () => 1, 1)).toBe(6);
+    expect(((node.config as GeneratorNodeConfig).parameters.transformation.size as ExpressionState).getValue()(3, 4, () => 1, 1)).toBe(6);
   });
 });

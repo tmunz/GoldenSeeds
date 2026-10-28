@@ -1,16 +1,19 @@
 import React, { useRef } from 'react';
 
 import { AnimatedButton } from '../../ui/AnimatedButton';
-import { configService } from './ConfigService';
+import { configManager } from './ConfigManager';
 import { LoadProgress, LoadRegular, LoadNone } from '../../ui/icon/Load';
 
-export function ConfigImporter() {
+export function ConfigImporter(props: { onLoad?: () => void; label?: string }) {
   const importConfigElement = useRef<HTMLInputElement | null>(null);
 
   function loadConfig(file: Blob) {
     if (typeof file !== 'undefined') {
       const fileReader = new FileReader();
-      fileReader.onload = (event) => configService.setRawConfig(JSON.parse(event.target?.result as string));
+      fileReader.onload = async (event) => {
+        await configManager.load(JSON.parse(event.target?.result as string));
+        props.onLoad?.();
+      };
       fileReader.readAsText(file);
     }
   }
@@ -28,9 +31,11 @@ export function ConfigImporter() {
     <>
       <AnimatedButton
         points={[LoadNone, LoadRegular, LoadProgress]}
-        title="import"
-        iconText="json"
-        onClick={() => (importConfigElement.current)?.click()}
+        title={props.label ?? 'import'}
+        iconText='json'
+        onClick={() => {
+          importConfigElement.current?.click();
+        }}
       />
       <input
         ref={importConfigElement}

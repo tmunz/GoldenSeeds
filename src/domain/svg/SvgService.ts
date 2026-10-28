@@ -1,36 +1,17 @@
 import { SvgGeneratorResult } from '../generator/SvgGenerator';
-import { PointUtils } from '../../utils/PointUtils';
 
 export class SvgService {
-  /**
-   * Wraps one or more already-generated SvgGeneratorResults into a single, standalone
-   * `<svg>` document, sized to width/height and centered/scaled to fit their combined
-   * bounding box. Used by the graph render node (see RenderNode.ts/RenderNodeView.tsx and
-   * GraphRenderer.ts), whose PortValue only carries the raw per-node svg fragment plus
-   * bounding box - not a displayable standalone document.
-   */
-  public wrapResults(results: SvgGeneratorResult[], width: number, height: number, offset = 0): string {
-    return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-      <g transform="${this.centerAndScale(width, height, this.svgBoundingBox(results), offset)}">
-        ${results.map((stageResult) => stageResult.svg ?? '').join('')}
+  /** Center a graph result in a standalone SVG document. */
+  wrapResult(result: SvgGeneratorResult, width: number, height: number, offset = 0): string {
+    const { min, max } = result.boundingBox;
+    const boundingBox = {
+      x: min[0], y: min[1], w: max[0] - min[0], h: max[1] - min[1],
+    };
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+      <g transform="${this.centerAndScale(width, height, boundingBox, offset)}">
+        ${result.svg ?? ''}
       </g>
     </svg>`;
-  }
-
-
-  private svgBoundingBox(generatedStages: SvgGeneratorResult[]): {
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-  } {
-    const maxBoundingBox = PointUtils.combineBoundingBoxes(generatedStages.map((stage) => stage.boundingBox));
-    return {
-      x: maxBoundingBox.min[0],
-      y: maxBoundingBox.min[1],
-      w: maxBoundingBox.max[0] - maxBoundingBox.min[0],
-      h: maxBoundingBox.max[1] - maxBoundingBox.min[1],
-    };
   }
 
   private centerAndScale(

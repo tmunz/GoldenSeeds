@@ -1,12 +1,14 @@
 import React from 'react';
-import { AnimatedButton, DIRECTION_UP, DIRECTION_DOWN } from '../../ui/AnimatedButton';
+import { AnimatedButton } from '../../ui/AnimatedButton';
 import { configManager, ConfigItem } from './ConfigManager';
 import { PlusNone, PlusRegular, PlusRotated } from '../../ui/icon/Plus';
 import { ResetNone, ResetRegular, ResetProgress } from '../../ui/icon/Reset';
 import { Config } from './Config';
-import { ConfigService } from './ConfigService';
+import { toRawConfig } from '../graph/GraphSerializer';
+import { LoadNone, LoadProgress, LoadRegular } from '../../ui/icon/Load';
+import { SaveNone, SaveRegular, SaveProgress } from '../../ui/icon/Save';
+import './ConfigManagerUi.css';
 
-import './ConfigManagerUi.styl';
 
 
 export function ConfigManagerUi(props: {
@@ -29,33 +31,30 @@ export function ConfigManagerUi(props: {
     const configItem = props.configItems.find(c => c.name === props.activeConfig?.meta.name);
     const sortIndex = configItem?.sortIndex ?? ((props.configItems[props.configItems.length - 1]?.sortIndex ?? 0) + 1);
     if (props.activeConfig) {
-      configManager.save(ConfigService.toRawConfig(props.activeConfig), sortIndex, configItem?.preconfig ?? false);
+      configManager.save(toRawConfig(props.activeConfig), sortIndex, configItem?.preconfig ?? false);
     }
   }
 
-  function getConfigItem(name: string) {
-    return props.configItems.find(c => c.name === name);
-  }
-
   const selected = props.activeConfig?.meta.name;
+  const configItem = props.configItems.find(item => item.name === selected);
   return selected ?
     <div className="config-manager">
-      {getConfigItem(selected)?.preconfig && <AnimatedButton
+      {configItem?.preconfig && <AnimatedButton
         points={[ResetNone, ResetRegular, ResetProgress]}
         title="reset"
         onClick={() => configManager.reset(selected)}
       />}
-      {getConfigItem(selected) && <AnimatedButton
-        rotation={DIRECTION_UP}
+      {configItem && <AnimatedButton
+        points={[LoadNone, LoadRegular, LoadProgress]}
         title="reload"
         onClick={() => configManager.select(selected)}
       />}
       <AnimatedButton
-        rotation={DIRECTION_DOWN}
+        points={[SaveNone, SaveRegular, SaveProgress]}
         title="save"
         onClick={() => save()}
       />
-      {getConfigItem(selected) && !getConfigItem(selected)?.preconfig && <AnimatedButton
+      {configItem && !configItem?.preconfig && <AnimatedButton
         points={[PlusNone, PlusRegular, PlusRotated]}
         rotation={45}
         title="remove"

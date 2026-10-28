@@ -1,13 +1,13 @@
 import React, { useEffect, useState, MutableRefObject, useRef } from 'react';
 
-import './Collapsable.styl';
+import './Collapsable.css';
 
 export function Collapsable({ show, children, className }: {
   show: boolean;
   children: React.ReactNode;
   className?: string;
 }) {
-  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const ref: MutableRefObject<HTMLDivElement | null> = React.useRef(null);
   const [height, setHeight] = useState(0);
   const [visibility, setVisibility] = useState<boolean>(show);
@@ -23,13 +23,13 @@ export function Collapsable({ show, children, className }: {
     if (show) {
       setVisibility(true);
     } else {
-      timeoutIdRef.current && clearInterval(timeoutIdRef.current);
+      timeoutIdRef.current && clearTimeout(timeoutIdRef.current);
       timeoutIdRef.current = setTimeout(() => {
         setVisibility(false);
       }, 800);
     }
     return () => {
-      timeoutIdRef.current && clearInterval(timeoutIdRef.current);
+      timeoutIdRef.current && clearTimeout(timeoutIdRef.current);
     };
   }, [show]);
 

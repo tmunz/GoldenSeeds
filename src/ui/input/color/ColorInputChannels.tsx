@@ -9,7 +9,7 @@ import { GreenColorInputConfig } from './color-channel-config/GreenColorInputCon
 import { BlueColorInputConfig } from './color-channel-config/BlueColorInputConfig';
 import { Color, ColorValue } from '../../../datatypes/Color';
 
-import './ColorInputChannels.styl';
+import './ColorInputChannels.css';
 
 
 type InputData = ColorInputConfig & { value: string }
@@ -144,12 +144,12 @@ export function ColorInputChannels(props: {
     const s = (event.target as HTMLInputElement).value ?? '';
     const index = (event.target as HTMLInputElement).selectionStart ?? 0;
     switch (code) {
-      case 8:
-        index > 0 && update(`${s.slice(0, index - 1)}0${s.slice(index)}`, key, index - 1);
-        break;
-      case 46:
-        update(`${s.slice(0, index)}0${s.slice(index + 1)}`, key, index + 1);
-        break;
+    case 8:
+      index > 0 && update(`${s.slice(0, index - 1)}0${s.slice(index)}`, key, index - 1);
+      break;
+    case 46:
+      update(`${s.slice(0, index)}0${s.slice(index + 1)}`, key, index + 1);
+      break;
     }
   }
 

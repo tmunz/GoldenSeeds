@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './DarkThemeToggle.styl';
+import './DarkThemeToggle.css';
 
 export function DarkThemeToggle(props: { active: boolean, onChange: (active: boolean) => void }) {
 

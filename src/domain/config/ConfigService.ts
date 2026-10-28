@@ -4,7 +4,7 @@ import { Config } from './Config';
 import { RawConfig } from './RawConfig';
 import { Graph } from '../graph/Graph';
 import { GraphLayout } from '../graph/GraphLayout';
-import { fromRawConfig, toRawConfig } from '../graph/GraphSerializer';
+import { fromRawConfig } from '../graph/GraphSerializer';
 
 export class ConfigService {
   config$ = new BehaviorSubject<Config>({ meta: { name: '' }, graph: { nodes: [], edges: [] }, layout: {} });
@@ -20,10 +20,6 @@ export class ConfigService {
   /** Persists the graph/layout after an edit in GraphCanvas (see GraphCanvas's onGraphChange). */
   setGraph(graph: Graph, layout: GraphLayout) {
     this.config$.next({ ...this.config$.value, graph, layout });
-  }
-
-  static toRawConfig(config: Config): RawConfig {
-    return toRawConfig(config);
   }
 }
 

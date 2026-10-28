@@ -1,0 +1,74 @@
+.range-input.input {
+
+  &>input {
+    appearance: none;
+    tap-decoration-color: transparent;
+    background-color: var(--textColorAlt);
+    padding: 0;
+    height: 12px;
+    overflow: hidden;
+
+    &::-ms-track,
+    &::-moz-range-track {
+      border: inherit;
+      color: transparent;
+      background: transparent;
+    }
+
+    &::-ms-fill-lower,
+    &::-ms-fill-upper {
+      background: transparent;
+    }
+
+    &::-ms-tooltip {
+      display: none;
+    }
+
+    &::-moz-range-track {
+      background: transparent;
+    }
+
+    --rangeThumbColor: var(--actionColor);
+
+    &::-webkit-slider-thumb {
+      transition: .4s ease-in-out all;
+      cursor: grab;
+      appearance: none;
+      width: 40px;
+      height: 9999999px;
+      border: none;
+      background: var(--rangeThumbColor);
+      border-radius: 0;
+    }
+
+    &::-ms-thumb {
+      transition: .4s ease-in-out all;
+      cursor: grab;
+      appearance: none;
+      width: 40px;
+      height: 9999999px;
+      border: none;
+      background: var(--rangeThumbColor);
+      border-radius: 0;
+    }
+
+    &::-moz-range-thumb {
+      transition: .4s ease-in-out all;
+      cursor: grab;
+      appearance: none;
+      width: 40px;
+      height: 9999999px;
+      border: none;
+      background: var(--rangeThumbColor);
+      border-radius: 0;
+    }
+
+    &:focus {
+      --rangeThumbColor: var(--accentColor);
+    }
+
+    &.range-invalid {
+      --rangeThumbColor: var(--textColor);
+    }
+  }
+}

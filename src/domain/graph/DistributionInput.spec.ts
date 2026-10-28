@@ -2,7 +2,7 @@ import dandelion from '../config/data/dandelion.json';
 import smartify from '../config/data/smartify.json';
 import unknownPleasures from '../config/data/unknown-pleasures.json';
 import { DEFAULT_DISTRIBUTION, DEFAULT_DISTRIBUTION_TEXT } from '../../datatypes/ProbabilityDistribution';
-import { DistributionState } from '../config/stageItemState/DistributionState';
+import { DistributionState } from '../parameter/DistributionState';
 import { RawConfig } from '../config/RawConfig';
 import { valueNodeRegistry } from './ValueNodeRegistry';
 import { generatorNodeRegistry } from './GeneratorNodeRegistry';

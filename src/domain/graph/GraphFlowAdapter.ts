@@ -18,7 +18,7 @@ export interface GraphNodeData extends Record<string, unknown> {
   /** The node's live evaluated outputs (see GraphEvaluator), refreshed by GraphCanvas on every change. */
   output?: Record<string, PortValue>;
   /** The value at each of the node's input ports: either the value flowing in through a connected
-   * edge, or (for generator node param ports - see ParamPorts) its own default value (see Stage.ts)
+   * edge, or (for generator node param ports - see ParamPorts) its own default value (see GeneratorNode.ts)
    * when nothing is connected - see `connectedInputPorts` to tell the two cases apart. */
   inputValues?: Record<string, PortValue>;
   /** Which of the node's input ports actually have an incoming edge, vs. falling back to a default. */

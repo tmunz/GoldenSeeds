@@ -52,18 +52,6 @@ export class PolarGrid extends SvgGenerator<PolarConfig> {
 
     const drawingBoundingBox = PointUtils.boundingBox(drawing.points);
 
-    /*
-    // stabilize center if all prev points are centered
-    if (prev.grid.reduce((b: boolean, p: number[]) => b && p[Point.X] === 0 && p[Point.Y] === 0, true)) {
-      const extremeX = Math.max(-drawingBoundingBox.min[Point.X], drawingBoundingBox.max[Point.X]);
-      const extremeY = Math.max(-drawingBoundingBox.min[Point.Y], drawingBoundingBox.max[Point.Y]);
-      drawingBoundingBox = {
-        min: [-extremeX, -extremeY],
-        max: [extremeX, extremeY],
-      };
-    }
-    */
-
     return {
       grid: drawing.points,
       svg: drawing.svg,

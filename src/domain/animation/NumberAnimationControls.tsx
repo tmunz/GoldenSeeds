@@ -4,7 +4,7 @@ import { DEFAULT_ANIMATION_SECONDS } from './AnimationService';
 import { GraphAnimationContext } from './useGraphAnimation';
 import { NumberDefinition } from './GraphAnimation';
 
-import './NumberAnimationControls.styl';
+import './NumberAnimationControls.css';
 
 export function NumberAnimationControls({ value, definition, portId, valid }: {
   value: string;

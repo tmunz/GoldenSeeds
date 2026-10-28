@@ -1,0 +1,11 @@
+.export-column {
+  grid-area: export;
+}
+
+.export-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  overflow-y: auto;
+}

@@ -1,6 +1,5 @@
 import { GraphEvaluator } from './GraphEvaluator';
 import { generatorNodeRegistry } from './GeneratorNodeRegistry';
-import { STAGE_RESULT_PORTS } from './StageGraphAdapter';
 
 describe('GeneratorNodeRegistry', () => {
   test('exposes all registered generator kinds', () => {
@@ -17,27 +16,22 @@ describe('GeneratorNodeRegistry', () => {
       const node = await generatorNodeRegistry.createNode(kind, `${kind}-1`);
 
       expect(node.kind).toBe(kind);
-      expect(node.inputs).toContainEqual({ id: STAGE_RESULT_PORTS.GRID_PORT, type: 'grid' });
-      expect(node.inputs).toContainEqual({ id: STAGE_RESULT_PORTS.SVG_PORT, type: 'svg' });
-      expect(node.inputs).toContainEqual({ id: STAGE_RESULT_PORTS.BOUNDING_BOX_PORT, type: 'boundingBox' });
+      expect(node.inputs).toContainEqual({ id: 'grid', type: 'grid' });
+      expect(node.inputs).toContainEqual({ id: 'svg', type: 'svg' });
+      expect(node.inputs).toContainEqual({ id: 'boundingBox', type: 'boundingBox' });
       expect(node.outputs).toEqual([
-        { id: STAGE_RESULT_PORTS.GRID_PORT, type: 'grid' },
-        { id: STAGE_RESULT_PORTS.SVG_PORT, type: 'svg' },
-        { id: STAGE_RESULT_PORTS.BOUNDING_BOX_PORT, type: 'boundingBox' },
+        { id: 'grid', type: 'grid' },
+        { id: 'svg', type: 'svg' },
+        { id: 'boundingBox', type: 'boundingBox' },
       ]);
 
       const { outputsByNode } = new GraphEvaluator().evaluate({ nodes: [node], edges: [] });
-      const svgOut = outputsByNode[node.id][STAGE_RESULT_PORTS.SVG_PORT];
+      const svgOut = outputsByNode[node.id]['svg'];
 
       expect(svgOut.type).toBe('svg');
       expect(svgOut.type === 'svg' && typeof svgOut.value).toBe('string');
     },
   );
-
-  test('creates a default node using the registry default generator', async () => {
-    const node = await generatorNodeRegistry.createDefaultNode('default-1');
-    expect(node.kind).toBe('shape');
-  });
 
   test('chains two generator nodes together via an edge, like the linear pipeline', async () => {
     const cartesian = await generatorNodeRegistry.createNode('cartesian', 'cartesian-1');
@@ -48,14 +42,14 @@ describe('GeneratorNodeRegistry', () => {
       edges: [
         {
           id: 'cartesian-1->shape-1',
-          from: { nodeId: 'cartesian-1', port: STAGE_RESULT_PORTS.SVG_PORT },
-          to: { nodeId: 'shape-1', port: STAGE_RESULT_PORTS.SVG_PORT },
+          from: { nodeId: 'cartesian-1', port: 'svg' },
+          to: { nodeId: 'shape-1', port: 'svg' },
         },
       ],
     });
 
     expect(order).toEqual(['cartesian-1', 'shape-1']);
-    const shapeOut = outputsByNode['shape-1'][STAGE_RESULT_PORTS.SVG_PORT];
+    const shapeOut = outputsByNode['shape-1']['svg'];
     expect(shapeOut.type === 'svg' && shapeOut.value?.length).toBeGreaterThan(0);
   });
 

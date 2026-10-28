@@ -1,3 +1,4 @@
+import { PointUtils } from '../../utils/PointUtils';
 import { BoundingBox } from '../../datatypes/BoundingBox';
 
 type ParamBase = { initial: string; animateable?: boolean };
@@ -18,6 +19,12 @@ export interface SvgGeneratorResult {
   svg: string | null;
   boundingBox: BoundingBox;
 }
+
+export const DEFAULT_GENERATOR_RESULT: SvgGeneratorResult = {
+  grid: [[0, 0]],
+  svg: null,
+  boundingBox: PointUtils.DEFAULT_BOUNDING_BOX,
+};
 
 export abstract class SvgGenerator<T> {
   type: string;

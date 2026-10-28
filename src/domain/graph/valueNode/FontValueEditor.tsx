@@ -5,7 +5,7 @@ import { AnimatedButton } from '../../../ui/AnimatedButton';
 import { PlusNone, PlusRegular, PlusRotated } from '../../../ui/icon/Plus';
 import { fontService } from '../../font/FontService';
 
-import './FontValueEditor.styl';
+import './FontValueEditor.css';
 
 export function FontValueEditor(props: { value: Font; onChange: (font: Font) => void }) {
   const inputId = useId();

@@ -1,6 +1,6 @@
 import { Font, Path } from 'opentype.js';
 import { fontService } from '../font/FontService';
-import { Stage } from '../config/Stage';
+import { GeneratorNodeConfig } from './GeneratorNode';
 import { generatorNodeRegistry } from './GeneratorNodeRegistry';
 import { valueNodeRegistry } from './ValueNodeRegistry';
 import { withParameter } from './GeneratorParameters';
@@ -19,12 +19,12 @@ describe('inline string inputs', () => {
   test.each(['Golden Seeds', '', '  spaced text  ', 'Grüße 🌻'])('preserves %p through editing and save/load', async (text) => {
     const original = await generatorNodeRegistry.createNode('text', 'text');
     const edited = withParameter(original, 'param:text.content', text);
-    expect((original.config as Stage).state.data.text.content.getValue()).toBe('text');
-    expect((edited.config as Stage).state.data.text.content.getValue()).toBe(text);
+    expect((original.config as GeneratorNodeConfig).parameters.text.content.getValue()).toBe('text');
+    expect((edited.config as GeneratorNodeConfig).parameters.text.content.getValue()).toBe(text);
     const raw = toRawConfig({ meta: { name: 'strings' }, graph: { nodes: [edited], edges: [] }, layout: {} });
     expect(raw.nodes[0].parameters?.text.content).toBe(text);
     const restored = await fromRawConfig(raw);
-    expect((restored.graph.nodes[0].config as Stage).state.data.text.content.getValue()).toBe(text);
+    expect((restored.graph.nodes[0].config as GeneratorNodeConfig).parameters.text.content.getValue()).toBe(text);
   });
 
   test('a string node overrides local text, and disconnect restores it', async () => {

@@ -6,7 +6,7 @@ import { ColorInput } from '../ui/input/color/ColorInput';
 import { randomInt } from '../utils/Random';
 import { DarkThemeToggle } from './DarkThemeToggle';
 
-import './Themer.styl';
+import './Themer.css';
 
 
 export function Themer() {

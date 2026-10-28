@@ -6,7 +6,7 @@ import { formatPortValue } from './PortValueFormat';
 import { portColor } from './PortColors';
 import { ParameterEditor } from './ParameterEditor';
 
-import './InputPort.styl';
+import './InputPort.css';
 
 export function InputPort({ id, type, definition, localText = '', connected, value, onChange }: {
   id: string;

@@ -1,7 +1,7 @@
 import { DEFAULT_DISTRIBUTION_TEXT, DISTRIBUTION_FIELDS, isDistributionFieldValue, ProbabilityDistribution } from '../../datatypes/ProbabilityDistribution';
 import { ParamDefinition, ParamDefinitionType } from '../generator/SvgGenerator';
-import { StageItemState } from '../config/stageItemState/StageItemState';
-import { stageItemStateService } from '../config/stageItemState/StageItemStateService';
+import { ParameterState } from '../parameter/ParameterState';
+import { createParameterState } from '../parameter/CreateParameterState';
 import { GraphNode } from './GraphNode';
 import { PortValue } from './PortValue';
 import { PARAM_TYPE_TO_PORT_TYPE } from './ParamPorts';
@@ -31,7 +31,7 @@ export const DEFAULT_VALUE_DEFINITIONS: Record<ParamDefinitionType, ParamDefinit
 };
 
 export interface ValueNodeConfig {
-  state: StageItemState<unknown, unknown>;
+  state: ParameterState<unknown, unknown>;
 }
 
 /** Build a value node around fresh state; its evaluation closure never changes that state. */
@@ -60,7 +60,7 @@ export function createValueNode(type: ParamDefinitionType, id: string, state: Va
 
 export class ValueNodeRegistry {
   async createNode(type: ParamDefinitionType, id: string, textValue: string): Promise<GraphNode<ValueNodeConfig>> {
-    const state = await stageItemStateService.createState(type === 'selection' ? 'number' : type, textValue);
+    const state = await createParameterState(type === 'selection' ? 'number' : type, textValue);
     return createValueNode(type, id, state);
   }
 }

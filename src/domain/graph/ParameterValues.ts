@@ -1,14 +1,14 @@
-import { parseParameter } from '../config/stageItemState/ParseParameter';
+import { parseParameter } from '../parameter/ParseParameter';
 import { ParamDefinition } from '../generator/SvgGenerator';
-import { StageItemState } from '../config/stageItemState/StageItemState';
+import { ParameterState } from '../parameter/ParameterState';
 import { PortValue } from './PortValue';
 import { PARAM_TYPE_TO_PORT_TYPE } from './ParamPorts';
 
-export function parameterEditorText(definition: ParamDefinition, state: StageItemState<unknown, unknown>): string {
+export function parameterEditorText(definition: ParamDefinition, state: ParameterState<unknown, unknown>): string {
   return definition.type === 'selection' ? String(definition.options.indexOf(state.getTextValue())) : state.getTextValue();
 }
 
-export function parameterPortValue(definition: ParamDefinition, state: StageItemState<unknown, unknown>): PortValue {
+export function parameterPortValue(definition: ParamDefinition, state: ParameterState<unknown, unknown>): PortValue {
   return definition.type === 'selection'
     ? { type: 'number', value: Number(parameterEditorText(definition, state)) }
     : { type: PARAM_TYPE_TO_PORT_TYPE[definition.type], value: state.getValue() } as PortValue;

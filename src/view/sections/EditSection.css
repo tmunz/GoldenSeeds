@@ -1,0 +1,26 @@
+.edit-column {
+  grid-area: edit;
+
+  &>.drawer-content {
+    &>.actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px 16px;
+      max-height: 40%;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+
+    &>.graph-main {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+
+      .graph-canvas {
+        min-height: 0;
+      }
+    }
+  }
+}

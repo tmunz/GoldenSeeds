@@ -58,11 +58,6 @@ export class PointUtils {
     return (a * Math.sin(beta)) / Math.sin(alpha);
   }
 
-  static triangleSideC(a: number, alpha: number, beta: number): number {
-    const gamma = Math.PI - alpha - beta;
-    return (a * Math.sin(gamma)) / Math.sin(alpha);
-  }
-
   static slope(p0: Point, p1: Point): number {
     return (p1[Point.Y] - p0[Point.Y]) / (p1[Point.X] - p0[Point.X]);
   }

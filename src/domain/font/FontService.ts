@@ -7,11 +7,6 @@ export class FontService {
   private static DB_TABLE = 'fontData';
   private static DB_KEY = 'fontName';
 
-  async saveFromPath(path: string) {
-    const buffer = await (await fetch(path)).arrayBuffer();
-    this.saveBuffer(buffer);
-  }
-
   saveBuffer(buffer: ArrayBuffer): Promise<{ fontName: string, font: Font }> {
     return new Promise((resolve, reject) => {
       this.database()

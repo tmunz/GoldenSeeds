@@ -1,0 +1,65 @@
+.carousel-selector {
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: stretch;
+  align-content: center;
+  user-select: none;
+
+  &>.carousel-prev,
+  &>.carousel-next {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: .4s ease-in-out all;
+  }
+
+  .carousel-overview {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    mask: linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
+    overflow: hidden;
+    transition: all 1s ease-in-out;
+    cursor: grab;
+    border: none;
+    container-type: inline-size;
+    flex: 1;
+    min-width: 0;
+
+    &:active {
+      cursor: grabbing !important;
+    }
+
+    .carousel-item {
+      position: absolute;
+      backface-visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.75, 0, 0.75, 0);
+      padding: 5px;
+      text-align: center;
+      white-space: nowrap;
+      cursor: pointer;
+
+      &>input[type="radio"] {
+        appearance: none;
+        position: absolute;
+      }
+
+      .preview {
+        width: 100px;
+        aspect-ratio: 1;
+        object-fit: contain;
+        display: block;
+        margin: auto;
+        margin-top: 16px;
+      }
+    }
+  }
+}

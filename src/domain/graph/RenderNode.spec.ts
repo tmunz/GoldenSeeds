@@ -1,103 +1,55 @@
-import { Stage } from '../config/Stage';
-import { CartesianGrid } from '../generator/cartesian';
-import { SvgGeneratorService, svgGeneratorService } from '../generator/SvgGeneratorService';
-import { GraphEvaluator } from './GraphEvaluator';
-import { stageToGraphNode, STAGE_RESULT_PORTS } from './StageGraphAdapter';
-import {
-  appendRenderNode,
-  ensureRenderNode,
-  createRenderNode,
-  RENDER_NODE_ID,
-  RENDER_IN_GRID_PORT,
-  RENDER_IN_SVG_PORT,
-  RENDER_IN_BOUNDING_BOX_PORT,
-  RENDER_PREVIEW_PORT,
-} from './RenderNode';
+import { DEFAULT_GENERATOR_RESULT } from '../generator/SvgGenerator';
+import { generatorNodeRegistry } from './GeneratorNodeRegistry';
+import { graphEvaluator } from './GraphEvaluator';
+import { connectResultPorts, RESULT_PORTS } from './GraphResult';
+import { ensureRenderNode, createRenderNode, RENDER_NODE_ID, RENDER_PREVIEW_PORT } from './RenderNode';
 import { Graph } from './Graph';
 
 describe('RenderNode', () => {
-  test('createRenderNode has grid/svg/boundingBox input ports and a single svgResult out port', () => {
+  test('has result input ports and a single combined preview output', () => {
     const node = createRenderNode();
-
     expect(node.id).toBe(RENDER_NODE_ID);
-    expect(node.inputs).toEqual([
-      { id: RENDER_IN_GRID_PORT, type: 'grid' },
-      { id: RENDER_IN_SVG_PORT, type: 'svg' },
-      { id: RENDER_IN_BOUNDING_BOX_PORT, type: 'boundingBox' },
-    ]);
+    expect(node.inputs).toEqual(RESULT_PORTS);
     expect(node.outputs).toEqual([{ id: RENDER_PREVIEW_PORT, type: 'svgResult' }]);
   });
 
-  test('evaluate falls back to the default result when nothing is connected', () => {
-    const node = createRenderNode();
-    expect(node.evaluate({})).toEqual({
-      [RENDER_PREVIEW_PORT]: { type: 'svgResult', value: SvgGeneratorService.DEFAULT_RESULT },
+  test('falls back to the default result when nothing is connected', () => {
+    expect(createRenderNode().evaluate({})).toEqual({
+      [RENDER_PREVIEW_PORT]: { type: 'svgResult', value: DEFAULT_GENERATOR_RESULT },
     });
   });
 
-  test('evaluate combines connected grid/svg/boundingBox inputs', () => {
-    const node = createRenderNode();
+  test('combines connected grid, SVG, and bounding box inputs', () => {
     const grid = [[1, 2]];
     const svg = '<svg/>';
     const boundingBox = { min: [0, 0], max: [1, 1] };
-
-    expect(
-      node.evaluate({
-        [RENDER_IN_GRID_PORT]: { type: 'grid', value: grid },
-        [RENDER_IN_SVG_PORT]: { type: 'svg', value: svg },
-        [RENDER_IN_BOUNDING_BOX_PORT]: { type: 'boundingBox', value: boundingBox },
-      }),
-    ).toEqual({
-      [RENDER_PREVIEW_PORT]: { type: 'svgResult', value: { grid, svg, boundingBox } },
-    });
+    expect(createRenderNode().evaluate({
+      grid: { type: 'grid', value: grid }, svg: { type: 'svg', value: svg },
+      boundingBox: { type: 'boundingBox', value: boundingBox },
+    })).toEqual({ [RENDER_PREVIEW_PORT]: { type: 'svgResult', value: { grid, svg, boundingBox } } });
   });
 
-  test('appendRenderNode adds the node without connecting it when no source is given', () => {
-    const graph: Graph = { nodes: [], edges: [] };
-    const result = appendRenderNode(graph);
-
-    expect(result.nodes).toHaveLength(1);
-    expect(result.nodes[0].id).toBe(RENDER_NODE_ID);
+  test('adds a missing render node without connecting it', () => {
+    const result = ensureRenderNode({ nodes: [], edges: [] });
+    expect(result.nodes.map((node) => node.id)).toEqual([RENDER_NODE_ID]);
     expect(result.edges).toEqual([]);
   });
 
-  test("appendRenderNode auto-connects the given node id's grid/svg/boundingBox outputs to the render node", () => {
-    const graph: Graph = { nodes: [], edges: [] };
-    const result = appendRenderNode(graph, 'shape-1');
-
-    expect(result.edges).toEqual([
-      {
-        id: 'shape-1.grid->render-output.grid',
-        from: { nodeId: 'shape-1', port: STAGE_RESULT_PORTS.GRID_PORT },
-        to: { nodeId: RENDER_NODE_ID, port: RENDER_IN_GRID_PORT },
-      },
-      {
-        id: 'shape-1.svg->render-output.svg',
-        from: { nodeId: 'shape-1', port: STAGE_RESULT_PORTS.SVG_PORT },
-        to: { nodeId: RENDER_NODE_ID, port: RENDER_IN_SVG_PORT },
-      },
-      {
-        id: 'shape-1.boundingBox->render-output.boundingBox',
-        from: { nodeId: 'shape-1', port: STAGE_RESULT_PORTS.BOUNDING_BOX_PORT },
-        to: { nodeId: RENDER_NODE_ID, port: RENDER_IN_BOUNDING_BOX_PORT },
-      },
-    ]);
-  });
-
-  test('appendRenderNode/ensureRenderNode is a no-op if a render node already exists', () => {
+  test('preserves graphs that already contain a render node', () => {
     const graph: Graph = { nodes: [createRenderNode()], edges: [] };
-
     expect(ensureRenderNode(graph)).toBe(graph);
-    expect(appendRenderNode(graph, 'shape-1')).toBe(graph);
   });
 
-  test('evaluating a stage graph with an appended render node exposes the final SVG on the render node', async () => {
-    const cartesianStage = await new Stage('cartesian-1').with(new CartesianGrid());
-    const expected = svgGeneratorService.getResult(cartesianStage, SvgGeneratorService.DEFAULT_RESULT);
-
-    const graph = appendRenderNode({ nodes: [stageToGraphNode(cartesianStage)], edges: [] }, 'cartesian-1');
-    const { outputsByNode } = new GraphEvaluator().evaluate(graph);
-
-    expect(outputsByNode[RENDER_NODE_ID][RENDER_PREVIEW_PORT]).toEqual({ type: 'svgResult', value: expected });
+  test('exposes a connected generator output as the final preview', async () => {
+    const node = await generatorNodeRegistry.createNode('cartesian', 'grid');
+    const graph = ensureRenderNode({ nodes: [node], edges: connectResultPorts(node.id, RENDER_NODE_ID) });
+    const { outputsByNode } = graphEvaluator.evaluate(graph);
+    expect(outputsByNode[RENDER_NODE_ID][RENDER_PREVIEW_PORT]).toEqual({
+      type: 'svgResult', value: {
+        grid: outputsByNode.grid.grid.value,
+        svg: outputsByNode.grid.svg.value,
+        boundingBox: outputsByNode.grid.boundingBox.value,
+      },
+    });
   });
 });

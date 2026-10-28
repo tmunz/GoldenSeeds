@@ -1,15 +1,12 @@
 import React from 'react';
 
-import './Input.styl';
-import './RangeInput.styl';
+import './Input.css';
+import './RangeInput.css';
 
-export function RangeInput<T>(props: {
+export function RangeInput(props: {
   className?: string;
-  label?: string;
   value?: number;
-  output?: string;
-  options?: T[];
-  onChange: (value: T) => void;
+  onChange: (value: number) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -19,17 +16,12 @@ export function RangeInput<T>(props: {
       <input
         className={props.className}
         type="range"
-        onChange={(e) => {
-          const targetValue = parseFloat(e.target.value);
-          props.onChange(props.options ? props.options[targetValue] : (targetValue as unknown as T));
-        }}
+        onChange={(event) => props.onChange(Number(event.target.value))}
         value={props.value}
         min={props.min}
         max={props.max}
         step={props.step}
       />
-      <label>{props.label}</label>
-      <output>{props.output}</output>
     </div>
   );
 }

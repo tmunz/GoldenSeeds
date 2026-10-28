@@ -2,8 +2,8 @@ import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
 
-import './variables.styl';
-import './index.styl';
+import './variables.css';
+import './index.css';
 
 const appElement = document.getElementById('app');
 if (appElement) {

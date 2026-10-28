@@ -1,0 +1,49 @@
+.drawer-column {
+  display: grid;
+  grid-template-rows: 64px minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  position: relative;
+
+  &:not(:last-of-type)::after {
+    content: '';
+    position: absolute;
+    top: 64px;
+    bottom: 0;
+    right: 0;
+    width: 1px;
+    pointer-events: none;
+    background: linear-gradient(transparent, var(--textColorAlt) 15%, var(--textColorAlt) 85%, transparent);
+  }
+
+  &>.drawer-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 0;
+    z-index: 2;
+
+    &>.drawer-toggle {
+      margin: 0;
+    }
+  }
+
+  &>.drawer-content {
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  &.open>.drawer-content {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}

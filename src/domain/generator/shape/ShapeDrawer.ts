@@ -34,23 +34,16 @@ export interface ShapeConfig {
   };
 }
 
-export interface Props {
-  config: ShapeConfig;
-  grid: Point[];
-}
-
 interface ItemProps {
   size: number;
-  edges: number;
   angle: number;
   smoothness: number;
 }
 
 function getItemProps(config: ShapeConfig, n: number, items: number, size: number): ItemProps {
-  const edges = config.shape.edges;
   const angle = config.transformation.angle(n, items, size);
   const smoothness = config.style.smoothness(n, items, size);
-  return { size, edges, angle, smoothness };
+  return { size, angle, smoothness };
 }
 
 export function draw(config: ShapeConfig, grid: Point[]): { svg: string; boundingBox: BoundingBox } {

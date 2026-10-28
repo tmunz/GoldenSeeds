@@ -1,8 +1,8 @@
 import type { Font } from 'opentype.js';
 import { DISTRIBUTION_DEFINITION, DISTRIBUTION_FIELDS, ProbabilityDistribution } from '../../datatypes/ProbabilityDistribution';
-import { DistributionState } from '../config/stageItemState/DistributionState';
-import { FontState } from '../config/stageItemState/FontState';
-import { parseParameter } from '../config/stageItemState/ParseParameter';
+import { DistributionState } from '../parameter/DistributionState';
+import { FontState } from '../parameter/FontState';
+import { parseParameter } from '../parameter/ParseParameter';
 import { ParamDefinition, ParamDefinitionType } from '../generator/SvgGenerator';
 import { GraphNode } from './GraphNode';
 import { withParameter } from './GeneratorParameters';

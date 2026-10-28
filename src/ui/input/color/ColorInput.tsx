@@ -6,7 +6,7 @@ import { RANDOM_GRADIENT } from './color-channel-config/RandomConfig';
 import { ColorInputRandom } from './ColorInputRandom';
 import { ColorInputSelection } from './ColorInputSelection';
 
-import './ColorInput.styl';
+import './ColorInput.css';
 
 type ColorMode = 'rgb' | 'hsl' | 'select' | 'random';
 

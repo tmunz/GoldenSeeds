@@ -1,0 +1,7 @@
+.themer {
+  backdrop-filter: blur(4px);
+
+  .edit-mode {
+    color: var(--accentColor);
+  }
+}

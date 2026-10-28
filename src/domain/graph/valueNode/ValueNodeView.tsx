@@ -10,7 +10,7 @@ import { ParameterEditor } from '../ParameterEditor';
 import { DistributionValueEditor } from './DistributionValueEditor';
 import { FontValueEditor } from './FontValueEditor';
 
-import './ValueNodeView.styl';
+import './ValueNodeView.css';
 
 /** Standalone value nodes share scalar editors with generator input ports. */
 export function ValueNodeView({ id, data }: NodeProps<FlowNode>) {

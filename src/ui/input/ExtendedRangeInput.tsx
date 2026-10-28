@@ -2,15 +2,14 @@ import React from 'react';
 import { RangeInput } from './RangeInput';
 import { TextInput } from './TextInput';
 
-import './Input.styl';
-import './ExtendedRangeInput.styl';
+import './Input.css';
+import './ExtendedRangeInput.css';
 
 
 export function ExtendedRangeInput(props: {
   className?: string;
   label?: string;
   value?: string;
-  output?: string;
   onChange: (value: string) => void;
   min?: number;
   max?: number;
@@ -20,14 +19,13 @@ export function ExtendedRangeInput(props: {
   return (
     <div className="extended-range-input" >
       <TextInput {...props} />
-      <RangeInput<number>
-        {...{
-          ...props,
-          value: isFinite(value) ? value : 0,
-          label: undefined,
-          output: undefined,
-          onChange: (value) => props.onChange(`${value}`),
-        }}
+      <RangeInput
+        className={props.className}
+        value={isFinite(value) ? value : 0}
+        min={props.min}
+        max={props.max}
+        step={props.step}
+        onChange={(next) => props.onChange(String(next))}
       />
     </div>
   );

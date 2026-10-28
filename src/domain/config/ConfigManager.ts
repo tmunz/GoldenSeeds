@@ -1,9 +1,9 @@
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { configService, ConfigService } from '../config/ConfigService';
+import { configService } from './ConfigService';
 import { RawConfig } from '../config/RawConfig';
 import { renderGraphToSvg } from '../graph/GraphRenderer';
-import { fromRawConfig } from '../graph/GraphSerializer';
+import { fromRawConfig, toRawConfig } from '../graph/GraphSerializer';
 import { preconfigs } from './data';
 
 
@@ -39,16 +39,14 @@ export class ConfigManager {
           await Promise.all(preconfigs.map((preconfig, i) => {
             const existingItem = existingItems.get(preconfig.meta.name);
             if (existingItem === undefined || existingItem?.preconfig) {
-              configManager.save(preconfig, i, true);
+              return this.save(preconfig, i, true);
             }
           }));
 
           // remove old preconfigs
           await Promise.all([...existingItems.values()]
             .filter(item => item.preconfig && !preconfigs.find(preconfig => preconfig.meta.name === item.name))
-            .map(item => {
-              configManager.delete(item.name);
-            })
+            .map(item => this.delete(item.name))
           );
 
           this.configsManageable$.next(true);
@@ -63,9 +61,13 @@ export class ConfigManager {
     });
   }
 
-  select(name?: string) {
+  select(name?: string, { updateUrl = true, reload = true }: { updateUrl?: boolean; reload?: boolean } = {}) {
+    if (!reload && name === configService.config$.value.meta.name) {
+      if (updateUrl) { this.updateUrl(name); }
+      return Promise.resolve();
+    }
     const config = this.configItemMap$.value.get(name ?? '') ?? { rawConfig: { meta: { name: '' }, nodes: [], edges: [] } };
-    this.setConfig(config.rawConfig);
+    return updateUrl ? this.load(config.rawConfig) : configService.setRawConfig(config.rawConfig);
   }
 
   async reset(name: string) {
@@ -74,7 +76,7 @@ export class ConfigManager {
     const config = this.configItemMap$.value.get(name);
     if (config) {
       await this.save(preconfig ?? rawConfig, config.sortIndex, true);
-      this.select(name);
+      await this.select(name);
     }
   }
 
@@ -94,14 +96,14 @@ export class ConfigManager {
     });
   }
 
-  async save(rawConfig: RawConfig, sortIndex: number, preconfig: boolean = false): Promise<ConfigItem> {
+  async save(rawConfig: RawConfig, sortIndex: number, preconfig = false): Promise<ConfigItem> {
     const name = rawConfig.meta.name;
     return new Promise((resolve, reject) => {
       return this.database().then(async (db) => {
         const config = await fromRawConfig(rawConfig);
         // re-derive the persisted form from the live config, so it's always normalized to the
         // current RawConfig shape regardless of what was passed in.
-        const normalizedRawConfig = ConfigService.toRawConfig(config);
+        const normalizedRawConfig = toRawConfig(config);
         const svg = renderGraphToSvg(config.graph, 1000, 1000);
         const transaction = db.transaction([ConfigManager.DB_TABLE], 'readwrite');
         const objectStore = transaction.objectStore(ConfigManager.DB_TABLE);
@@ -117,12 +119,19 @@ export class ConfigManager {
     });
   }
 
-  private setConfig(rawConfig: RawConfig) {
+  load(rawConfig: RawConfig): Promise<void> {
+    this.updateUrl(rawConfig.meta.name);
+    return configService.setRawConfig(rawConfig);
+  }
+
+  private updateUrl(name: string): void {
     const searchParams = new URLSearchParams(window.location.search);
-    searchParams.set('name', rawConfig.meta.name);
-    const newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
-    history.pushState(null, '', newRelativePathQuery);
-    configService.setRawConfig(rawConfig);
+    searchParams.delete('id');
+    searchParams.set('name', name);
+    const newRelativePathQuery = window.location.pathname + '?' + searchParams.toString() + window.location.hash;
+    if (newRelativePathQuery !== window.location.pathname + window.location.search + window.location.hash) {
+      history.pushState(null, '', newRelativePathQuery);
+    }
   }
 
   private async database(): Promise<IDBDatabase> {

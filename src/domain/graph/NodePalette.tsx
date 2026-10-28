@@ -7,7 +7,7 @@ import { ParamDefinitionType } from '../generator/SvgGenerator';
 import { generatorNodeRegistry } from './GeneratorNodeRegistry';
 import { valueNodeRegistry, DEFAULT_VALUE_DEFINITIONS } from './ValueNodeRegistry';
 
-import './NodePalette.styl';
+import './NodePalette.css';
 
 const VALUE_KINDS: ParamDefinitionType[] = ['number', 'expression', 'distribution', 'color', 'string', 'font'];
 

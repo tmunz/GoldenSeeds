@@ -1,4 +1,4 @@
-export type PointDimension = 0 | 1;
+type PointDimension = 0 | 1;
 
 export class Point extends Array<number> {
   static X: PointDimension = 0;

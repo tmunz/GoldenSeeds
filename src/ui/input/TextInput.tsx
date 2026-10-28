@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, ChangeEvent, MutableRefObject } from 'react';
 
-import './Input.styl';
-import './TextInput.styl';
+import './Input.css';
+import './TextInput.css';
 
 export interface Props {
   label?: string;

@@ -1,0 +1,117 @@
+.select-column {
+  grid-area: select;
+
+  &>.drawer-content {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .selection-overview {
+    display: flex;
+    container: selection-carousel / size;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+
+    .carousel-selector {
+      display: grid;
+      grid-template-columns: 60px minmax(0, 1fr) 60px;
+      grid-template-rows: minmax(0, 1fr);
+      align-items: stretch;
+      min-width: 0;
+      height: 100%;
+      padding: 10px;
+
+      &>.carousel-prev,
+      &>.carousel-next {
+        min-width: 0;
+
+        .animated-button {
+          box-sizing: border-box;
+          width: 60px;
+          height: 60px;
+          padding: 10px;
+          margin: 0;
+
+          .animated-icon {
+            width: 40px;
+            height: 40px;
+          }
+        }
+      }
+    }
+
+    .carousel-overview {
+      position: relative;
+      container-type: size;
+      height: 100%;
+      width: 100%;
+      min-height: 0;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: none;
+
+      .carousel-item {
+        box-sizing: border-box;
+        width: 72cqw;
+        max-height: 100%;
+        white-space: nowrap;
+
+        .title {
+          line-height: 16px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .preview {
+          width: min(100%, max(0px, calc(100cqh - 80px)));
+          height: auto;
+        }
+      }
+    }
+  }
+
+  .selection-actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 80px));
+    justify-content: center;
+    gap: 8px;
+    padding: 24px 12px;
+
+    .animated-button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-width: 0;
+      margin: 0;
+      padding: 8px 4px;
+
+      .icon-text {
+        position: static;
+        transform: none;
+        order: 1;
+        font-size: 11px;
+      }
+    }
+  }
+}
+
+@container selection-carousel (max-width: 360px) {
+  .select-column .selection-overview .carousel-selector {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr) 60px;
+
+    .carousel-overview {
+      grid-column: 1 / -1;
+      grid-row: 1;
+    }
+
+    &>.carousel-prev,
+    &>.carousel-next {
+      grid-row: 2;
+    }
+  }
+}

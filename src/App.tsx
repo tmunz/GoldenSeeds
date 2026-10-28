@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { GraphView } from './view/GraphView';
+import { MainView } from './view/MainView';
 import { Config } from './domain/config/Config';
 import { configService } from './domain/config/ConfigService';
 import { fontService } from './domain/font/FontService';
@@ -10,45 +10,54 @@ import { preconfigs } from './domain/config/data';
 const SignikaBoldFont = require('./domain/font/signika-bold.otf'); // eslint-disable-line
 
 export function App() {
+  const [initialViewerOpen] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return Boolean(params.get('id') || params.get('name'));
+  });
   const [configItems, setConfigItems] = useState<ConfigItem[]>([]);
   const [configsManageable, setConfigsManageable] = useState<boolean>(false);
   const [activeConfig, setActiveConfig] = useState<Config>();
 
-  const setup = useCallback(async () => {
-    // wait for preconfigs to be loaded, but at least some initial time to animate
-    const start = Date.now();
-    const buffer = await (await fetch(SignikaBoldFont)).arrayBuffer();
-    await fontService.saveBuffer(buffer).catch(() => console.warn('font could not be loaded'));
-    await configManager.init();
-    window.addEventListener('popstate', (e) => handleLocation(e));
-    setTimeout(() => handleLocation(), Math.max(0, 1000 - (Date.now() - start)));
-  }, []);
-
-  function handleLocation(e?: Event) {
-    const location = e !== undefined ? (e.currentTarget as Window).location.search : window.location.search;
-    const configName = new URLSearchParams(location).get('name');
-    configManager.select(configName ? configName : preconfigs[0]?.meta.name);
-  }
-
   useEffect(() => {
-    const configItemsSubsription = configManager.configItems$.subscribe(setConfigItems);
+    const configItemsSubscription = configManager.configItems$.subscribe(setConfigItems);
     const configsManageableSubscription = configManager.configsManageable$.subscribe(setConfigsManageable);
     const activeConfigSubscription = configService.config$.subscribe(setActiveConfig);
 
-    setup();
+    let disposed = false;
+    let startupTimeout: ReturnType<typeof setTimeout> | undefined;
+    async function setup() {
+      const start = Date.now();
+      const buffer = await (await fetch(SignikaBoldFont)).arrayBuffer();
+      await fontService.saveBuffer(buffer).catch(() => console.warn('font could not be loaded'));
+      await configManager.init();
+      if (disposed) { return; }
+      window.addEventListener('popstate', handleLocation);
+      startupTimeout = setTimeout(handleLocation, Math.max(0, 1000 - (Date.now() - start)));
+    }
+    void setup();
 
     return () => {
-      configItemsSubsription.unsubscribe();
+      disposed = true;
+      clearTimeout(startupTimeout);
+      window.removeEventListener('popstate', handleLocation);
+      configItemsSubscription.unsubscribe();
       configsManageableSubscription.unsubscribe();
       activeConfigSubscription.unsubscribe();
     };
-  }, [setup]);
+  }, []);
 
   return (
-    <GraphView
+    <MainView
+      initialViewerOpen={initialViewerOpen}
       configItems={configItems}
       configsManageable={configsManageable}
       activeConfig={activeConfig}
     />
   );
+}
+
+function handleLocation() {
+  const params = new URLSearchParams(window.location.search);
+  const configName = params.get('id') || params.get('name');
+  configManager.select(configName || preconfigs[0]?.meta.name, { updateUrl: false });
 }

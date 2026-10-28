@@ -6,7 +6,6 @@ import { SvgGenerator } from './SvgGenerator';
 import { Shape } from './shape';
 import { FunctionPlotter } from './function';
 import { TextDrawer } from './text';
-import { ShapeConfig } from './shape/ShapeDrawer';
 
 export class SvgGeneratorRegistry {
   private registry: Map<string, () => SvgGenerator<unknown>> = new Map();
@@ -27,10 +26,6 @@ export class SvgGeneratorRegistry {
   newInstance(type: string): SvgGenerator<unknown> | null {
     const instance = this.registry.get(type);
     return instance ? instance() : null;
-  }
-
-  getDefaultGenerator(): SvgGenerator<ShapeConfig> {
-    return new Shape();
   }
 }
 
