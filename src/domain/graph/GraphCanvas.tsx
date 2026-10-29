@@ -4,6 +4,7 @@ import {
   Background,
   Controls,
   MiniMap,
+  Panel,
   Connection,
   Edge,
   applyNodeChanges,
@@ -41,16 +42,18 @@ import {
 } from './GraphFlowAdapter';
 import { isValidConnection as isValidGraphConnection } from './ConnectionValidator';
 import { graphEvaluator } from './GraphEvaluator';
-import { ensureRenderNode, RENDER_NODE_ID, RENDER_NODE_KIND } from './RenderNode';
+import { ensureRenderNode, RENDER_NODE_ID, RENDER_NODE_KIND, RENDER_PREVIEW_PORT } from './RenderNode';
 import { connectResultPorts } from './GraphResult';
 import { VALUE_KIND_PREFIX, DEFAULT_VALUE_DEFINITIONS } from './ValueNodeRegistry';
 import { parseParamPortId, collectParamPorts } from './ParamPorts';
-import { ParamDefinitionType } from '../generator/SvgGenerator';
+import { DEFAULT_GENERATOR_RESULT, ParamDefinitionType } from '../generator/SvgGenerator';
 import { GeneratorNodeConfig } from './GeneratorNode';
+import { svgService } from '../svg/SvgService';
 
 import './GraphCanvas.css';
 
 const nodeTypes = { [GRAPH_NODE_TYPE]: GraphNodeView, [RENDER_FLOW_NODE_TYPE]: RenderNodeView, [VALUE_FLOW_NODE_TYPE]: ValueNodeView };
+const MINI_VIEW_SIZE = { width: 200, height: 150 };
 
 /** Editor metadata for a generator parameter or a structured value's numeric field. */
 function paramDefinitionFor(node: GraphNode | undefined, portId: string) {
@@ -82,6 +85,7 @@ function defaultParamValues(node: GraphNode): Record<string, PortValue> | undefi
 
 export interface GraphCanvasProps {
   graph: Graph;
+  showResultPreview?: boolean;
   animation?: GraphAnimationControls;
   layout?: GraphLayout;
   onGraphChange: (graph: Graph, layout: GraphLayout) => void;
@@ -110,7 +114,7 @@ interface GraphSnapshot {
  * - The terminal render node's connectors stay pinned to the right viewport edge.
  * - The full graph is re-evaluated on every change; the final preview lives in MainView.
  */
-const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(function GraphCanvasContent({ graph, animation, layout = {}, onGraphChange, onHistoryChange }, ref) {
+const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(function GraphCanvasContent({ graph, animation, layout = {}, showResultPreview = true, onGraphChange, onHistoryChange }, ref) {
   const [viewportX, viewportY, zoom] = useStore((state) => state.transform);
   const width = useStore((state) => state.width);
   const height = useStore((state) => state.height);
@@ -338,6 +342,13 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
     }
   }, [nodes, edges, animation?.frames]);
 
+  const resultPreview = useMemo(() => {
+    if (!showResultPreview) { return ''; }
+    const preview = evaluation?.outputsByNode[RENDER_NODE_ID]?.[RENDER_PREVIEW_PORT];
+    const result = preview?.type === 'svgResult' ? preview.value : DEFAULT_GENERATOR_RESULT;
+    return svgService.wrapResult(result, MINI_VIEW_SIZE.width, MINI_VIEW_SIZE.height, 16);
+  }, [evaluation, showResultPreview]);
+
   const inputValuesByNode = useMemo(() => {
     const map: Record<string, Record<string, PortValue>> = {};
     // start every generator node's param ports from its own default value (see GeneratorNode.ts), so
@@ -414,10 +425,18 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
           isValidConnection={isValidConnection}
           proOptions={{ hideAttribution: true }}
           defaultViewport={DEFAULT_VIEWPORT}
+          minZoom={0.1}
         >
           <Background />
           <Controls fitViewOptions={fitViewOptions} />
-          <MiniMap />
+          <MiniMap style={MINI_VIEW_SIZE} />
+          {showResultPreview && <Panel position="top-right" className="graph-result-preview" style={MINI_VIEW_SIZE}>
+            <img
+              alt="Drawing result preview"
+              draggable={false}
+              src={`data:image/svg+xml;charset=utf-8,${encodeURIComponent(resultPreview)}`}
+            />
+          </Panel>}
           <NodePalette onAdd={handleAddNode} />
         </ReactFlow>
       </GraphAnimationContext.Provider>

@@ -2,6 +2,7 @@
   --accentColor: #decd87;
   --backgroundColor: 0, 0, 0;
   --backgroundColorAlt: 22, 22, 22;
+  --graphNodeBackground: 10, 10, 10;
   --actionColor: #fff;
   --textColor: #999;
   --textColorAlt: #444;
@@ -10,6 +11,7 @@
   &.light-theme {
     --backgroundColor: 255, 255, 255;
     --backgroundColorAlt: 240, 240, 240;
+    --graphNodeBackground: 240, 240, 240;
     --textColor: #222;
     --actionColor: #666;
     --textColorAlt: #aaa;

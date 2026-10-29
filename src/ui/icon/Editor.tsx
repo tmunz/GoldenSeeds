@@ -1,15 +1,3 @@
-export const EditorNone: number[][] = [
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-];
-
 export const EditorRegular: number[][] = [
   [90, 5],
   [10, 5],
@@ -21,6 +9,8 @@ export const EditorRegular: number[][] = [
   [45, 55],
   [90, 30],
 ];
+
+export const EditorNone: number[][] = Array.from({ length: EditorRegular.length }, () => [50, 50]);
 
 export const EditorClose: number[][] = [
   [10, 10],

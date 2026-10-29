@@ -4,7 +4,7 @@ import { configService } from '../../domain/config/ConfigService';
 import { Graph } from '../../domain/graph/Graph';
 import { renderGraphToSvg } from '../../domain/graph/GraphRenderer';
 import { SvgCanvas } from '../../domain/svg/SvgCanvas';
-import { Drawer } from '../../ui/Drawer';
+import { Frame } from '../../ui/Frame';
 import { ViewerNone, ViewerRegular, ViewerClose } from '../../ui/icon/Viewer';
 import { TextInput } from '../../ui/input/TextInput';
 import { useDimension } from '../../utils/useDimension';
@@ -25,7 +25,7 @@ export function ViewerSection(props: {
   const name = props.activeConfig?.meta.name;
 
   return (
-    <Drawer
+    <Frame
       className="viewer-column"
       title="view"
       label="Drawing preview"
@@ -41,6 +41,6 @@ export function ViewerSection(props: {
       <div className="viewer-content" ref={viewerContentRef}>
         {props.activeConfig && <SvgCanvas svgKey={name ?? 'drawing'} svgContent={preview} />}
       </div>
-    </Drawer>
+    </Frame>
   );
 }

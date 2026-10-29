@@ -1,16 +1,3 @@
-export const LoadNone: number[][] = [
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-];
-
 export const LoadRegular: number[][] = [
   [90, 90],
   [90, 20],
@@ -23,6 +10,8 @@ export const LoadRegular: number[][] = [
   [50, 45],
   [30, 60],
 ];
+
+export const LoadNone: number[][] = Array.from({ length: LoadRegular.length }, () => [50, 50]);
 
 export const LoadProgress: number[][] = [
   [90, 90],

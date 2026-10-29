@@ -5,7 +5,7 @@ import { Graph } from '../../domain/graph/Graph';
 import { renderGraphToSvg } from '../../domain/graph/GraphRenderer';
 import { PngExporter } from '../../domain/png/PngExporter';
 import { SvgExporter } from '../../domain/svg/SvgExporter';
-import { Drawer } from '../../ui/Drawer';
+import { Frame } from '../../ui/Frame';
 import { SaveNone, SaveRegular, SaveClose } from '../../ui/icon/Save';
 
 import './ExportSection.css';
@@ -23,7 +23,7 @@ export function ExportSection(props: {
   });
 
   return (
-    <Drawer
+    <Frame
       className="export-column"
       title="export"
       label="Export drawing"
@@ -38,6 +38,6 @@ export function ExportSection(props: {
           <PngExporter getData={getData} />
         </div>
       )}
-    </Drawer>
+    </Frame>
   );
 }

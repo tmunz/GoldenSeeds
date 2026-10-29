@@ -7,7 +7,7 @@ import { configService } from '../../domain/config/ConfigService';
 import { GraphCanvas, GraphCanvasHandle } from '../../domain/graph/GraphCanvas';
 import { AnimatedButton, DIRECTION_LEFT, DIRECTION_RIGHT } from '../../ui/AnimatedButton';
 import { ArrowNone, ArrowFlat, ArrowRegular } from '../../ui/icon/Arrow';
-import { Drawer } from '../../ui/Drawer';
+import { Frame } from '../../ui/Frame';
 import { EditorNone, EditorRegular, EditorClose } from '../../ui/icon/Editor';
 
 import './EditSection.css';
@@ -18,6 +18,7 @@ export function EditSection(props: {
   activeConfig?: Config;
   animation: GraphAnimationControls;
   open: boolean;
+  showResultPreview: boolean;
   onToggle: () => void;
 }) {
   const graphCanvasRef = useRef<GraphCanvasHandle>(null);
@@ -46,7 +47,7 @@ export function EditSection(props: {
   }, [undo, redo, props.open]);
 
   return (
-    <Drawer
+    <Frame
       className="edit-column"
       title="edit"
       label="Node editor"
@@ -81,12 +82,13 @@ export function EditSection(props: {
               graph={props.activeConfig.graph}
               animation={props.animation}
               layout={props.activeConfig.layout}
+              showResultPreview={props.showResultPreview}
               onGraphChange={(graph, layout) => configService.setGraph(graph, layout)}
               onHistoryChange={setHistoryState}
             />
           </section>
         </>
       )}
-    </Drawer>
+    </Frame>
   );
 }

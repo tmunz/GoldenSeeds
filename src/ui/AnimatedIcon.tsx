@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-
 import './AnimatedIcon.css';
 
 export interface Props {
@@ -7,6 +6,8 @@ export interface Props {
   index: number;
   rotation?: number;
 }
+
+const DURATION = 300;
 
 export function AnimatedIcon(props: Props) {
   const [index, setIndex] = useState(0);
@@ -41,7 +42,7 @@ export function AnimatedIcon(props: Props) {
             begin="indefinite"
             fill="freeze"
             attributeName="points"
-            dur="200ms"
+            dur={`${DURATION}ms`}
             ref={e => refs.current[i] = e}
             to={toPath(points)}
           />

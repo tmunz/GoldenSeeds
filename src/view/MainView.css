@@ -13,7 +13,7 @@
   &>.themer {
     position: absolute;
     z-index: 5;
-    bottom: 0;
+    top: env(safe-area-inset-top, 0px);
     right: 10px;
 
     &>button {

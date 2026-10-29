@@ -1,22 +1,9 @@
 .value-node {
   position: relative;
-  min-width: 160px;
-  border: 1px solid var(--textColorAlt);
-  border-radius: 4px;
-  background: rgb(var(--backgroundColorAlt));
-  color: var(--textColor);
-  font-size: 11px;
-
-  .value-node-header {
-    padding: 4px 8px;
-    border-bottom: 1px solid var(--textColorAlt);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    cursor: grab;
-  }
+  min-width: 260px;
 
   .value-node-body {
-    padding: 8px;
+    padding: 16px;
   }
 
   .value-node-port {
@@ -30,12 +17,16 @@
 }
 
 .distribution-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
   .input-port {
     padding: 0;
-    min-height: 44px;
+    min-height: 56px;
 
     .react-flow__handle-left {
-      left: -9px;
+      left: -25px;
     }
   }
 }

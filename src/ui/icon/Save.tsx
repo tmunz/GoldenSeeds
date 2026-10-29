@@ -1,16 +1,3 @@
-export const SaveNone: number[][] = [
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-];
-
 export const SaveRegular: number[][] = [
   [10, 5],
   [10, 90],
@@ -23,6 +10,8 @@ export const SaveRegular: number[][] = [
   [50, 50],
   [30, 35],
 ];
+
+export const SaveNone: number[][] = Array.from({ length: SaveRegular.length }, () => [50, 50]);
 
 export const SaveProgress: number[][] = [
   [10, 5],

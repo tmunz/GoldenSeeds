@@ -1,7 +1,7 @@
 .edit-column {
   grid-area: edit;
 
-  &>.drawer-content {
+  &>.frame-content {
     &>.actions {
       display: flex;
       flex-wrap: wrap;

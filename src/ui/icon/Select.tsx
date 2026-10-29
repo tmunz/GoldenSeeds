@@ -1,12 +1,23 @@
-// Temporary selection icon, with matching points for all animation states.
-export const SelectNone: number[][] = Array.from({ length: 9 }, () => [50, 50]);
-
 export const SelectRegular: number[][] = [
-  [10, 10], [90, 10], [90, 90], [10, 90], [10, 10],
-  [10, 50], [90, 50], [50, 50], [50, 90],
+  [25, 20],
+  [ 0, 50],
+  [25, 80],
+  [25, 50],
+  [75, 50],
+  [75, 20],
+  [100, 50],
+  [75, 80],
 ];
 
+export const SelectNone: number[][] = Array.from({ length: SelectRegular.length }, () => [50, 50]);
+
 export const SelectClose: number[][] = [
-  [10, 10], [10, 10], [50, 50], [90, 90], [50, 50],
-  [25, 75], [10, 90], [25, 75], [90, 10],
+  [10, 10],
+  [50, 50],
+  [10, 90], 
+  [50, 50], 
+  [50, 50],
+  [90, 10], 
+  [50, 50], 
+  [90, 90], 
 ];

@@ -19,6 +19,7 @@
   }
 
   .carousel-overview {
+    --carousel-item-gap: 20px;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;

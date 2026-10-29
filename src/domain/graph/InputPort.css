@@ -2,13 +2,13 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
   padding: 0 8px;
   white-space: nowrap;
 
   &.input-port-editable {
     align-self: stretch;
-    min-width: 180px;
+    min-width: 0;
   }
 
   >.parameter-editor {
@@ -21,10 +21,11 @@
 
   .input-port-value {
     color: var(--textColor);
-    font-style: italic;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 80px;
+    max-width: 120px;
+    margin-left: auto;
+    letter-spacing: 0;
   }
 
   .input-port-value-default {
@@ -36,14 +37,14 @@
 .parameter-option-editor {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   width: 100%;
   padding: 6px 0;
   color: var(--textColor);
 
   select {
     font: inherit;
-    padding: 4px;
+    padding: 8px;
     color: var(--actionColor);
     background: rgb(var(--backgroundColorAlt));
     border: 1px solid var(--textColorAlt);

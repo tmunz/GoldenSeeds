@@ -4,7 +4,7 @@ import { ConfigImporter } from '../../domain/config/ConfigImporter';
 import { configService } from '../../domain/config/ConfigService';
 import { AnimatedButton } from '../../ui/AnimatedButton';
 import { CarouselSelector } from '../../ui/CarouselSelector';
-import { Drawer } from '../../ui/Drawer';
+import { Frame } from '../../ui/Frame';
 import { SelectNone, SelectRegular, SelectClose } from '../../ui/icon/Select';
 import { EditorNone, EditorRegular, EditorClose } from '../../ui/icon/Editor';
 import { PlusNone, PlusRegular, PlusRotated } from '../../ui/icon/Plus';
@@ -39,7 +39,7 @@ export function SelectSection(props: {
   }
 
   return (
-    <Drawer
+    <Frame
       className="select-column"
       title="select"
       label="Select drawing"
@@ -47,31 +47,33 @@ export function SelectSection(props: {
       open={props.open}
       onToggle={props.onToggle}
     >
-      <div className="selection-overview">
-        <CarouselSelector
-          items={props.configItems}
-          selected={selection?.name}
-          select={setSelectedName}
-          selectionDelay={0}
-          scale={1.5}
-        />
+      <div className="selection-content">
+        <div className="selection-overview">
+          <CarouselSelector
+            items={props.configItems}
+            selected={selection?.name}
+            select={setSelectedName}
+            selectionDelay={0}
+            scale={1.5}
+          />
+        </div>
+        <div className="selection-actions" role="group" aria-label="Drawing actions">
+          <ConfigImporter label="load" onLoad={props.onEdit} />
+          <AnimatedButton
+            title="edit"
+            iconText="selected"
+            points={[EditorNone, EditorRegular, EditorClose]}
+            disabled={!selection}
+            onClick={editSelected}
+          />
+          <AnimatedButton
+            title="create"
+            iconText="new"
+            points={[PlusNone, PlusRegular, PlusRotated]}
+            onClick={() => { void createDrawing(); }}
+          />
+        </div>
       </div>
-      <div className="selection-actions" role="group" aria-label="Drawing actions">
-        <ConfigImporter label="load" onLoad={props.onEdit} />
-        <AnimatedButton
-          title="edit"
-          iconText="selected"
-          points={[EditorNone, EditorRegular, EditorClose]}
-          disabled={!selection}
-          onClick={editSelected}
-        />
-        <AnimatedButton
-          title="create"
-          iconText="new"
-          points={[PlusNone, PlusRegular, PlusRotated]}
-          onClick={() => { void createDrawing(); }}
-        />
-      </div>
-    </Drawer>
+    </Frame>
   );
 }

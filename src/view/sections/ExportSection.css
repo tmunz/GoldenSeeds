@@ -1,10 +1,16 @@
 .export-column {
   grid-area: export;
+
+  &>.frame-content {
+    flex-direction: column-reverse;
+  }
 }
 
 .export-panel {
+  min-height: 0;
+  padding-bottom: 24px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
   gap: 16px;
   overflow-y: auto;

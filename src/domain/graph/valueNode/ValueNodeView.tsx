@@ -10,6 +10,7 @@ import { ParameterEditor } from '../ParameterEditor';
 import { DistributionValueEditor } from './DistributionValueEditor';
 import { FontValueEditor } from './FontValueEditor';
 
+import '../Node.css';
 import './ValueNodeView.css';
 
 /** Standalone value nodes share scalar editors with generator input ports. */
@@ -23,7 +24,7 @@ export function ValueNodeView({ id, data }: NodeProps<FlowNode>) {
   useEffect(() => { updateNodeInternals(id); }, [id, data.connectedInputPorts, updateNodeInternals]);
   return (
     <div className="value-node">
-      <div className="value-node-header">{type}</div>
+      <div className="value-node-header node-header"><span className="node-title">{type}</span></div>
       <div className="value-node-body">
         {type === 'distribution' ? <DistributionValueEditor value={state.getValue() as ProbabilityDistribution}
           inputValues={data.inputValues} connectedInputPorts={data.connectedInputPorts}

@@ -53,6 +53,7 @@ export function MainView(props: {
         activeConfig={props.activeConfig}
         animation={animation}
         open={editMode}
+        showResultPreview={!viewerMode}
         onToggle={() => setEditMode(open => !open)}
       />
       <ViewerSection

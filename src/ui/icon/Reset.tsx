@@ -1,13 +1,3 @@
-export const ResetNone: number[][] = [
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-  [50, 50],
-];
-
 export const ResetRegular: number[][] = [
   [10, 90],
   [90, 90],
@@ -17,6 +7,8 @@ export const ResetRegular: number[][] = [
   [50, 30],
   [65, 10],
 ];
+
+export const ResetNone: number[][] = Array.from({ length: ResetRegular.length }, () => [50, 50]);
 
 export const ResetProgress: number[][] = [
   [50, 90],

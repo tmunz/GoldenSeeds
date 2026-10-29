@@ -115,14 +115,14 @@ export function CarouselSelector(props: {
           const p = Math.max(-MAX_AROUND - 1, Math.min(MAX_AROUND + 1, delta));
           const angle = p / MAX_AROUND * Math.PI / 2 * 0.7;
           const scale = 1 / (p == 0 ? 1 : Math.abs(p * 10) ** 0.3);
-          const offset = Math.sin(p / (MAX_AROUND + 1) * Math.PI / 2) * 55 * (props.scale ?? 1);
+          const offset = Math.sin(p / (MAX_AROUND + 1) * Math.PI / 2) * 75 * (props.scale ?? 1);
           const visible = Math.abs(delta) <= MAX_AROUND;
           return <label
             htmlFor={`${carouselId}__${item.name.replace(' ', '_')}`}
             key={item.name}
             className="carousel-item action"
             style={{
-              transform: `translateX(${offset}cqw) scale(${scale}) rotateY(${angle}rad)`,
+              transform: `translateX(calc(${offset}cqw + ${p} * var(--carousel-item-gap))) scale(${scale}) rotateY(${angle}rad)`,
               opacity: visible ? 1 : 0,
             }}
           >

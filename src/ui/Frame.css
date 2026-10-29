@@ -1,6 +1,6 @@
-.drawer-column {
+.frame-column {
   display: grid;
-  grid-template-rows: 64px minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) calc(64px + env(safe-area-inset-bottom, 0px));
   min-width: 0;
   min-height: 0;
   height: 100%;
@@ -9,27 +9,32 @@
   &:not(:last-of-type)::after {
     content: '';
     position: absolute;
-    top: 64px;
-    bottom: 0;
+    top: 0;
+    bottom: calc(64px + env(safe-area-inset-bottom, 0px));
     right: 0;
     width: 1px;
     pointer-events: none;
     background: linear-gradient(transparent, var(--textColorAlt) 15%, var(--textColorAlt) 85%, transparent);
   }
 
-  &>.drawer-header {
+  &>.frame-footer {
+    box-sizing: border-box;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
     display: flex;
     justify-content: center;
     align-items: center;
     min-width: 0;
     z-index: 2;
 
-    &>.drawer-toggle {
+    &>.frame-toggle {
+      box-sizing: border-box;
       margin: 0;
+      min-width: 44px;
+      min-height: 44px;
     }
   }
 
-  &>.drawer-content {
+  &>.frame-content {
     min-width: 0;
     min-height: 0;
     overflow: hidden;
@@ -41,7 +46,7 @@
     transition: opacity 0.3s ease-in-out;
   }
 
-  &.open>.drawer-content {
+  &.open>.frame-content {
     visibility: visible;
     opacity: 1;
     pointer-events: auto;

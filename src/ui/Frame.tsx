@@ -1,9 +1,9 @@
 import React, { useId } from 'react';
 import { AnimatedButton } from './AnimatedButton';
 
-import './Drawer.css';
+import './Frame.css';
 
-export function Drawer(props: {
+export function Frame(props: {
   className?: string;
   title: string;
   label: string;
@@ -15,10 +15,18 @@ export function Drawer(props: {
   const panelId = useId();
 
   return (
-    <section className={`drawer-column ${props.className ?? ''}${props.open ? ' open' : ''}`} aria-label={props.label}>
-      <header className="drawer-header">
+    <section className={`frame-column ${props.className ?? ''}${props.open ? ' open' : ''}`} aria-label={props.label}>
+      <div
+        id={panelId}
+        className="frame-content"
+        aria-hidden={!props.open}
+        {...(!props.open ? { inert: '' } : {})}
+      >
+        {props.children}
+      </div>
+      <footer className="frame-footer">
         <AnimatedButton
-          className="drawer-toggle"
+          className="frame-toggle"
           title={props.title}
           points={props.iconPaths}
           active={props.open}
@@ -26,15 +34,7 @@ export function Drawer(props: {
           controls={panelId}
           onClick={props.onToggle}
         />
-      </header>
-      <div
-        id={panelId}
-        className="drawer-content"
-        aria-hidden={!props.open}
-        {...(!props.open ? { inert: '' } : {})}
-      >
-        {props.children}
-      </div>
+      </footer>
     </section>
   );
 }

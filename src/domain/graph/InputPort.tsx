@@ -8,8 +8,9 @@ import { ParameterEditor } from './ParameterEditor';
 
 import './InputPort.css';
 
-export function InputPort({ id, type, definition, localText = '', connected, value, onChange }: {
+export function InputPort({ id, label = id, type, definition, localText = '', connected, value, onChange }: {
   id: string;
+  label?: string;
   type: PortValueType;
   definition?: ParamDefinition;
   localText?: string;
@@ -26,8 +27,8 @@ export function InputPort({ id, type, definition, localText = '', connected, val
   return (
     <div className={`input-port${editable ? ' input-port-editable' : ''}`}>
       <Handle type="target" position={Position.Left} id={id} style={{ background: portColor(type) }} />
-      {editable ? <ParameterEditor portId={id} label={id} value={localText} definition={definition} onChange={onChange} /> : <>
-        <span className="input-port-label">{id}</span>
+      {editable ? <ParameterEditor portId={id} label={label} value={localText} definition={definition} onChange={onChange} /> : <>
+        <span className="input-port-label">{label}</span>
         <span className={`input-port-value${connected ? '' : ' input-port-value-default'}`}>{preview}</span>
       </>}
     </div>
