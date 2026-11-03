@@ -1,8 +1,8 @@
-import { GeneratorNodeConfig } from '../graph/GeneratorNode';
-import { generatorNodeRegistry } from '../graph/GeneratorNodeRegistry';
-import { valueNodeRegistry, ValueNodeConfig } from '../graph/ValueNodeRegistry';
-import { GraphEvaluator } from '../graph/GraphEvaluator';
-import { toRawConfig } from '../graph/GraphSerializer';
+import { GeneratorNodeConfig } from '../graph/nodes/generator/GeneratorNode';
+import { generatorNodeRegistry } from '../graph/nodes/generator/GeneratorNodeRegistry';
+import { valueNodeRegistry, ValueNodeConfig } from '../graph/nodes/value/ValueNodeRegistry';
+import { GraphEvaluator } from '../graph/runtime/GraphEvaluator';
+import { toRawConfig } from '../graph/runtime/GraphSerializer';
 import { DEFAULT_DISTRIBUTION_TEXT } from '../../datatypes/ProbabilityDistribution';
 import { applyNumberAnimations, animationValue, startupAnimationTarget, NumberAnimationTarget } from './GraphAnimation';
 
@@ -20,8 +20,8 @@ describe('graph number animation', () => {
     const evaluator = new GraphEvaluator();
     for (const value of [0, 5, 10]) {
       const animated = applyNumberAnimations(graph, [{ input, value }]);
-      const output = evaluator.evaluate(animated).outputsByNode.polar.grid;
-      expect(output.type === 'grid' && output.value.length).toBe(value);
+      const output = evaluator.evaluate(animated).outputsByNode.polar.points;
+      expect(output.type === 'points' && output.value.length).toBe(value);
       expect((number.config as ValueNodeConfig).state.getValue()).toBe(10);
       expect(toRawConfig({ meta: { name: 'animation' }, graph, layout: {} })).toEqual(saved);
     }

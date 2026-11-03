@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGraphAnimation } from '../domain/animation/useGraphAnimation';
 import { Config } from '../domain/config/Config';
 import { ConfigItem } from '../domain/config/ConfigManager';
-import { Themer } from '../themer/Themer';
+import { Settings } from '../settings/Settings';
 import { ExportSection } from './sections/ExportSection';
 import { EditSection } from './sections/EditSection';
 import { ViewerSection } from './sections/ViewerSection';
@@ -20,11 +20,41 @@ export function MainView(props: {
   const [editMode, setEditMode] = useState(false);
   const [viewerMode, setViewerMode] = useState(Boolean(props.initialViewerOpen));
   const [exportMode, setExportMode] = useState(false);
+  const [compact, setCompact] = useState(() => window.matchMedia('(max-width: 760px)').matches);
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 760px)');
+    const change = () => setCompact(query.matches);
+    query.addEventListener('change', change);
+    return () => query.removeEventListener('change', change);
+  }, []);
+  useEffect(() => {
+    if (!compact) return;
+    // On smaller screens keep one usable workspace and the four steps in reach.
+    if (editMode) { setSelectMode(false); setViewerMode(false); setExportMode(false); }
+    else if (viewerMode) { setSelectMode(false); setExportMode(false); }
+    else if (exportMode) setSelectMode(false);
+  }, [compact, editMode, viewerMode, exportMode]);
+
+  function toggleStep(step: 'select' | 'edit' | 'view' | 'export') {
+    if (compact) {
+      setSelectMode(step === 'select' && !selectMode);
+      setEditMode(step === 'edit' && !editMode);
+      setViewerMode(step === 'view' && !viewerMode);
+      setExportMode(step === 'export' && !exportMode);
+      return;
+    }
+    if (step === 'select') setSelectMode(open => !open);
+    if (step === 'edit') setEditMode(open => !open);
+    if (step === 'view') setViewerMode(open => !open);
+    if (step === 'export') setExportMode(open => !open);
+  }
+
   const animation = useGraphAnimation(props.activeConfig?.graph);
 
   function openEditor() {
     setSelectMode(false);
-    setViewerMode(true);
+    setViewerMode(!compact);
+    if (compact) setExportMode(false);
     setEditMode(true);
   }
 
@@ -36,7 +66,7 @@ export function MainView(props: {
           selectMode ? 'minmax(48px, 1fr)' : 'minmax(48px, 0fr)',
           editMode ? 'minmax(48px, 2fr)' : 'minmax(48px, 0fr)',
           viewerMode ? 'minmax(48px, 2fr)' : 'minmax(48px, 0fr)',
-          exportMode ? 'minmax(48px, 0.35fr)' : 'minmax(48px, 0fr)',
+          exportMode ? 'minmax(48px, 1fr)' : 'minmax(48px, 0fr)',
         ].join(' '),
       }}
     >
@@ -44,7 +74,7 @@ export function MainView(props: {
         configItems={props.configItems}
         activeName={props.activeConfig?.meta.name}
         open={selectMode}
-        onToggle={() => setSelectMode(open => !open)}
+        onToggle={() => toggleStep('select')}
         onEdit={openEditor}
       />
       <EditSection
@@ -54,21 +84,22 @@ export function MainView(props: {
         animation={animation}
         open={editMode}
         showResultPreview={!viewerMode}
-        onToggle={() => setEditMode(open => !open)}
+        onToggle={() => toggleStep('edit')}
       />
       <ViewerSection
         activeConfig={props.activeConfig}
         graph={animation.graph}
+        animating={animation.frames.length > 0}
         open={viewerMode}
-        onToggle={() => setViewerMode(open => !open)}
+        onToggle={() => toggleStep('view')}
       />
       <ExportSection
         activeConfig={props.activeConfig}
         graph={animation.graph}
         open={exportMode}
-        onToggle={() => setExportMode(open => !open)}
+        onToggle={() => toggleStep('export')}
       />
-      <Themer />
+      <Settings />
     </div>
   );
 }

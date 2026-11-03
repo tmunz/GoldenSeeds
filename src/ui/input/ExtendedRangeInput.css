@@ -1,18 +1,27 @@
 .extended-range-input {
   position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding-bottom: 6px;
 
+  .text-input {
+    grid-area: 1 / 1;
+    margin: 8px 0 0;
+    border-bottom: none;
+
+    >.indicator { display: none; }
+  }
+
+  /* Center the track on the text field's bottom edge, sharing the same row. */
   .range-input {
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    right: 0;
+    grid-area: 1 / 1;
+    align-self: end;
+    transform: translateY(50%);
     padding: 0;
     margin: 0;
+    height: 24px;
+    line-height: 0;
 
-    &>input {
-      height: 4px;
-      padding: 0;
-      margin: 0;
-    }
+    >input { display: block; height: 24px; }
   }
 }

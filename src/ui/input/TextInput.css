@@ -1,6 +1,6 @@
 .text-input.input {
 
-  border-bottom: 2px solid var(--textColorAlt);
+  border-bottom: 1px solid var(--textColorAlt);
 
   &>.indicator {
     &:after {
@@ -16,6 +16,9 @@
 
 
   &>input {
+    height: 26px;
+    padding: 4px 0;
+
     &:focus~.indicator:after {
       background-color:  var(--accentColor);
       width: 100%;

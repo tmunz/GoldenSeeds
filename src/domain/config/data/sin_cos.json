@@ -226,14 +226,14 @@
       }
     },
     {
-      "id": "3.grid->render-output.grid",
+      "id": "3.points->render-output.points",
       "from": {
         "nodeId": "3",
-        "port": "grid"
+        "port": "points"
       },
       "to": {
         "nodeId": "render-output",
-        "port": "grid"
+        "port": "points"
       }
     },
     {

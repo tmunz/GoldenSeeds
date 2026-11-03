@@ -1,6 +1,6 @@
 .frame-column {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) calc(64px + env(safe-area-inset-bottom, 0px));
+  grid-template-rows: minmax(0, 1fr) calc(76px + env(safe-area-inset-bottom, 0px));
   min-width: 0;
   min-height: 0;
   height: 100%;
@@ -10,14 +10,14 @@
     content: '';
     position: absolute;
     top: 0;
-    bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
     right: 0;
     width: 1px;
     pointer-events: none;
     background: linear-gradient(transparent, var(--textColorAlt) 15%, var(--textColorAlt) 85%, transparent);
   }
 
-  &>.frame-footer {
+  >.frame-footer {
     box-sizing: border-box;
     padding-bottom: env(safe-area-inset-bottom, 0px);
     display: flex;
@@ -25,16 +25,14 @@
     align-items: center;
     min-width: 0;
     z-index: 2;
-
-    &>.frame-toggle {
-      box-sizing: border-box;
+    >.frame-toggle {
       margin: 0;
-      min-width: 44px;
-      min-height: 44px;
+      width: 100%;
+      min-height: 60px;
+
     }
   }
-
-  &>.frame-content {
+  >.frame-content {
     min-width: 0;
     min-height: 0;
     overflow: hidden;
@@ -42,13 +40,20 @@
     flex-direction: column;
     visibility: hidden;
     opacity: 0;
+    transform: translateY(8px);
     pointer-events: none;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity var(--motionDuration), transform var(--motionDuration) var(--motionEase), visibility var(--motionDuration);
   }
-
-  &.open>.frame-content {
-    visibility: visible;
-    opacity: 1;
-    pointer-events: auto;
-  }
+  &.open>.frame-content { visibility: visible; opacity: 1; transform: translateY(0); pointer-events: auto; }
+}
+.frame-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-shrink: 0;
+  padding: 32px 24px 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  span { font-size: 10px; color: var(--accentColor); }
+  h2 { overflow: hidden; text-overflow: ellipsis; margin: 0; font-size: 12px; letter-spacing: 1px; }
 }

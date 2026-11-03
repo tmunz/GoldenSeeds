@@ -1,4 +1,5 @@
 import { Font, parse } from 'opentype.js';
+import { openDatabase } from '../../utils/IndexedDb';
 
 const SignikaBoldFont = require('./signika-bold.otf'); // eslint-disable-line
 
@@ -7,78 +8,68 @@ export class FontService {
   private static DB_TABLE = 'fontData';
   private static DB_KEY = 'fontName';
 
-  saveBuffer(buffer: ArrayBuffer): Promise<{ fontName: string, font: Font }> {
+  async saveBuffer(buffer: ArrayBuffer): Promise<{ fontName: string, font: Font }> {
+    const font = parse(buffer);
+    const fontName = font.names.fullName.en;
+    const db = await this.database();
     return new Promise((resolve, reject) => {
-      this.database()
-        .then((db) => {
-          const font = parse(buffer);
-          const fontName = font.names.fullName.en;
-          const transaction = db.transaction([FontService.DB_TABLE], 'readwrite');
-          const objectStore = transaction.objectStore(FontService.DB_TABLE);
-          objectStore.add({ fontName, data: buffer });
-          resolve({ fontName, font });
-        })
-        .catch((e) => {
-          console.warn('font could not be saved');
-          reject(e);
-        });
+      const transaction = db.transaction([FontService.DB_TABLE], 'readwrite');
+      transaction.addEventListener('complete', () => resolve({ fontName, font }));
+      transaction.addEventListener('abort', () => reject(transaction.error ?? new Error('Font save aborted')));
+      transaction.addEventListener('error', () => reject(transaction.error ?? new Error('Font save failed')));
+      transaction.objectStore(FontService.DB_TABLE).put({ fontName, data: buffer });
     });
   }
 
   async listFonts(): Promise<string[]> {
-    return new Promise((resolve) => {
-      this.database().then((db) => {
-        const transaction = db.transaction(FontService.DB_TABLE);
-        const objectStore = transaction.objectStore(FontService.DB_TABLE);
-        const getRequest = objectStore.getAllKeys();
-        getRequest.addEventListener('success', event => {
-          const list = (event.target as unknown as { result: string[] }).result;
-          resolve(list);
-        });
-      }).catch(() => {
-        console.warn('fonts could not be loaded');
-        resolve([]);
+    try {
+      const db = await this.database();
+      return await new Promise<string[]>((resolve, reject) => {
+        const request = db.transaction(FontService.DB_TABLE).objectStore(FontService.DB_TABLE).getAllKeys();
+        request.addEventListener('success', () => resolve(request.result as string[]));
+        request.addEventListener('error', () => reject(request.error));
       });
-    });
+    } catch {
+      return [];
+    }
   }
 
   async get(fontName: string): Promise<Font> {
-    return new Promise((resolve) => {
-      this.database().then((db) => {
-        const transaction = db.transaction(FontService.DB_TABLE);
-        const objectStore = transaction.objectStore(FontService.DB_TABLE);
-        const getRequest = objectStore.get(fontName);
-        getRequest.addEventListener('success', (event) => {
-          const data = (event.target as unknown as { result: { data: string } }).result?.data;
-          resolve(parse(data));
+    if (fontName) {
+      try {
+        const db = await this.database();
+        const record = await new Promise<{ data: ArrayBuffer } | undefined>((resolve, reject) => {
+          const request = db.transaction(FontService.DB_TABLE).objectStore(FontService.DB_TABLE).get(fontName);
+          request.addEventListener('success', () => resolve(request.result));
+          request.addEventListener('error', () => reject(request.error));
         });
-      }).catch(async () => {
-        console.warn(`font ${fontName} could not be loaded use default`);
-        const data = await (await fetch(SignikaBoldFont)).arrayBuffer();
-        resolve(parse(data));
-      });
-    });
+        if (record?.data instanceof ArrayBuffer) {
+          return parse(record.data);
+        }
+      } catch { /* Missing, unreadable, or invalid stored fonts use the bundled default. */ }
+    }
+    return parse(await this.defaultFontBuffer());
   }
 
-  private async database(): Promise<IDBDatabase> {
-    return new Promise((resolve, reject) => {
-      const dbOpenEvent = window.indexedDB.open(FontService.DB_NAME, 1);
-      dbOpenEvent.addEventListener('upgradeneeded', (event: Event) => {
-        const db = (event.target as unknown as { result: IDBDatabase }).result;
-        if (!db.objectStoreNames.contains(FontService.DB_TABLE)) {
-          db.createObjectStore(FontService.DB_TABLE, {
-            autoIncrement: false,
-            keyPath: FontService.DB_KEY,
-          });
-        }
-      });
-      dbOpenEvent.addEventListener('success', (event: Event) => {
-        const db = (event.target as unknown as { result: IDBDatabase }).result;
-        resolve(db);
-      });
-      dbOpenEvent.addEventListener('error', (event: Event) => {
-        reject(event);
-      });
+  /** Makes the bundled default font selectable alongside user-provided fonts. */
+  async installDefaultFont(): Promise<void> {
+    await this.saveBuffer(await this.defaultFontBuffer());
+  }
+
+  private async defaultFontBuffer(): Promise<ArrayBuffer> {
+    const response = await fetch(SignikaBoldFont);
+    if (!response.ok) { throw new Error('Default font could not be loaded'); }
+    return response.arrayBuffer();
+  }
+
+  private database(): Promise<IDBDatabase> {
+    return openDatabase(FontService.DB_NAME, 1, (db) => {
+      if (!db.objectStoreNames.contains(FontService.DB_TABLE)) {
+        db.createObjectStore(FontService.DB_TABLE, {
+          autoIncrement: false,
+          keyPath: FontService.DB_KEY,
+        });
+      }
     });
   }
 }

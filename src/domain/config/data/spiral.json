@@ -130,25 +130,25 @@
       }
     },
     {
-      "id": "stage-0.grid->stage-1.grid",
+      "id": "stage-0.points->stage-1.points",
       "from": {
         "nodeId": "stage-0",
-        "port": "grid"
+        "port": "points"
       },
       "to": {
         "nodeId": "stage-1",
-        "port": "grid"
+        "port": "points"
       }
     },
     {
-      "id": "stage-1.grid->render-output.grid",
+      "id": "stage-1.points->render-output.points",
       "from": {
         "nodeId": "stage-1",
-        "port": "grid"
+        "port": "points"
       },
       "to": {
         "nodeId": "render-output",
-        "port": "grid"
+        "port": "points"
       }
     },
     {

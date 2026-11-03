@@ -11,3 +11,10 @@ export const ArrowFlat: number[][] = [
   [50, 60],
   [90, 40],
 ];
+
+/** Fully flattened arrow for an expanded disclosure control. */
+export const ArrowLine: number[][] = [
+  [10, 50],
+  [50, 50],
+  [90, 50],
+];

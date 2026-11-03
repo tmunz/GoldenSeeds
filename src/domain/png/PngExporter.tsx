@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from '../../i18n/I18n';
 import { AnimatedButton } from '../../ui/AnimatedButton';
 import { SaveNone, SaveRegular, SaveProgress } from '../../ui/icon/Save';
 import { downloadFile } from '../../utils/Download';
@@ -6,6 +7,7 @@ import { downloadFile } from '../../utils/Download';
 export function PngExporter({ getData }: {
   getData: () => { svg: string; dimensions: { width: number; height: number }; name: string };
 }) {
+  const { t } = useTranslation();
   function exportPng() {
     const { name, svg, dimensions } = getData();
     const canvas = document.createElement('canvas');
@@ -29,5 +31,5 @@ export function PngExporter({ getData }: {
     image.src = url;
   }
 
-  return <AnimatedButton onClick={exportPng} points={[SaveNone, SaveRegular, SaveProgress]} title="export" iconText="png" />;
+  return <AnimatedButton onClick={exportPng} points={[SaveNone, SaveRegular, SaveProgress]} title={t('actions.export')} iconText="png" />;
 }

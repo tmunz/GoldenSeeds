@@ -16,10 +16,10 @@ export interface TextDrawerConfig {
   };
 }
 
-export function draw(config: TextDrawerConfig, grid: Point[]): { svg: string; boundingBox: BoundingBox } {
-  return grid.reduce(
+export function draw(config: TextDrawerConfig, points: Point[]): { svg: string; boundingBox: BoundingBox } {
+  return points.reduce(
     (agg, p, n) => {
-      const size = config.text.size(n, grid.length);
+      const size = config.text.size(n, points.length);
       const text = drawFont(p, config, size);
       return {
         svg: agg.svg + text.svg,

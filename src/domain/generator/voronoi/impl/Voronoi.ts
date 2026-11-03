@@ -2,7 +2,6 @@ import { Boundary } from './Boundary';
 import { Queue } from './utils/Queue';
 import { Cell } from './Cell';
 import { VoronoiWorker } from './VoronoiWorker';
-import { Edge } from './Edge';
 import { Site } from './Site';
 import { SiteArea } from './SiteArea';
 import { HalfEdge } from './HalfEdge';
@@ -14,9 +13,6 @@ import { BoundingBox } from '../../../../datatypes/BoundingBox';
 // this implementation uses the ideas of Fortune's algorithm
 export class Voronoi {
   cells: Cell[] = [];
-  siteAreas: SiteArea[] = [];
-  edges: Edge[] = [];
-  vertices: Point[] = [];
 
   constructor(inputPoints: number[][], boundingBox: BoundingBox, cellOffset = 0) {
     const worker = new VoronoiWorker();
@@ -26,11 +22,8 @@ export class Voronoi {
       max: [boundingBox.max[Point.X] + cellOffset, boundingBox.max[Point.Y] + cellOffset],
     });
 
-    const { edges, vertices, siteAreas } = worker.process(siteQueue, boundary);
+    const { siteAreas } = worker.process(siteQueue, boundary);
 
-    this.edges = edges;
-    this.vertices = vertices.filter((p) => boundary.isPointInside(p));
-    this.siteAreas = siteAreas;
     this.cells = siteAreas.map((siteArea) => {
       const cell = this.convertToCell(siteArea);
       cell.path = ConvexPolygonTools.offsetPath(cell.path, cellOffset);

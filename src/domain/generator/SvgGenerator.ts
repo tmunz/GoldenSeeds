@@ -15,16 +15,29 @@ export type ParamDefinition =
 export type ParamDefinitionType = ParamDefinition['type'];
 
 export interface SvgGeneratorResult {
-  grid: number[][];
+  points: number[][];
   svg: string | null;
   boundingBox: BoundingBox;
 }
 
 export const DEFAULT_GENERATOR_RESULT: SvgGeneratorResult = {
-  grid: [[0, 0]],
+  points: [[0, 0]],
   svg: null,
   boundingBox: PointUtils.DEFAULT_BOUNDING_BOX,
 };
+
+/** Result of a generator that emits new points: they replace the previous ones and extend the bounding box. */
+export function withDrawnPoints(
+  prev: SvgGeneratorResult,
+  drawing: { svg: string; points: number[][] },
+  drawingBoundingBox: BoundingBox = PointUtils.boundingBox(drawing.points),
+): SvgGeneratorResult {
+  return {
+    points: drawing.points,
+    svg: drawing.svg,
+    boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, drawingBoundingBox]),
+  };
+}
 
 export abstract class SvgGenerator<T> {
   type: string;

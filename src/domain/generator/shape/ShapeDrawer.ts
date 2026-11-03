@@ -5,6 +5,7 @@ import { PointUtils } from '../../../utils/PointUtils';
 import { Point } from '../../../datatypes/Point';
 import { random } from '../../../utils/Random';
 import { MathUtils } from '../../../utils/MathUtils';
+import { fillAttributes, strokeAttributes } from '../SvgPrimitives';
 
 // alternative "0.5 / MATH.PI" to maintain circumfence instead of diameter
 const POLAR_BASE_D = 0.5;
@@ -46,10 +47,10 @@ function getItemProps(config: ShapeConfig, n: number, items: number, size: numbe
   return { size, angle, smoothness };
 }
 
-export function draw(config: ShapeConfig, grid: Point[]): { svg: string; boundingBox: BoundingBox } {
+export function draw(config: ShapeConfig, points: Point[]): { svg: string; boundingBox: BoundingBox } {
   if (config.shape.edges <= 0) { return { svg: '', boundingBox: PointUtils.DEFAULT_BOUNDING_BOX }; }
-  const items: number = grid.length;
-  return grid.reduce(
+  const items: number = points.length;
+  return points.reduce(
     (agg, position: Point, m: number) => {
       const n = m + 1;
       const size: number = config.transformation.size(n, items);
@@ -242,14 +243,8 @@ function pointAsSvg(p: Point) {
 }
 
 function style(n: number, fillColor: Color, strokeColor: Color, strokeWidth: number) {
-  return `
-    fill="${fillColor.getRgbString(n)}"
-    fill-opacity="${fillColor.getOpacity()}"  
-    stroke="${strokeColor.getRgbString(n)}" 
-    stroke-opacity="${strokeColor.getOpacity()}" 
-    stroke-width="${strokeWidth}"
-    vector-effect="non-scaling-stroke"
-  `;
+  return `${fillAttributes(fillColor, n)}
+    ${strokeAttributes(strokeColor, n, strokeWidth)}`;
 }
 
 function drawArc(center: Point, size: number, startAngle: number, angle: number, style: string): string {

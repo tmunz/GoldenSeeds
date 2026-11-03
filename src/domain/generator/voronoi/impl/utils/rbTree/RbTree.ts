@@ -142,6 +142,8 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
     }
 
     let isRed = false;
+    // The node that took over the removed node's position; undefined when the position is now empty.
+    let replacement: TreeNode | undefined;
     if (next && left && right) {
       isRed = next.red ?? false;
       next.red = node.red;
@@ -150,99 +152,121 @@ export class RbTree<TreeNode extends RbTreeNode<TreeNode>> {
       if (next !== right) {
         parent = next.parent;
         next.parent = node.parent;
-        node = next.right;
-        parent.left = node;
+        replacement = next.right;
+        if (parent) {
+          parent.left = replacement;
+        }
         next.right = right;
         right.parent = next;
       } else {
         next.parent = parent;
         parent = next;
-        node = next.right;
+        replacement = next.right;
       }
     } else {
       isRed = node.red ?? false;
-      node = next;
+      replacement = next;
     }
 
-    if (node) {
-      node.parent = parent;
+    if (replacement) {
+      replacement.parent = parent;
     }
 
     if (isRed) {
       return;
     }
 
-    if (node && node.red) {
-      node.red = false;
+    if (replacement && replacement.red) {
+      replacement.red = false;
       return;
     }
 
-    let sibling: TreeNode;
+    let current: TreeNode | undefined = replacement;
     do {
-      if (node === this.root) {
+      if (!parent || current === this.root) {
         break;
       }
 
-      if (node === parent.left) {
+      let sibling: TreeNode | undefined;
+      if (current === parent.left) {
         sibling = parent.right;
-        if (sibling.red) {
+        if (sibling?.red) {
           sibling.red = false;
           parent.red = true;
           this.rotateLeft(parent);
           sibling = parent.right;
         }
+        if (!sibling) {
+          break;
+        }
 
-        if ((sibling.left && sibling.left.red) || (sibling.right && sibling.right.red)) {
-          if (!sibling.right || !sibling.right.red) {
-            sibling.left.red = false;
+        if (sibling.left?.red || sibling.right?.red) {
+          if (!sibling.right?.red) {
+            if (sibling.left) {
+              sibling.left.red = false;
+            }
             sibling.red = true;
             this.rotateRight(sibling);
-            sibling = parent.right;
+            sibling = parent.right ?? sibling;
           }
           sibling.red = parent.red;
-          parent.red = sibling.right.red = false;
+          parent.red = false;
+          if (sibling.right) {
+            sibling.right.red = false;
+          }
           this.rotateLeft(parent);
-          node = this.root;
+          current = this.root;
           break;
         }
       } else {
         sibling = parent.left;
-        if (sibling.red) {
+        if (sibling?.red) {
           sibling.red = false;
           parent.red = true;
           this.rotateRight(parent);
           sibling = parent.left;
         }
+        if (!sibling) {
+          break;
+        }
 
-        if ((sibling.left && sibling.left.red) || (sibling.right && sibling.right.red)) {
-          if (!sibling.left || !sibling.left.red) {
-            sibling.right.red = false;
+        if (sibling.left?.red || sibling.right?.red) {
+          if (!sibling.left?.red) {
+            if (sibling.right) {
+              sibling.right.red = false;
+            }
             sibling.red = true;
             this.rotateLeft(sibling);
-            sibling = parent.left;
+            sibling = parent.left ?? sibling;
           }
           sibling.red = parent.red;
-          parent.red = sibling.left.red = false;
+          parent.red = false;
+          if (sibling.left) {
+            sibling.left.red = false;
+          }
           this.rotateRight(parent);
-          node = this.root;
+          current = this.root;
           break;
         }
       }
 
       sibling.red = true;
-      node = parent;
+      current = parent;
       parent = parent.parent;
-    } while (!node.red);
+    } while (current && !current.red);
 
-    if (node) {
-      node.red = false;
+    if (current) {
+      current.red = false;
     }
   }
 
   private rotateLeft(node: TreeNode): void {
     const p: TreeNode = node;
-    const q: TreeNode = node.right;
-    const parent: TreeNode = p.parent;
+    const q: TreeNode | undefined = node.right;
+    if (!q) {
+      return;
+    }
+    const parent: TreeNode | undefined = p.parent;
 
     if (parent) {
       if (parent.left === p) {

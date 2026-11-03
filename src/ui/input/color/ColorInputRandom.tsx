@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from '../../../i18n/I18n';
 import { Color } from '../../../datatypes/Color';
 import { RANDOM_GRADIENT } from './color-channel-config/RandomConfig';
 
@@ -9,6 +10,7 @@ export function ColorInputRandom(props: {
   color: Color,
   onSelect: (color: Color) => void,
 }) {
+  const { t } = useTranslation();
   return <div className="color-input-random">
     <input
       style={{
@@ -17,7 +19,7 @@ export function ColorInputRandom(props: {
       }}
       onClick={() => props.onSelect(new Color(props.color).withRandom())}
       type="button"
-      value="random"
+      value={t('color.modes.random')}
     />
   </div>;
 

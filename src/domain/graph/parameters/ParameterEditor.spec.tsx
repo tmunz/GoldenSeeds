@@ -1,0 +1,56 @@
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { ParameterEditor } from './ParameterEditor';
+import { I18nProvider } from '../../../i18n/I18n';
+
+jest.mock('./ParameterEditor.css', () => ({}));
+jest.mock('../../../ui/input/Input.css', () => ({}));
+jest.mock('../../../ui/input/ExtendedRangeInput.css', () => ({}));
+jest.mock('../../../ui/input/RangeInput.css', () => ({}));
+jest.mock('../../../ui/input/TextInput.css', () => ({}));
+jest.mock('../../../ui/input/color/ColorInput', () => ({ ColorInput: () => null }));
+jest.mock('../../animation/NumberAnimationControls', () => ({ NumberAnimationControls: () => null }));
+
+const definition = { type: 'selection' as const, initial: 'circular', options: ['linear', 'circular'] };
+
+test('option editors show the current text above an integer range instead of a dropdown', () => {
+  const html = renderToStaticMarkup(<ParameterEditor label="type" value="1" definition={definition} onChange={() => true} />);
+  expect(html).not.toContain('<select');
+  expect(html).toContain('readonly="" value="1: circular"');
+  expect(html).toContain('type="range" aria-label="type" aria-valuetext="1: circular"');
+  expect(html).toContain('min="0" max="1" step="1"');
+});
+
+test('the selected option label stays translated without changing its numeric value', () => {
+  const html = renderToStaticMarkup(<I18nProvider initialLocale="de">
+    <ParameterEditor label="Typ" value="1" definition={definition} onChange={() => true} />
+  </I18nProvider>);
+  expect(html).toContain('readonly="" value="1: kreisförmig"');
+  expect(html).toMatch(/type="range"[^>]*aria-valuetext="1: kreisförmig"[^>]*value="1"/);
+});
+
+test('number editors keep an editable number field and their numeric bounds', () => {
+  const html = renderToStaticMarkup(<ParameterEditor label="count" value="5"
+    definition={{ type: 'number', initial: '0', min: 0, max: 10, step: 0.5 }} onChange={() => true} />);
+  expect(html).not.toContain('readonly');
+  expect(html).toContain('type="text" value="5"');
+  expect(html).toContain('min="0" max="10" step="0.5"');
+});
+
+
+test('expression fields explain usage and constants on hover and expose the help as an accessible description', () => {
+  const html = renderToStaticMarkup(<ParameterEditor label="value" value="n * 2"
+    definition={{ type: 'expression', initial: '1' }} onChange={() => true} />);
+  expect(html).toContain('title="Enter a JavaScript formula');
+  expect(html).toContain('aria-describedby=');
+  for (const name of ['goldenRatio', 'Math.PI', 'Math.E', 'fib(n)', 'items', 'itemSize']) {
+    expect(html).toContain(name);
+  }
+});
+
+test('a stored formula that does not work is flagged as invalid immediately', () => {
+  const render = (value: string) => renderToStaticMarkup(<ParameterEditor label="value" value={value}
+    definition={{ type: 'expression', initial: '1' }} onChange={() => true} />);
+  expect(render('n * 2')).not.toContain('range-invalid');
+  expect(render('n *')).toContain('range-invalid');
+});

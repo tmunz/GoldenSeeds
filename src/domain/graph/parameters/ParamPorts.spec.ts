@@ -1,0 +1,110 @@
+import { CartesianGrid } from '../../generator/cartesian';
+import { GraphEvaluator } from '../runtime/GraphEvaluator';
+import { paramPortId } from './ParamPorts';
+import { generatorNodeRegistry } from '../nodes/generator/GeneratorNodeRegistry';
+import { valueNodeRegistry } from '../nodes/value/ValueNodeRegistry';
+
+describe('ParamPorts / generator node parameter inputs', () => {
+  test('generator node exposes one input port per generator parameter', async () => {
+    const node = await generatorNodeRegistry.createNode('cartesian', 'cartesian-1');
+
+    // 'points'/'svg'/'boundingBox' result ports plus one port per param across all groups
+    // (style.color, style.strokeWidth, points.items, ...)
+    expect(node.inputs).toContainEqual({ id: 'points', type: 'points' });
+    expect(node.inputs).toContainEqual({ id: 'svg', type: 'svg' });
+    expect(node.inputs).toContainEqual({ id: 'boundingBox', type: 'boundingBox' });
+    expect(node.inputs).toContainEqual({ id: paramPortId('style', 'color'), type: 'color' });
+    expect(node.inputs).toContainEqual({ id: paramPortId('style', 'strokeWidth'), type: 'expression' });
+    expect(node.inputs).toContainEqual({ id: paramPortId('grid', 'items'), type: 'number' });
+    expect(node.inputs.length).toBe(3 + Object.values(CartesianGrid.definition).reduce((n, g) => n + Object.keys(g).length, 0));
+  });
+
+  test('unconnected parameter ports fall back to the generator default value', async () => {
+    const node = await generatorNodeRegistry.createNode('cartesian', 'cartesian-1');
+
+    const { outputsByNode } = new GraphEvaluator().evaluate({ nodes: [node], edges: [] });
+    const gridOut = outputsByNode['cartesian-1']['points'];
+
+    expect(gridOut.type).toBe('points');
+    // default 'points.items' is 20 -> non-empty points/svg is produced
+    expect(gridOut.type === 'points' && gridOut.value.length).toBeGreaterThan(0);
+  });
+
+  test('a connected number value node overrides the parameter (points.items) for evaluation', async () => {
+    const generatorNode = await generatorNodeRegistry.createNode('cartesian', 'cartesian-1');
+    const itemsValueNode = await valueNodeRegistry.createNode('number', 'items-1', '4');
+
+    const graphWithOverride = {
+      nodes: [itemsValueNode, generatorNode],
+      edges: [
+        {
+          id: 'items-1->cartesian-1',
+          from: { nodeId: 'items-1', port: 'out' },
+          to: { nodeId: 'cartesian-1', port: paramPortId('grid', 'items') },
+        },
+      ],
+    };
+
+    const { outputsByNode } = new GraphEvaluator().evaluate(graphWithOverride);
+    const overriddenOut = outputsByNode['cartesian-1']['points'];
+
+    const { outputsByNode: baselineOutputs } = new GraphEvaluator().evaluate({ nodes: [generatorNode], edges: [] });
+    const baselineOut = baselineOutputs['cartesian-1']['points'];
+
+    expect(overriddenOut).not.toEqual(baselineOut);
+    expect(overriddenOut.type === 'points' && overriddenOut.value.length).toBe(4);
+  });
+
+  test('a connected color value node overrides a color parameter (style.fillColor) on a shape node', async () => {
+    const generatorNode = await generatorNodeRegistry.createNode('shape', 'shape-1');
+    const colorValueNode = await valueNodeRegistry.createNode('color', 'color-1', 'red');
+
+    const { outputsByNode } = new GraphEvaluator().evaluate({
+      nodes: [colorValueNode, generatorNode],
+      edges: [
+        {
+          id: 'color-1->shape-1',
+          from: { nodeId: 'color-1', port: 'out' },
+          to: { nodeId: 'shape-1', port: paramPortId('style', 'fillColor') },
+        },
+      ],
+    });
+
+    const out = outputsByNode['shape-1']['svg'];
+    expect(out.type).toBe('svg');
+    expect(out.type === 'svg' && out.value).toEqual(expect.stringContaining('fill="#ff0000"'));
+  });
+});
+
+describe('ValueNodeRegistry', () => {
+  test('creates a number value node', async () => {
+    const node = await valueNodeRegistry.createNode('number', 'n-1', '42');
+    expect(node.outputs).toEqual([{ id: 'out', type: 'number' }]);
+    const { outputsByNode } = new GraphEvaluator().evaluate({ nodes: [node], edges: [] });
+    expect(outputsByNode['n-1'].out).toEqual({ type: 'number', value: 42 });
+  });
+
+  test('creates a color value node', async () => {
+    const node = await valueNodeRegistry.createNode('color', 'c-1', 'gold');
+    expect(node.outputs).toEqual([{ id: 'out', type: 'color' }]);
+    const { outputsByNode } = new GraphEvaluator().evaluate({ nodes: [node], edges: [] });
+    const out = outputsByNode['c-1'].out;
+    expect(out.type).toBe('color');
+    expect(out.type === 'color' && out.value.isValid()).toBe(true);
+  });
+
+  test('creates an expression value node whose value is a callable function', async () => {
+    const node = await valueNodeRegistry.createNode('expression', 'e-1', 'n * 2');
+    expect(node.outputs).toEqual([{ id: 'out', type: 'expression' }]);
+    const { outputsByNode } = new GraphEvaluator().evaluate({ nodes: [node], edges: [] });
+    const out = outputsByNode['e-1'].out;
+    expect(out.type).toBe('expression');
+    expect(out.type === 'expression' && out.value(3, 10, (n: number) => n, 1)).toBe(6);
+  });
+
+  test('creates a string value node', async () => {
+    const node = await valueNodeRegistry.createNode('string', 's-1', 'hello');
+    const { outputsByNode } = new GraphEvaluator().evaluate({ nodes: [node], edges: [] });
+    expect(outputsByNode['s-1'].out).toEqual({ type: 'string', value: 'hello' });
+  });
+});

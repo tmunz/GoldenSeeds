@@ -1,6 +1,6 @@
 import { MathUtils } from '../../../utils/MathUtils';
 import { TreeConfig, draw } from './TreeDrawer';
-import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
+import { SvgGenerator, SvgGeneratorResult, withDrawnPoints } from '../SvgGenerator';
 import { PointUtils } from '../../../utils/PointUtils';
 import { Point } from '../../../datatypes/Point';
 
@@ -74,13 +74,13 @@ export class Tree extends SvgGenerator<TreeConfig> {
     super(Tree.type, Tree.definition);
   }
 
-  generate(config: TreeConfig, prev: SvgGeneratorResult) {
-    const drawing = draw(config, prev.grid);
+  generate(config: TreeConfig, prev: SvgGeneratorResult): SvgGeneratorResult {
+    const drawing = draw(config, prev.points);
 
     let drawingBoundingBox = PointUtils.boundingBox(drawing.points);
 
     // stabilize center if all prev points are x-axis-centered
-    if (prev.grid.reduce((b: boolean, p: number[]) => b && p[Point.X] === 0, true)) {
+    if (prev.points.reduce((b: boolean, p: number[]) => b && p[Point.X] === 0, true)) {
       const extremeX = Math.max(-drawingBoundingBox.min[Point.X], drawingBoundingBox.max[Point.X]);
       drawingBoundingBox = {
         min: [-extremeX, drawingBoundingBox.min[Point.Y]],
@@ -88,10 +88,6 @@ export class Tree extends SvgGenerator<TreeConfig> {
       };
     }
 
-    return {
-      grid: drawing.points,
-      svg: drawing.svg,
-      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, drawingBoundingBox]),
-    };
+    return withDrawnPoints(prev, drawing, drawingBoundingBox);
   }
 }

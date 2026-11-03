@@ -1,5 +1,5 @@
-import { GraphEdge } from '../graph/GraphEdge';
-import { GraphLayout } from '../graph/GraphLayout';
+import { GraphEdge } from '../graph/model/GraphEdge';
+import { GraphLayout } from '../graph/model/GraphLayout';
 
 /**
  * A single persisted graph node: its id, its node kind (a generator kind like 'shape'/'cartesian',

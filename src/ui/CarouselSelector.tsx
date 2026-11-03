@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useId, useRef } from 'react';
+import { useTranslation } from '../i18n/I18n';
 import { AnimatedButton, DIRECTION_LEFT, DIRECTION_RIGHT } from './AnimatedButton';
 
 import './CarouselSelector.css';
@@ -6,23 +7,28 @@ import './CarouselSelector.css';
 
 interface CarouselSelectorItem {
   name: string;
+  label?: string;
   svg: string | null;
 }
 
 export function CarouselSelector(props: {
   items: CarouselSelectorItem[];
+  itemLabel?: string;
   selected?: string;
   select: (name: string) => void;
+  onActivate?: (name: string) => void;
   selectionDelay?: number;
   scale?: number;
   className?: string;
 }) {
+  const { t } = useTranslation();
 
   const carouselId = useId();
   const MAX_AROUND = 3;
 
   const [startX, setStartX] = useState<number | null>(null);
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [selectedIndex, setSelectedIndex] = useState(() => Math.max(0, props.items.findIndex(item => item.name === props.selected)));
+  const dragged = useRef(false);
 
   const radioElements: React.MutableRefObject<(HTMLInputElement | null)[]> = useRef([]);
 
@@ -36,6 +42,7 @@ export function CarouselSelector(props: {
     const mouseMove = (e: MouseEvent | TouchEvent) => {
       if (startX === null) { return; }
       const deltaX = (e instanceof MouseEvent ? e : e.touches[0]).clientX - startX;
+      if (Math.abs(deltaX) > 5) { dragged.current = true; }
       const deltaIndex = convertDeltaXToItemDelta(deltaX);
       if (deltaIndex !== 0) {
         const count = props.items.length;
@@ -96,15 +103,20 @@ export function CarouselSelector(props: {
     <div className={`carousel-selector ${props.className ?? ''}`}>
       <div className="carousel-prev">
         <AnimatedButton
+          title={t('actions.previous')}
+          iconText={props.itemLabel ?? ''}
+          disabled={props.items.length < 2}
           rotation={DIRECTION_LEFT}
           onClick={() => selectByDelta(-1)}
         />
       </div>
-      <fieldset
+      <div
         role="radiogroup"
-        aria-label="Available options"
+        tabIndex={-1}
+        aria-label={props.itemLabel ? t('carousel.options', { label: props.itemLabel }) : t('carousel.available')}
         id={carouselId}
         className="carousel-overview"
+        onPointerDown={() => { dragged.current = false; }}
         onMouseDown={handleMouseDown}
         onTouchStart={handleMouseDown}
         onMouseUp={() => radioElements.current[selectedIndex]?.focus()}
@@ -120,9 +132,16 @@ export function CarouselSelector(props: {
           return <label
             htmlFor={`${carouselId}__${item.name.replace(' ', '_')}`}
             key={item.name}
-            className="carousel-item action"
+            className="carousel-item"
+            title={item.label ?? item.name}
+            onClickCapture={event => {
+              if (dragged.current) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+            }}
             style={{
-              transform: `translateX(calc(${offset}cqw + ${p} * var(--carousel-item-gap))) scale(${scale}) rotateY(${angle}rad)`,
+              transform: `translate(-50%, -50%) translateX(calc(${offset}cqw + ${p} * var(--carousel-item-gap))) scale(${scale}) rotateY(${angle}rad)`,
               opacity: visible ? 1 : 0,
             }}
           >
@@ -132,6 +151,16 @@ export function CarouselSelector(props: {
               name={carouselId}
               value={i}
               checked={i === selectedIndex}
+              onClick={() => {
+                if (i === selectedIndex && item.name === props.selected && !dragged.current) { props.onActivate?.(item.name); }
+              }}
+              onKeyDown={event => {
+                dragged.current = false;
+                if (event.key === 'Enter' && i === selectedIndex && item.name === props.selected) {
+                  event.preventDefault();
+                  props.onActivate?.(item.name);
+                }
+              }}
               onChange={() => {
                 setSelectedIndex(i);
                 if (props.selectionDelay === 0) props.select(item.name);
@@ -139,18 +168,21 @@ export function CarouselSelector(props: {
               }}
               ref={e => { radioElements.current[i] = e; }}
             />
-            <div className="title">{item.name}</div>
+            <div className="title">{item.label ?? item.name}</div>
             {item.svg && <img
-              alt={`last saved ${item.name}`}
+              alt={t('carousel.saved', { name: item.label ?? item.name })}
               draggable="false"
               className="preview"
               src={`data:image/svg+xml;base64,${window.btoa(item.svg)}`} />
             }
           </label>;
         })}
-      </fieldset>
+      </div>
       <div className="carousel-next">
         <AnimatedButton
+          title={t('actions.next')}
+          iconText={props.itemLabel ?? ''}
+          disabled={props.items.length < 2}
           rotation={DIRECTION_RIGHT}
           onClick={() => selectByDelta(+1)}
         />

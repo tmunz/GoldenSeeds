@@ -1,0 +1,17 @@
+.render-node {
+  width: 0px;
+  height: calc(66px * var(--portScale));
+  box-sizing: border-box;
+  background: rgb(var(--backgroundColorAlt));
+  color: var(--textColor);
+  font-size: 11px;
+
+  .render-node-port {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: calc(22px * var(--portScale));
+    white-space: nowrap;
+    color: var(--textColorAlt);
+  }
+}

@@ -1,17 +1,13 @@
-.export-column {
-  grid-area: export;
-
-  &>.frame-content {
-    flex-direction: column-reverse;
-  }
-}
-
+.export-column { grid-area: export; }
 .export-panel {
+  flex: 1;
   min-height: 0;
-  padding-bottom: 24px;
+  padding: 32px 16px;
   display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-  gap: 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 24px;
   overflow-y: auto;
+  .animated-button { min-height: 64px; margin: 0; }
 }

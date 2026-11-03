@@ -1,5 +1,6 @@
 import { Color } from '../../../datatypes/Color';
 import { Point } from '../../../datatypes/Point';
+import { fillAttributes, polylinePathData, strokeAttributes } from '../SvgPrimitives';
 
 export interface FunctionPlotterConfig {
   style: {
@@ -16,8 +17,8 @@ export interface FunctionPlotterConfig {
   };
 }
 
-export function plot(config: FunctionPlotterConfig, grid: Point[]): { svg: string; points: Point[] } {
-  return grid.reduce(
+export function plot(config: FunctionPlotterConfig, points: Point[]): { svg: string; points: Point[] } {
+  return points.reduce(
     (agg, p, j) => {
       const coordinates = calculateFunctionPlot(
         p,
@@ -27,20 +28,10 @@ export function plot(config: FunctionPlotterConfig, grid: Point[]): { svg: strin
         config.plot.functionY,
         config.style.resolution,
       );
-      const svg = `<path 
-        fill="${config.style.fillColor.getRgbString(j)}"
-        fill-opacity="${config.style.fillColor.getOpacity()}"
-        stroke="${config.style.strokeColor.getRgbString(j)}"
-        stroke-opacity="${config.style.strokeColor.getOpacity()}"
-        stroke-width="${config.style.strokeWidth(j, config.plot.items)}"
-        vector-effect="non-scaling-stroke"
-        d="${coordinates.highResolution.reduce((s: string, point: Point, i: number) => {
-    if (i === 0) {
-      return `M ${point[Point.X]}, ${point[Point.Y]} `;
-    } else {
-      return `${s} L ${point[Point.X]}, ${point[Point.Y]} `;
-    }
-  }, '')}" />`;
+      const svg = `<path
+        ${fillAttributes(config.style.fillColor, j)}
+        ${strokeAttributes(config.style.strokeColor, j, config.style.strokeWidth(j, config.plot.items))}
+        d="${polylinePathData(coordinates.highResolution)}" />`;
       return {
         svg: agg.svg + svg,
         points: [...agg.points, ...coordinates.mainPoints],

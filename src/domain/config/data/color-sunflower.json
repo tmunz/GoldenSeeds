@@ -63,14 +63,14 @@
       }
     },
     {
-      "id": "1.grid->2.grid",
+      "id": "1.points->2.points",
       "from": {
         "nodeId": "1",
-        "port": "grid"
+        "port": "points"
       },
       "to": {
         "nodeId": "2",
-        "port": "grid"
+        "port": "points"
       }
     },
     {
@@ -107,14 +107,14 @@
       }
     },
     {
-      "id": "2.grid->3.grid",
+      "id": "2.points->3.points",
       "from": {
         "nodeId": "2",
-        "port": "grid"
+        "port": "points"
       },
       "to": {
         "nodeId": "3",
-        "port": "grid"
+        "port": "points"
       }
     },
     {
@@ -140,14 +140,14 @@
       }
     },
     {
-      "id": "3.grid->render-output.grid",
+      "id": "3.points->render-output.points",
       "from": {
         "nodeId": "3",
-        "port": "grid"
+        "port": "points"
       },
       "to": {
         "nodeId": "render-output",
-        "port": "grid"
+        "port": "points"
       }
     },
     {

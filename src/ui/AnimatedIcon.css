@@ -1,9 +1,9 @@
 .animated-icon {
   &>.icon {
-    stroke: var(--actionColor);
+    stroke: currentColor;
     stroke-width: 1px;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    stroke-linecap: butt;
+    stroke-linejoin: miter;
     transition: stroke .2s;
     fill: none;
   }

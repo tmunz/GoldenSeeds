@@ -10,7 +10,6 @@ export interface CircleEvent extends RbTreeNode<CircleEvent> {
   site: Site;
   centerY: number;
   arc: BeachSectionNode;
-  circleEvent?: CircleEvent;
 }
 
 export class CircleEventQueue {
@@ -21,7 +20,7 @@ export class CircleEventQueue {
     return this.current;
   }
 
-  detachCurrent(arc?: CircleEvent): void {
+  detachCurrent(arc?: BeachSectionNode): void {
     if (arc) {
       const circleEvent = arc.circleEvent;
       if (circleEvent) {
@@ -53,7 +52,7 @@ export class CircleEventQueue {
     }
   }
 
-  attachCircleEventIfNeededOnCollapse(arc: CircleEvent): void {
+  attachCircleEventIfNeededOnCollapse(arc: BeachSectionNode): void {
     const lArc = arc.prev;
     const rArc = arc.next;
     if (lArc?.site && rArc?.site && arc?.site && lArc.site !== rArc.site) {

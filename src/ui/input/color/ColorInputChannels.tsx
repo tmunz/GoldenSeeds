@@ -1,4 +1,5 @@
 import React, { useState, useEffect, ClipboardEvent, useRef, ChangeEvent, useCallback } from 'react';
+import { useTranslation } from '../../../i18n/I18n';
 import { ColorInputConfig } from './color-channel-config/ColorInputConfig';
 import { HueColorInputConfig } from './color-channel-config/HueColorInputConfig';
 import { SaturationColorInputConfig } from './color-channel-config/SaturationColorInputConfig';
@@ -20,35 +21,25 @@ export function ColorInputChannels(props: {
   alphaDisabled?: boolean,
   colorMode: 'hsl' | 'rgb',
 }) {
+  const { t } = useTranslation();
 
   const colorToInputData = useCallback((c: Color): InputData[] => {
-    if (props.colorMode === 'hsl') {
-      const hslChannels = [HueColorInputConfig, SaturationColorInputConfig, LightnessColorInputConfig];
-      if (props.alphaDisabled !== true) {
-        hslChannels.push(AlphaColorInputConfig);
-      }
-      return hslChannels.map(config => {
-        const v = (c.getHsla() as unknown as Record<string, number>)[config.name];
-        const a = Math.round(config.name === 'a' ? v * 100 : v);
-        return {
-          ...config, value: prepareField((isFinite(a) ? a : 100).toString(config.base),
-            calculateInputLength(config))
-        };
-      });
-    } else { // rgb
-      const rgbChannels = [RedColorInputConfig, GreenColorInputConfig, BlueColorInputConfig];
-      if (props.alphaDisabled !== true) {
-        rgbChannels.push(AlphaColorInputConfig);
-      }
-      return rgbChannels.map(config => {
-        const v = (c.getRgba() as unknown as Record<string, number>)[config.name];
-        const a = Math.round(config.name === 'a' ? v * 100 : v);
-        return {
-          ...config, value: prepareField((isFinite(a) ? a : 100).toString(config.base),
-            calculateInputLength(config))
-        };
-      });
+    const hsl = props.colorMode === 'hsl';
+    const channels = hsl
+      ? [HueColorInputConfig, SaturationColorInputConfig, LightnessColorInputConfig]
+      : [RedColorInputConfig, GreenColorInputConfig, BlueColorInputConfig];
+    if (props.alphaDisabled !== true) {
+      channels.push(AlphaColorInputConfig);
     }
+    const values = (hsl ? c.getHsla() : c.getRgba()) as unknown as Record<string, number>;
+    return channels.map(config => {
+      const v = values[config.name];
+      const a = Math.round(config.name === 'a' ? v * 100 : v);
+      return {
+        ...config, value: prepareField((isFinite(a) ? a : 100).toString(config.base),
+          calculateInputLength(config))
+      };
+    });
   }, [props.colorMode, props.alphaDisabled]);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -200,26 +191,28 @@ export function ColorInputChannels(props: {
     <div className="color-input-range"
       style={{
         opacity: selectedIndex !== null ? 1 : 0,
-        background: `linear-gradient(90deg, 
+        background: `linear-gradient(0deg,
           ${currentInputData.gradient.map((g, i, arr) => `${new Color({ ...(props.colorMode === 'hsl' ? props.color.getHsla() : props.color.getRgba()), ...g }).getRgbaString()} ${i / (arr.length - 1) * 100}% `).join(',')}`
       }} >
       <input
         type="range"
+        aria-label={t(`color.channels.${currentInputData.name}`)}
         min={currentInputData.min}
         max={currentInputData.max}
         value={Number(`${currentInputData.base === 0x10 ? '0x' : ''}${currentInputData.value}`)}
         onChange={(event) => handleRangeInputChange(event, selectedIndex ?? 0)}
       />
     </div>
-    <div className={`color-input-field${selectedIndex !== null ? ' color-input-range-active' : ''}`}>
+    <div className={`color-input-field${selectedIndex !== null ? ' color-input-range-active' : ''}`}
+      style={{ color: props.color.getHsla().l <= 50 ? '#FFF' : '#000' }}>
       {inputData.map((entry: InputData, key: number) =>
         <div className="color-input-entry" key={key}>
           <label>{entry.name}</label>
           <input
             key={key}
             ref={e => refs.current[key] = e}
-            style={{ color: props.color.getHsla().l <= 50 ? '#FFF' : '#000' }}
             value={entry.value}
+            aria-label={t(`color.channels.${entry.name}`)}
             onPaste={onPaste}
             onSelect={(event) => { setSelectedIndex(key); setCursorPosition(event.currentTarget.selectionStart); }}
             onKeyDown={prepareDelete}

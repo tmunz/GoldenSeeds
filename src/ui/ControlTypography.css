@@ -1,0 +1,6 @@
+/* Controls retain the same light typography in the settings, graph, and other panels. */
+:where(.input, .color-input, .font-editor, .carousel-selector) {
+  font-family: var(--uiFontFamily);
+  font-weight: var(--uiFontWeight);
+  letter-spacing: var(--uiLetterSpacing);
+}

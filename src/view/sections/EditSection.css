@@ -2,15 +2,59 @@
   grid-area: edit;
 
   &>.frame-content {
-    &>.actions {
-      display: flex;
-      flex-wrap: wrap;
+    >.frame-header {
+      display: grid;
+      grid-template-columns: minmax(160px, 1fr) max-content;
       align-items: center;
-      gap: 8px;
-      padding: 0 10px 16px;
-      max-height: 40%;
-      overflow-y: auto;
+      gap: 16px;
+      padding: 32px 12px 12px;
+      min-width: 0;
+      overflow-x: auto;
       flex-shrink: 0;
+
+      >.frame-heading {
+        grid-column: 1 / -1;
+        padding: 0;
+      }
+
+      >.drawing-status {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        min-width: 0;
+        gap: 12px;
+        padding: 0;
+        white-space: nowrap;
+
+        .text-input {
+          flex: 1;
+          min-width: 120px;
+          max-width: 240px;
+        }
+
+        .save-state {
+          font-size: 10px;
+          letter-spacing: 1px;
+        }
+
+        .save-state-unsaved {
+          color: var(--accentColor);
+        }
+      }
+
+      >.actions {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+
+        .config-manager {
+          flex-wrap: nowrap;
+        }
+
+        .animated-button {
+          margin: 0;
+        }
+      }
     }
 
     &>.graph-main {
@@ -24,3 +68,4 @@
     }
   }
 }
+

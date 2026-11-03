@@ -4,13 +4,14 @@
   grid-template-areas: 'select edit viewer export';
   grid-template-rows: minmax(0, 1fr);
   justify-content: center;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   height: 100dvh;
   min-width: 192px;
+  overflow: clip;
   transition: grid-template-columns 0.5s ease-in-out;
 
-  &>.themer {
+  &>.settings {
     position: absolute;
     z-index: 5;
     top: env(safe-area-inset-top, 0px);
@@ -27,4 +28,10 @@
   .main-view {
     transition: none;
   }
+}
+
+@media (max-width: 760px) {
+  .frame-heading { padding: 32px 12px 12px; gap: 8px; }
+  .drawing-status { padding: 8px 12px; }
+  .main-view >.settings { right: 0; }
 }

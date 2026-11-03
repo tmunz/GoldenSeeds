@@ -1,0 +1,83 @@
+.node-palette {
+  max-width: calc(100% - 32px);
+  color: var(--textColor);
+  font-family: var(--uiFontFamily);
+  font-weight: var(--uiFontWeight);
+  letter-spacing: var(--uiLetterSpacing);
+  font-size: 11px;
+
+  .node-palette-control {
+    display: flex;
+    align-items: flex-start;
+    max-width: 100%;
+  }
+
+  button {
+    font: inherit;
+    letter-spacing: inherit;
+    color: var(--actionColor);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 1px solid var(--actionColor);
+      outline-offset: -1px;
+    }
+
+    &:disabled {
+      cursor: wait;
+      opacity: 0.5;
+    }
+  }
+
+  .node-palette-toggle {
+    display: grid;
+    place-items: center;
+    flex: 0 0 56px;
+    width: 56px;
+    height: 56px;
+    padding: 4px;
+    background: rgb(var(--backgroundColorAlt));
+
+    &:hover, &[aria-expanded="true"] {
+      color: var(--textColor);
+    }
+  }
+
+  .node-palette-menu {
+    margin-left: 8px;
+    padding: 16px;
+    min-width: 0;
+    max-height: min(520px, calc(100dvh - 160px));
+    overflow: auto;
+    background: rgb(var(--backgroundColorAlt));
+    border: 1px solid rgb(var(--backgroundColor));
+
+    &[hidden] { display: none; }
+  }
+
+  .node-palette-groups {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .node-palette-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 110px;
+
+    button {
+      text-align: left;
+      min-height: 36px;
+      padding: 8px;
+      text-transform: uppercase;
+
+      &:hover:not(:disabled) {
+        background: rgb(var(--backgroundColor));
+        color: var(--textColor);
+      }
+    }
+  }
+}

@@ -46,16 +46,20 @@ export function AnimatedButton(props: {
       className={['animated-button', props.className ?? '', active ? 'active' : ''].join(' ')}
       onClick={() => handleClick()}
       disabled={props.disabled}
+      type="button"
+      aria-label={[props.title, props.iconText].filter(Boolean).join(' ')}
       aria-expanded={props.expanded}
       aria-controls={props.controls}
     >
-      <div className="tooltip">{props.title}</div>
-      <div className="icon-text">{props.iconText}</div>
-      <AnimatedIcon
-        points={props.points ?? [ArrowNone, ArrowFlat, ArrowRegular]}
-        index={props.disabled ? 0 : (active ? 2 : 1)}
-        rotation={props.rotation ?? 0}
-      />
+      {props.iconText && <div className="icon-text" aria-hidden="true">{props.iconText}</div>}
+      <span className="button-icon">
+        <span className="tooltip" aria-hidden="true">{props.title}</span>
+        <AnimatedIcon
+          points={props.points ?? [ArrowNone, ArrowFlat, ArrowRegular]}
+          index={props.disabled ? 0 : (active ? 2 : 1)}
+          rotation={props.rotation ?? 0}
+        />
+      </span>
     </button>
   );
 }

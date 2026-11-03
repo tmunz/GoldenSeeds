@@ -1,19 +1,36 @@
 :root {
+  --uiFontFamily: simplesimple_light, sans-serif;
+  --uiFontWeight: 400;
+  --uiHeadingWeight: 200;
+  --uiLetterSpacing: 2px;
+  --uiDisplayLetterSpacing: 14px;
   --accentColor: #decd87;
+  --motionDuration: 320ms;
+  --motionEase: cubic-bezier(.22, 1, .36, 1);
   --backgroundColor: 0, 0, 0;
   --backgroundColorAlt: 22, 22, 22;
-  --graphNodeBackground: 10, 10, 10;
+  --graphNodeBackground: 20, 20, 20;
+  --graphNodeText: #e0e0e0;
+  --graphNodeMuted: #b0b0b0;
+  --graphNodePlaceholder: #777;
+  --graphNodeBorder: #484848;
+  --graphNodeDivider: #333;
   --actionColor: #fff;
   --textColor: #999;
-  --textColorAlt: #444;
+  --textColorAlt: #777;
   --errorColor: #f4511e;
 
   &.light-theme {
     --backgroundColor: 255, 255, 255;
     --backgroundColorAlt: 240, 240, 240;
     --graphNodeBackground: 240, 240, 240;
+    --graphNodeText: #222;
+    --graphNodeMuted: #555;
+    --graphNodePlaceholder: #888;
+    --graphNodeBorder: #aaa;
+    --graphNodeDivider: #ccc;
     --textColor: #222;
-    --actionColor: #666;
-    --textColorAlt: #aaa;
+    --actionColor: #111;
+    --textColorAlt: #747474;
   }
 }

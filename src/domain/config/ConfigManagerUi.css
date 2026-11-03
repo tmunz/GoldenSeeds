@@ -1,7 +1,30 @@
 .config-manager {
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  column-gap: 5px;
+  flex-wrap: wrap;
+
+  .animated-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .icon-text {
+      position: static;
+      transform: none;
+      order: 1;
+      font-size: 10px;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+  }
+}
+
+.config-manager-error {
+  display: block;
+  max-width: 320px;
+  padding: 8px 0;
+  color: var(--errorColor);
+  font-size: 12px;
 }

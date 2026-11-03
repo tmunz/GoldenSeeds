@@ -1,74 +1,33 @@
 .range-input.input {
-
-  &>input {
-    appearance: none;
-    tap-decoration-color: transparent;
-    background-color: var(--textColorAlt);
-    padding: 0;
-    height: 12px;
-    overflow: hidden;
-
-    &::-ms-track,
-    &::-moz-range-track {
-      border: inherit;
-      color: transparent;
-      background: transparent;
-    }
-
-    &::-ms-fill-lower,
-    &::-ms-fill-upper {
-      background: transparent;
-    }
-
-    &::-ms-tooltip {
-      display: none;
-    }
-
-    &::-moz-range-track {
-      background: transparent;
-    }
-
+  >input {
     --rangeThumbColor: var(--actionColor);
+    appearance: none;
+    height: 28px;
+    padding: 0;
+    margin: 0;
+    cursor: ew-resize;
+    background: linear-gradient(var(--textColorAlt), var(--textColorAlt)) center / 100% 4px no-repeat;
 
     &::-webkit-slider-thumb {
-      transition: .4s ease-in-out all;
-      cursor: grab;
       appearance: none;
-      width: 40px;
-      height: 9999999px;
-      border: none;
-      background: var(--rangeThumbColor);
+      width: 32px;
+      height: 4px;
+      border: 0;
       border-radius: 0;
-    }
-
-    &::-ms-thumb {
-      transition: .4s ease-in-out all;
-      cursor: grab;
-      appearance: none;
-      width: 40px;
-      height: 9999999px;
-      border: none;
       background: var(--rangeThumbColor);
-      border-radius: 0;
+      transition: background-color var(--motionDuration);
     }
-
+    &::-moz-range-track { background: transparent; border: 0; }
     &::-moz-range-thumb {
-      transition: .4s ease-in-out all;
-      cursor: grab;
-      appearance: none;
-      width: 40px;
-      height: 9999999px;
-      border: none;
-      background: var(--rangeThumbColor);
+      width: 32px;
+      height: 4px;
+      border: 0;
       border-radius: 0;
+      background: var(--rangeThumbColor);
+      transition: background-color var(--motionDuration);
     }
-
-    &:focus {
-      --rangeThumbColor: var(--accentColor);
-    }
-
-    &.range-invalid {
-      --rangeThumbColor: var(--textColor);
-    }
+    &:is(:hover, :focus-visible, :active) { --rangeThumbColor: var(--accentColor); }
+    &:active { cursor: grabbing; }
+    &.range-invalid { --rangeThumbColor: var(--errorColor); }
   }
 }

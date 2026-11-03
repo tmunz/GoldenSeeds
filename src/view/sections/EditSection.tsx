@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from '../../i18n/I18n';
 import { GraphAnimationControls } from '../../domain/animation/useGraphAnimation';
 import { Config } from '../../domain/config/Config';
 import { ConfigItem } from '../../domain/config/ConfigManager';
 import { ConfigManagerUi } from '../../domain/config/ConfigManagerUi';
-import { configService } from '../../domain/config/ConfigService';
-import { GraphCanvas, GraphCanvasHandle } from '../../domain/graph/GraphCanvas';
+import { configService, SaveState } from '../../domain/config/ConfigService';
+import { GraphCanvas, GraphCanvasHandle } from '../../domain/graph/editor/GraphCanvas';
 import { AnimatedButton, DIRECTION_LEFT, DIRECTION_RIGHT } from '../../ui/AnimatedButton';
 import { ArrowNone, ArrowFlat, ArrowRegular } from '../../ui/icon/Arrow';
 import { Frame } from '../../ui/Frame';
 import { EditorNone, EditorRegular, EditorClose } from '../../ui/icon/Editor';
+import { TextInput } from '../../ui/input/TextInput';
 
 import './EditSection.css';
 
@@ -21,6 +23,12 @@ export function EditSection(props: {
   showResultPreview: boolean;
   onToggle: () => void;
 }) {
+  const { t } = useTranslation();
+  const [saveState, setSaveState] = useState<SaveState>(configService.saveState$.value);
+  useEffect(() => {
+    const subscription = configService.saveState$.subscribe(setSaveState);
+    return () => subscription.unsubscribe();
+  }, []);
   const graphCanvasRef = useRef<GraphCanvasHandle>(null);
   const [{ canUndo, canRedo }, setHistoryState] = useState({ canUndo: false, canRedo: false });
   const undo = useCallback(() => canUndo && graphCanvasRef.current?.undo(), [canUndo]);
@@ -29,17 +37,29 @@ export function EditSection(props: {
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       const target = event.target;
-      if (!props.open || (target instanceof HTMLElement &&
-        (target.isContentEditable || target.closest('input, textarea, select'))) ||
-        !(event.ctrlKey || event.metaKey)) {
+      if (!props.open || event.altKey || (target instanceof HTMLElement &&
+        (target.isContentEditable || target.closest('input, textarea, select')))) {
         return;
       }
-      if (event.key === 'z' && !event.shiftKey) {
+      const canvas = graphCanvasRef.current;
+      const key = event.key.toLowerCase();
+      if (!(event.ctrlKey || event.metaKey)) {
+        if (key === 'f') { canvas?.fit(); }
+        return;
+      }
+      if (key === 'z' && !event.shiftKey) {
         event.preventDefault();
         undo();
-      } else if (event.key === 'y' || (event.key === 'z' && event.shiftKey)) {
+      } else if (key === 'y' || (key === 'z' && event.shiftKey)) {
         event.preventDefault();
         redo();
+      } else if (key === 'd') {
+        event.preventDefault();
+        canvas?.duplicate();
+      } else if (key === 'c' && !window.getSelection()?.toString()) {
+        canvas?.copy();
+      } else if (key === 'v') {
+        canvas?.paste();
       }
     }
     window.addEventListener('keydown', handleKeyDown);
@@ -48,46 +68,55 @@ export function EditSection(props: {
 
   return (
     <Frame
+      step="02"
       className="edit-column"
-      title="edit"
-      label="Node editor"
+      title={t('sections.edit')}
+      label={t('sections.editLabel')}
       iconPaths={[EditorNone, EditorRegular, EditorClose]}
       open={props.open}
       onToggle={props.onToggle}
-    >
-      {props.activeConfig && (
+      headerContent={props.activeConfig && (
         <>
+          <div className="drawing-status">
+            <TextInput value={props.activeConfig.meta.name} onChange={(name) => configService.setName(name)} label={t('drawing.name')} />
+            {/* <span className={`save-state save-state-${saveState}`} role="status" aria-live="polite">
+              {saveState === 'saved' ? 'saved' : 'unsaved changes'}
+            </span> */}
+          </div>
           <div className="actions">
             {props.configsManageable && (
-              <ConfigManagerUi configItems={props.configItems} activeConfig={props.activeConfig} />
+              <ConfigManagerUi configItems={props.configItems} activeConfig={props.activeConfig} hasChanges={saveState === 'unsaved'} />
             )}
             <AnimatedButton
-              title="undo"
+              title={t('actions.undo')}
               rotation={DIRECTION_LEFT}
               disabled={!canUndo}
               onClick={() => undo()}
               points={[ArrowNone, ArrowFlat, ArrowRegular]}
             />
             <AnimatedButton
-              title="redo"
+              title={t('actions.redo')}
               rotation={DIRECTION_RIGHT}
               disabled={!canRedo}
               onClick={() => redo()}
               points={[ArrowNone, ArrowFlat, ArrowRegular]}
             />
           </div>
-          <section className="graph-main" aria-label="Node graph">
-            <GraphCanvas
-              ref={graphCanvasRef}
-              graph={props.activeConfig.graph}
-              animation={props.animation}
-              layout={props.activeConfig.layout}
-              showResultPreview={props.showResultPreview}
-              onGraphChange={(graph, layout) => configService.setGraph(graph, layout)}
-              onHistoryChange={setHistoryState}
-            />
-          </section>
         </>
+      )}
+    >
+      {props.activeConfig && (
+        <section className="graph-main" aria-label={t('graph.canvas')}>
+          <GraphCanvas
+            ref={graphCanvasRef}
+            graph={props.activeConfig.graph}
+            animation={props.animation}
+            layout={props.activeConfig.layout}
+            showResultPreview={props.showResultPreview}
+            onGraphChange={(graph, layout) => configService.setGraph(graph, layout)}
+            onHistoryChange={setHistoryState}
+          />
+        </section>
       )}
     </Frame>
   );

@@ -1,3 +1,5 @@
+@import './ControlTypography.css';
+
 .carousel-selector {
   width: 100%;
   box-sizing: border-box;
@@ -15,11 +17,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: .4s ease-in-out all;
+
+    .animated-button { margin: 0; }
+
+    .animated-button:active:not(:disabled) {
+      transform: none;
+    }
   }
 
   .carousel-overview {
     --carousel-item-gap: 20px;
+    position: relative;
+    box-sizing: border-box;
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -34,6 +43,9 @@
     container-type: inline-size;
     flex: 1;
     min-width: 0;
+    min-height: 32px;
+    margin: 0;
+    padding: 0;
 
     &:active {
       cursor: grabbing !important;
@@ -41,12 +53,22 @@
 
     .carousel-item {
       position: absolute;
+      top: 50%;
+      left: 50%;
+      box-sizing: border-box;
+      width: max-content;
+      max-width: 100%;
       backface-visibility: hidden;
       transition: all 0.3s cubic-bezier(0.75, 0, 0.75, 0);
       padding: 5px;
       text-align: center;
       white-space: nowrap;
       cursor: pointer;
+
+      .title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
 
       &>input[type="radio"] {
         appearance: none;
@@ -62,5 +84,43 @@
         margin-top: 16px;
       }
     }
+  }
+}
+
+.carousel-selector .carousel-overview .carousel-item {
+  color: var(--textColor);
+  transition: transform 550ms var(--motionEase), opacity 400ms, color var(--motionDuration);
+  &:has(input:checked) { color: var(--actionColor); }
+  &:has(input:focus-visible) { outline: 1px solid var(--accentColor); outline-offset: 8px; }
+  &:hover { color: var(--accentColor); }
+}
+
+.carousel-selector.carousel-compact {
+  margin-top: 8px;
+  min-height: 32px;
+
+  >.carousel-prev,
+  >.carousel-next {
+    flex: 0 0 28px;
+
+    .animated-button {
+      min-width: 28px;
+      min-height: 32px;
+      margin: 0;
+      padding: 4px 2px;
+
+      .icon-text { display: none; }
+    }
+  }
+
+  .carousel-overview {
+    --carousel-item-gap: 28px;
+    min-height: 32px;
+    margin: 0;
+    padding: 0;
+    mask: none;
+
+    .carousel-item { padding: 0; }
+    .title { text-transform: uppercase; }
   }
 }

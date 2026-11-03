@@ -53,3 +53,5 @@ test('releases the SVG URL if image loading fails', () => {
   expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:drawing');
   expect(downloadFile).not.toHaveBeenCalled();
 });
+
+jest.mock('../../i18n/I18n', () => ({ useTranslation: () => ({ t: jest.requireActual('../../i18n/translate').translate, locale: 'en' }) }));

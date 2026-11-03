@@ -62,6 +62,18 @@ To run tests:
 npm run test
 ```
 
+### Editor shortcuts
+
+| Shortcut | Action |
+| --- | --- |
+| `Ctrl`/`⌘` + `Z`, `Ctrl`/`⌘` + `Y` | Undo, redo |
+| `Ctrl`/`⌘` + `C`, `Ctrl`/`⌘` + `V` | Copy the selected nodes, paste them |
+| `Ctrl`/`⌘` + `D` | Duplicate the selected nodes |
+| `Delete` / `Backspace` | Delete the selected nodes |
+| `F` | Fit all nodes into view |
+
+Copying a node also copies the value nodes that only feed it, so a duplicated stage keeps its colors and formulas.
+
 ## Development
 
 The project is developed with the following technologies:

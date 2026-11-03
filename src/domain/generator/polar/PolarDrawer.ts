@@ -1,5 +1,6 @@
 import { Color } from '../../../datatypes/Color';
 import { Point } from '../../../datatypes/Point';
+import { svgLine } from '../SvgPrimitives';
 
 export interface PolarConfig {
   style: {
@@ -13,24 +14,12 @@ export interface PolarConfig {
   };
 }
 
-export function draw(config: PolarConfig, grid: Point[]): { svg: string; points: Point[] } {
-  return grid.reduce(
+export function draw(config: PolarConfig, points: Point[]): { svg: string; points: Point[] } {
+  return points.reduce(
     (agg, p) => {
       const coordinates = calculatePolarGrid(p, config.grid.items, config.grid.angle, config.grid.distance);
       const svg = coordinates
-        .map(
-          (coordinate: Point, j: number) =>
-            `<line
-        x1="${p[Point.X]}"
-        y1="${p[Point.Y]}"
-        x2="${coordinate[Point.X]}"
-        y2="${coordinate[Point.Y]}"
-        stroke="${config.style.color.getRgbString(j)}"
-        stroke-opacity="${config.style.color.getOpacity()}"
-        stroke-width="${config.style.strokeWidth(j, config.grid.items)}"
-        vector-effect="non-scaling-stroke"
-      />`,
-        )
+        .map((coordinate: Point, j: number) => svgLine(p, coordinate, config.style.color, j, config.style.strokeWidth(j, config.grid.items)))
         .join('');
       return {
         svg: agg.svg + svg,
@@ -47,10 +36,10 @@ function calculatePolarGrid(
   angle: (n: number, items: number) => number,
   distance: (n: number, items: number) => number,
 ): Point[] {
-  const grid = [];
+  const points = [];
   for (let n = 1; n <= items; n++) {
     const rad = (angle(n, items) / 180) * Math.PI;
-    grid.push([Math.cos(rad), Math.sin(rad)].map((trig, i) => center[i] + distance(n, items) * trig));
+    points.push([Math.cos(rad), Math.sin(rad)].map((trig, i) => center[i] + distance(n, items) * trig));
   }
-  return grid;
+  return points;
 }

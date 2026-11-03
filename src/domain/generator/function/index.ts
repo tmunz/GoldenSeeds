@@ -1,6 +1,5 @@
 import { MathUtils } from '../../../utils/MathUtils';
-import { PointUtils } from '../../../utils/PointUtils';
-import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
+import { SvgGenerator, SvgGeneratorResult, withDrawnPoints } from '../SvgGenerator';
 import { plot, FunctionPlotterConfig } from './FunctionPlotter';
 
 export class FunctionPlotter extends SvgGenerator<FunctionPlotterConfig> {
@@ -64,11 +63,6 @@ export class FunctionPlotter extends SvgGenerator<FunctionPlotterConfig> {
   }
 
   generate(config: FunctionPlotterConfig, prev: SvgGeneratorResult): SvgGeneratorResult {
-    const plotting = plot(config, prev.grid);
-    return {
-      grid: plotting.points,
-      svg: plotting.svg,
-      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, PointUtils.boundingBox(plotting.points)]),
-    };
+    return withDrawnPoints(prev, plot(config, prev.points));
   }
 }

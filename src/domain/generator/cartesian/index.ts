@@ -1,6 +1,5 @@
-import { SvgGenerator, SvgGeneratorResult, ParamDefinition } from '../SvgGenerator';
+import { SvgGenerator, SvgGeneratorResult, ParamDefinition, withDrawnPoints } from '../SvgGenerator';
 import { CartesianConfig, draw } from './CartesianDrawer';
-import { PointUtils } from '../../../utils/PointUtils';
 
 export class CartesianGrid extends SvgGenerator<CartesianConfig> {
   static type = 'cartesian';
@@ -62,11 +61,6 @@ export class CartesianGrid extends SvgGenerator<CartesianConfig> {
   }
 
   generate(config: CartesianConfig, prev: SvgGeneratorResult): SvgGeneratorResult {
-    const drawing = draw(config, prev.grid);
-    return {
-      grid: drawing.points,
-      svg: drawing.svg,
-      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, PointUtils.boundingBox(drawing.points)]),
-    };
+    return withDrawnPoints(prev, draw(config, prev.points));
   }
 }

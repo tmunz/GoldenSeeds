@@ -1,7 +1,6 @@
 import { MathUtils } from '../../../utils/MathUtils';
-import { SvgGenerator, SvgGeneratorResult } from '../SvgGenerator';
+import { SvgGenerator, SvgGeneratorResult, withDrawnPoints } from '../SvgGenerator';
 import { draw, PolarConfig } from './PolarDrawer';
-import { PointUtils } from '../../../utils/PointUtils';
 
 export class PolarGrid extends SvgGenerator<PolarConfig> {
   static type = 'polar';
@@ -48,14 +47,6 @@ export class PolarGrid extends SvgGenerator<PolarConfig> {
   }
 
   generate(config: PolarConfig, prev: SvgGeneratorResult): SvgGeneratorResult {
-    const drawing = draw(config, prev.grid);
-
-    const drawingBoundingBox = PointUtils.boundingBox(drawing.points);
-
-    return {
-      grid: drawing.points,
-      svg: drawing.svg,
-      boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, drawingBoundingBox]),
-    };
+    return withDrawnPoints(prev, draw(config, prev.points));
   }
 }

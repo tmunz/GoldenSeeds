@@ -1,5 +1,6 @@
 import { Color } from '../../../datatypes/Color';
 import { Point } from '../../../datatypes/Point';
+import { svgLine } from '../SvgPrimitives';
 
 export interface CartesianConfig {
   style: {
@@ -16,9 +17,9 @@ export interface CartesianConfig {
   };
 }
 
-export function draw(config: CartesianConfig, grid: Point[]): { svg: string; points: Point[] } {
+export function draw(config: CartesianConfig, points: Point[]): { svg: string; points: Point[] } {
   if (config.grid.x <= 0) { return { svg: '', points: [] }; }
-  return grid.reduce(
+  return points.reduce(
     (agg, p) => {
       const coordinatesRaw = calculateCartesianGrid(
         config.grid.items,
@@ -62,27 +63,18 @@ function calculateCartesianGrid(
   xDistance: (n: number, items: number) => number,
   yDistance: (n: number, items: number) => number,
 ): Point[] {
-  const grid = [] as Point[];
+  const points = [] as Point[];
   for (let i = 0; i < items; i++) {
     const calcX = i % x;
     const calcY = Math.floor(i / x);
-    grid.push([
+    points.push([
       calcX * xDistance(calcX, x),
       calcY * yDistance(calcY, Math.floor(items / x)),
     ]);
   }
-  return grid;
+  return points;
 }
 
 function drawLine(from: Point, to: Point, config: CartesianConfig, i: number) {
-  return `<line
-      x1="${from[Point.X]}"
-      y1="${from[Point.Y]}"
-      x2="${to[Point.X]}"
-      y2="${to[Point.Y]}"
-      stroke="${config.style.color.getRgbString(i)}"
-      stroke-opacity="${config.style.color.getOpacity()}"
-      stroke-width="${config.style.strokeWidth(i, config.grid.items)}"
-      vector-effect="non-scaling-stroke"
-    />`;
+  return svgLine(from, to, config.style.color, i, config.style.strokeWidth(i, config.grid.items));
 }

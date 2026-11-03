@@ -34,8 +34,8 @@ export class Voronoi extends SvgGenerator<VoronoiConfig> {
   generate(config: VoronoiConfig, prev: SvgGeneratorResult) {
     return {
       boundingBox: prev.boundingBox,
-      svg: draw(config, prev.grid, prev.boundingBox),
-      grid: prev.grid,
+      svg: draw(config, prev.points, prev.boundingBox),
+      points: prev.points,
     };
   }
 }

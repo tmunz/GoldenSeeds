@@ -1,0 +1,43 @@
+import { ParamDefinition, ParamDefinitionType } from '../../generator/SvgGenerator';
+import { PortValueType } from '../model/PortValue';
+
+export const PARAM_TYPE_TO_PORT_TYPE: Record<ParamDefinitionType, PortValueType> = {
+  number: 'number',
+  expression: 'expression',
+  distribution: 'distribution',
+  color: 'color',
+  selection: 'number',
+  string: 'string',
+  font: 'font',
+};
+
+interface ParamPort {
+  groupId: string;
+  id: string;
+  portId: string;
+  portType: PortValueType;
+}
+
+/** Builds the input port id for a generator parameter, e.g. paramPortId('style', 'fillColor') -> 'param:style.fillColor'. */
+export function paramPortId(groupId: string, id: string): string {
+  return `param:${groupId}.${id}`;
+}
+
+/** Reverses paramPortId, e.g. 'param:style.fillColor' -> { groupId: 'style', id: 'fillColor' }. */
+export function parseParamPortId(portId: string): { groupId: string; id: string } | undefined {
+  const match = /^param:([^.]+)\.(.+)$/.exec(portId);
+  return match ? { groupId: match[1], id: match[2] } : undefined;
+}
+
+/** Flattens a generator's { groupId: { paramId: ParamDefinition } } definition into a list of graph ports. */
+export function collectParamPorts(definition: Record<string, Record<string, ParamDefinition>>): ParamPort[] {
+  const ports: ParamPort[] = [];
+  Object.keys(definition).forEach((groupId) => {
+    Object.keys(definition[groupId]).forEach((id) => {
+      const portType = PARAM_TYPE_TO_PORT_TYPE[definition[groupId][id].type];
+      ports.push({ groupId, id, portId: paramPortId(groupId, id), portType });
+    });
+  });
+  return ports;
+}
+

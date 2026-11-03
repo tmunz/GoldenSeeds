@@ -1,4 +1,4 @@
-import { configManager } from './ConfigManager';
+import { ConfigManager, configManager } from './ConfigManager';
 import { configService } from './ConfigService';
 import { preconfigs } from './data';
 
@@ -39,9 +39,9 @@ test('startup loads a default drawing without adding it to the URL', async () =>
 });
 
 test('restoring a drawing from browser history leaves its URL unchanged', async () => {
-  location.search = '?id=Default+drawing';
+  location.search = '?name=Default+drawing';
   await configManager.select('Default drawing', { updateUrl: false });
-  expect(location.search).toBe('?id=Default+drawing');
+  expect(location.search).toBe('?name=Default+drawing');
   expect(pushState).not.toHaveBeenCalled();
 });
 
@@ -54,8 +54,8 @@ test('explicit selection sets the URL immediately without duplicate history entr
   expect(pushState).toHaveBeenCalledTimes(1);
 });
 
-test('loading a drawing replaces an old identifier before conversion finishes', async () => {
-  location.search = '?id=old&theme=dark';
+test('loading a drawing replaces the previous name before conversion finishes', async () => {
+  location.search = '?theme=dark&name=old';
   const loading = configManager.load({ meta: { name: 'Imported & ready' }, nodes: [], edges: [] });
   expect(location.search).toBe('?theme=dark&name=Imported+%26+ready');
   await loading;
@@ -99,4 +99,41 @@ test('reset replaces same-name edits with the preset before resolving', async ()
   expect(reset.graph).not.toBe(editedGraph);
   expect(reset.graph.nodes.some(node => node.id === 'edited')).toBe(false);
   expect(reset.layout).toEqual({});
+});
+
+
+test('saving reports success only after the storage transaction commits', async () => {
+  const manager = new ConfigManager();
+  const put = jest.fn();
+  const transaction = Object.assign(new EventTarget(), { objectStore: () => ({ put }), error: null });
+  const db = { transaction: () => transaction } as unknown as IDBDatabase;
+  jest.spyOn(manager as unknown as { database: () => Promise<IDBDatabase> }, 'database').mockResolvedValue(db);
+  let items: string[] = [];
+  const subscription = manager.configItems$.subscribe(value => { items = value.map(item => item.name); });
+  const saving = manager.save(preconfigs[0], 0);
+  for (let tick = 0; tick < 20 && !put.mock.calls.length; tick++) { await Promise.resolve(); }
+  expect(put).toHaveBeenCalled();
+  expect(items).toEqual([]);
+  transaction.dispatchEvent(new Event('complete'));
+  await saving;
+  expect(items).toEqual(['Default drawing']);
+  subscription.unsubscribe();
+});
+
+test('an aborted save rejects instead of reporting a saved drawing', async () => {
+  const manager = new ConfigManager();
+  const put = jest.fn();
+  const transaction = Object.assign(new EventTarget(), { objectStore: () => ({ put }), error: null });
+  const db = { transaction: () => transaction } as unknown as IDBDatabase;
+  jest.spyOn(manager as unknown as { database: () => Promise<IDBDatabase> }, 'database').mockResolvedValue(db);
+  const saving = manager.save(preconfigs[0], 0);
+  const failure = expect(saving).rejects.toThrow('Save aborted');
+  for (let tick = 0; tick < 20 && !put.mock.calls.length; tick++) { await Promise.resolve(); }
+  transaction.dispatchEvent(new Event('abort'));
+  await failure;
+});
+
+test('imported names get a numeric suffix when they collide with a stored drawing', () => {
+  expect(configManager.uniqueName('Fresh')).toBe('Fresh');
+  expect(configManager.uniqueName('Default drawing')).toBe('Default drawing (2)');
 });

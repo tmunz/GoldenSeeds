@@ -1,0 +1,8 @@
+@import '../../../ui/ControlTypography.css';
+
+.parameter-editor {
+  min-width: 0;
+  transition: background-color var(--motionDuration), color var(--motionDuration);
+
+  &:focus-within >.extended-range-input label { color: var(--accentColor); }
+}

@@ -36,10 +36,10 @@ export class TextDrawer extends SvgGenerator<TextDrawerConfig> {
   }
 
   generate = (config: TextDrawerConfig, prev: SvgGeneratorResult): SvgGeneratorResult => {
-    const drawing = draw(config, prev.grid);
+    const drawing = draw(config, prev.points);
 
     return {
-      grid: prev.grid,
+      points: prev.points,
       svg: drawing.svg,
       boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, drawing.boundingBox]),
     };

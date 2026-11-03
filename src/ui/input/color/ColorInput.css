@@ -1,4 +1,10 @@
+@import '../../ControlTypography.css';
+
 .color-input {
+  width: 150px;
+  max-width: 100%;
+
+  .color-input-label { margin-bottom: 2px; }
 
   .color-input-main {
     position: relative;
@@ -7,4 +13,5 @@
       border-color: var(--errorColor);
     }
   }
+
 }

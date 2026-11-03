@@ -1,5 +1,5 @@
 import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Graph } from '../graph/Graph';
+import { Graph } from '../graph/model/Graph';
 import { animationService, DEFAULT_ANIMATION_SECONDS } from './AnimationService';
 import { animationKey, animationValue, applyNumberAnimations, NumberAnimationFrame, NumberAnimationTarget, startupAnimationTarget } from './GraphAnimation';
 
@@ -67,7 +67,13 @@ export function useGraphAnimation(graph: Graph | undefined) {
     return () => clearTimeout(timeout);
   }, [graph, play]);
 
-  const frames = useMemo(() => Object.values(playback).filter((frame) => frame.graph === graph), [playback, graph]);
+  // Start the preview at zero during the render that first receives the graph.
+  // Effects and the StrictMode-safe timer run after that render, which otherwise flashes the final drawing.
+  const pendingStartup = graph && graph.nodes.length > 1 && !started.current ? startupAnimationTarget(graph) : undefined;
+  const frames = useMemo(() => {
+    const active = Object.values(playback).filter((frame) => frame.graph === graph);
+    return active.length || !pendingStartup ? active : [{ input: pendingStartup, value: 0 }];
+  }, [playback, graph, pendingStartup]);
   const animatedGraph = useMemo(() => applyNumberAnimations(graph ?? EMPTY_GRAPH, frames), [graph, frames]);
   return useMemo(() => ({ frames, play, stop, graph: animatedGraph }), [frames, play, stop, animatedGraph]);
 }

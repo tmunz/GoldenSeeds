@@ -1,9 +1,9 @@
-import { Graph } from '../graph/Graph';
-import { NodeEdit, editGraphNode } from '../graph/NodeEditing';
+import { Graph } from '../graph/model/Graph';
+import { NodeEdit, editGraphNode } from '../graph/editor/NodeEditing';
 import { ParamDefinition } from '../generator/SvgGenerator';
-import { GeneratorNodeConfig } from '../graph/GeneratorNode';
-import { collectParamPorts } from '../graph/ParamPorts';
-import { VALUE_KIND_PREFIX, ValueNodeConfig } from '../graph/ValueNodeRegistry';
+import { GeneratorNodeConfig } from '../graph/nodes/generator/GeneratorNode';
+import { collectParamPorts } from '../graph/parameters/ParamPorts';
+import { VALUE_KIND_PREFIX, ValueNodeConfig } from '../graph/nodes/value/ValueNodeRegistry';
 
 export type NumberDefinition = Extract<ParamDefinition, { type: 'number' }>;
 export interface NumberAnimationTarget {

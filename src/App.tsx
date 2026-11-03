@@ -7,12 +7,10 @@ import { fontService } from './domain/font/FontService';
 import { configManager, ConfigItem } from './domain/config/ConfigManager';
 import { preconfigs } from './domain/config/data';
 
-const SignikaBoldFont = require('./domain/font/signika-bold.otf'); // eslint-disable-line
-
 export function App() {
   const [initialViewerOpen] = useState(() => {
     const params = new URLSearchParams(window.location.search);
-    return Boolean(params.get('id') || params.get('name'));
+    return Boolean(params.get('name'));
   });
   const [configItems, setConfigItems] = useState<ConfigItem[]>([]);
   const [configsManageable, setConfigsManageable] = useState<boolean>(false);
@@ -27,8 +25,7 @@ export function App() {
     let startupTimeout: ReturnType<typeof setTimeout> | undefined;
     async function setup() {
       const start = Date.now();
-      const buffer = await (await fetch(SignikaBoldFont)).arrayBuffer();
-      await fontService.saveBuffer(buffer).catch(() => console.warn('font could not be loaded'));
+      await fontService.installDefaultFont().catch(() => console.warn('font could not be loaded'));
       await configManager.init();
       if (disposed) { return; }
       window.addEventListener('popstate', handleLocation);
@@ -36,10 +33,19 @@ export function App() {
     }
     void setup();
 
+    function warnAboutUnsavedChanges(event: BeforeUnloadEvent) {
+      if (configService.hasUnsavedChanges()) {
+        event.preventDefault();
+        event.returnValue = '';
+      }
+    }
+    window.addEventListener('beforeunload', warnAboutUnsavedChanges);
+
     return () => {
       disposed = true;
       clearTimeout(startupTimeout);
       window.removeEventListener('popstate', handleLocation);
+      window.removeEventListener('beforeunload', warnAboutUnsavedChanges);
       configItemsSubscription.unsubscribe();
       configsManageableSubscription.unsubscribe();
       activeConfigSubscription.unsubscribe();
@@ -58,6 +64,6 @@ export function App() {
 
 function handleLocation() {
   const params = new URLSearchParams(window.location.search);
-  const configName = params.get('id') || params.get('name');
+  const configName = params.get('name');
   configManager.select(configName || preconfigs[0]?.meta.name, { updateUrl: false });
 }

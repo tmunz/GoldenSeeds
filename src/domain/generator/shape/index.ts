@@ -101,10 +101,10 @@ export class Shape extends SvgGenerator<ShapeConfig> {
   }
 
   generate = (config: ShapeConfig, prev: SvgGeneratorResult) => {
-    const shape = draw(config, prev.grid);
+    const shape = draw(config, prev.points);
 
     return {
-      grid: prev.grid,
+      points: prev.points,
       svg: shape.svg,
       boundingBox: PointUtils.combineBoundingBoxes([prev.boundingBox, shape.boundingBox]),
     };

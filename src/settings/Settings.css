@@ -1,0 +1,49 @@
+.settings {
+  width: 150px;
+  padding: 8px 14px;
+  background: rgba(var(--backgroundColor), .94);
+  transition: background-color var(--motionDuration);
+
+  >button {
+    display: flex;
+    justify-content: flex-end;
+    overflow: visible;
+  }
+
+  h1 {
+    flex-shrink: 0;
+    margin: 8px 0;
+    margin-right: calc(-1 * var(--uiDisplayLetterSpacing));
+    white-space: nowrap;
+  }
+
+  .collapsible-content {
+    padding: 16px 0 4px;
+  }
+
+  .settings-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .settings-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .color-input-label {
+    margin-bottom: 8px;
+  }
+}
+.settings .language-selector {
+  select {
+    font: inherit;
+    letter-spacing: inherit;
+    color: var(--textColor);
+    background: rgb(var(--backgroundColorAlt));
+    border: 1px solid var(--textColorAlt);
+    padding: 6px;
+  }
+}

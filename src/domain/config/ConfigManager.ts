@@ -1,11 +1,11 @@
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { configService } from './ConfigService';
-import { RawConfig } from '../config/RawConfig';
-import { renderGraphToSvg } from '../graph/GraphRenderer';
-import { fromRawConfig, toRawConfig } from '../graph/GraphSerializer';
+import { RawConfig } from './RawConfig';
+import { renderGraphToSvg } from '../graph/runtime/GraphRenderer';
+import { fromRawConfig, toRawConfig } from '../graph/runtime/GraphSerializer';
 import { preconfigs } from './data';
-
+import { openDatabase } from '../../utils/IndexedDb';
 
 export interface ConfigItem {
   name: string;
@@ -26,39 +26,28 @@ export class ConfigManager {
   private static DB_KEY = 'name';
 
   async init(): Promise<void> {
-    return new Promise((resolve) => {
-      this.database().then((db) => {
-        const transaction = db.transaction(ConfigManager.DB_TABLE);
-        const objectStore = transaction.objectStore(ConfigManager.DB_TABLE);
-        const getRequest = objectStore.getAll();
-        getRequest.addEventListener('success', async (event) => {
-          const existingItems = new Map(((event.target as unknown as { result: ConfigItem[] }).result).map(item => [item.name, item]));
-          this.configItemMap$.next(existingItems);
-
-          // add new and update all existing preconfigs
-          await Promise.all(preconfigs.map((preconfig, i) => {
-            const existingItem = existingItems.get(preconfig.meta.name);
-            if (existingItem === undefined || existingItem?.preconfig) {
-              return this.save(preconfig, i, true);
-            }
-          }));
-
-          // remove old preconfigs
-          await Promise.all([...existingItems.values()]
-            .filter(item => item.preconfig && !preconfigs.find(preconfig => preconfig.meta.name === item.name))
-            .map(item => this.delete(item.name))
-          );
-
-          this.configsManageable$.next(true);
-          resolve();
-        });
-      }).catch(() => {
-        console.warn('configs could not be loaded');
-        const list = preconfigs.map((rawConfig, i) => ({ name: rawConfig.meta.name, preconfig: true, rawConfig, svg: null, sortIndex: i }));
-        this.configItemMap$.next(new Map(list.map(item => [item.name, item])));
-        resolve();
+    try {
+      const db = await this.database();
+      const items = await new Promise<ConfigItem[]>((resolve, reject) => {
+        const request = db.transaction(ConfigManager.DB_TABLE).objectStore(ConfigManager.DB_TABLE).getAll();
+        request.addEventListener('success', () => resolve(request.result));
+        request.addEventListener('error', () => reject(request.error));
       });
-    });
+      const existingItems = new Map(items.map(item => [item.name, item]));
+      this.configItemMap$.next(existingItems);
+      await Promise.all(preconfigs.map((preconfig, index) => {
+        const existing = existingItems.get(preconfig.meta.name);
+        if (!existing || existing.preconfig) { return this.save(preconfig, index, true); }
+      }));
+      await Promise.all(items.filter(item => item.preconfig && !preconfigs.some(config => config.meta.name === item.name))
+        .map(item => this.delete(item.name)));
+      this.configsManageable$.next(true);
+    } catch {
+      console.warn('configs could not be loaded');
+      const items = preconfigs.map((rawConfig, sortIndex) => ({ name: rawConfig.meta.name, preconfig: true, rawConfig, svg: null, sortIndex }));
+      this.configItemMap$.next(new Map(items.map(item => [item.name, item])));
+      this.configsManageable$.next(false);
+    }
   }
 
   select(name?: string, { updateUrl = true, reload = true }: { updateUrl?: boolean; reload?: boolean } = {}) {
@@ -66,8 +55,19 @@ export class ConfigManager {
       if (updateUrl) { this.updateUrl(name); }
       return Promise.resolve();
     }
-    const config = this.configItemMap$.value.get(name ?? '') ?? { rawConfig: { meta: { name: '' }, nodes: [], edges: [] } };
-    return updateUrl ? this.load(config.rawConfig) : configService.setRawConfig(config.rawConfig);
+    const item = this.configItemMap$.value.get(name ?? '');
+    const rawConfig = item?.rawConfig ?? { meta: { name: '' }, nodes: [], edges: [] };
+    return updateUrl
+      ? this.load(rawConfig, { saved: Boolean(item) })
+      : configService.setRawConfig(rawConfig, { saved: Boolean(item) });
+  }
+
+  /** A name that does not collide with any stored drawing, e.g. "name (2)". */
+  uniqueName(name: string): string {
+    const names = this.configItemMap$.value;
+    let candidate = name;
+    for (let suffix = 2; names.has(candidate); suffix++) { candidate = `${name} (${suffix})`; }
+    return candidate;
   }
 
   async reset(name: string) {
@@ -97,36 +97,36 @@ export class ConfigManager {
   }
 
   async save(rawConfig: RawConfig, sortIndex: number, preconfig = false): Promise<ConfigItem> {
-    const name = rawConfig.meta.name;
+    const db = await this.database();
+    const config = await fromRawConfig(rawConfig);
+    const data: ConfigItem = {
+      name: rawConfig.meta.name,
+      rawConfig: toRawConfig(config),
+      svg: renderGraphToSvg(config.graph, 1000, 1000),
+      sortIndex,
+      preconfig,
+    };
     return new Promise((resolve, reject) => {
-      return this.database().then(async (db) => {
-        const config = await fromRawConfig(rawConfig);
-        // re-derive the persisted form from the live config, so it's always normalized to the
-        // current RawConfig shape regardless of what was passed in.
-        const normalizedRawConfig = toRawConfig(config);
-        const svg = renderGraphToSvg(config.graph, 1000, 1000);
-        const transaction = db.transaction([ConfigManager.DB_TABLE], 'readwrite');
-        const objectStore = transaction.objectStore(ConfigManager.DB_TABLE);
-        const data = { name, rawConfig: normalizedRawConfig, svg, sortIndex, preconfig };
-        const putRequest = objectStore.put(data);
-        putRequest.addEventListener('success', () => {
-          const next = new Map(this.configItemMap$.value);
-          next.set(data.name, data);
-          this.configItemMap$.next(next);
-          resolve(data);
-        });
-      }).catch(() => reject());
+      const transaction = db.transaction([ConfigManager.DB_TABLE], 'readwrite');
+      transaction.addEventListener('complete', () => {
+        const next = new Map(this.configItemMap$.value);
+        next.set(data.name, data);
+        this.configItemMap$.next(next);
+        resolve(data);
+      });
+      transaction.addEventListener('abort', () => reject(transaction.error ?? new Error('Save aborted')));
+      transaction.addEventListener('error', () => reject(transaction.error ?? new Error('Save failed')));
+      transaction.objectStore(ConfigManager.DB_TABLE).put(data);
     });
   }
 
-  load(rawConfig: RawConfig): Promise<void> {
+  load(rawConfig: RawConfig, { saved = false }: { saved?: boolean } = {}): Promise<void> {
     this.updateUrl(rawConfig.meta.name);
-    return configService.setRawConfig(rawConfig);
+    return configService.setRawConfig(rawConfig, { saved });
   }
 
   private updateUrl(name: string): void {
     const searchParams = new URLSearchParams(window.location.search);
-    searchParams.delete('id');
     searchParams.set('name', name);
     const newRelativePathQuery = window.location.pathname + '?' + searchParams.toString() + window.location.hash;
     if (newRelativePathQuery !== window.location.pathname + window.location.search + window.location.hash) {
@@ -134,26 +134,15 @@ export class ConfigManager {
     }
   }
 
-  private async database(): Promise<IDBDatabase> {
-    return new Promise((resolve, reject) => {
-      const dbOpenEvent = window.indexedDB.open(ConfigManager.DB_NAME, 1);
-      dbOpenEvent.addEventListener('upgradeneeded', (event: Event) => {
-        const db = (event.target as unknown as { result: IDBDatabase }).result;
-        if (!db.objectStoreNames.contains(ConfigManager.DB_TABLE)) {
-          const objectStore = db.createObjectStore(ConfigManager.DB_TABLE, {
-            autoIncrement: false,
-            keyPath: ConfigManager.DB_KEY,
-          });
-          objectStore.createIndex('sortIndex', 'sortIndex', { unique: true });
-        }
-      });
-      dbOpenEvent.addEventListener('success', (event: Event) => {
-        const db = (event.target as unknown as { result: IDBDatabase }).result as IDBDatabase;
-        resolve(db);
-      });
-      dbOpenEvent.addEventListener('error', (event: Event) => {
-        reject(event);
-      });
+  private database(): Promise<IDBDatabase> {
+    return openDatabase(ConfigManager.DB_NAME, 1, (db) => {
+      if (!db.objectStoreNames.contains(ConfigManager.DB_TABLE)) {
+        const objectStore = db.createObjectStore(ConfigManager.DB_TABLE, {
+          autoIncrement: false,
+          keyPath: ConfigManager.DB_KEY,
+        });
+        objectStore.createIndex('sortIndex', 'sortIndex', { unique: true });
+      }
     });
   }
 }

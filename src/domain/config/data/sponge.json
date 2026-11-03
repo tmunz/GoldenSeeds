@@ -45,14 +45,14 @@
       }
     },
     {
-      "id": "1.grid->render-output.grid",
+      "id": "1.points->render-output.points",
       "from": {
         "nodeId": "1",
-        "port": "grid"
+        "port": "points"
       },
       "to": {
         "nodeId": "render-output",
-        "port": "grid"
+        "port": "points"
       }
     },
     {

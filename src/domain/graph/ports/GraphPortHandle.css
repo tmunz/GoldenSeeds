@@ -1,0 +1,54 @@
+@property --portSweep {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 180deg;
+}
+
+.graph-port-handle {
+  width: calc(14px * var(--portScale, 1));
+  height: calc(14px * var(--portScale, 1));
+  min-width: calc(14px * var(--portScale, 1));
+  min-height: calc(14px * var(--portScale, 1));
+  border: none;
+  background: transparent;
+  transition: opacity 0.15s, box-shadow 0.15s;
+
+  /* Sweep the visible sector around the center while preserving the full hit area. */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-sizing: border-box;
+    border: calc(2px * var(--portScale, 1)) solid rgb(var(--graphNodeBackground));
+    border-radius: 50% !important;
+    background: var(--portColor);
+    box-shadow: 0 0 0 calc(1px * var(--portScale, 1)) var(--graphNodeBorder);
+    pointer-events: none;
+    mask-image: conic-gradient(from var(--portStart, 0deg), #000 0deg var(--portSweep), transparent var(--portSweep) 360deg);
+    transition: --portSweep 800ms var(--motionEase);
+  }
+
+  &.target::before {
+    --portStart: 180deg;
+  }
+
+  &.port-connected::before {
+    --portSweep: 360deg;
+  }
+
+  &.port-compatible {
+    opacity: 1;
+    outline: calc(2px * var(--portScale, 1)) solid var(--accentColor);
+    outline-offset: calc(3px * var(--portScale, 1));
+    box-shadow: 0 0 calc(12px * var(--portScale, 1)) var(--accentColor);
+  }
+
+  &.port-incompatible {
+    opacity: 0.2;
+  }
+
+  &.port-origin {
+    outline: calc(2px * var(--portScale, 1)) solid var(--actionColor);
+    outline-offset: calc(2px * var(--portScale, 1));
+  }
+}

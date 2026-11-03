@@ -1,44 +1,41 @@
 .animated-button {
   position: relative;
-  display: inline-block;
-  padding: 5px;
-  margin-top: 10px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  box-sizing: border-box;
+  min-width: 44px;
+  min-height: 48px;
+  padding: 8px 6px;
+  margin: 8px 0 0;
+  vertical-align: middle;
+  transition: color var(--motionDuration), opacity var(--motionDuration), transform var(--motionDuration) var(--motionEase);
 
-  &:hover {
-    cursor: pointer;
-
-    .tooltip {
-      opacity: 1;
-    }
-
-    .icon {
-      stroke: var(--accentColor);
-    }
-  }
-
+  .button-icon { position: relative; display: inline-flex; flex-shrink: 0; }
+  .animated-icon { width: 22px; height: 22px; flex-shrink: 0; }
+  .icon-text { order: 1; font-size: 9px; line-height: 1.4; letter-spacing: 1px; }
   .tooltip {
     position: absolute;
-    text-align: center;
-    margin: auto;
+    z-index: 10;
+    bottom: calc(100% + 4px);
     left: 50%;
-    transform: translateX(-50%);
-    top: -10px;
+    padding: 4px 6px;
+    background: rgb(var(--backgroundColor));
+    transform: translate(-50%, 4px);
     opacity: 0;
-    transition: opacity .8s;
+    visibility: hidden;
+    pointer-events: none;
+    white-space: nowrap;
     font-size: 10px;
+    transition: opacity var(--motionDuration), transform var(--motionDuration) var(--motionEase), visibility var(--motionDuration);
   }
-
-  .icon-text {
-    position: absolute;
-    text-align: center;
-    font-size: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 0;
+  &:is(:hover, :focus-visible):not(:disabled) {
+    color: var(--accentColor);
+    .tooltip { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+    .icon { stroke: var(--accentColor); }
   }
-
-  .animated-icon {
-    width: 20px;
-    height: 20px;
-  }
+  &:active:not(:disabled) { transform: translateY(2px); }
+  &:disabled { opacity: .3; cursor: default; }
 }

@@ -19,7 +19,7 @@ export function AnimatedIcon(props: Props) {
       setIndex(props.index);
       const elem = refs.current[props.index];
       if (elem) {
-        (elem as unknown as { beginElement: () => void }).beginElement();
+        (elem as unknown as { beginElement?: () => void }).beginElement?.();
       }
     }
   }, [setIndex, index, props.index, refs]);
@@ -29,10 +29,10 @@ export function AnimatedIcon(props: Props) {
   };
 
   return (
-    <svg viewBox="0 0 100 100" className="animated-icon">
+    <svg viewBox="0 0 100 100" className="animated-icon" aria-hidden="true" focusable="false">
       <polyline
         className="icon"
-        points={toPath(props.points[0])}
+        points={toPath(props.points[props.index])}
         transform={`rotate(${props.rotation ? props.rotation : 0} 50 50)`}
         vectorEffect="non-scaling-stroke"
       >
@@ -42,7 +42,7 @@ export function AnimatedIcon(props: Props) {
             begin="indefinite"
             fill="freeze"
             attributeName="points"
-            dur={`${DURATION}ms`}
+            dur={`${window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 1 : DURATION}ms`}
             ref={e => refs.current[i] = e}
             to={toPath(points)}
           />

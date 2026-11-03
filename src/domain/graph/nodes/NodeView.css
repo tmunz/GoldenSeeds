@@ -1,0 +1,147 @@
+.node {
+  --textColor: var(--graphNodeText);
+  --textColorAlt: var(--graphNodeMuted);
+  position: relative;
+  box-sizing: border-box;
+  min-width: 240px;
+  border: 1px solid var(--graphNodeBorder);
+  transition: border-color var(--motionDuration), background-color var(--motionDuration), box-shadow var(--motionDuration);
+  background: rgb(var(--graphNodeBackground));
+  color: var(--textColor);
+  font-family: var(--uiFontFamily);
+  font-size: 13px;
+  font-weight: var(--uiFontWeight);
+  letter-spacing: var(--uiLetterSpacing);
+  line-height: 1.5;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 18%);
+
+  .node-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 32px;
+    padding: 8px 12px 8px 16px;
+    border-bottom: 1px solid var(--graphNodeDivider);
+    cursor: grab;
+  }
+
+  .node-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--actionColor);
+    font-size: 16px;
+    font-weight: var(--uiHeadingWeight);
+    letter-spacing: var(--uiLetterSpacing);
+    text-transform: lowercase;
+  }
+
+  .node-header-actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 4px;
+  }
+
+  .node-delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    box-sizing: border-box;
+
+    svg { width: 18px; height: 18px; }
+
+    &:hover { color: var(--errorColor); }
+  }
+
+  .node-collapse {
+    flex-shrink: 0;
+    min-width: 32px;
+    min-height: 32px;
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    padding: 4px;
+  }
+
+  .node-body {
+    box-sizing: border-box;
+    padding: 12px;
+  }
+
+  .node-output-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -1px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.node-ports {
+  --nodePortRowHeight: calc(3em + 12px);
+  width: 380px;
+
+  .node-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 100px;
+    gap: 12px;
+    padding: 12px 0;
+  }
+
+  .node-inputs,
+  .node-input-group,
+  .node-outputs {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .node-inputs {
+    gap: 16px;
+  }
+
+  .node-input-group>.input-port {
+    box-sizing: border-box;
+    padding: 4px 0 4px 16px;
+    min-height: var(--nodePortRowHeight);
+  }
+
+  .node-outputs {
+    align-items: stretch;
+    gap: 0;
+    border-left: 1px solid var(--graphNodeDivider);
+
+  }
+
+  .node-port {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: var(--nodePortRowHeight);
+    padding: 0 12px 0 0;
+    letter-spacing: inherit;
+    text-align: right;
+
+    .node-port-label {
+      padding-left: 0;
+      overflow-wrap: anywhere;
+    }
+  }
+}
+
+.react-flow__node.selected>.node {
+  border-color: var(--accentColor);
+  box-shadow: 0 0 0 1px var(--accentColor), 0 4px 16px rgb(0 0 0 / 18%);
+}
+
+.node:focus-within { border-color: var(--accentColor); }
+.node h3 { color: var(--textColorAlt); font-size: 11px; font-weight: var(--uiHeadingWeight); letter-spacing: var(--uiLetterSpacing); margin: 0 0 4px 16px; text-transform: uppercase; }
+

@@ -1,0 +1,96 @@
+.input-port {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  white-space: nowrap;
+
+  &.input-port-editable {
+    align-self: stretch;
+    min-width: 0;
+  }
+
+  .input-port-content {
+    flex: 1;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+
+    .parameter-editor {
+      width: 100%;
+    }
+  }
+
+  /* Both states share one grid cell, reserving the editor's height when connected. */
+  .input-port-editor,
+  .input-port-preview {
+    grid-area: 1 / 1;
+    min-width: 0;
+  }
+
+  .input-port-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .input-port-hidden {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .input-port-label {
+    color: var(--textColorAlt);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .input-port-value {
+    /* Empty root inputs reserve the same value line as connected inputs. */
+    min-height: 1.5em;
+    color: var(--textColor);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    letter-spacing: 0;
+  }
+
+  .input-port-value-default {
+    color: var(--graphNodePlaceholder);
+  }
+
+  .input-port-color {
+    display: inline-block;
+    width: 28px;
+    height: 1em;
+    vertical-align: middle;
+    border: 1px solid var(--textColorAlt);
+    box-sizing: border-box;
+    background: repeating-conic-gradient(#777 0% 25%, #bbb 0% 50%) 0 / 6px 6px;
+
+    > span {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &.input-port-default .input-port-editor {
+    input[type="text"]:not(.invalid),
+    select {
+      color: var(--graphNodePlaceholder);
+    }
+  }
+
+  &.input-incompatible .input-port-content {
+    opacity: 0.35;
+  }
+
+  &.input-compatible .input-port-label {
+    color: var(--accentColor);
+  }
+}
+

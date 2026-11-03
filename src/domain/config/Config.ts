@@ -1,5 +1,5 @@
-import { Graph } from '../graph/Graph';
-import { GraphLayout } from '../graph/GraphLayout';
+import { Graph } from '../graph/model/Graph';
+import { GraphLayout } from '../graph/model/GraphLayout';
 
 export interface Config {
   meta: { name: string };

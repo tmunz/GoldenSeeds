@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from '../../../i18n/I18n';
 import { Color } from '../../../datatypes/Color';
 import { CarouselSelector } from '../../CarouselSelector';
 import { ColorInputChannels } from './ColorInputChannels';
@@ -16,6 +17,7 @@ export function ColorInput(props: {
   label?: string;
   alphaDisabled?: boolean;
 }) {
+  const { t } = useTranslation();
 
   const COLOR_MODES: ColorMode[] = ['rgb', 'hsl', 'select', 'random'];
   const INITIAL_COLOR_MODE = COLOR_MODES[0];
@@ -44,7 +46,7 @@ export function ColorInput(props: {
     }
   }
 
-  return <div className="color-input polaroid">
+  return <div className={'color-input polaroid'}>
     <div className="color-input-label">{props.label}</div>
     <div
       className={`color-input-main polaroid-picture${color.isValid() ? '' : ' color-input-invalid'}`}
@@ -71,7 +73,9 @@ export function ColorInput(props: {
       />}
     </div>
     <CarouselSelector
-      items={COLOR_MODES.map(c => ({ name: c.toString(), svg: null }))}
+      className="carousel-compact"
+      itemLabel={t('color.mode')}
+      items={COLOR_MODES.map(c => ({ name: c, label: t(`color.modes.${c}`), svg: null }))}
       selected={colorMode ?? undefined}
       select={(c) => setColorMode(c as ColorMode)}
     />

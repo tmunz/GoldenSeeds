@@ -8,8 +8,8 @@
     box-sizing: border-box;
     display: grid;
     grid-template-rows: minmax(0, 1fr) auto;
-    gap: 48px;
-    padding: 48px 0;
+    gap: 24px;
+    padding: 16px 0 32px;
 
 
     .selection-overview {
@@ -21,7 +21,8 @@
 
       .carousel-selector {
         display: grid;
-        grid-template-columns: 60px minmax(0, 1fr) 60px;
+        --carousel-control-size: clamp(44px, 12cqw, 60px);
+        grid-template-columns: var(--carousel-control-size) minmax(0, 1fr) var(--carousel-control-size);
         grid-template-rows: minmax(0, 1fr);
         align-items: stretch;
         min-width: 0;
@@ -34,14 +35,14 @@
 
           .animated-button {
             box-sizing: border-box;
-            width: 60px;
+            width: 100%;
             height: 60px;
-            padding: 10px;
+            padding: 6px;
             margin: 0;
 
             .animated-icon {
-              width: 40px;
-              height: 40px;
+              width: clamp(22px, 8cqw, 40px);
+              height: clamp(22px, 8cqw, 40px);
             }
           }
         }
@@ -102,23 +103,6 @@
           font-size: 11px;
         }
       }
-    }
-  }
-}
-
-@container selection-carousel (max-width: 360px) {
-  .select-column .selection-overview .carousel-selector {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: minmax(0, 1fr) 60px;
-
-    .carousel-overview {
-      grid-column: 1 / -1;
-      grid-row: 1;
-    }
-
-    &>.carousel-prev,
-    &>.carousel-next {
-      grid-row: 2;
     }
   }
 }
