@@ -2,8 +2,48 @@ import { fromRawConfig, toRawConfig } from './GraphSerializer';
 import { RENDER_NODE_ID } from '../nodes/render/RenderNode';
 import { paramPortId } from '../parameters/ParamPorts';
 import { graphEvaluator } from './GraphEvaluator';
+import { graphNodeWidth, GRAPH_RIGHT_MARGIN, NODE_GRID_SIZE } from '../model/GraphLayout';
 
 describe('GraphSerializer', () => {
+  test('loads saved positions on the grid to the left of the output and stays stable on reload', async () => {
+    const raw = {
+      meta: { name: 'saved positions' },
+      nodes: [{ id: 'generator', kind: 'cartesian' }, { id: 'number', kind: 'value:number', value: '7' }],
+      edges: [],
+      layout: { generator: { x: 555.78, y: 53.8 }, number: { x: 315.98, y: 52.5 }, 'render-output': { x: 9000, y: 1000 } },
+    };
+    const config = await fromRawConfig(raw);
+    expect(config.layout).toEqual({ generator: { x: -420, y: 60 }, number: { x: -660, y: 60 } });
+    expect((await fromRawConfig(toRawConfig(config))).layout).toEqual(config.layout);
+    expect(raw.layout.generator).toEqual({ x: 555.78, y: 53.8 });
+  });
+
+  test('positions nodes without a saved layout inside the right edge', async () => {
+    const config = await fromRawConfig({
+      meta: { name: 'no layout' }, nodes: [{ id: 'number', kind: 'value:number', value: '1' }], edges: [],
+    });
+    expect(config.layout.number).toEqual({ x: -280, y: 0 });
+  });
+
+  test('every preset is already on the snap grid and aligned with the right margin', () => {
+    // Include inactive presets too, so enabling one preserves the same coordinate system.
+    const fs = require('fs');
+    const path = require('path');
+    const directory = path.resolve(__dirname, '../../config/data');
+    fs.readdirSync(directory).filter((file: string) => file.endsWith('.json')).forEach((file: string) => {
+      const raw = JSON.parse(fs.readFileSync(path.join(directory, file), 'utf8'));
+      const nodes = raw.nodes.filter((node: { kind: string }) => node.kind !== 'render');
+      const right = Math.max(...nodes.map((node: { id: string; kind: string }) => {
+        const { x, y } = raw.layout[node.id];
+        expect(Number.isInteger(x / NODE_GRID_SIZE)).toBe(true);
+        expect(Number.isInteger(y / NODE_GRID_SIZE)).toBe(true);
+        return x + graphNodeWidth(node.kind);
+      }));
+      expect(right).toBeLessThanOrEqual(-GRAPH_RIGHT_MARGIN);
+      expect(right).toBeGreaterThan(-GRAPH_RIGHT_MARGIN - NODE_GRID_SIZE);
+    });
+  });
+
   test('loads current points connections and generator parameters without rewriting them', async () => {
     const raw = {
       meta: { name: 'points' },

@@ -6,6 +6,7 @@ import { NumberState } from './NumberState';
 import { ParameterState } from './ParameterState';
 import { StringState } from './StringState';
 import { DistributionState } from './DistributionState';
+import { PointsState } from './PointsState';
 
 export async function createParameterState(type: ParamDefinitionType, textValue: string): Promise<ParameterState<unknown, unknown>> {
   let state: ParameterState<unknown, unknown> | null = null;
@@ -14,6 +15,7 @@ export async function createParameterState(type: ParamDefinitionType, textValue:
   case 'distribution': state = new DistributionState(); break;
   case 'expression': state = new ExpressionState(); break;
   case 'number': state = new NumberState(); break;
+  case 'points': state = new PointsState(); break;
   case 'font': state = new FontState(); break;
   case 'selection':
   case 'string':

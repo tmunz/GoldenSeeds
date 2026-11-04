@@ -3,6 +3,7 @@ import { parameterOverrides } from '../parameters/GeneratorParameters';
 import { Config } from '../../config/Config';
 import { RawConfig, RawGraphNode } from '../../config/RawConfig';
 import { GraphNode } from '../model/GraphNode';
+import { alignGraphLayout } from '../model/GraphLayout';
 import { generatorNodeRegistry } from '../nodes/generator/GeneratorNodeRegistry';
 import { valueNodeRegistry, VALUE_KIND_PREFIX, ValueNodeConfig } from '../nodes/value/ValueNodeRegistry';
 import { createRenderNode, ensureRenderNode, RENDER_NODE_KIND } from '../nodes/render/RenderNode';
@@ -13,7 +14,7 @@ export async function fromRawConfig(rawConfig: RawConfig): Promise<Config> {
   const nodes: GraphNode[] = await Promise.all(rawConfig.nodes.map((n) => nodeFromRaw(n)));
   const graph = ensureRenderNode({ nodes, edges: rawConfig.edges });
 
-  return { meta: rawConfig.meta, graph, layout: rawConfig.layout ?? {} };
+  return { meta: rawConfig.meta, graph, layout: alignGraphLayout(graph.nodes, rawConfig.layout) };
 }
 
 /** Converts a live Config back into its persisted RawConfig form. */

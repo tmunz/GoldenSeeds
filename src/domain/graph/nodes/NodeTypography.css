@@ -1,0 +1,7 @@
+.node .node-title,
+.node-palette .node-palette-group >button {
+  font-family: var(--uiFontFamily);
+  font-weight: var(--uiHeadingWeight);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}

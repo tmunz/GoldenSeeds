@@ -33,7 +33,7 @@ export class Voronoi {
 
   private createSiteQueue(points: number[][]): Queue<Site> {
     const limitPrecision = (n: number) => Math.floor(n / PointUtils.TOLERANCE) * PointUtils.TOLERANCE;
-    const cleanedSites = points
+    const cleanedSites = [...points]
       .sort((a, b) => (b[1] - a[1] ? b[1] - a[1] : b[0] - a[0]))
       .map((p, id) => ({ point: [limitPrecision(p[0]), limitPrecision(p[1])], id }))
       .reduce(

@@ -8,6 +8,7 @@ jest.mock('../../../ui/input/Input.css', () => ({}));
 jest.mock('../../../ui/input/ExtendedRangeInput.css', () => ({}));
 jest.mock('../../../ui/input/RangeInput.css', () => ({}));
 jest.mock('../../../ui/input/TextInput.css', () => ({}));
+jest.mock('../../../ui/input/TextAreaInput.css', () => ({}));
 jest.mock('../../../ui/input/color/ColorInput', () => ({ ColorInput: () => null }));
 jest.mock('../../animation/NumberAnimationControls', () => ({ NumberAnimationControls: () => null }));
 
@@ -53,4 +54,14 @@ test('a stored formula that does not work is flagged as invalid immediately', ()
     definition={{ type: 'expression', initial: '1' }} onChange={() => true} />);
   expect(render('n * 2')).not.toContain('range-invalid');
   expect(render('n *')).toContain('range-invalid');
+});
+
+test('points use a multiline value field with a coordinate example and input help', () => {
+  const html = renderToStaticMarkup(<ParameterEditor label="value" value="[1,1], [2,2], [3,5.6]"
+    definition={{ type: 'points', initial: '[0,0]' }} onChange={() => true} />);
+  expect(html).toContain('<textarea');
+  expect(html).toContain('rows="4"');
+  expect(html).toContain('placeholder="[1,1], [2,2], [3,5.6]"');
+  expect(html).toContain('>[1,1], [2,2], [3,5.6]</textarea>');
+  expect(html).toContain('Each point needs two finite numbers');
 });

@@ -176,40 +176,40 @@
   ],
   "layout": {
     "stage-0": {
-      "x": 316.48,
-      "y": 5.04
+      "x": -900,
+      "y": 0
     },
     "stage-0:plot.items": {
-      "x": 0.0,
-      "y": 0.0
+      "x": -1220,
+      "y": 0
     },
     "stage-0:plot.functionX": {
-      "x": 0.26,
-      "y": 114.06
+      "x": -1220,
+      "y": 120
     },
     "stage-0:plot.functionY": {
-      "x": 2.05,
-      "y": 230.45
+      "x": -1220,
+      "y": 240
     },
     "stage-1": {
-      "x": 799.93,
-      "y": 307.85
+      "x": -420,
+      "y": 300
     },
     "stage-1:style.strokeColor": {
-      "x": 477.75,
-      "y": 285.28
+      "x": -740,
+      "y": 280
     },
     "stage-1:shape.cutRatio1": {
-      "x": 444.78,
-      "y": 547.45
+      "x": -780,
+      "y": 540
     },
     "stage-1:transformation.angle": {
-      "x": 443.25,
-      "y": 660.08
+      "x": -780,
+      "y": 660
     },
     "stage-1:transformation.size": {
-      "x": 445.25,
-      "y": 769.72
+      "x": -780,
+      "y": 760
     }
   }
 }

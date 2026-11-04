@@ -22,7 +22,7 @@ export function ValueNodeView({ id, data, selected, deletable }: NodeProps<FlowN
   const definition = data.definition ?? DEFAULT_VALUE_DEFINITIONS[type];
   const outputPort = graphNode.outputs[0];
   return (
-    <NodeView id={id} connectedInputPorts={data.connectedInputPorts} title={t(`ports.${type}`, {}, type)}
+    <NodeView id={id} kind={graphNode.kind} connectedInputPorts={data.connectedInputPorts} title={t(`ports.${type}`, {}, type)}
       selected={selected} onDelete={deletable && data.onDelete ? () => data.onDelete?.(id) : undefined}
       width={type === 'color' || type === 'font' ? 176 : undefined} output={outputPort && (
         <GraphPortHandle direction="source" id={outputPort.id} portType={outputPort.type} guidance={data.portGuidance?.outputs[outputPort.id]} />

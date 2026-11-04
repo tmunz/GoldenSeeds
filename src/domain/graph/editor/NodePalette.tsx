@@ -3,7 +3,7 @@ import { useTranslation } from '../../../i18n/I18n';
 import { Panel, useReactFlow, useStore } from '@xyflow/react';
 
 import { GraphNode } from '../model/GraphNode';
-import { GraphPosition } from '../model/GraphLayout';
+import { GraphPosition, graphNodeWidth } from '../model/GraphLayout';
 import { ParamDefinitionType } from '../../generator/SvgGenerator';
 import { generatorNodeRegistry } from '../nodes/generator/GeneratorNodeRegistry';
 import { RENDER_NODE_ID } from '../nodes/render/RenderNode';
@@ -11,10 +11,11 @@ import { findFreeNodePosition } from './GraphPlacement';
 import { newNodeId } from './NodeInsertion';
 import { GeneratorNodeConfig } from '../nodes/generator/GeneratorNode';
 import { valueNodeRegistry, DEFAULT_VALUE_DEFINITIONS } from '../nodes/value/ValueNodeRegistry';
+import { NodeTypeIcon } from '../../../ui/icon/NodeType';
 
 import './NodePalette.css';
 
-const VALUE_KINDS: ParamDefinitionType[] = ['number', 'expression', 'distribution', 'color', 'string', 'font'];
+const VALUE_KINDS: ParamDefinitionType[] = ['number', 'expression', 'points', 'distribution', 'color', 'string', 'font'];
 
 export interface NodePaletteProps {
   onAdd: (node: GraphNode, position: GraphPosition) => void;
@@ -57,8 +58,7 @@ export function NodePalette({ onAdd }: NodePaletteProps) {
     const { x, y, zoom } = getViewport();
     const generator = (node.config as Partial<GeneratorNodeConfig> | undefined)?.generator;
     const parameterCount = generator ? Object.values(generator.definition).reduce((count, group) => count + Object.keys(group).length, 0) : 0;
-    const compact = node.kind === 'value:color' || node.kind === 'value:font';
-    const size = { width: generator ? 380 : compact ? 176 : 240, height: generator ? 400 + parameterCount * 80 : 480 };
+    const size = { width: graphNodeWidth(node.kind), height: generator ? 400 + parameterCount * 80 : 480 };
     const preferred = {
       x: (width / 2 - x) / zoom - size.width / 2,
       y: (Math.max(120, height / 3) - y) / zoom,
@@ -128,13 +128,19 @@ export function NodePalette({ onAdd }: NodePaletteProps) {
             <section className="node-palette-group" aria-label={t('graph.values')}>
               <h3>{t('graph.value')}</h3>
               {VALUE_KINDS.map(kind => (
-                <button key={kind} type="button" disabled={busy} onClick={() => add(kind, 'value')}>{t(`ports.${kind}`, {}, kind)}</button>
+                <button key={kind} type="button" disabled={busy} onClick={() => add(kind, 'value')}>
+                  <NodeTypeIcon kind={`value:${kind}`} />
+                  <span>{t(`ports.${kind}`, {}, kind)}</span>
+                </button>
               ))}
             </section>
             <section className="node-palette-group" aria-label={t('graph.generators')}>
               <h3>{t('graph.generator')}</h3>
               {generatorNodeRegistry.kinds.map(kind => (
-                <button key={kind} type="button" disabled={busy} onClick={() => add(kind, 'generator')}>{t(`generators.${kind}`, {}, kind)}</button>
+                <button key={kind} type="button" disabled={busy} onClick={() => add(kind, 'generator')}>
+                  <NodeTypeIcon kind={kind} />
+                  <span>{t(`generators.${kind}`, {}, kind)}</span>
+                </button>
               ))}
             </section>
           </div>

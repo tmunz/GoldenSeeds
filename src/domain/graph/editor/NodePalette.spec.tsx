@@ -46,8 +46,14 @@ test('new nodes avoid occupied positions near the visible viewport', async () =>
 });
 
 
+function visibleText(node: React.ReactNode): string {
+  if (typeof node === 'string' || typeof node === 'number') { return String(node); }
+  if (!React.isValidElement(node)) { return ''; }
+  return React.Children.toArray(node.props.children).map(visibleText).join('');
+}
+
 function findButton(element: React.ReactElement, label: string): React.ReactElement {
-  if (element.type === 'button' && (element.props.children === label || element.props['aria-label'] === label)) { return element; }
+  if (element.type === 'button' && (visibleText(element) === label || element.props['aria-label'] === label)) { return element; }
   for (const child of React.Children.toArray(element.props.children)) {
     if (!React.isValidElement(child)) { continue; }
     const found = findButton(child, label);
@@ -61,7 +67,7 @@ test('offers generator and value nodes directly beside a collapsed plus control'
   const panel = NodePalette({ onAdd });
   expect(findButton(panel, 'Add node').props['aria-expanded']).toBe(false);
   expect(findButton(panel, 'shape')).toBeDefined();
-  for (const kind of ['number', 'expression', 'distribution', 'color', 'string', 'font']) {
+  for (const kind of ['number', 'expression', 'distribution', 'color', 'string', 'font', 'Points']) {
     expect(findButton(panel, kind)).toBeDefined();
   }
   await findButton(panel, 'number').props.onClick();

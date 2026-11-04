@@ -1,5 +1,6 @@
 export const en = {
-  'expression.help': 'Enter a JavaScript formula, such as n * 2, or a constant number.\n\nVariables: n = current index or position; items = total item count. In applicable shape inputs, i = point index and itemSize = shape size. Their availability depends on the connected input.\n\nConstants: goldenRatio ≈ 1.618, Math.PI ≈ 3.142, Math.E ≈ 2.718.\n\nFunctions: fib(n) for Fibonacci numbers; Math.sin(n), Math.cos(n), Math.sqrt(n), Math.pow(n, 2), Math.abs(n), Math.min(n, items), Math.max(n, items). Trigonometric functions use radians.\n\nExample: n * 360 / goldenRatio',
+  'expression.help': 'Enter a JavaScript formula, such as n * 2, or a constant number.\n\nVariables: n = current index; items = total item count. In applicable shape inputs, i = point index and itemSize = shape size. Their availability depends on the connected input.\n\nConstants: goldenRatio ≈ 1.618, Math.PI ≈ 3.142, Math.E ≈ 2.718.\n\nFunctions: fib(n) for Fibonacci numbers; Math.sin(n), Math.cos(n), Math.sqrt(n), Math.pow(n, 2), Math.abs(n), Math.min(n, items), Math.max(n, items). Trigonometric functions use radians.\n\nExample: n * 360 / goldenRatio',
+  'points.help': 'Enter [x,y] pairs separated by commas, e.g. [1,1.1], [2,5]. A full array such as [[1,1],[2,2]] is also accepted. Each point needs two finite numbers. Use [] for no points.',
   'fields.value': 'value',
   'ports.points': 'Points',
   'ports.svg': 'Drawing',

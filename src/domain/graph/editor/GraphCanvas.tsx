@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useDeferredValue, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { forwardRef, useCallback, useDeferredValue, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from '../../../i18n/I18n';
 import {
   ReactFlow,
@@ -26,7 +26,7 @@ import { DISTRIBUTION_DEFINITION, ProbabilityDistribution } from '../../../datat
 import { Graph } from '../model/Graph';
 import { GraphEdge } from '../model/GraphEdge';
 import { GraphNode } from '../model/GraphNode';
-import { GraphLayout, GraphPosition, DEFAULT_VIEWPORT } from '../model/GraphLayout';
+import { GraphLayout, GraphPosition, DEFAULT_VIEWPORT, NODE_GRID_SIZE } from '../model/GraphLayout';
 import { PortValue } from '../model/PortValue';
 import { GeneratorNodeView } from '../nodes/generator/GeneratorNodeView';
 import { RenderNodeView } from '../nodes/render/RenderNodeView';
@@ -61,7 +61,6 @@ const nodeTypes = { [GRAPH_NODE_TYPE]: GeneratorNodeView, [RENDER_FLOW_NODE_TYPE
 const edgeTypes = { connection: ConnectionEdge };
 const defaultEdgeOptions = { type: 'connection' };
 const MINI_VIEW_SIZE = { width: 200, height: 150 };
-const NODE_GRID_SIZE = 20;
 const NODE_SNAP_GRID: [number, number] = [NODE_GRID_SIZE, NODE_GRID_SIZE];
 const BACKGROUND_DOT_SIZE = 1;
 // React Flow centers the pattern tile; offset it so dot centers land on snap coordinates.
@@ -124,13 +123,24 @@ interface GraphSnapshot {
 
 const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(function GraphCanvasContent({ graph, animation, layout = {}, showResultPreview = true, onGraphChange, onHistoryChange }, ref) {
   const { t } = useTranslation();
-  const { fitView, getNodes } = useReactFlow();
+  const { fitView, getNodes, getViewport, setViewport } = useReactFlow();
   const connectionStart = useConnection(state => state.fromHandle);
   const pendingFocusRef = useRef<string | null>(null);
   const [viewportX, viewportY, zoom] = useStore((state) => state.transform);
   const width = useStore((state) => state.width);
   const height = useStore((state) => state.height);
   const [snapToGrid, setSnapToGrid] = useState(true);
+  const previousWidthRef = useRef(width);
+
+  useLayoutEffect(() => {
+    const previousWidth = previousWidthRef.current;
+    previousWidthRef.current = width;
+    if (width <= 0 || previousWidth === width) { return; }
+    // Keep graph content the same distance from the right edge as the editor resizes.
+    // Viewport translation uses screen pixels, so this also works at every zoom level.
+    const viewport = getViewport();
+    void setViewport({ ...viewport, x: viewport.x + width - previousWidth }, { duration: 0 });
+  }, [width, getViewport, setViewport]);
 
   const [nodes, setNodes] = useState<FlowNode[]>(() => graphToFlowNodes(ensureRenderNode(graph), layout));
   const [edges, setEdges] = useState(() => graphToFlowEdges(ensureRenderNode(graph)));
@@ -165,10 +175,11 @@ const GraphCanvasContent = forwardRef<GraphCanvasHandle, GraphCanvasProps>(funct
     setNodes(graphToFlowNodes(nextGraph, layout));
     setCollapsedByNode({});
     setEdges(graphToFlowEdges(nextGraph));
+    void setViewport({ ...DEFAULT_VIEWPORT, x: width });
     setHistory({ past: [], future: [] });
     dragSnapshotRef.current = null;
     lastEditedValueNodeRef.current = null;
-  }, [graph, layout]);
+  }, [graph, layout, width, setViewport]);
 
   const pushHistory = useCallback((snapshot: GraphSnapshot) => {
     setHistory((h) => ({ past: [...h.past, snapshot], future: [] }));

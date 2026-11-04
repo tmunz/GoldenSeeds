@@ -23,7 +23,7 @@ test('edits are dirty and undoing to the saved content restores Saved', async ()
     ? editGraphNode(node, { kind: 'value', text: '2' }) : node);
   service.setGraph({ ...original.graph, nodes }, original.layout);
   expect(service.saveState$.value).toBe('unsaved');
-  service.setGraph(original.graph, { number: { x: 0, y: 0 }, 'render-output': { x: 999, y: 999 } });
+  service.setGraph(original.graph, { ...original.layout, 'render-output': { x: 999, y: 999 } });
   expect(service.saveState$.value).toBe('saved');
 });
 

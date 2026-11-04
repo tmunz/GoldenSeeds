@@ -21,6 +21,7 @@ export function valueNodeKind(type: ParamDefinitionType): string {
  * param port the node is connected to, instead of persisting it on the node itself).
  */
 export const DEFAULT_VALUE_DEFINITIONS: Record<ParamDefinitionType, ParamDefinition> = {
+  points: { initial: '[0, 0]', type: 'points' },
   number: { initial: '0', type: 'number', min: 0, max: 100, step: 1 },
   expression: { initial: '() => 1', type: 'expression', min: -10, max: 10, step: 0.1 },
   distribution: { initial: DEFAULT_DISTRIBUTION_TEXT, type: 'distribution' },

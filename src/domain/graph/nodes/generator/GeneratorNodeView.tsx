@@ -15,7 +15,7 @@ export function GeneratorNodeView({ id, data, selected, deletable }: NodeProps<F
   const { graphNode } = data;
   const config = graphNode.config;
   return (
-    <NodeView id={id} title={t(`generators.${graphNode.kind}`, {}, graphNode.kind)} layout="ports" collapsible collapsed={data.collapsed}
+    <NodeView id={id} kind={graphNode.kind} title={t(`generators.${graphNode.kind}`, {}, graphNode.kind)} layout="ports" collapsible collapsed={data.collapsed}
       selected={selected} onDelete={deletable && data.onDelete ? () => data.onDelete?.(id) : undefined}
       onCollapseChange={(collapsed) => data.onCollapseChange?.(id, collapsed)} connectedInputPorts={data.connectedInputPorts}
       portGuidance={data.portGuidance}>

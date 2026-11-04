@@ -1,7 +1,8 @@
 import { en } from './en';
 
 export const de: Record<keyof typeof en, string> = {
-  'expression.help': 'Gib eine JavaScript-Formel wie n * 2 oder eine konstante Zahl ein.\n\nVariablen: n = aktueller Index oder aktuelle Position; items = Gesamtanzahl der Elemente. In passenden Form-Eingängen gilt: i = Punktindex und itemSize = Formgröße. Ihre Verfügbarkeit hängt vom verbundenen Eingang ab.\n\nKonstanten: goldenRatio ≈ 1,618, Math.PI ≈ 3,142, Math.E ≈ 2,718.\n\nFunktionen: fib(n) für Fibonacci-Zahlen; Math.sin(n), Math.cos(n), Math.sqrt(n), Math.pow(n, 2), Math.abs(n), Math.min(n, items), Math.max(n, items). Winkelfunktionen verwenden das Bogenmaß.\n\nBeispiel: n * 360 / goldenRatio',
+  'expression.help': 'Gib eine JavaScript-Formel wie n * 2 oder eine konstante Zahl ein.\n\nVariablen: n = aktueller Index; items = Gesamtanzahl der Elemente. In passenden Form-Eingängen gilt: i = Punktindex und itemSize = Formgröße. Ihre Verfügbarkeit hängt vom verbundenen Eingang ab.\n\nKonstanten: goldenRatio ≈ 1,618, Math.PI ≈ 3,142, Math.E ≈ 2,718.\n\nFunktionen: fib(n) für Fibonacci-Zahlen; Math.sin(n), Math.cos(n), Math.sqrt(n), Math.pow(n, 2), Math.abs(n), Math.min(n, items), Math.max(n, items). Winkelfunktionen verwenden das Bogenmaß.\n\nBeispiel: n * 360 / goldenRatio',
+  'points.help': 'Gib [x,y]-Paare durch Kommas getrennt ein, z. B. [1,1.1], [2,5]. Ein vollständiges Array wie [[1,1],[2,2]] ist ebenfalls möglich. Jeder Punkt benötigt zwei endliche Zahlen. Verwende [] für keine Punkte. Dezimalzahlen werden mit einem Punkt geschrieben.',
   'fields.value': 'Wert',
   'ports.points': 'Punkte',
   'ports.svg': 'Zeichnung',

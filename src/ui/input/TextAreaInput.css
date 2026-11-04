@@ -1,0 +1,32 @@
+.textarea-input.input {
+  >label {
+    position: static;
+    display: block;
+    margin-bottom: 4px;
+    transform: none;
+  }
+
+  >textarea {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 84px;
+    padding: 4px 0;
+    resize: vertical;
+    font: inherit;
+    letter-spacing: inherit;
+    line-height: 1.5;
+    color: var(--actionColor);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--textColorAlt);
+    outline: none;
+
+    &::placeholder { color: var(--graphNodePlaceholder, var(--textColorAlt)); }
+    &:focus { border-bottom-color: var(--accentColor); }
+    &.invalid { border-bottom-color: var(--errorColor); }
+  }
+
+  &:focus-within >label { color: var(--accentColor); }
+  &:has(>textarea.invalid) >label { color: var(--errorColor); }
+}

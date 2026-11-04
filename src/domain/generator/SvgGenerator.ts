@@ -11,7 +11,7 @@ export type ParamDefinitionSelection = ParamBase & { type: 'selection'; options:
 export type ParamDefinition =
   | ParamDefinitionMinMaxStep
   | ParamDefinitionSelection
-  | (ParamBase & { type: 'color' | 'string' | 'font' | 'distribution' });
+  | (ParamBase & { type: 'color' | 'string' | 'font' | 'distribution' | 'points' });
 export type ParamDefinitionType = ParamDefinition['type'];
 
 export interface SvgGeneratorResult {

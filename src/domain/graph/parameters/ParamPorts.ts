@@ -2,6 +2,7 @@ import { ParamDefinition, ParamDefinitionType } from '../../generator/SvgGenerat
 import { PortValueType } from '../model/PortValue';
 
 export const PARAM_TYPE_TO_PORT_TYPE: Record<ParamDefinitionType, PortValueType> = {
+  points: 'points',
   number: 'number',
   expression: 'expression',
   distribution: 'distribution',

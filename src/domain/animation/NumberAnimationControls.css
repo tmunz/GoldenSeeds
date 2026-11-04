@@ -6,20 +6,22 @@
   color: var(--textColor);
   font-size: 11px;
 
-  label { display: flex; align-items: center; gap: 4px; }
-  input {
-    box-sizing: border-box;
-    width: 52px;
-    min-height: 32px;
-    font: inherit;
-    color: var(--actionColor);
-    background: transparent;
-    border: 0;
-    border-bottom: 1px solid var(--textColorAlt);
-    border-radius: 0;
-    padding: 3px 4px;
+  .extended-range-input {
+    flex: 1;
+    min-width: 0;
   }
-  .animated-button { margin: 0; }
-  .animated-icon { width: 18px; height: 18px; }
-  output { color: var(--accentColor); font-variant-numeric: tabular-nums; }
+
+  .animated-button {
+    margin: 0;
+  }
+
+  .animated-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  output {
+    color: var(--accentColor);
+    font-variant-numeric: tabular-nums;
+  }
 }

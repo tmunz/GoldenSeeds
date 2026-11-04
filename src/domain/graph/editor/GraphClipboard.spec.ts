@@ -59,8 +59,8 @@ describe('GraphClipboard', () => {
       from: { nodeId: fill.id, port: 'out' },
       to: { nodeId: shape.id, port: 'param:style.fillColor' },
     }]);
-    expect(copy.layout[shape.id]).toEqual({ x: 140, y: 90 });
-    expect(copy.layout[fill.id]).toEqual({ x: 40, y: 90 });
+    expect(copy.layout[shape.id]).toEqual({ x: layout.shape.x + 40, y: layout.shape.y + 40 });
+    expect(copy.layout[fill.id]).toEqual({ x: layout['shape:fill'].x + 40, y: layout['shape:fill'].y + 40 });
 
     const original = defined(graph.nodes.find(node => node.id === 'shape'));
     expect(shape.config).not.toBe(original.config);

@@ -5,6 +5,7 @@ import { Color } from '../../../datatypes/Color';
 import { ColorInput } from '../../../ui/input/color/ColorInput';
 import { ExtendedRangeInput } from '../../../ui/input/ExtendedRangeInput';
 import { TextInput } from '../../../ui/input/TextInput';
+import { TextAreaInput } from '../../../ui/input/TextAreaInput';
 import { ParamDefinition } from '../../generator/SvgGenerator';
 import { parseParameter } from '../../parameter/ParseParameter';
 
@@ -35,6 +36,10 @@ export function ParameterEditor({ label, value, definition, onChange, portId, sh
   }
   let editor: React.ReactNode;
   switch (definition.type) {
+  case 'points':
+    editor = <TextAreaInput label={label} value={text} onChange={change}
+      className={valid ? '' : 'invalid'} description={t('points.help')} placeholder="[1,1], [2,2], [3,5.6]" />;
+    break;
   case 'number':
   case 'expression':
     editor = <ExtendedRangeInput label={label} value={text} min={definition.min} max={definition.max} step={definition.step}

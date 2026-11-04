@@ -22,7 +22,7 @@ export function InputPort({ id, label = id, type, definition, localText = '', co
   onChange: (text: string) => boolean;
 }) {
   const { t, locale } = useTranslation();
-  const hasEditor = definition && ['number', 'expression', 'string', 'selection'].includes(definition.type);
+  const hasEditor = definition && ['number', 'expression', 'string', 'selection', 'points'].includes(definition.type);
   const defaultText = definition?.type === 'selection'
     ? String(definition.options.indexOf(definition.initial)) : definition ? parameterDefaultText(definition) : '';
   const isDefault = !connected && (!definition || localText === defaultText);

@@ -1,3 +1,5 @@
+@import './NodeTypography.css';
+
 .node {
   --textColor: var(--graphNodeText);
   --textColorAlt: var(--graphNodeMuted);
@@ -26,6 +28,14 @@
     cursor: grab;
   }
 
+  .node-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    color: var(--actionColor);
+  }
+
   .node-title {
     min-width: 0;
     overflow: hidden;
@@ -33,9 +43,6 @@
     white-space: nowrap;
     color: var(--actionColor);
     font-size: 16px;
-    font-weight: var(--uiHeadingWeight);
-    letter-spacing: var(--uiLetterSpacing);
-    text-transform: lowercase;
   }
 
   .node-header-actions {

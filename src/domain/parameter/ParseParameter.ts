@@ -6,10 +6,16 @@ import { ExpressionState } from './ExpressionState';
 import { NumberState } from './NumberState';
 import { StringState } from './StringState';
 import { ParameterState } from './ParameterState';
+import { PointsState } from './PointsState';
 
 /** Parse editor text into fresh state. Selections use zero-based indexes in the editor. */
 export function parseParameter(definition: ParamDefinition, text: string): ParameterState<unknown, unknown> | undefined {
   switch (definition.type) {
+  case 'points': {
+    const state = new PointsState();
+    state.setText(text);
+    return state.isValid() ? state : undefined;
+  }
   case 'number': {
     const value = Number(text);
     if (!text.trim() || !Number.isFinite(value) || definition.validate?.(value) === false) {

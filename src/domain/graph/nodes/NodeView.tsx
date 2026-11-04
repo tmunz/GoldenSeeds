@@ -5,6 +5,7 @@ import { GraphNodeData } from '../editor/GraphFlowAdapter';
 import { AnimatedButton } from '../../../ui/AnimatedButton';
 import { ArrowLine, ArrowNone, ArrowRegular } from '../../../ui/icon/Arrow';
 import { DeleteIcon } from '../../../ui/icon/Delete';
+import { NodeTypeIcon } from '../../../ui/icon/NodeType';
 
 import './NodeView.css';
 
@@ -13,6 +14,7 @@ const useNodeLayoutEffect = typeof window === 'undefined' ? useEffect : useLayou
 export interface NodeViewProps extends Pick<GraphNodeData, 'connectedInputPorts' | 'portGuidance'> {
   id: string;
   title: string;
+  kind?: string;
   children: ReactNode | ((collapsed: boolean) => ReactNode);
   layout?: 'content' | 'ports';
   width?: number;
@@ -25,7 +27,7 @@ export interface NodeViewProps extends Pick<GraphNodeData, 'connectedInputPorts'
 }
 
 /** Shared card, drag header, collapse behavior and handle measurement for editable nodes. */
-export function NodeView({ id, title, children, layout = 'content', width, selected = false, onDelete, collapsible = false, collapsed = false, onCollapseChange, connectedInputPorts, portGuidance, output }: NodeViewProps) {
+export function NodeView({ id, title, kind, children, layout = 'content', width, selected = false, onDelete, collapsible = false, collapsed = false, onCollapseChange, connectedInputPorts, portGuidance, output }: NodeViewProps) {
   const { t } = useTranslation();
   const updateNodeInternals = useUpdateNodeInternals();
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -91,7 +93,10 @@ export function NodeView({ id, title, children, layout = 'content', width, selec
   return (
     <div className={`node node-${layout}${collapsed ? ' node-collapsed' : ''}`} style={width === undefined ? undefined : { width, minWidth: width }}>
       <div className="node-header">
-        <span className="node-title">{title}</span>
+        <div className="node-heading">
+          {kind && <NodeTypeIcon kind={kind} />}
+          <span className="node-title" title={title}>{title}</span>
+        </div>
         <div className="node-header-actions">
           {selected && onDelete && <button type="button" className="node-delete nodrag nopan"
             aria-label={t('graph.deleteNode', { name: title })} title={t('graph.deleteNode', { name: title })} onClick={event => {
