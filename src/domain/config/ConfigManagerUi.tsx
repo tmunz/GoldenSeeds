@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useTranslation } from '../../i18n/I18n';
 import { AnimatedButton } from '../../ui/AnimatedButton';
+import { confirmDialog } from '../../ui/DialogService';
 import { configManager, ConfigItem } from './ConfigManager';
-import { PlusNone, PlusRegular, PlusRotated } from '../../ui/icon/Plus';
-import { ResetNone, ResetRegular, ResetProgress } from '../../ui/icon/Reset';
+import { PlusNone, PlusRegular, PlusRotated } from '../../ui/icon/animated/Plus';
+import { ResetNone, ResetRegular, ResetProgress } from '../../ui/icon/animated/Reset';
 import { Config } from './Config';
 import { configService } from './ConfigService';
 import { preconfigs } from './data';
 import { toRawConfig } from '../graph/runtime/GraphSerializer';
-import { LoadNone, LoadProgress, LoadRegular } from '../../ui/icon/Load';
-import { SaveNone, SaveRegular, SaveProgress } from '../../ui/icon/Save';
+import { LoadNone, LoadProgress, LoadRegular } from '../../ui/icon/animated/Load';
+import { SaveNone, SaveRegular, SaveProgress } from '../../ui/icon/animated/Save';
 import './ConfigManagerUi.css';
 
 export function ConfigManagerUi({ configItems, activeConfig, hasChanges }: {
@@ -59,8 +60,10 @@ export function ConfigManagerUi({ configItems, activeConfig, hasChanges }: {
         points={[LoadNone, LoadRegular, LoadProgress]} 
         title={t('actions.reload')}
         disabled={busy || !hasChanges}
-        onClick={() => {
-          if (window.confirm(t('drawing.discardChanges'))) { void act(() => configManager.select(selected)); }
+        onClick={async () => {
+          if (await confirmDialog(t('drawing.discardChanges'), { title: t('dialog.unsaved'), confirmLabel: t('actions.discard') })) {
+            await act(() => configManager.select(selected));
+          }
         }}
       />}
       <AnimatedButton

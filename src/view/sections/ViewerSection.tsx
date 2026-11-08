@@ -5,7 +5,7 @@ import { Graph } from '../../domain/graph/model/Graph';
 import { renderGraphToSvg } from '../../domain/graph/runtime/GraphRenderer';
 import { SvgPreview } from '../../domain/svg/SvgPreview';
 import { Frame } from '../../ui/Frame';
-import { ViewerNone, ViewerRegular, ViewerClose } from '../../ui/icon/Viewer';
+import { ViewerNone, ViewerRegular, ViewerClose } from '../../ui/icon/animated/Viewer';
 import { useDimension } from '../../utils/useDimension';
 
 import './ViewerSection.css';

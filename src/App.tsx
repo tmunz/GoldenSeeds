@@ -33,19 +33,10 @@ export function App() {
     }
     void setup();
 
-    function warnAboutUnsavedChanges(event: BeforeUnloadEvent) {
-      if (configService.hasUnsavedChanges()) {
-        event.preventDefault();
-        event.returnValue = '';
-      }
-    }
-    window.addEventListener('beforeunload', warnAboutUnsavedChanges);
-
     return () => {
       disposed = true;
       clearTimeout(startupTimeout);
       window.removeEventListener('popstate', handleLocation);
-      window.removeEventListener('beforeunload', warnAboutUnsavedChanges);
       configItemsSubscription.unsubscribe();
       configsManageableSubscription.unsubscribe();
       activeConfigSubscription.unsubscribe();

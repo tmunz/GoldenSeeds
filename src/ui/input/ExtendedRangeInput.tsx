@@ -12,6 +12,8 @@ export function ExtendedRangeInput(props: {
   value?: string;
   valueText?: string;
   description?: string;
+  help?: React.ReactNode;
+  helpLabel?: string;
   onChange: (value: string) => void;
   min?: number;
   max?: number;

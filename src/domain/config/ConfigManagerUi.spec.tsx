@@ -2,6 +2,7 @@ import { ConfigManagerUi } from './ConfigManagerUi';
 import { configManager, ConfigItem } from './ConfigManager';
 import { configService } from './ConfigService';
 import { preconfigs } from './data';
+import { dialogService } from '../../ui/DialogService';
 
 jest.mock('react', () => ({ ...jest.requireActual('react'), useState: (initial: unknown) => [initial, jest.fn()] }));
 jest.mock('./ConfigManagerUi.css', () => ({}));
@@ -43,6 +44,19 @@ test('a saved user version of a preset still offers reset to the original', () =
   const buttons = actions({ ...item, preconfig: false }, false);
   expect(buttons.some((button: { props: { title: string } }) => button.props.title === 'reset')).toBe(true);
   expect(buttons.find((button: { props: { title: string } }) => button.props.title === 'reload').props.disabled).toBe(true);
+});
+
+test.each([false, true])('reload waits for the styled confirmation and respects response %s', async accepted => {
+  const select = jest.spyOn(configManager, 'select').mockResolvedValue();
+  const reload = actions().find((button: { props: { title: string } }) => button.props.title === 'reload');
+  const pending = reload.props.onClick();
+  expect(select).not.toHaveBeenCalled();
+  const request = dialogService.current()!;
+  expect(request.kind).toBe('confirm');
+  expect(request.title).toBe('Unsaved changes');
+  dialogService.respond(request, accepted);
+  await pending;
+  expect(select).toHaveBeenCalledTimes(accepted ? 1 : 0);
 });
 
 jest.mock('../../i18n/I18n', () => ({ useTranslation: () => ({ t: jest.requireActual('../../i18n/translate').translate, locale: 'en' }) }));

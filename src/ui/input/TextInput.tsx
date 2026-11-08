@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useId, ChangeEvent, MutableRefObject } from 'react';
+import { HelpPopover } from '../HelpPopover';
 
 import './Input.css';
 import './TextInput.css';
@@ -10,6 +11,8 @@ export interface Props {
   className?: string;
   readOnly?: boolean;
   description?: string;
+  help?: React.ReactNode;
+  helpLabel?: string;
 }
 
 export const TextInput = (props: Props) => {
@@ -30,7 +33,7 @@ export const TextInput = (props: Props) => {
   };
 
   return (
-    <div className="input text-input" title={props.description}>
+    <div className={`input text-input${props.help ? ' has-help' : ''}`} title={props.description}>
       <input
         id={id}
         ref={ref}
@@ -43,6 +46,7 @@ export const TextInput = (props: Props) => {
       />
       <label htmlFor={id} className={props.value === '' || typeof props.value === 'undefined' ? 'input-empty' : ''}>{props.label}</label>
       <div className="indicator" />
+      {props.help && <HelpPopover label={props.helpLabel ?? props.label ?? ''}>{props.help}</HelpPopover>}
       {props.description && <span id={`${id}-description`} hidden>{props.description}</span>}
     </div>
   );

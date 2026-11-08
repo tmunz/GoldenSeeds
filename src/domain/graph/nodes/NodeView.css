@@ -61,7 +61,7 @@
     padding: 6px;
     box-sizing: border-box;
 
-    svg { width: 18px; height: 18px; }
+    .delete-icon { width: 18px; height: 18px; }
 
     &:hover { color: var(--errorColor); }
   }

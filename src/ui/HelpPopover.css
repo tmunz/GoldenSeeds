@@ -1,0 +1,39 @@
+.input-help {
+  position: absolute;
+  right: 0;
+  top: 8px;
+  z-index: 2;
+  .input-help-trigger { display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; color: var(--textColorAlt); }
+  .input-help-trigger:is(:hover, [aria-expanded="true"]) { color: var(--accentColor); }
+  button:focus-visible { outline: 1px solid var(--accentColor); outline-offset: 2px; }
+}
+
+.help-popover {
+  position: fixed;
+  z-index: 10000;
+  box-sizing: border-box;
+  width: min(400px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
+  padding: 20px;
+  background: rgb(var(--backgroundColorAlt));
+  border: 1px solid var(--textColorAlt);
+  box-shadow: 0 8px 32px #0005;
+  color: var(--actionColor);
+  font-family: var(--uiFontFamily);
+  font-size: 13px;
+  letter-spacing: var(--uiLetterSpacing);
+  text-transform: none;
+  line-height: 1.6;
+
+  .help-popover-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+  h2 { font-size: 13px; text-transform: uppercase; margin: 0; }
+  .help-popover-heading button { min-width: 26px; min-height: 26px; font-size: 20px; }
+  h3 { font-size: inherit; font-weight: inherit; text-transform: uppercase; color: var(--accentColor); margin: 18px 0 8px; }
+  p { margin: 8px 0; }
+  dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 16px; margin: 0; }
+  dd { margin: 0; color: var(--textColor); }
+  code { font-size: inherit; font-family: monospace; letter-spacing: 0; }
+  pre { padding: 10px; margin: 8px 0 0; background: rgb(var(--backgroundColor)); overflow: auto; }
+  button:focus-visible { outline: 1px solid var(--accentColor); }
+}

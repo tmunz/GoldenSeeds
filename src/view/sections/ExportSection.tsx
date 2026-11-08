@@ -7,7 +7,7 @@ import { renderGraphToSvg } from '../../domain/graph/runtime/GraphRenderer';
 import { PngExporter } from '../../domain/png/PngExporter';
 import { SvgExporter } from '../../domain/svg/SvgExporter';
 import { Frame } from '../../ui/Frame';
-import { SaveNone, SaveRegular, SaveClose } from '../../ui/icon/Save';
+import { SaveNone, SaveRegular, SaveClose } from '../../ui/icon/animated/Save';
 
 import './ExportSection.css';
 

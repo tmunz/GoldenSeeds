@@ -3,7 +3,7 @@ import { useTranslation } from '../../../i18n/I18n';
 import { useUpdateNodeInternals } from '@xyflow/react';
 import { GraphNodeData } from '../editor/GraphFlowAdapter';
 import { AnimatedButton } from '../../../ui/AnimatedButton';
-import { ArrowLine, ArrowNone, ArrowRegular } from '../../../ui/icon/Arrow';
+import { ArrowLine, ArrowNone, ArrowRegular } from '../../../ui/icon/animated/Arrow';
 import { DeleteIcon } from '../../../ui/icon/Delete';
 import { NodeTypeIcon } from '../../../ui/icon/NodeType';
 

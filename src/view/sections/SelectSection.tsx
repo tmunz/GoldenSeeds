@@ -6,9 +6,10 @@ import { configService } from '../../domain/config/ConfigService';
 import { AnimatedButton } from '../../ui/AnimatedButton';
 import { CarouselSelector } from '../../ui/CarouselSelector';
 import { Frame } from '../../ui/Frame';
-import { SelectNone, SelectRegular, SelectClose } from '../../ui/icon/Select';
-import { EditorNone, EditorRegular, EditorClose } from '../../ui/icon/Editor';
-import { PlusNone, PlusRegular, PlusRotated } from '../../ui/icon/Plus';
+import { confirmDialog } from '../../ui/DialogService';
+import { SelectNone, SelectRegular, SelectClose } from '../../ui/icon/animated/Select';
+import { EditorNone, EditorRegular, EditorClose } from '../../ui/icon/animated/Editor';
+import { PlusNone, PlusRegular, PlusRotated } from '../../ui/icon/animated/Plus';
 
 import './SelectSection.css';
 
@@ -25,19 +26,21 @@ export function SelectSection(props: {
     ?? props.configItems.find(item => item.name === props.activeName)
     ?? props.configItems[0];
 
-  function confirmDiscard(): boolean {
-    return !configService.hasUnsavedChanges() || window.confirm(t('drawing.discardChanges'));
+  async function confirmDiscard(): Promise<boolean> {
+    return !configService.hasUnsavedChanges() || await confirmDialog(t('drawing.discardChanges'), {
+      title: t('dialog.unsaved'), confirmLabel: t('actions.discard'),
+    });
   }
 
-  function editSelected() {
+  async function editSelected() {
     if (!selection) return;
-    if (selection.name !== props.activeName && !confirmDiscard()) return;
-    configManager.select(selection.name, { reload: false });
+    if (selection.name !== props.activeName && !await confirmDiscard()) return;
+    await configManager.select(selection.name, { reload: false });
     props.onEdit();
   }
 
   async function createDrawing() {
-    if (!confirmDiscard()) return;
+    if (!await confirmDiscard()) return;
     const names = new Set([...props.configItems.map(item => item.name), props.activeName]);
     const untitled = t('drawing.untitled');
     let name = untitled;

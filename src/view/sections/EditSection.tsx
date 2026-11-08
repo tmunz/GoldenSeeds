@@ -7,9 +7,9 @@ import { ConfigManagerUi } from '../../domain/config/ConfigManagerUi';
 import { configService, SaveState } from '../../domain/config/ConfigService';
 import { GraphCanvas, GraphCanvasHandle } from '../../domain/graph/editor/GraphCanvas';
 import { AnimatedButton, DIRECTION_LEFT, DIRECTION_RIGHT } from '../../ui/AnimatedButton';
-import { ArrowNone, ArrowFlat, ArrowRegular } from '../../ui/icon/Arrow';
+import { ArrowNone, ArrowFlat, ArrowRegular } from '../../ui/icon/animated/Arrow';
 import { Frame } from '../../ui/Frame';
-import { EditorNone, EditorRegular, EditorClose } from '../../ui/icon/Editor';
+import { EditorNone, EditorRegular, EditorClose } from '../../ui/icon/animated/Editor';
 import { TextInput } from '../../ui/input/TextInput';
 
 import './EditSection.css';

@@ -3,7 +3,7 @@ import { useTranslation } from '../../../../i18n/I18n';
 import type { Font } from 'opentype.js';
 import { CarouselSelector } from '../../../../ui/CarouselSelector';
 import { AnimatedButton } from '../../../../ui/AnimatedButton';
-import { PlusNone, PlusRegular, PlusRotated } from '../../../../ui/icon/Plus';
+import { PlusNone, PlusRegular, PlusRotated } from '../../../../ui/icon/animated/Plus';
 import { fontService } from '../../../font/FontService';
 
 import './FontValueEditor.css';

@@ -1,6 +1,7 @@
 .text-input.input {
 
   border-bottom: 1px solid var(--textColorAlt);
+  &.has-help >input { padding-right: 32px; }
 
   &>.indicator {
     &:after {

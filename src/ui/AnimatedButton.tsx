@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { AnimatedIcon } from './AnimatedIcon';
-import { ArrowFlat, ArrowRegular, ArrowNone } from './icon/Arrow';
+import { ArrowFlat, ArrowRegular, ArrowNone } from './icon/animated/Arrow';
 
 import './AnimatedButton.css';
 

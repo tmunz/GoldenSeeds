@@ -8,6 +8,7 @@ import { TextInput } from '../../../ui/input/TextInput';
 import { TextAreaInput } from '../../../ui/input/TextAreaInput';
 import { ParamDefinition } from '../../generator/SvgGenerator';
 import { parseParameter } from '../../parameter/ParseParameter';
+import { ExpressionHelp } from './ExpressionHelp';
 
 import './ParameterEditor.css';
 
@@ -43,7 +44,8 @@ export function ParameterEditor({ label, value, definition, onChange, portId, sh
   case 'number':
   case 'expression':
     editor = <ExtendedRangeInput label={label} value={text} min={definition.min} max={definition.max} step={definition.step}
-      description={definition.type === 'expression' ? t('expression.help') : undefined}
+      help={definition.type === 'expression' ? <ExpressionHelp /> : undefined}
+      helpLabel={definition.type === 'expression' ? t('expression.title') : undefined}
       className={valid ? '' : 'invalid range-invalid'} onChange={change} />;
     break;
   case 'selection': {

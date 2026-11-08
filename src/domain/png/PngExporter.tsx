@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from '../../i18n/I18n';
 import { AnimatedButton } from '../../ui/AnimatedButton';
-import { SaveNone, SaveRegular, SaveProgress } from '../../ui/icon/Save';
+import { SaveNone, SaveRegular, SaveProgress } from '../../ui/icon/animated/Save';
 import { downloadFile } from '../../utils/Download';
 
 export function PngExporter({ getData }: {

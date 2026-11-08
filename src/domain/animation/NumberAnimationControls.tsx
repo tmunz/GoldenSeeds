@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useTranslation } from '../../i18n/I18n';
 import { AnimatedButton } from '../../ui/AnimatedButton';
-import { PlayNone, PlayRegular, PlayStop } from '../../ui/icon/Play';
+import { PlayNone, PlayRegular, PlayStop } from '../../ui/icon/animated/Play';
 import { ExtendedRangeInput } from '../../ui/input/ExtendedRangeInput';
 import { useNodeId } from '@xyflow/react';
 import { DEFAULT_ANIMATION_SECONDS } from './AnimationService';

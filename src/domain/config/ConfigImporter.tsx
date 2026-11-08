@@ -2,10 +2,11 @@ import React, { useRef } from 'react';
 import { useTranslation } from '../../i18n/I18n';
 
 import { AnimatedButton } from '../../ui/AnimatedButton';
+import { alertDialog, confirmDialog } from '../../ui/DialogService';
 import { configManager } from './ConfigManager';
 import { configService } from './ConfigService';
 import { ConfigImportError, findSuspiciousExpressions, parseRawConfig } from './ConfigValidation';
-import { LoadProgress, LoadRegular, LoadNone } from '../../ui/icon/Load';
+import { LoadProgress, LoadRegular, LoadNone } from '../../ui/icon/animated/Load';
 
 export function ConfigImporter(props: { onLoad?: () => void; label?: string }) {
   const { t } = useTranslation();
@@ -14,10 +15,12 @@ export function ConfigImporter(props: { onLoad?: () => void; label?: string }) {
   async function loadConfig(file: File) {
     try {
       const rawConfig = parseRawConfig(await file.text(), file.name.replace(/\.json$/i, ''));
-      if (findSuspiciousExpressions(rawConfig).length > 0 && !window.confirm(t('import.unsafeExpression'))) {
+      if (findSuspiciousExpressions(rawConfig).length > 0 && !await confirmDialog(t('import.unsafeExpression'))) {
         return;
       }
-      if (configService.hasUnsavedChanges() && !window.confirm(t('drawing.discardChanges'))) {
+      if (configService.hasUnsavedChanges() && !await confirmDialog(t('drawing.discardChanges'), {
+        title: t('dialog.unsaved'), confirmLabel: t('actions.discard'),
+      })) {
         return;
       }
       rawConfig.meta.name = configManager.uniqueName(rawConfig.meta.name);
@@ -27,7 +30,7 @@ export function ConfigImporter(props: { onLoad?: () => void; label?: string }) {
       const message = error instanceof ConfigImportError
         ? t(error.key, error.values)
         : t('import.error.load');
-      window.alert(`${t('import.failed')}\n${message}`);
+      await alertDialog(message, { title: t('import.failed') });
     }
   }
 

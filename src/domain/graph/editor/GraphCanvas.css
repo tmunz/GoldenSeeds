@@ -71,7 +71,7 @@
     pointer-events: all;
     animation: graph-edge-delete-appear 250ms 150ms both;
 
-    svg { width: 18px; height: 18px; }
+    .delete-icon { width: 18px; height: 18px; }
 
     &:hover { color: var(--errorColor); }
   }

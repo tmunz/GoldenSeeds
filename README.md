@@ -34,7 +34,7 @@ GoldenSeeds SVG Generator is a web-based application for creating SVG graphics u
 
 ## Install
 
-This project requires Node.js (tested for version 18.14.1) and npm. Clone the repository and install dependencies with the following commands:
+This project requires Node.js 20.9 or newer and npm (verified with Node.js 22.12). Clone the repository and install dependencies with the following commands:
 
 ```bash
 git clone https://github.com/tmunz/GoldenSeeds.git
@@ -84,6 +84,8 @@ The project is developed with the following technologies:
 - **Webpack**: For bundling the project.
 
 It uses various development dependencies for code linting, testing, and building, including Babel, TypeScript, and ESLint.
+
+The `sockjs` dependency override selects `uuid` 11.1.1 or newer to address its buffer-bounds advisory; SockJS uses the compatible CommonJS `v4()` API. Remove the override when SockJS updates its own dependency. Jest still depends on `deepmerge` 4.3.1, which has an [unpatched low-severity advisory](https://github.com/advisories/GHSA-gcqx-w48m-w2h4). Avoid `npm audit fix --force`, which currently proposes downgrading Jest to 25.1.0.
 
 ## Issues
 

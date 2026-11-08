@@ -2,6 +2,7 @@ import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ParameterEditor } from './ParameterEditor';
 import { I18nProvider } from '../../../i18n/I18n';
+import { ExpressionHelp } from './ExpressionHelp';
 
 jest.mock('./ParameterEditor.css', () => ({}));
 jest.mock('../../../ui/input/Input.css', () => ({}));
@@ -39,11 +40,19 @@ test('number editors keep an editable number field and their numeric bounds', ()
 });
 
 
-test('expression fields explain usage and constants on hover and expose the help as an accessible description', () => {
+test('expression fields offer a dedicated help button instead of a native tooltip', () => {
   const html = renderToStaticMarkup(<ParameterEditor label="value" value="n * 2"
     definition={{ type: 'expression', initial: '1' }} onChange={() => true} />);
-  expect(html).toContain('title="Enter a JavaScript formula');
-  expect(html).toContain('aria-describedby=');
+  expect(html).toContain('aria-label="Expression help" aria-expanded="false"');
+  expect(html).toContain('aria-haspopup="dialog"');
+  expect(html).not.toContain('title="Enter a JavaScript formula');
+});
+
+test('expression help formats variables, constants, functions and an example', () => {
+  const html = renderToStaticMarkup(<ExpressionHelp />);
+  expect(html).toContain('<h3>Variables</h3>');
+  expect(html).toContain('<dl>');
+  expect(html).toContain('<pre><code>n * 360 / goldenRatio</code></pre>');
   for (const name of ['goldenRatio', 'Math.PI', 'Math.E', 'fib(n)', 'items', 'itemSize']) {
     expect(html).toContain(name);
   }

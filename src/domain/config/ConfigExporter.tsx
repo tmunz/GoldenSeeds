@@ -3,7 +3,7 @@ import { useTranslation } from '../../i18n/I18n';
 import { Config } from './Config';
 import { toRawConfig } from '../graph/runtime/GraphSerializer';
 import { AnimatedButton } from '../../ui/AnimatedButton';
-import { SaveNone, SaveRegular, SaveProgress } from '../../ui/icon/Save';
+import { SaveNone, SaveRegular, SaveProgress } from '../../ui/icon/animated/Save';
 import { downloadFile } from '../../utils/Download';
 
 export function ConfigExporter({ config }: { config: Config }) {
